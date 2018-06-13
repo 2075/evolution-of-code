@@ -1,0 +1,272 @@
+{
+	"header": {
+		"identifier": "lychee.app.Blueprint",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"lychee.effect.Position",
+			"lychee.app.Element"
+		],
+		"includes": [
+			"lychee.app.Layer"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Element": {
+			"chunk": "lychee.import('lychee.app.Element')",
+			"type": "lychee.Definition",
+			"hash": "9e03c1c0",
+			"value": {
+				"reference": "lychee.app.Element",
+				"arguments": []
+			}
+		},
+		"_Layer": {
+			"chunk": "lychee.import('lychee.app.Layer')",
+			"type": "lychee.Definition",
+			"hash": "6f9d1207",
+			"value": {
+				"reference": "lychee.app.Layer",
+				"arguments": []
+			}
+		},
+		"_Position": {
+			"chunk": "lychee.import('lychee.effect.Position')",
+			"type": "lychee.Definition",
+			"hash": "46e05d0c",
+			"value": {
+				"reference": "lychee.effect.Position",
+				"arguments": []
+			}
+		},
+		"_validate_entity": {
+			"chunk": "function(entity) {\n\n\t\tif (entity instanceof Object) {\n\n\t\t\tif (\n\t\t\t\ttypeof entity.update === 'function'\n\t\t\t\t&& typeof entity.render === 'function'\n\t\t\t\t&& typeof entity.shape === 'number'\n\t\t\t\t&& typeof entity.setOrder === 'function'\n\t\t\t\t&& typeof entity.isAtPosition === 'function'\n\t\t\t) {\n\t\t\t\treturn true;\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn false;\n\n\t}",
+			"type": "function",
+			"hash": "d201e3e1",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "entity",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "true",
+					"type": "Boolean",
+					"value": true
+				},
+				{
+					"chunk": "false",
+					"type": "Boolean",
+					"value": false
+				}
+			]
+		},
+		"_on_relayout": {
+			"chunk": "function() {\n\n\t\tlet fade    = this.__fade;\n\t\tlet visible = this.visible;\n\n\t\tif (visible === true) {\n\n\t\t\tlet entity = null;\n\t\t\tlet type   = this.type;\n\t\t\tlet x1     = -1 / 2 * this.width;\n\t\t\tlet x2     =  1 / 2 * this.width;\n\t\t\tlet y1     = -1 / 2 * this.height;\n\t\t\tlet off_x  = x1 + 32;\n\t\t\tlet off_y  = y1 + 32;\n\t\t\tlet pos_x  = 0;\n\t\t\tlet pos_y  = 0;\n\n\n\t\t\tif (type === Composite.TYPE.grid) {\n\n\t\t\t\tfor (let e = 0, el = this.entities.length; e < el; e++) {\n\n\t\t\t\t\tentity = this.entities[e];\n\t\t\t\t\tpos_x  = off_x + entity.width  / 2;\n\t\t\t\t\tpos_y  = off_y + entity.height / 2;\n\n\t\t\t\t\tif (pos_x + entity.width / 2 > x2 - 32) {\n\n\t\t\t\t\t\toff_x  = x1 + 32;\n\t\t\t\t\t\toff_y += entity.height + 32;\n\n\t\t\t\t\t\tpos_x = off_x + entity.width  / 2;\n\t\t\t\t\t\tpos_y = off_y + entity.height / 2;\n\n\t\t\t\t\t\toff_x += entity.width + 32;\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tpos_x = off_x + entity.width  / 2;\n\t\t\t\t\t\tpos_y = off_y + entity.height / 2;\n\n\t\t\t\t\t\toff_x += entity.width + 32;\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\tentity.trigger('relayout');\n\t\t\t\t\tentity.setOrder(e + 1);\n\n\n\t\t\t\t\tif (fade === true) {\n\n\t\t\t\t\t\tentity.setPosition({\n\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\ty: pos_y - 3 / 2 * this.height\n\t\t\t\t\t\t});\n\n\t\t\t\t\t\tentity.addEffect(new _Position({\n\t\t\t\t\t\t\ttype:     _Position.TYPE.easeout,\n\t\t\t\t\t\t\tdelay:    100 * e,\n\t\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\t\tposition: {\n\t\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\t\ty: pos_y\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}));\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tentity.setPosition({\n\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\ty: pos_y\n\t\t\t\t\t\t});\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t} else if (type === Composite.TYPE.view) {\n\n\t\t\t\tif (this.entities.length === 2) {\n\n\t\t\t\t\tentity        = this.entities[0];\n\t\t\t\t\tentity.width  = 320;\n\t\t\t\t\tentity.height = this.height;\n\n\t\t\t\t\tpos_x = x1 + 32 + entity.width / 2;\n\t\t\t\t\tpos_y = y1 + entity.height / 2;\n\n\t\t\t\t\tentity.trigger('relayout');\n\t\t\t\t\tentity.setOrder(1);\n\n\n\t\t\t\t\tif (fade === true) {\n\n\t\t\t\t\t\tentity.setPosition({\n\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\ty: pos_y - 3 / 2 * this.height\n\t\t\t\t\t\t});\n\n\t\t\t\t\t\tentity.addEffect(new _Position({\n\t\t\t\t\t\t\ttype:     _Position.TYPE.easeout,\n\t\t\t\t\t\t\tdelay:    100,\n\t\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\t\tposition: {\n\t\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\t\ty: pos_y\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}));\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tentity.setPosition({\n\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\ty: pos_y\n\t\t\t\t\t\t});\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\tentity        = this.entities[1];\n\t\t\t\t\tentity.width  = Math.max(480, this.width - 64 - 320);\n\t\t\t\t\tentity.height = this.height;\n\n\t\t\t\t\tpos_x = x1 + 320 + 64 + entity.width / 2;\n\t\t\t\t\tpos_y = y1 + entity.height / 2;\n\n\t\t\t\t\tentity.trigger('relayout');\n\t\t\t\t\tentity.setOrder(2);\n\n\n\t\t\t\t\tif (fade === true) {\n\n\t\t\t\t\t\tentity.setPosition({\n\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\ty: pos_y - 3 / 2 * this.height\n\t\t\t\t\t\t});\n\n\t\t\t\t\t\tentity.addEffect(new _Position({\n\t\t\t\t\t\t\ttype:     _Position.TYPE.easeout,\n\t\t\t\t\t\t\tdelay:    100,\n\t\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\t\tposition: {\n\t\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\t\ty: pos_y\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}));\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tentity.setPosition({\n\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\ty: pos_y\n\t\t\t\t\t\t});\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t} else if (type === Composite.TYPE.full) {\n\n\t\t\t\tfor (let e = 0, el = this.entities.length; e < el; e++) {\n\n\t\t\t\t\tlet entity = this.entities[e];\n\n\t\t\t\t\tentity.position.x = 0;\n\t\t\t\t\tentity.position.y = 0;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\n\t\tif (fade === true) {\n\t\t\tthis.__fade = false;\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "b92127ad",
+			"parameters": [],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.type = Composite.TYPE.grid;\n\n\n\t\tthis.__fade = false;\n\n\n\t\tthis.setType(states.type);\n\n\t\tdelete states.type;\n\n\n\t\tstates.relayout = false;\n\n\n\t\t_Layer.call(this, states);\n\n\t\tstates = null;\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tthis.bind('relayout', _on_relayout, this);\n\t\tthis.bind('reshape',  _on_relayout, this);\n\n\t}",
+			"type": "function",
+			"hash": "d943023a",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"type": "setType"
+		},
+		"properties": {
+			"type": {
+				"chunk": "this.type = Composite.TYPE.grid;",
+				"type": "Enum",
+				"hash": "c0dec0ef",
+				"value": {
+					"chunk": "Composite.TYPE.grid",
+					"type": "Enum",
+					"hash": "c171f214",
+					"value": "Composite.TYPE.grid"
+				}
+			},
+			"__fade": {
+				"chunk": "this.__fade = false;",
+				"type": "Boolean",
+				"hash": "aa88bfc6",
+				"value": {
+					"chunk": "false",
+					"type": "Boolean",
+					"hash": "d5619e17",
+					"value": false
+				}
+			}
+		},
+		"enums": {
+			"TYPE": {
+				"values": [
+					{
+						"name": "grid",
+						"value": {
+							"chunk": "0",
+							"type": "Number",
+							"hash": "d271c07f",
+							"value": 0
+						}
+					},
+					{
+						"name": "view",
+						"value": {
+							"chunk": "1",
+							"type": "Number",
+							"hash": "9416ac93",
+							"value": 1
+						}
+					},
+					{
+						"name": "full",
+						"value": {
+							"chunk": "2",
+							"type": "Number",
+							"hash": "0129e217",
+							"value": 2
+						}
+					}
+				]
+			}
+		},
+		"events": {
+			"relayout": {
+				"name": "relayout",
+				"methods": [
+					"addEntity",
+					"setType",
+					"setVisible"
+				],
+				"parameters": []
+			}
+		},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Layer.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.app.Blueprint';\n\n\t\t\tlet states = data['arguments'][0];\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.type !== Composite.TYPE.grid) states.type = this.type;\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "e9c1b4fe",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"addEntity": {
+				"chunk": "function(entity) {\n\n\t\t\tentity = _validate_entity(entity) === true ? entity : null;\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tlet index = this.entities.indexOf(entity);\n\t\t\t\tif (index === -1) {\n\n\t\t\t\t\tthis.entities.push(entity);\n\t\t\t\t\tthis.trigger('relayout');\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "9147abbf",
+				"parameters": [
+					{
+						"chunk": "_validate_entity(entity) === true ? entity : null",
+						"name": "entity",
+						"type": "lychee.app.Entity",
+						"value": {
+							"constructor": "lychee.app.Entity",
+							"arguments": []
+						}
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setType": {
+				"chunk": "function(type) {\n\n\t\t\ttype = lychee.enumof(Composite.TYPE, type) ? type : null;\n\n\n\t\t\tif (type !== null) {\n\n\t\t\t\tthis.type = type;\n\t\t\t\tthis.trigger('relayout');\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "60c7264a",
+				"parameters": [
+					{
+						"chunk": "lychee.enumof(Composite.TYPE, type) ? type : null",
+						"name": "type",
+						"type": "Enum",
+						"value": "Composite.TYPE"
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setVisible": {
+				"chunk": "function(visible) {\n\n\t\t\tvisible = typeof visible === 'boolean' ? visible : null;\n\n\n\t\t\tif (visible !== null) {\n\n\t\t\t\tlet fade = false;\n\t\t\t\tif (this.visible === false && visible === true) {\n\t\t\t\t\tfade = true;\n\t\t\t\t}\n\n\n\t\t\t\tthis.visible = visible;\n\n\n\t\t\t\tif (fade === true) {\n\t\t\t\t\tthis.__fade = true;\n\t\t\t\t\tthis.trigger('relayout');\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "c680fa33",
+				"parameters": [
+					{
+						"chunk": "typeof visible === 'boolean' ? visible : null",
+						"name": "visible",
+						"type": "Boolean",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

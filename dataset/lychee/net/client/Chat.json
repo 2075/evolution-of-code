@@ -1,0 +1,205 @@
+{
+	"header": {
+		"identifier": "lychee.net.client.Chat",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [
+			"lychee.net.Service"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Service": {
+			"chunk": "lychee.import('lychee.net.Service')",
+			"type": "lychee.Definition",
+			"hash": "1de466ca",
+			"value": {
+				"reference": "lychee.net.Service",
+				"arguments": []
+			}
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(id, client, data) {\n\n\t\tid = typeof id === 'string' ? id : 'chat';\n\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.room = null;\n\t\tthis.user = null;\n\n\n\t\t_Service.call(this, id, client, _Service.TYPE.client);\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tthis.setRoom(states.room);\n\t\tthis.setUser(states.user);\n\n\t\tdelete states.room;\n\t\tdelete states.user;\n\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "8a643315",
+			"parameters": [
+				{
+					"chunk": "typeof id === 'string' ? id : 'chat'",
+					"name": "id",
+					"type": "String",
+					"value": "chat"
+				},
+				{
+					"chunk": null,
+					"name": "client",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "undefined"
+				}
+			]
+		},
+		"states": {
+			"room": "setRoom",
+			"user": "setUser"
+		},
+		"properties": {
+			"room": {
+				"chunk": "this.room = null;",
+				"type": "null",
+				"hash": "f540f2da",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"user": {
+				"chunk": "this.user = null;",
+				"type": "null",
+				"hash": "e5c3b4f3",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Service.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.net.client.Chat';\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.room !== null) states.room = this.room;\n\t\t\tif (this.user !== null) states.user = this.user;\n\n\n\t\t\tdata['arguments'][2] = states;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "7e589585",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"sync": {
+				"chunk": "function() {\n\n\t\t\tlet user = this.user;\n\t\t\tlet room = this.room;\n\t\t\tif (user !== null && room !== null) {\n\n\t\t\t\tif (this.tunnel !== null) {\n\n\t\t\t\t\tthis.tunnel.send({\n\t\t\t\t\t\tuser: user,\n\t\t\t\t\t\troom: room\n\t\t\t\t\t}, {\n\t\t\t\t\t\tid:    this.id,\n\t\t\t\t\t\tevent: 'sync'\n\t\t\t\t\t});\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "14810a39",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"message": {
+				"chunk": "function(message) {\n\n\t\t\tmessage = typeof message === 'string' ? message : null;\n\n\n\t\t\tif (message !== null) {\n\n\t\t\t\tlet user = this.user;\n\t\t\t\tlet room = this.room;\n\t\t\t\tif (user !== null && room !== null) {\n\n\t\t\t\t\tif (this.tunnel !== null) {\n\n\t\t\t\t\t\tthis.tunnel.send({\n\t\t\t\t\t\t\tmessage: message,\n\t\t\t\t\t\t\tuser:    user,\n\t\t\t\t\t\t\troom:    room\n\t\t\t\t\t\t}, {\n\t\t\t\t\t\t\tid:    this.id,\n\t\t\t\t\t\t\tevent: 'message'\n\t\t\t\t\t\t});\n\n\t\t\t\t\t\treturn true;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "144be61a",
+				"parameters": [
+					{
+						"chunk": "typeof message === 'string' ? message : null",
+						"name": "message",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setRoom": {
+				"chunk": "function(room) {\n\n\t\t\troom = typeof room === 'string' ? room : null;\n\n\n\t\t\tif (room !== null) {\n\n\t\t\t\tthis.room = room;\n\t\t\t\tthis.sync();\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "0d0b624d",
+				"parameters": [
+					{
+						"chunk": "typeof room === 'string' ? room : null",
+						"name": "room",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setUser": {
+				"chunk": "function(user) {\n\n\t\t\tuser = typeof user === 'string' ? user : null;\n\n\n\t\t\tif (user !== null) {\n\n\t\t\t\tthis.user = user;\n\t\t\t\tthis.sync();\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "91ae526a",
+				"parameters": [
+					{
+						"chunk": "typeof user === 'string' ? user : null",
+						"name": "user",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

@@ -1,0 +1,473 @@
+{
+	"header": {
+		"identifier": "lychee.ai.Layer",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"lychee.ai.Agent"
+		],
+		"includes": [
+			"lychee.event.Emitter"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Agent": {
+			"chunk": "lychee.import('lychee.ai.Agent')",
+			"type": "lychee.Definition",
+			"hash": "d54840fa",
+			"value": {
+				"reference": "lychee.ai.Agent",
+				"arguments": []
+			}
+		},
+		"_Emitter": {
+			"chunk": "lychee.import('lychee.event.Emitter')",
+			"type": "lychee.Definition",
+			"hash": "b60271ea",
+			"value": {
+				"reference": "lychee.event.Emitter",
+				"arguments": []
+			}
+		},
+		"_validate_agent": {
+			"chunk": "function(agent) {\n\n\t\tif (agent instanceof Object) {\n\n\t\t\tif (\n\t\t\t\ttypeof agent.update === 'function'\n\t\t\t\t&& typeof agent.crossover === 'function'\n\t\t\t\t&& typeof agent.fitness === 'number'\n\t\t\t\t&& typeof agent.reward === 'function'\n\t\t\t\t&& typeof agent.punish === 'function'\n\t\t\t) {\n\t\t\t\treturn true;\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn false;\n\n\t}",
+			"type": "function",
+			"hash": "349119b2",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "agent",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "true",
+					"type": "Boolean",
+					"value": true
+				},
+				{
+					"chunk": "false",
+					"type": "Boolean",
+					"value": false
+				}
+			]
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\t// XXX: Keep Layer API compatibility\n\t\tthis.width    = 0;\n\t\tthis.height   = 0;\n\t\tthis.depth    = 0;\n\t\tthis.radius   = 0;\n\t\tthis.alpha    = 1;\n\t\tthis.entities = [];\n\t\tthis.position = { x: 0, y: 0, z: 0 };\n\t\tthis.visible  = true;\n\n\n\t\tthis.agents = [];\n\n\t\tthis.__map = {};\n\n\n\t\tthis.setAgents(states.agents);\n\n\n\t\t_Emitter.call(this);\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "d463cfe9",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"agents": "setAgents"
+		},
+		"properties": {
+			"width": {
+				"chunk": "this.width    = 0;",
+				"type": "Number",
+				"hash": "8b38b39c",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			},
+			"height": {
+				"chunk": "this.height   = 0;",
+				"type": "Number",
+				"hash": "553bd596",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			},
+			"depth": {
+				"chunk": "this.depth    = 0;",
+				"type": "Number",
+				"hash": "a4deadea",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			},
+			"radius": {
+				"chunk": "this.radius   = 0;",
+				"type": "Number",
+				"hash": "5bca5324",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			},
+			"alpha": {
+				"chunk": "this.alpha    = 1;",
+				"type": "Number",
+				"hash": "bfddf02c",
+				"value": {
+					"chunk": "1",
+					"type": "Number",
+					"hash": "9416ac93",
+					"value": 1
+				}
+			},
+			"entities": {
+				"chunk": "this.entities = [];",
+				"type": "Array",
+				"hash": "d084d553",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"position": {
+				"chunk": "this.position = { x: 0, y: 0, z: 0 };",
+				"type": "Object",
+				"hash": "0192e5fc",
+				"value": {
+					"chunk": "{ x: 0, y: 0, z: 0 }",
+					"type": "Object",
+					"hash": "63c3e4d6",
+					"value": {
+						"x": 0,
+						"y": 0,
+						"z": 0
+					}
+				}
+			},
+			"visible": {
+				"chunk": "this.visible  = true;",
+				"type": "Boolean",
+				"hash": "5f2eb3ac",
+				"value": {
+					"chunk": "true",
+					"type": "Boolean",
+					"hash": "34edcf72",
+					"value": true
+				}
+			},
+			"agents": {
+				"chunk": "this.agents = [];",
+				"type": "Array",
+				"hash": "32b7d9a0",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"__map": {
+				"chunk": "this.__map = {};",
+				"type": "Object",
+				"hash": "f89ac2ca",
+				"value": {
+					"chunk": "{}",
+					"type": "Object",
+					"hash": "30f4c306",
+					"value": {}
+				}
+			}
+		},
+		"enums": {},
+		"events": {
+			"epoche": {
+				"name": "epoche",
+				"methods": [
+					"update"
+				],
+				"parameters": []
+			}
+		},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ai.Layer';\n\n\t\t\tlet states = {};\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.agents.length > 0) {\n\t\t\t\tblob.agents = this.agents.map(lychee.serialize);\n\t\t\t}\n\n\t\t\tif (blob.agents instanceof Array && Object.keys(this.__map).length > 0) {\n\n\t\t\t\tblob.map = Object.map(this.__map, function(val, key) {\n\n\t\t\t\t\tlet index = this.agents.indexOf(val);\n\t\t\t\t\tif (index !== -1) {\n\t\t\t\t\t\treturn index;\n\t\t\t\t\t}\n\n\n\t\t\t\t\treturn undefined;\n\n\t\t\t\t}, this);\n\n\t\t\t}\n\n\n\t\t\tdata['arguments'][0] = states;\n\t\t\tdata['blob']         = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "46e4d91b",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"render": {
+				"chunk": "function(renderer, offsetX, offsetY) {\n\t\t\t// XXX: Do nothing\n\t\t}",
+				"type": "function",
+				"hash": "6879fa3f",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "renderer",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetX",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetY",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"update": {
+				"chunk": "function(clock, delta) {\n\n\t\t\tlet agents   = this.agents;\n\t\t\tlet is_alive = false;\n\n\t\t\tfor (let a = 0, al = agents.length; a < al; a++) {\n\n\t\t\t\tlet agent = agents[a];\n\t\t\t\tif (agent.alive === true) {\n\t\t\t\t\tagent.update(clock, delta);\n\t\t\t\t\tis_alive = true;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tif (is_alive === false) {\n\t\t\t\tthis.trigger('epoche');\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "cafb58ab",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "clock",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "delta",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"addAgent": {
+				"chunk": "function(agent) {\n\n\t\t\tagent = _validate_agent(agent) === true ? agent : null;\n\n\n\t\t\tif (agent !== null) {\n\n\t\t\t\tlet index = this.agents.indexOf(agent);\n\t\t\t\tif (index === -1) {\n\n\t\t\t\t\tthis.agents.push(agent);\n\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "f0aab5d0",
+				"parameters": [
+					{
+						"chunk": "_validate_agent(agent) === true ? agent : null",
+						"name": "agent",
+						"type": "lychee.ai.Agent",
+						"value": {
+							"constructor": "lychee.ai.Agent",
+							"arguments": []
+						}
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setAgent": {
+				"chunk": "function(id, agent) {\n\n\t\t\tid    = typeof id === 'string'          ? id    : null;\n\t\t\tagent = _validate_agent(agent) === true ? agent : null;\n\n\n\t\t\tif (id !== null && agent !== null && this.__map[id] === undefined) {\n\n\t\t\t\tthis.__map[id] = agent;\n\n\t\t\t\tlet result = this.addAgent(agent);\n\t\t\t\tif (result === true) {\n\t\t\t\t\treturn true;\n\t\t\t\t} else {\n\t\t\t\t\tdelete this.__map[id];\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "923af1a0",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'string'          ? id    : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					},
+					{
+						"chunk": "_validate_agent(agent) === true ? agent : null",
+						"name": "agent",
+						"type": "lychee.ai.Agent",
+						"value": {
+							"constructor": "lychee.ai.Agent",
+							"arguments": []
+						}
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"getAgent": {
+				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tlet found = null;\n\n\n\t\t\tif (id !== null) {\n\n\t\t\t\tlet num = parseInt(id, 10);\n\n\t\t\t\tif (this.__map[id] !== undefined) {\n\t\t\t\t\tfound = this.__map[id];\n\t\t\t\t} else if (isNaN(num) === false) {\n\t\t\t\t\tfound = this.agents[num] || null;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn found;\n\n\t\t}",
+				"type": "function",
+				"hash": "0f51e28f",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'string' ? id : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "null",
+						"type": "null",
+						"value": null
+					},
+					{
+						"chunk": "this.__map[id]",
+						"type": "undefined",
+						"value": {
+							"reference": "this.__map[id]",
+							"arguments": []
+						}
+					},
+					{
+						"chunk": "this.agents[num] || null",
+						"type": "undefined",
+						"value": {
+							"reference": "this.agents[num] || null",
+							"arguments": []
+						}
+					}
+				]
+			},
+			"removeAgent": {
+				"chunk": "function(agent) {\n\n\t\t\tagent = _validate_agent(agent) === true ? agent : null;\n\n\n\t\t\tif (agent !== null) {\n\n\t\t\t\tlet found = false;\n\n\t\t\t\tlet index = this.agents.indexOf(agent);\n\t\t\t\tif (index !== -1) {\n\n\t\t\t\t\tthis.agents.splice(index, 1);\n\t\t\t\t\tfound = true;\n\n\t\t\t\t}\n\n\n\t\t\t\tfor (let id in this.__map) {\n\n\t\t\t\t\tif (this.__map[id] === agent) {\n\n\t\t\t\t\t\tdelete this.__map[id];\n\t\t\t\t\t\tfound = true;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\treturn found;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "3715975c",
+				"parameters": [
+					{
+						"chunk": "_validate_agent(agent) === true ? agent : null",
+						"name": "agent",
+						"type": "lychee.ai.Agent",
+						"value": {
+							"constructor": "lychee.ai.Agent",
+							"arguments": []
+						}
+					}
+				],
+				"values": [
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					},
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"setAgents": {
+				"chunk": "function(agents) {\n\n\t\t\tagents = agents instanceof Array ? agents : null;\n\n\n\t\t\tlet all = true;\n\n\t\t\tif (agents !== null) {\n\n\t\t\t\tfor (let a = 0, al = agents.length; a < al; a++) {\n\n\t\t\t\t\tlet result = this.addAgent(agents[a]);\n\t\t\t\t\tif (result === false) {\n\t\t\t\t\t\tall = false;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn all;\n\n\t\t}",
+				"type": "function",
+				"hash": "8c6eb18a",
+				"parameters": [
+					{
+						"chunk": "agents instanceof Array ? agents : null",
+						"name": "agents",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"removeAgents": {
+				"chunk": "function() {\n\n\t\t\tlet agents = this.agents;\n\n\t\t\tfor (let a = 0, al = agents.length; a < al; a++) {\n\n\t\t\t\tthis.removeAgent(agents[a]);\n\n\t\t\t\tal--;\n\t\t\t\ta--;\n\n\t\t\t}\n\n\t\t\treturn true;\n\n\t\t}",
+				"type": "function",
+				"hash": "818aa5d4",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"setPosition": {
+				"chunk": "function(position) {\n\n\t\t\tposition = position instanceof Object ? position : null;\n\n\n\t\t\tif (position !== null) {\n\n\t\t\t\tthis.position.x = typeof position.x === 'number' ? position.x : this.position.x;\n\t\t\t\tthis.position.y = typeof position.y === 'number' ? position.y : this.position.y;\n\t\t\t\tthis.position.z = typeof position.z === 'number' ? position.z : this.position.z;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "da2f4510",
+				"parameters": [
+					{
+						"chunk": "position instanceof Object ? position : null",
+						"name": "position",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

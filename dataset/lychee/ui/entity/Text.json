@@ -1,0 +1,254 @@
+{
+	"header": {
+		"identifier": "lychee.ui.entity.Text",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [
+			"lychee.ui.Entity"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Entity": {
+			"chunk": "lychee.import('lychee.ui.Entity')",
+			"type": "lychee.Definition",
+			"hash": "adc9fb14",
+			"value": {
+				"reference": "lychee.ui.Entity",
+				"arguments": []
+			}
+		},
+		"_FONT": {
+			"chunk": "attachments[\"fnt\"]",
+			"type": "Font",
+			"hash": "3076ee3c",
+			"value": {
+				"constructor": "Font",
+				"arguments": []
+			}
+		},
+		"_render_buffer": {
+			"chunk": "function(renderer) {\n\n\t\tlet font = this.font;\n\t\tif (font !== null && font.texture !== null) {\n\n\t\t\tif (this.__buffer !== null) {\n\t\t\t\tthis.__buffer.resize(this.width, this.height);\n\t\t\t} else {\n\t\t\t\tthis.__buffer = renderer.createBuffer(this.width, this.height);\n\t\t\t}\n\n\n\t\t\trenderer.clear(this.__buffer);\n\t\t\trenderer.setBuffer(this.__buffer);\n\t\t\trenderer.setAlpha(1.0);\n\n\n\t\t\tlet lines = this.__lines;\n\t\t\tlet lh    = font.lineheight;\n\t\t\tlet ll    = lines.length;\n\t\t\tif (ll > 0) {\n\n\t\t\t\tfor (let l = 0; l < ll; l++) {\n\n\t\t\t\t\trenderer.drawText(\n\t\t\t\t\t\t0,\n\t\t\t\t\t\t0 + lh * l,\n\t\t\t\t\t\tlines[l],\n\t\t\t\t\t\tfont,\n\t\t\t\t\t\tfalse\n\t\t\t\t\t);\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\trenderer.setBuffer(null);\n\t\t\tthis.__isDirty = false;\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "3913b345",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "renderer",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.font  = _FONT;\n\t\tthis.value = '';\n\n\t\tthis.__buffer  = null;\n\t\tthis.__lines   = [];\n\t\tthis.__isDirty = true;\n\n\n\t\tthis.setFont(states.font);\n\t\tthis.setValue(states.value);\n\n\t\tdelete states.font;\n\t\tdelete states.value;\n\n\n\t\tstates.width  = this.width;\n\t\tstates.height = this.height;\n\t\tstates.shape  = _Entity.SHAPE.rectangle;\n\n\n\t\t_Entity.call(this, states);\n\n\t\tstates = null;\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tthis.bind('relayout', function() {\n\t\t\tthis.__isDirty = true;\n\t\t}, this);\n\n\t\t// this.bind('touch', function() {\n\t\t// \tthis.trigger('change', [ this.value ]);\n\t\t// }, this);\n\n\t}",
+			"type": "function",
+			"hash": "175345df",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"font": "setFont",
+			"value": "setValue"
+		},
+		"properties": {
+			"font": {
+				"chunk": "this.font  = _FONT;",
+				"type": "Font",
+				"hash": "c759f68b",
+				"value": {
+					"chunk": "_FONT",
+					"type": "Font",
+					"hash": "b185383f",
+					"value": {
+						"constructor": "Font",
+						"arguments": [
+							"/tmp/Font.fnt"
+						]
+					}
+				}
+			},
+			"value": {
+				"chunk": "this.value = '';",
+				"type": "String",
+				"hash": "1bbfa317",
+				"value": {
+					"chunk": "''",
+					"type": "String",
+					"hash": "30f4c306",
+					"value": ""
+				}
+			},
+			"__buffer": {
+				"chunk": "this.__buffer  = null;",
+				"type": "null",
+				"hash": "c172b0c3",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"__lines": {
+				"chunk": "this.__lines   = [];",
+				"type": "Array",
+				"hash": "05d82e1c",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"__isDirty": {
+				"chunk": "this.__isDirty = true;",
+				"type": "Boolean",
+				"hash": "0ce9596a",
+				"value": {
+					"chunk": "true",
+					"type": "Boolean",
+					"hash": "34edcf72",
+					"value": true
+				}
+			}
+		},
+		"enums": {},
+		"events": {
+			"change": {
+				"name": "change",
+				"methods": [],
+				"parameters": [
+					{
+						"chunk": "this.value",
+						"type": "undefined",
+						"hash": "8d57048e",
+						"value": {
+							"reference": "this.value",
+							"arguments": []
+						}
+					}
+				]
+			}
+		},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {\n\n\t\t\tlet font = lychee.deserialize(blob.font);\n\t\t\tif (font !== null) {\n\t\t\t\tthis.setFont(font);\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "814dbb80",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "blob",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Entity.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.entity.Text';\n\n\t\t\tlet states = data['arguments'][0];\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.value !== '') states.value = this.value;\n\n\n\t\t\tif (this.font !== null) blob.font = lychee.serialize(this.font);\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "106e5215",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"render": {
+				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tif (this.visible === false) return;\n\n\n\t\t\tlet alpha    = this.alpha;\n\t\t\tlet position = this.position;\n\t\t\tlet x        = position.x + offsetX;\n\t\t\tlet y        = position.y + offsetY;\n\t\t\tlet hwidth   = this.width  / 2;\n\t\t\tlet hheight  = this.height / 2;\n\n\n\t\t\tif (this.__isDirty === true) {\n\t\t\t\t_render_buffer.call(this, renderer);\n\t\t\t}\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(alpha);\n\t\t\t}\n\n\t\t\tif (this.__buffer !== null) {\n\n\t\t\t\trenderer.drawBuffer(\n\t\t\t\t\tx - hwidth,\n\t\t\t\t\ty - hheight,\n\t\t\t\t\tthis.__buffer\n\t\t\t\t);\n\n\t\t\t}\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(1.0);\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "d2659f04",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "renderer",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetX",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetY",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"setFont": {
+				"chunk": "function(font) {\n\n\t\t\tfont = font instanceof Font ? font : null;\n\n\n\t\t\tif (font !== null) {\n\n\t\t\t\tthis.font = font;\n\n\t\t\t\t// refresh the layout\n\t\t\t\tif (this.value !== '') {\n\t\t\t\t\tthis.setValue(this.value);\n\t\t\t\t}\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "02ed6421",
+				"parameters": [
+					{
+						"chunk": "font instanceof Font ? font : null",
+						"name": "font",
+						"type": "Font",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setValue": {
+				"chunk": "function(value) {\n\n\t\t\tvalue = typeof value === 'string' ? value : null;\n\n\n\t\t\tif (value !== null) {\n\n\t\t\t\tlet font = this.font;\n\t\t\t\tif (font !== null) {\n\n\t\t\t\t\tlet realwidth  = 0;\n\t\t\t\t\tlet realheight = 0;\n\t\t\t\t\tlet lines      = value.split('\\n');\n\n\t\t\t\t\tlines.forEach(function(line) {\n\n\t\t\t\t\t\tlet tmp = font.measure(line);\n\t\t\t\t\t\tif (tmp.realwidth  > realwidth)  realwidth  = tmp.realwidth;\n\t\t\t\t\t\tif (tmp.realheight > realheight) realheight = tmp.realheight;\n\n\t\t\t\t\t});\n\n\t\t\t\t\tthis.width  = realwidth;\n\t\t\t\t\tthis.height = realheight * lines.length;\n\n\t\t\t\t}\n\n\n\t\t\t\tthis.value = value;\n\n\t\t\t\tthis.__lines   = value.split('\\n');\n\t\t\t\tthis.__isDirty = true;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "7eb86250",
+				"parameters": [
+					{
+						"chunk": "typeof value === 'string' ? value : null",
+						"name": "value",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

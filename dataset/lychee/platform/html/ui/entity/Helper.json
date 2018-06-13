@@ -1,0 +1,214 @@
+{
+	"header": {
+		"identifier": "lychee.ui.entity.Helper",
+		"attaches": {},
+		"tags": {
+			"platform": "html"
+		},
+		"requires": [],
+		"includes": [
+			"lychee.ui.entity.Button"
+		],
+		"supports": {
+			"body": "function(lychee, global) {\n\n\tif (\n\t\ttypeof global.document !== 'undefined'\n\t\t&& typeof global.document.createElement === 'function'\n\t\t&& typeof global.location !== 'undefined'\n\t\t&& typeof global.location.href === 'string'\n\t) {\n\t\treturn true;\n\t}\n\n\n\treturn false;\n\n}",
+			"hash": "0f1d0e9d",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "lychee",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "global",
+					"type": "undefined"
+				}
+			]
+		},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Button": {
+			"chunk": "lychee.import('lychee.ui.entity.Button')",
+			"type": "lychee.Definition",
+			"hash": "b3693ec1",
+			"value": {
+				"reference": "lychee.ui.entity.Button",
+				"arguments": []
+			}
+		},
+		"_CONFIG": {
+			"chunk": "attachments[\"json\"].buffer",
+			"type": "undefined",
+			"hash": "b8ed9603"
+		},
+		"_TEXTURE": {
+			"chunk": "attachments[\"png\"]",
+			"type": "Texture",
+			"hash": "44097138",
+			"value": {
+				"constructor": "Texture",
+				"arguments": []
+			}
+		},
+		"_is_value": {
+			"chunk": "function(value) {\n\n\t\tvalue = typeof value === 'string' ? value : null;\n\n\n\t\tif (value !== null) {\n\n\t\t\tlet action   = value.split('=')[0] || '';\n\t\t\tlet resource = value.split('=')[1] || '';\n\t\t\tlet data     = value.split('=')[2] || '';\n\n\n\t\t\tif (action === 'boot' && resource !== '') {\n\n\t\t\t\treturn true;\n\n\t\t\t} else if (action === 'profile' && resource !== '' && data !== '') {\n\n\t\t\t\treturn true;\n\n\t\t\t} else if (action === 'unboot') {\n\n\t\t\t\treturn true;\n\n\t\t\t} else if (/^(start|stop|edit|file|web)$/g.test(action) && resource !== '') {\n\n\t\t\t\treturn true;\n\n\t\t\t} else if (action === 'refresh') {\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn false;\n\n\t}",
+			"type": "function",
+			"hash": "d0b60047",
+			"parameters": [
+				{
+					"chunk": "typeof value === 'string' ? value : null",
+					"name": "value",
+					"type": "String",
+					"value": null
+				}
+			],
+			"values": [
+				{
+					"chunk": "true",
+					"type": "Boolean",
+					"value": true
+				},
+				{
+					"chunk": "false",
+					"type": "Boolean",
+					"value": false
+				}
+			]
+		},
+		"_help": {
+			"chunk": "function(value) {\n\n\t\tlet action  = value.split('=')[0];\n\t\tlet element = global.document.createElement('a');\n\n\n\t\tif (action === 'refresh') {\n\t\t\telement.href = './' + global.location.href.split('/').pop();\n\t\t} else {\n\t\t\telement.href = 'lycheejs://' + value;\n\t\t}\n\n\t\telement.click();\n\n\n\t\treturn true;\n\n\t}",
+			"type": "function",
+			"hash": "790b0df8",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "value",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "true",
+					"type": "Boolean",
+					"value": true
+				}
+			]
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({\n\t\t\tlabel: 'HELPER'\n\t\t}, data);\n\n\n\t\tthis.__action = null;\n\n\n\t\t_Button.call(this, states);\n\n\t\tstates = null;\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tthis.bind('change', function(value) {\n\t\t\treturn _help(value);\n\t\t}, this);\n\n\t}",
+			"type": "function",
+			"hash": "5c78c14f",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {},
+		"properties": {
+			"__action": {
+				"chunk": "this.__action = null;",
+				"type": "null",
+				"hash": "9deb4636",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Button.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.entity.Helper';\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "9f302b7b",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"render": {
+				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tif (this.visible === false) return;\n\n\n\t\t\tlet action   = this.__action;\n\t\t\tlet alpha    = this.alpha;\n\t\t\tlet font     = this.font;\n\t\t\tlet label    = this.label;\n\t\t\tlet position = this.position;\n\t\t\tlet x        = position.x + offsetX;\n\t\t\tlet y        = position.y + offsetY;\n\t\t\tlet hwidth   = this.width  / 2;\n\t\t\tlet hheight  = this.height / 2;\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(alpha);\n\t\t\t}\n\n\n\t\t\trenderer.drawBox(\n\t\t\t\tx - hwidth,\n\t\t\t\ty - hheight,\n\t\t\t\tx + hwidth,\n\t\t\t\ty + hheight,\n\t\t\t\t'#545454',\n\t\t\t\ttrue\n\t\t\t);\n\n\n\t\t\tlet pulse = this.__pulse;\n\t\t\tif (pulse.active === true) {\n\n\t\t\t\trenderer.setAlpha(pulse.alpha);\n\n\t\t\t\trenderer.drawBox(\n\t\t\t\t\tx - hwidth,\n\t\t\t\t\ty - hheight,\n\t\t\t\t\tx + hwidth,\n\t\t\t\t\ty + hheight,\n\t\t\t\t\t'#32afe5',\n\t\t\t\t\ttrue\n\t\t\t\t);\n\n\t\t\t\trenderer.setAlpha(1.0);\n\n\t\t\t}\n\n\n\t\t\tif (action !== null) {\n\n\t\t\t\tlet map = _CONFIG.map[action] || null;\n\t\t\t\tif (map !== null) {\n\n\t\t\t\t\tif (this.width > 96) {\n\n\t\t\t\t\t\trenderer.drawSprite(\n\t\t\t\t\t\t\tx - hwidth,\n\t\t\t\t\t\t\ty - hheight,\n\t\t\t\t\t\t\t_TEXTURE,\n\t\t\t\t\t\t\tmap[0]\n\t\t\t\t\t\t);\n\n\t\t\t\t\t\trenderer.drawText(\n\t\t\t\t\t\t\tx,\n\t\t\t\t\t\t\ty,\n\t\t\t\t\t\t\tlabel,\n\t\t\t\t\t\t\tfont,\n\t\t\t\t\t\t\ttrue\n\t\t\t\t\t\t);\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\trenderer.drawSprite(\n\t\t\t\t\t\t\tx - map[0].w / 2,\n\t\t\t\t\t\t\ty - hheight,\n\t\t\t\t\t\t\t_TEXTURE,\n\t\t\t\t\t\t\tmap[0]\n\t\t\t\t\t\t);\n\n\t\t\t\t\t}\n\n\t\t\t\t} else if (label !== null && font !== null) {\n\n\t\t\t\t\trenderer.drawText(\n\t\t\t\t\t\tx,\n\t\t\t\t\t\ty,\n\t\t\t\t\t\tlabel,\n\t\t\t\t\t\tfont,\n\t\t\t\t\t\ttrue\n\t\t\t\t\t);\n\n\t\t\t\t}\n\n\t\t\t} else if (label !== null && font !== null) {\n\n\t\t\t\trenderer.drawText(\n\t\t\t\t\tx,\n\t\t\t\t\ty,\n\t\t\t\t\tlabel,\n\t\t\t\t\tfont,\n\t\t\t\t\ttrue\n\t\t\t\t);\n\n\t\t\t}\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(1.0);\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "ff033886",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "renderer",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetX",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetY",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"setValue": {
+				"chunk": "function(value) {\n\n\t\t\tvalue = typeof value === 'string' ? value : null;\n\n\n\t\t\tif (value !== null && _is_value(value) === true) {\n\n\t\t\t\tthis.value    = value;\n\t\t\t\tthis.__action = value.split('=')[0] || null;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "b05372fd",
+				"parameters": [
+					{
+						"chunk": "typeof value === 'string' ? value : null",
+						"name": "value",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

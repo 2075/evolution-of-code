@@ -1,0 +1,254 @@
+{
+	"header": {
+		"identifier": "lychee.ui.element.Search",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"lychee.ui.entity.Input",
+			"lychee.ui.entity.Select"
+		],
+		"includes": [
+			"lychee.ui.Element"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Element": {
+			"chunk": "lychee.import('lychee.ui.Element')",
+			"type": "lychee.Definition",
+			"hash": "8e05c4c6",
+			"value": {
+				"reference": "lychee.ui.Element",
+				"arguments": []
+			}
+		},
+		"_Input": {
+			"chunk": "lychee.import('lychee.ui.entity.Input')",
+			"type": "lychee.Definition",
+			"hash": "42594032",
+			"value": {
+				"reference": "lychee.ui.entity.Input",
+				"arguments": []
+			}
+		},
+		"_Select": {
+			"chunk": "lychee.import('lychee.ui.entity.Select')",
+			"type": "lychee.Definition",
+			"hash": "ebc6bc7f",
+			"value": {
+				"reference": "lychee.ui.entity.Select",
+				"arguments": []
+			}
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.data  = [];\n\t\tthis.value = '';\n\n\n\t\tstates.label    = 'Search';\n\t\tstates.options  = [];\n\t\tstates.relayout = true;\n\n\n\t\t_Element.call(this, states);\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tlet input = new _Input({\n\t\t\ttype:  _Input.TYPE.text,\n\t\t\tvalue: ''\n\t\t});\n\n\t\tinput.bind('change', function(value) {\n\n\t\t\tlet select = this.getEntity('select');\n\t\t\tif (select !== null) {\n\n\t\t\t\tlet filtered = this.data.filter(function(other) {\n\t\t\t\t\treturn other.indexOf(value) !== -1;\n\t\t\t\t});\n\n\t\t\t\tif (filtered.length === 0) {\n\n\t\t\t\t\tselect.setOptions([ '- No matches -' ]);\n\t\t\t\t\tselect.height = 32;\n\t\t\t\t\tthis.trigger('relayout');\n\n\t\t\t\t\tthis.value = value;\n\t\t\t\t\tthis.trigger('change', [ value ]);\n\n\t\t\t\t} else {\n\n\t\t\t\t\tselect.setOptions(filtered);\n\t\t\t\t\tselect.height = Math.min(32 * filtered.length, this.height - 128);\n\t\t\t\t\tthis.trigger('relayout');\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}, this);\n\n\t\tlet select = new _Select({\n\t\t\toptions: this.data,\n\t\t\tvalue:   this.data[0],\n\t\t\theight:  this.height - 128\n\t\t});\n\n\t\tselect.bind('change', function(value) {\n\n\t\t\tif (value !== '- No matches -') {\n\t\t\t\tthis.value = value;\n\t\t\t\tthis.trigger('change', [ value ]);\n\t\t\t}\n\n\t\t}, this);\n\n\n\t\tthis.addEntity(input);\n\t\tthis.addEntity(select);\n\n\n\t\tthis.setData(states.data);\n\t\tdelete states.data;\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "2c9ccd81",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"data": "setData"
+		},
+		"properties": {
+			"data": {
+				"chunk": "this.data  = [];",
+				"type": "Array",
+				"hash": "cb2092e0",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"value": {
+				"chunk": "this.value = '';",
+				"type": "String",
+				"hash": "1bbfa317",
+				"value": {
+					"chunk": "''",
+					"type": "String",
+					"hash": "30f4c306",
+					"value": ""
+				}
+			}
+		},
+		"enums": {},
+		"events": {
+			"relayout": {
+				"name": "relayout",
+				"methods": [
+					"setData"
+				],
+				"parameters": []
+			},
+			"change": {
+				"name": "change",
+				"methods": [],
+				"parameters": [
+					{
+						"chunk": "value",
+						"type": "String",
+						"hash": "d9093f6e",
+						"value": ""
+					}
+				]
+			}
+		},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Element.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.element.Search';\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "400ed85c",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"getEntity": {
+				"chunk": "function(id, position) {\n\n\t\t\tid        = typeof id === 'string'    ? id       : null;\n\t\t\tposition = position instanceof Object ? position : null;\n\n\n\t\t\tif (id === 'search') {\n\t\t\t\treturn this.entities[3] || null;\n\t\t\t} else if (id === 'select') {\n\t\t\t\treturn this.entities[5] || null;\n\t\t\t}\n\n\n\t\t\treturn _Element.prototype.getEntity.call(this, id, position);\n\n\t\t}",
+				"type": "function",
+				"hash": "0912f822",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'string'    ? id       : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					},
+					{
+						"chunk": "position instanceof Object ? position : null",
+						"name": "position",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this.entities[3] || null",
+						"type": "undefined",
+						"value": {
+							"reference": "this.entities[3] || null",
+							"arguments": []
+						}
+					},
+					{
+						"chunk": "this.entities[5] || null",
+						"type": "undefined",
+						"value": {
+							"reference": "this.entities[5] || null",
+							"arguments": []
+						}
+					},
+					{
+						"chunk": "null",
+						"type": "null",
+						"value": null
+					},
+					{
+						"chunk": "this.__map[id]",
+						"type": "undefined",
+						"value": {
+							"reference": "this.__map[id]",
+							"arguments": []
+						}
+					},
+					{
+						"chunk": "this.entities[num + 2] || null",
+						"type": "Number",
+						"value": 1337
+					},
+					{
+						"chunk": "entity",
+						"type": "lychee.app.Entity",
+						"value": {
+							"constructor": "lychee.app.Entity",
+							"arguments": []
+						}
+					}
+				]
+			},
+			"setData": {
+				"chunk": "function(data) {\n\n\t\t\tdata = data instanceof Array ? data : null;\n\n\n\t\t\tif (data !== null) {\n\n\t\t\t\tthis.data = data.map(function(value) {\n\t\t\t\t\treturn '' + value;\n\t\t\t\t}).sort();\n\n\n\t\t\t\tlet select = this.getEntity('select');\n\t\t\t\tif (select !== null) {\n\t\t\t\t\tselect.setOptions(this.data);\n\t\t\t\t\tselect.height = Math.min(32 * this.data.length, this.height - 128);\n\t\t\t\t\tthis.trigger('relayout');\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "4c5f4846",
+				"parameters": [
+					{
+						"chunk": "data instanceof Array ? data : null",
+						"name": "data",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setValue": {
+				"chunk": "function(value) {\n\n\t\t\tvalue = typeof value === 'string' ? value : null;\n\n\n\t\t\tif (value !== null) {\n\n\t\t\t\tthis.value = value;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "0b16663f",
+				"parameters": [
+					{
+						"chunk": "typeof value === 'string' ? value : null",
+						"name": "value",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

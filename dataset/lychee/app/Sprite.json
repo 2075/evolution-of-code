@@ -1,0 +1,265 @@
+{
+	"header": {
+		"identifier": "lychee.app.Sprite",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [
+			"lychee.app.Entity"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Entity": {
+			"chunk": "lychee.import('lychee.app.Entity')",
+			"type": "lychee.Definition",
+			"hash": "fb88a2da",
+			"value": {
+				"reference": "lychee.app.Entity",
+				"arguments": []
+			}
+		},
+		"_start_animation": {
+			"chunk": "function(settings) {\n\n\t\tlet duration = typeof settings.duration === 'number' ? settings.duration : 1000;\n\t\tlet frame    = typeof settings.frame === 'number'    ? settings.frame    : 0;\n\t\tlet frames   = typeof settings.frames === 'number'   ? settings.frames   : 25;\n\t\tlet loop     = settings.loop === true;\n\n\n\t\tlet animation = this.__animation;\n\n\t\tanimation.start    = null;\n\t\tanimation.active   = true;\n\t\tanimation.duration = duration;\n\t\tanimation.frames   = frames;\n\t\tanimation.loop     = loop;\n\n\t\tthis.frame = frame;\n\n\t}",
+			"type": "function",
+			"hash": "5d315f07",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "settings",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_stop_animation": {
+			"chunk": "function() {\n\n\t\tlet animation = this.__animation;\n\n\t\tanimation.active = false;\n\n\t\tthis.frame = 0;\n\n\t}",
+			"type": "function",
+			"hash": "f55b8beb",
+			"parameters": [],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.frame   = 0;\n\t\tthis.texture = null;\n\n\t\tthis.__animation = {\n\t\t\tactive:   false,\n\t\t\tstart:    null,\n\t\t\tframes:   0,\n\t\t\tduration: 0,\n\t\t\tloop:     false\n\t\t};\n\t\tthis.__map = {\n\t\t\t'default': []\n\t\t};\n\n\n\t\tthis.setTexture(states.texture);\n\t\tthis.setMap(states.map);\n\n\t\tdelete states.texture;\n\t\tdelete states.map;\n\n\n\t\t_Entity.call(this, states);\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "25011121",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"texture": "setTexture",
+			"map": "setMap"
+		},
+		"properties": {
+			"frame": {
+				"chunk": "this.frame   = 0;",
+				"type": "Number",
+				"hash": "038dae24",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			},
+			"texture": {
+				"chunk": "this.texture = null;",
+				"type": "null",
+				"hash": "c119cb38",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"__animation": {
+				"chunk": "this.__animation = {\n\t\t\tactive:   false,\n\t\t\tstart:    null,\n\t\t\tframes:   0,\n\t\t\tduration: 0,\n\t\t\tloop:     false\n\t\t};",
+				"type": "Object",
+				"hash": "09ca3e35",
+				"value": {
+					"chunk": "{\n\t\t\tactive:   false,\n\t\t\tstart:    null,\n\t\t\tframes:   0,\n\t\t\tduration: 0,\n\t\t\tloop:     false\n\t\t}",
+					"type": "Object",
+					"hash": "dd3b0905",
+					"value": {
+						"active": false,
+						"start": null,
+						"frames": 0,
+						"duration": 0,
+						"loop": false
+					}
+				}
+			},
+			"__map": {
+				"chunk": "this.__map = {\n\t\t\t'default': []\n\t\t};",
+				"type": "Object",
+				"hash": "b5bfb3f7",
+				"value": {
+					"chunk": "{\n\t\t\t'default': []\n\t\t}",
+					"type": "Object",
+					"hash": "6e6fbb3e",
+					"value": {
+						"default": []
+					}
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {\n\n\t\t\tlet texture = lychee.deserialize(blob.texture);\n\t\t\tif (texture !== null) {\n\t\t\t\tthis.setTexture(texture);\n\t\t\t}\n\n\t\t\tif (blob.animation instanceof Object) {\n\t\t\t\t_start_animation.call(this, blob.animation);\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "5276a478",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "blob",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Entity.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.app.Sprite';\n\n\t\t\tlet states = data['arguments'][0];\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (Object.keys(this.__map).length > 0) {\n\n\t\t\t\tstates.map = {};\n\n\n\t\t\t\tfor (let state in this.__map) {\n\n\t\t\t\t\tstates.map[state] = [];\n\n\n\t\t\t\t\tlet frames = this.__map[state];\n\t\t\t\t\tfor (let f = 0, fl = frames.length; f < fl; f++) {\n\n\t\t\t\t\t\tlet frame  = frames[f];\n\t\t\t\t\t\tlet sframe = {};\n\n\t\t\t\t\t\tif (frame.x !== 0) sframe.x = frame.x;\n\t\t\t\t\t\tif (frame.y !== 0) sframe.y = frame.y;\n\t\t\t\t\t\tif (frame.w !== 0) sframe.w = frame.w;\n\t\t\t\t\t\tif (frame.h !== 0) sframe.h = frame.h;\n\n\n\t\t\t\t\t\tstates.map[state].push(sframe);\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tif (this.__animation.active === true) {\n\n\t\t\t\tblob.animation = {};\n\n\t\t\t\tif (this.__animation.duration !== 1000) blob.animation.duration = this.__animation.duration;\n\t\t\t\tif (this.frame !== 0)                   blob.animation.frame    = this.frame;\n\t\t\t\tif (this.__animation.frames !== 25)     blob.animation.frames   = this.__animation.frames;\n\t\t\t\tif (this.__animation.loop !== false)    blob.animation.loop     = true;\n\n\t\t\t}\n\n\t\t\tif (this.texture !== null) blob.texture = lychee.serialize(this.texture);\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "cea57f85",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.app.Entity',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"render": {
+				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tlet texture = this.texture;\n\t\t\tif (texture !== null) {\n\n\t\t\t\tlet alpha    = this.alpha;\n\t\t\t\tlet position = this.position;\n\n\t\t\t\tlet x1 = 0;\n\t\t\t\tlet y1 = 0;\n\n\n\t\t\t\tif (alpha !== 1) {\n\t\t\t\t\trenderer.setAlpha(alpha);\n\t\t\t\t}\n\n\n\t\t\t\tlet map = this.__map[this.state][this.frame] || null;\n\t\t\t\tif (map !== null) {\n\n\t\t\t\t\tx1 = position.x + offsetX - map.w / 2;\n\t\t\t\t\ty1 = position.y + offsetY - map.h / 2;\n\n\t\t\t\t\trenderer.drawSprite(\n\t\t\t\t\t\tx1,\n\t\t\t\t\t\ty1,\n\t\t\t\t\t\ttexture,\n\t\t\t\t\t\tmap\n\t\t\t\t\t);\n\n\t\t\t\t} else {\n\n\t\t\t\t\tlet hw = (this.width / 2)  || this.radius;\n\t\t\t\t\tlet hh = (this.height / 2) || this.radius;\n\n\t\t\t\t\tx1 = position.x + offsetX - hw;\n\t\t\t\t\ty1 = position.y + offsetY - hh;\n\n\t\t\t\t\trenderer.drawSprite(\n\t\t\t\t\t\tx1,\n\t\t\t\t\t\ty1,\n\t\t\t\t\t\ttexture\n\t\t\t\t\t);\n\n\t\t\t\t}\n\n\n\t\t\t\tif (alpha !== 1) {\n\t\t\t\t\trenderer.setAlpha(1.0);\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\t_Entity.prototype.render.call(this, renderer, offsetX, offsetY);\n\n\t\t}",
+				"type": "function",
+				"hash": "119043f1",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "renderer",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetX",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetY",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"update": {
+				"chunk": "function(clock, delta) {\n\n\t\t\t_Entity.prototype.update.call(this, clock, delta);\n\n\n\t\t\tlet animation = this.__animation;\n\t\t\tif (animation.active === true) {\n\n\t\t\t\tif (animation.start === null) {\n\t\t\t\t\tanimation.start = clock;\n\t\t\t\t}\n\n\t\t\t\tif (animation.start !== null) {\n\n\t\t\t\t\tlet t = (clock - animation.start) / animation.duration;\n\t\t\t\t\tif (t <= 1) {\n\n\t\t\t\t\t\tthis.frame = Math.max(0, Math.ceil(t * animation.frames) - 1);\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tif (animation.loop === true) {\n\t\t\t\t\t\t\tanimation.start = clock;\n\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\tthis.frame = animation.frames - 1;\n\t\t\t\t\t\t\tanimation.active = false;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "138aa84e",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "clock",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "delta",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"setState": {
+				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tlet result = _Entity.prototype.setState.call(this, id);\n\t\t\tif (result === true) {\n\n\t\t\t\tlet map = this.__map[this.state] || null;\n\t\t\t\tif (map !== null) {\n\n\t\t\t\t\tif (map instanceof Array) {\n\n\t\t\t\t\t\tlet statemap = this.states[this.state] || null;\n\t\t\t\t\t\tif (statemap !== null) {\n\n\t\t\t\t\t\t\t_stop_animation.call(this);\n\n\t\t\t\t\t\t\tif (statemap.animation === true) {\n\n\t\t\t\t\t\t\t\t_start_animation.call(this, {\n\t\t\t\t\t\t\t\t\tduration: statemap.duration || 1000,\n\t\t\t\t\t\t\t\t\tframe:    0,\n\t\t\t\t\t\t\t\t\tframes:   map.length,\n\t\t\t\t\t\t\t\t\tloop:     statemap.loop === true\n\t\t\t\t\t\t\t\t});\n\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\tmap = map[0];\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\tif (map.width !== undefined && typeof map.width === 'number') {\n\t\t\t\t\t\tthis.width = map.width;\n\t\t\t\t\t}\n\n\t\t\t\t\tif (map.height !== undefined && typeof map.height === 'number') {\n\t\t\t\t\t\tthis.height = map.height;\n\t\t\t\t\t}\n\n\t\t\t\t\tif (map.radius !== undefined && typeof map.radius === 'number') {\n\t\t\t\t\t\tthis.radius = map.radius;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn result;\n\n\t\t}",
+				"type": "function",
+				"hash": "686f11d0",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'string' ? id : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "result",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"setTexture": {
+				"chunk": "function(texture) {\n\n\t\t\ttexture = texture instanceof Texture ? texture : null;\n\n\n\t\t\tthis.texture = texture;\n\n\t\t\treturn true;\n\n\t\t}",
+				"type": "function",
+				"hash": "9a7943b6",
+				"parameters": [
+					{
+						"chunk": "texture instanceof Texture ? texture : null",
+						"name": "texture",
+						"type": "Texture",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"setMap": {
+				"chunk": "function(map) {\n\n\t\t\tmap = map instanceof Object ? map : null;\n\n\n\t\t\tlet valid = false;\n\n\t\t\tif (map !== null) {\n\n\t\t\t\tfor (let state in map) {\n\n\t\t\t\t\tlet frames = map[state];\n\t\t\t\t\tif (frames instanceof Array) {\n\n\t\t\t\t\t\tthis.__map[state] = [];\n\n\n\t\t\t\t\t\tfor (let f = 0, fl = frames.length; f < fl; f++) {\n\n\t\t\t\t\t\t\tlet frame = frames[f];\n\t\t\t\t\t\t\tif (frame instanceof Object) {\n\n\t\t\t\t\t\t\t\tframe.x = typeof frame.x === 'number' ? frame.x : 0;\n\t\t\t\t\t\t\t\tframe.y = typeof frame.y === 'number' ? frame.y : 0;\n\t\t\t\t\t\t\t\tframe.w = typeof frame.w === 'number' ? frame.w : 0;\n\t\t\t\t\t\t\t\tframe.h = typeof frame.h === 'number' ? frame.h : 0;\n\n\n\t\t\t\t\t\t\t\tthis.__map[state].push(frame);\n\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\tvalid = true;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn valid;\n\n\t\t}",
+				"type": "function",
+				"hash": "45889e7e",
+				"parameters": [
+					{
+						"chunk": "map instanceof Object ? map : null",
+						"name": "map",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					},
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			}
+		}
+	}
+}

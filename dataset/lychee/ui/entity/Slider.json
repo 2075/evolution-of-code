@@ -1,0 +1,478 @@
+{
+	"header": {
+		"identifier": "lychee.ui.entity.Slider",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [
+			"lychee.ui.Entity"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Entity": {
+			"chunk": "lychee.import('lychee.ui.Entity')",
+			"type": "lychee.Definition",
+			"hash": "adc9fb14",
+			"value": {
+				"reference": "lychee.ui.Entity",
+				"arguments": []
+			}
+		},
+		"_FONT": {
+			"chunk": "attachments[\"fnt\"]",
+			"type": "Font",
+			"hash": "3076ee3c",
+			"value": {
+				"constructor": "Font",
+				"arguments": []
+			}
+		},
+		"_update_cursor": {
+			"chunk": "function() {\n\n\t\tlet val  = this.value;\n\t\tlet map  = this.__cursor.map;\n\t\tlet type = this.type;\n\n\n\t\tif (val < this.min || val > this.max) {\n\t\t\treturn;\n\t\t}\n\n\n\t\tif (type === Composite.TYPE.horizontal) {\n\n\t\t\tlet vx = (val - this.min) / (this.max - this.min);\n\n\t\t\tmap.x = vx * (this.width - 44);\n\t\t\tmap.y = 0;\n\n\t\t} else if (type === Composite.TYPE.vertical) {\n\n\t\t\tlet vy = (val - this.min) / (this.max - this.min);\n\n\t\t\tmap.x = 0;\n\t\t\tmap.y = vy * (this.height - 44);\n\n\t\t}\n\n\n\t\tthis.__isDirty = false;\n\n\t}",
+			"type": "function",
+			"hash": "47c91a52",
+			"parameters": [],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.font  = _FONT;\n\t\tthis.max   = 128;\n\t\tthis.min   = 0;\n\t\tthis.step  = 1;\n\t\tthis.type  = Composite.TYPE.horizontal;\n\t\tthis.value = 0;\n\n\t\tthis.__cursor  = {\n\t\t\tactive:   false,\n\t\t\talpha:    0.0,\n\t\t\tduration: 600,\n\t\t\tstart:    null,\n\t\t\tpingpong: false,\n\t\t\tmap: {\n\t\t\t\tx: 0,\n\t\t\t\ty: 0\n\t\t\t}\n\t\t};\n\t\tthis.__pulse   = {\n\t\t\tactive:   false,\n\t\t\tduration: 300,\n\t\t\tstart:    null,\n\t\t\talpha:    0.0\n\t\t};\n\t\tthis.__isDirty = true;\n\n\n\t\tthis.setFont(states.font);\n\t\tthis.setMax(states.max);\n\t\tthis.setMin(states.min);\n\t\tthis.setStep(states.step);\n\t\tthis.setType(states.type);\n\n\t\tdelete states.font;\n\t\tdelete states.max;\n\t\tdelete states.min;\n\t\tdelete states.step;\n\t\tdelete states.type;\n\n\n\t\tif (this.type === Composite.TYPE.horizontal) {\n\t\t\tstates.width  = typeof states.width === 'number'  ? states.width  : 192;\n\t\t\tstates.height = typeof states.height === 'number' ? states.height :  32;\n\t\t} else if (this.type === Composite.TYPE.vertical) {\n\t\t\tstates.width  = typeof states.width === 'number'  ? states.width  :  32;\n\t\t\tstates.height = typeof states.height === 'number' ? states.height : 192;\n\t\t}\n\n\t\tstates.shape = _Entity.SHAPE.rectangle;\n\n\n\t\t_Entity.call(this, states);\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tthis.bind('relayout', function() {\n\t\t\tthis.__isDirty = true;\n\t\t}, this);\n\n\t\tthis.bind('touch', function(id, position, delta) {\n\n\t\t\tlet val  = null;\n\t\t\tlet type = this.type;\n\n\t\t\tif (type === Composite.TYPE.horizontal) {\n\n\t\t\t\tlet qx = Math.max(-0.5, Math.min(0.5, position.x / (this.width - 44))) + 0.5;\n\t\t\t\tlet vx = (this.min + qx * (this.max - this.min)) | 0;\n\n\t\t\t\tval = ((vx / this.step) | 0) * this.step;\n\n\t\t\t} else if (type === Composite.TYPE.vertical) {\n\n\t\t\t\tlet qy = Math.max(-0.5, Math.min(0.5, position.y / (this.height - 44))) + 0.5;\n\t\t\t\tlet vy = (this.min + qy * (this.max - this.min)) | 0;\n\n\t\t\t\tval = ((vy / this.step) | 0) * this.step;\n\n\t\t\t}\n\n\n\t\t\tlet result = this.setValue(val);\n\t\t\tif (result === true) {\n\t\t\t\tthis.trigger('change', [ val ]);\n\t\t\t}\n\n\t\t}, this);\n\n\t\tthis.bind('swipe', function(id, state, position, delta, swipe) {\n\n\t\t\tlet val  = null;\n\t\t\tlet step = this.step;\n\t\t\tlet type = this.type;\n\n\t\t\tif (type === Composite.TYPE.horizontal) {\n\n\t\t\t\tlet qx = Math.max(-0.5, Math.min(0.5, position.x / (this.width - 44))) + 0.5;\n\t\t\t\tlet vx = (this.min + qx * (this.max - this.min)) | 0;\n\n\t\t\t\tval = ((vx / step) | 0) * step;\n\n\t\t\t} else if (type === Composite.TYPE.vertical) {\n\n\t\t\t\tlet qy = Math.max(-0.5, Math.min(0.5, position.y / (this.height - 44))) + 0.5;\n\t\t\t\tlet vy = (this.min + qy * (this.max - this.min)) | 0;\n\n\t\t\t\tval = ((vy / step) | 0) * step;\n\n\t\t\t}\n\n\n\t\t\tlet result = this.setValue(val);\n\t\t\tif (result === true) {\n\t\t\t\tthis.trigger('change', [ val ]);\n\t\t\t}\n\n\t\t}, this);\n\n\t\tthis.bind('key', function(key, name, delta) {\n\n\t\t\tif (this.state === 'active') {\n\n\t\t\t\tlet val  = this.value;\n\t\t\t\tlet step = this.step;\n\t\t\t\tlet type = this.type;\n\n\t\t\t\tif (type === Composite.TYPE.horizontal) {\n\n\t\t\t\t\tif (key === 'a' || key === 'arrow-left') {\n\t\t\t\t\t\tval -= step;\n\t\t\t\t\t}\n\n\t\t\t\t\tif (key === 'd' || key === 'arrow-right') {\n\t\t\t\t\t\tval += step;\n\t\t\t\t\t}\n\n\t\t\t\t} else if (type === Composite.TYPE.vertical) {\n\n\t\t\t\t\tif (key === 'w' || key === 'arrow-up') {\n\t\t\t\t\t\tval -= step;\n\t\t\t\t\t}\n\n\t\t\t\t\tif (key === 's' || key === 'arrow-down') {\n\t\t\t\t\t\tval += step;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tif (key === 'space') {\n\t\t\t\t\tval = this.min;\n\t\t\t\t}\n\n\t\t\t\tif (key === 'enter') {\n\t\t\t\t\tval = this.max;\n\t\t\t\t}\n\n\n\t\t\t\tlet result = this.setValue(val);\n\t\t\t\tif (result === true) {\n\t\t\t\t\tthis.trigger('change', [ val ]);\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}, this);\n\n\t\tthis.bind('focus', function() {\n\t\t\tthis.setState('active');\n\t\t}, this);\n\n\t\tthis.bind('blur', function() {\n\t\t\tthis.setState('default');\n\t\t}, this);\n\n\n\t\tthis.setValue(states.value);\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "6f0c2df8",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"font": "setFont",
+			"max": "setMax",
+			"min": "setMin",
+			"step": "setStep",
+			"type": "setType",
+			"value": "setValue"
+		},
+		"properties": {
+			"font": {
+				"chunk": "this.font  = _FONT;",
+				"type": "Font",
+				"hash": "c759f68b",
+				"value": {
+					"chunk": "_FONT",
+					"type": "Font",
+					"hash": "b185383f",
+					"value": {
+						"constructor": "Font",
+						"arguments": [
+							"/tmp/Font.fnt"
+						]
+					}
+				}
+			},
+			"max": {
+				"chunk": "this.max   = 128;",
+				"type": "Number",
+				"hash": "69f154db",
+				"value": {
+					"chunk": "128",
+					"type": "Number",
+					"hash": "85f0b427",
+					"value": 128
+				}
+			},
+			"min": {
+				"chunk": "this.min   = 0;",
+				"type": "Number",
+				"hash": "866f0873",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			},
+			"step": {
+				"chunk": "this.step  = 1;",
+				"type": "Number",
+				"hash": "4474fa77",
+				"value": {
+					"chunk": "1",
+					"type": "Number",
+					"hash": "9416ac93",
+					"value": 1
+				}
+			},
+			"type": {
+				"chunk": "this.type  = Composite.TYPE.horizontal;",
+				"type": "Enum",
+				"hash": "1e5981f3",
+				"value": {
+					"chunk": "Composite.TYPE.horizontal",
+					"type": "Enum",
+					"hash": "138aaff7",
+					"value": "Composite.TYPE.horizontal"
+				}
+			},
+			"value": {
+				"chunk": "this.value = 0;",
+				"type": "Number",
+				"hash": "6e3affd3",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			},
+			"__cursor": {
+				"chunk": "this.__cursor  = {\n\t\t\tactive:   false,\n\t\t\talpha:    0.0,\n\t\t\tduration: 600,\n\t\t\tstart:    null,\n\t\t\tpingpong: false,\n\t\t\tmap: {\n\t\t\t\tx: 0,\n\t\t\t\ty: 0\n\t\t\t}\n\t\t};",
+				"type": "Object",
+				"hash": "1f922184",
+				"value": {
+					"chunk": "{\n\t\t\tactive:   false,\n\t\t\talpha:    0.0,\n\t\t\tduration: 600,\n\t\t\tstart:    null,\n\t\t\tpingpong: false,\n\t\t\tmap: {\n\t\t\t\tx: 0,\n\t\t\t\ty: 0\n\t\t\t}\n\t\t}",
+					"type": "Object",
+					"hash": "d79fb28a",
+					"value": {
+						"active": false,
+						"alpha": 0,
+						"duration": 600,
+						"start": null,
+						"pingpong": false,
+						"map": {
+							"x": 0,
+							"y": 0
+						}
+					}
+				}
+			},
+			"__pulse": {
+				"chunk": "this.__pulse   = {\n\t\t\tactive:   false,\n\t\t\tduration: 300,\n\t\t\tstart:    null,\n\t\t\talpha:    0.0\n\t\t};",
+				"type": "Object",
+				"hash": "1fcc5b2f",
+				"value": {
+					"chunk": "{\n\t\t\tactive:   false,\n\t\t\tduration: 300,\n\t\t\tstart:    null,\n\t\t\talpha:    0.0\n\t\t}",
+					"type": "Object",
+					"hash": "8ecccaa3",
+					"value": {
+						"active": false,
+						"duration": 300,
+						"start": null,
+						"alpha": 0
+					}
+				}
+			},
+			"__isDirty": {
+				"chunk": "this.__isDirty = true;",
+				"type": "Boolean",
+				"hash": "0ce9596a",
+				"value": {
+					"chunk": "true",
+					"type": "Boolean",
+					"hash": "34edcf72",
+					"value": true
+				}
+			}
+		},
+		"enums": {
+			"TYPE": {
+				"values": [
+					{
+						"name": "horizontal",
+						"value": {
+							"chunk": "0",
+							"type": "Number",
+							"hash": "d271c07f",
+							"value": 0
+						}
+					},
+					{
+						"name": "vertical",
+						"value": {
+							"chunk": "1",
+							"type": "Number",
+							"hash": "9416ac93",
+							"value": 1
+						}
+					}
+				]
+			}
+		},
+		"events": {
+			"change": {
+				"name": "change",
+				"methods": [],
+				"parameters": [
+					{
+						"chunk": "val",
+						"type": "Number",
+						"hash": "85f0b427",
+						"value": 0
+					}
+				]
+			}
+		},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {\n\n\t\t\tlet font = lychee.deserialize(blob.font);\n\t\t\tif (font !== null) {\n\t\t\t\tthis.setFont(font);\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "814dbb80",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "blob",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Entity.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.entity.Slider';\n\n\t\t\tlet states = data['arguments'][0];\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.max !== 100)                        states.max   = this.max;\n\t\t\tif (this.min !== 0)                          states.min   = this.min;\n\t\t\tif (this.step !== 1)                         states.step  = this.step;\n\t\t\tif (this.type !== Composite.TYPE.horizontal) states.type  = this.type;\n\t\t\tif (this.value !== 0)                        states.value = this.value;\n\n\n\t\t\tif (this.font !== null) blob.font = lychee.serialize(this.font);\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "f7f4e912",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"update": {
+				"chunk": "function(clock, delta) {\n\n\t\t\tlet pulse = this.__pulse;\n\t\t\tif (pulse.active === true) {\n\n\t\t\t\tif (pulse.start === null) {\n\t\t\t\t\tpulse.start = clock;\n\t\t\t\t}\n\n\t\t\t\tlet pt = (clock - pulse.start) / pulse.duration;\n\t\t\t\tif (pt <= 1) {\n\t\t\t\t\tpulse.alpha = (1 - pt);\n\t\t\t\t} else {\n\t\t\t\t\tpulse.alpha  = 0.0;\n\t\t\t\t\tpulse.active = false;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tlet cursor = this.__cursor;\n\t\t\tif (cursor.active === true) {\n\n\t\t\t\tif (cursor.start === null) {\n\t\t\t\t\tcursor.start = clock;\n\t\t\t\t}\n\n\n\t\t\t\tlet ct = (clock - cursor.start) / cursor.duration;\n\t\t\t\tif (ct <= 1) {\n\t\t\t\t\tcursor.alpha = cursor.pingpong === true ? (1 - ct) : ct;\n\t\t\t\t} else {\n\t\t\t\t\tcursor.start    = clock;\n\t\t\t\t\tcursor.pingpong = !cursor.pingpong;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tif (this.__isDirty === true) {\n\t\t\t\t_update_cursor.call(this);\n\t\t\t}\n\n\n\t\t\t_Entity.prototype.update.call(this, clock, delta);\n\n\t\t}",
+				"type": "function",
+				"hash": "91c8d200",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "clock",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "delta",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"render": {
+				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tif (this.visible === false) return;\n\n\n\t\t\tlet alpha    = this.alpha;\n\t\t\tlet font     = this.font;\n\t\t\tlet position = this.position;\n\t\t\tlet type     = this.type;\n\t\t\tlet x        = position.x + offsetX;\n\t\t\tlet y        = position.y + offsetY;\n\t\t\tlet hwidth   = (this.width  - 2) / 2;\n\t\t\tlet hheight  = (this.height - 2) / 2;\n\n\n\t\t\tlet cursor = this.__cursor;\n\t\t\tlet map = cursor.map;\n\t\t\tlet cx  = 0;\n\t\t\tlet cy  = 0;\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(alpha);\n\t\t\t}\n\n\n\t\t\tif (type === Composite.TYPE.horizontal) {\n\n\t\t\t\tcx  = x - hwidth  + map.x + 20;\n\t\t\t\tcy  = y - hheight + 15;\n\n\n\t\t\t\trenderer.drawLine(\n\t\t\t\t\tx - hwidth,\n\t\t\t\t\ty,\n\t\t\t\t\tcx - 12,\n\t\t\t\t\ty,\n\t\t\t\t\tthis.state === 'active' ? '#32afe5' : '#545454',\n\t\t\t\t\t2\n\t\t\t\t);\n\n\t\t\t\trenderer.drawLine(\n\t\t\t\t\tcx + 12,\n\t\t\t\t\ty,\n\t\t\t\t\tx + hwidth,\n\t\t\t\t\ty,\n\t\t\t\t\tthis.state === 'active' ? '#32afe5' : '#545454',\n\t\t\t\t\t2\n\t\t\t\t);\n\n\t\t\t} else if (type === Composite.TYPE.vertical) {\n\n\t\t\t\tcx  = x - hwidth  + 15;\n\t\t\t\tcy  = y - hheight + map.y + 20;\n\n\n\t\t\t\trenderer.drawLine(\n\t\t\t\t\tx,\n\t\t\t\t\ty - hheight,\n\t\t\t\t\tx,\n\t\t\t\t\tcy - 12,\n\t\t\t\t\tthis.state === 'active' ? '#32afe5' : '#545454',\n\t\t\t\t\t2\n\t\t\t\t);\n\n\t\t\t\trenderer.drawLine(\n\t\t\t\t\tx,\n\t\t\t\t\tcy + 12,\n\t\t\t\t\tx,\n\t\t\t\t\ty + hheight,\n\t\t\t\t\tthis.state === 'active' ? '#32afe5' : '#545454',\n\t\t\t\t\t2\n\t\t\t\t);\n\n\t\t\t}\n\n\n\t\t\tif (cursor.active === true) {\n\n\t\t\t\trenderer.drawCircle(\n\t\t\t\t\tcx,\n\t\t\t\t\tcy,\n\t\t\t\t\t11,\n\t\t\t\t\t'#32afe5',\n\t\t\t\t\tfalse,\n\t\t\t\t\t2\n\t\t\t\t);\n\n\t\t\t\trenderer.setAlpha(cursor.alpha);\n\n\t\t\t\trenderer.drawCircle(\n\t\t\t\t\tcx,\n\t\t\t\t\tcy,\n\t\t\t\t\t12,\n\t\t\t\t\t'#32afe5',\n\t\t\t\t\ttrue\n\t\t\t\t);\n\n\t\t\t\trenderer.setAlpha(alpha);\n\n\n\t\t\t\tif (type === Composite.TYPE.horizontal) {\n\n\t\t\t\t\trenderer.drawText(\n\t\t\t\t\t\tcx,\n\t\t\t\t\t\tcy - 6 - font.lineheight,\n\t\t\t\t\t\t'' + this.value,\n\t\t\t\t\t\tfont,\n\t\t\t\t\t\ttrue\n\t\t\t\t\t);\n\n\t\t\t\t} else if (type === Composite.TYPE.vertical) {\n\n\t\t\t\t\trenderer.drawText(\n\t\t\t\t\t\tcx + 6 + font.measure('' + this.value).realwidth,\n\t\t\t\t\t\tcy,\n\t\t\t\t\t\t'' + this.value,\n\t\t\t\t\t\tfont,\n\t\t\t\t\t\ttrue\n\t\t\t\t\t);\n\n\t\t\t\t}\n\n\t\t\t} else {\n\n\t\t\t\trenderer.drawCircle(\n\t\t\t\t\tcx,\n\t\t\t\t\tcy,\n\t\t\t\t\t11,\n\t\t\t\t\t'#545454',\n\t\t\t\t\tfalse,\n\t\t\t\t\t2\n\t\t\t\t);\n\n\t\t\t}\n\n\n\t\t\tlet pulse = this.__pulse;\n\t\t\tif (pulse.active === true) {\n\n\t\t\t\trenderer.setAlpha(pulse.alpha);\n\n\t\t\t\trenderer.drawCircle(\n\t\t\t\t\tcx,\n\t\t\t\t\tcy,\n\t\t\t\t\t12,\n\t\t\t\t\t'#32afe5',\n\t\t\t\t\ttrue\n\t\t\t\t);\n\n\t\t\t\trenderer.setAlpha(1.0);\n\n\t\t\t}\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(1.0);\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "a6da8824",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "renderer",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetX",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetY",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"setFont": {
+				"chunk": "function(font) {\n\n\t\t\tfont = font instanceof Font ? font : null;\n\n\n\t\t\tif (font !== null) {\n\n\t\t\t\tthis.font = font;\n\n\n\t\t\t\tlet map = this.__cursor.map;\n\n\t\t\t\tmap.w = font.measure('_').realwidth;\n\t\t\t\tmap.h = font.measure('_').realheight;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "0dce8e2d",
+				"parameters": [
+					{
+						"chunk": "font instanceof Font ? font : null",
+						"name": "font",
+						"type": "Font",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setMax": {
+				"chunk": "function(max) {\n\n\t\t\tmax = typeof max === 'number' ? max : null;\n\n\n\t\t\tif (max !== null) {\n\n\t\t\t\tthis.max = max;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "6aec857d",
+				"parameters": [
+					{
+						"chunk": "typeof max === 'number' ? max : null",
+						"name": "max",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setMin": {
+				"chunk": "function(min) {\n\n\t\t\tmin = typeof min === 'number' ? min : null;\n\n\n\t\t\tif (min !== null) {\n\n\t\t\t\tthis.min = min;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "efffbb93",
+				"parameters": [
+					{
+						"chunk": "typeof min === 'number' ? min : null",
+						"name": "min",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setStep": {
+				"chunk": "function(step) {\n\n\t\t\tstep = typeof step === 'number' ? step : null;\n\n\n\t\t\tif (step !== null) {\n\n\t\t\t\tthis.step = step;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "8cb6db11",
+				"parameters": [
+					{
+						"chunk": "typeof step === 'number' ? step : null",
+						"name": "step",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setState": {
+				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null) {\n\n\t\t\t\tlet result = _Entity.prototype.setState.call(this, id);\n\t\t\t\tif (result === true) {\n\n\t\t\t\t\tlet cursor = this.__cursor;\n\t\t\t\t\tlet pulse  = this.__pulse;\n\n\n\t\t\t\t\tif (id === 'active') {\n\n\t\t\t\t\t\tcursor.start  = null;\n\t\t\t\t\t\tcursor.active = true;\n\n\t\t\t\t\t\tpulse.alpha   = 1.0;\n\t\t\t\t\t\tpulse.start   = null;\n\t\t\t\t\t\tpulse.active  = true;\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tcursor.active = false;\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "998628dc",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'string' ? id : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setType": {
+				"chunk": "function(type) {\n\n\t\t\ttype = lychee.enumof(Composite.TYPE, type) ? type : null;\n\n\n\t\t\tif (type !== null) {\n\n\t\t\t\tthis.type      = type;\n\t\t\t\tthis.__isDirty = true;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "45b0671f",
+				"parameters": [
+					{
+						"chunk": "lychee.enumof(Composite.TYPE, type) ? type : null",
+						"name": "type",
+						"type": "Enum",
+						"value": "Composite.TYPE"
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setValue": {
+				"chunk": "function(value) {\n\n\t\t\tvalue = typeof value === 'number' ? value : null;\n\n\n\t\t\tif (value !== null) {\n\n\t\t\t\tif (value >= this.min && value <= this.max) {\n\n\t\t\t\t\tthis.value     = value;\n\t\t\t\t\tthis.__isDirty = true;\n\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "8332cde0",
+				"parameters": [
+					{
+						"chunk": "typeof value === 'number' ? value : null",
+						"name": "value",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

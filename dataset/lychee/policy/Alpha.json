@@ -1,0 +1,125 @@
+{
+	"header": {
+		"identifier": "lychee.policy.Alpha",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(states) {\n\n\t\tthis.entity = states.entity instanceof Object  ? states.entity : null;\n\t\tthis.limit  = typeof states.limit === 'number' ? states.limit  : 1;\n\n\t}",
+			"type": "function",
+			"hash": "e8748752",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "states",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {},
+		"properties": {
+			"entity": {
+				"chunk": "this.entity = states.entity instanceof Object  ? states.entity : null;",
+				"type": "Object",
+				"hash": "ba9c45b7",
+				"value": {
+					"chunk": "states.entity instanceof Object  ? states.entity : null",
+					"type": "Object",
+					"hash": "7be06cdf",
+					"value": null
+				}
+			},
+			"limit": {
+				"chunk": "this.limit  = typeof states.limit === 'number' ? states.limit  : 1;",
+				"type": "Number",
+				"hash": "198bec9a",
+				"value": {
+					"chunk": "typeof states.limit === 'number' ? states.limit  : 1",
+					"type": "Number",
+					"hash": "ab861ecd",
+					"value": 1
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet states = {\n\t\t\t\tentity: null,\n\t\t\t\tlimit:  this.limit\n\t\t\t};\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.policy.Alpha',\n\t\t\t\t'arguments':   [ states ]\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "1fb212b0",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.policy.Alpha',\n\t\t\t\t'arguments':   [ states ]\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"sensor": {
+				"chunk": "function() {\n\n\t\t\tlet entity = this.entity;\n\t\t\tlet limit  = this.limit;\n\t\t\tlet values = [ 0.5 ];\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tlet hl = limit / 2;\n\n\t\t\t\tvalues[0] = (hl + entity.alpha) / (hl * 2);\n\n\t\t\t}\n\n\n\t\t\treturn values;\n\n\t\t}",
+				"type": "function",
+				"hash": "8fe3b0a0",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "[ 0.5 ]",
+						"type": "Array",
+						"value": [
+							0.5
+						]
+					}
+				]
+			},
+			"control": {
+				"chunk": "function(values) {\n\n\t\t\tlet entity = this.entity;\n\t\t\tlet limit  = this.limit;\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tlet hl = limit / 2;\n\n\t\t\t\tentity.alpha = (values[0] * (hl * 2)) - hl;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "7d8f5342",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "values",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

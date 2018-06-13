@@ -1,0 +1,421 @@
+{
+	"header": {
+		"identifier": "lychee.net.socket.WS",
+		"attaches": {},
+		"tags": {
+			"platform": "html-nwjs"
+		},
+		"requires": [
+			"lychee.crypto.SHA1",
+			"lychee.net.protocol.WS"
+		],
+		"includes": [
+			"lychee.event.Emitter"
+		],
+		"supports": {
+			"body": "function(lychee, global) {\n\n\tif (\n\t\ttypeof global.require === 'function'\n\t\t&& typeof global.setInterval === 'function'\n\t) {\n\n\t\ttry {\n\n\t\t\tglobal.require('net');\n\n\t\t\treturn true;\n\n\t\t} catch (err) {\n\t\t}\n\n\t}\n\n\n\treturn false;\n\n}",
+			"hash": "fbb5f694",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "lychee",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "global",
+					"type": "undefined"
+				}
+			]
+		},
+		"type": "Composite"
+	},
+	"memory": {
+		"Buffer": {
+			"chunk": "lychee.import('Buffer')",
+			"type": "Buffer",
+			"hash": "9bd64d74",
+			"value": {
+				"reference": "Buffer",
+				"arguments": []
+			}
+		},
+		"_net": {
+			"chunk": "{}",
+			"type": "Object",
+			"hash": "783b64e5",
+			"value": {}
+		},
+		"_clearInterval": {
+			"chunk": "function(id) {}",
+			"type": "Function",
+			"hash": "9e7c1f63"
+		},
+		"_setInterval": {
+			"chunk": "function(callback, delay) {}",
+			"type": "Function",
+			"hash": "608ad949"
+		},
+		"_Buffer": {
+			"chunk": "function() {}",
+			"type": "Function",
+			"hash": "2e426b83"
+		},
+		"_Emitter": {
+			"chunk": "lychee.import('lychee.event.Emitter')",
+			"type": "lychee.Definition",
+			"hash": "b60271ea",
+			"value": {
+				"reference": "lychee.event.Emitter",
+				"arguments": []
+			}
+		},
+		"_Protocol": {
+			"chunk": "lychee.import('lychee.net.protocol.WS')",
+			"type": "lychee.Definition",
+			"hash": "bfe91eee",
+			"value": {
+				"reference": "lychee.net.protocol.WS",
+				"arguments": []
+			}
+		},
+		"_SHA1": {
+			"chunk": "lychee.import('lychee.crypto.SHA1')",
+			"type": "lychee.Definition",
+			"hash": "62f94acc",
+			"value": {
+				"reference": "lychee.crypto.SHA1",
+				"arguments": []
+			}
+		},
+		"_connect_socket": {
+			"chunk": "function(socket, protocol) {\n\n\t\tlet that = this;\n\t\tif (that.__connection !== socket) {\n\n\t\t\tsocket.on('data', function(raw) {\n\n\t\t\t\t// XXX: nwjs has global scope problems\n\t\t\t\t// XXX: Internal Buffer is not our global.Buffer interface\n\n\t\t\t\tlet blob = new Buffer(raw.length);\n\t\t\t\tfor (let b = 0; b < blob.length; b++) {\n\t\t\t\t\tblob[b] = raw[b];\n\t\t\t\t}\n\n\n\t\t\t\tlet chunks = protocol.receive(blob);\n\t\t\t\tif (chunks.length > 0) {\n\n\t\t\t\t\tfor (let c = 0, cl = chunks.length; c < cl; c++) {\n\n\t\t\t\t\t\tlet chunk = chunks[c];\n\t\t\t\t\t\tif (chunk.payload[0] === 136) {\n\n\t\t\t\t\t\t\tthat.send(chunk.payload, chunk.headers, true);\n\t\t\t\t\t\t\tthat.disconnect();\n\n\t\t\t\t\t\t\treturn;\n\n\t\t\t\t\t\t} else {\n\n\t\t\t\t\t\t\tthat.trigger('receive', [ chunk.payload, chunk.headers ]);\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t});\n\n\t\t\tsocket.on('error', function(err) {\n\t\t\t\tthat.trigger('error');\n\t\t\t\tthat.disconnect();\n\t\t\t});\n\n\t\t\tsocket.on('timeout', function() {\n\t\t\t\tthat.trigger('error');\n\t\t\t\tthat.disconnect();\n\t\t\t});\n\n\t\t\tsocket.on('close', function() {\n\t\t\t\tthat.disconnect();\n\t\t\t});\n\n\t\t\tsocket.on('end', function() {\n\t\t\t\tthat.disconnect();\n\t\t\t});\n\n\n\t\t\tthat.__connection = socket;\n\t\t\tthat.__protocol   = protocol;\n\n\t\t\tthat.trigger('connect');\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "ee6dd9e5",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "socket",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "protocol",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_disconnect_socket": {
+			"chunk": "function(socket, protocol) {\n\n\t\tlet that = this;\n\t\tif (that.__connection === socket) {\n\n\t\t\tsocket.removeAllListeners('data');\n\t\t\tsocket.removeAllListeners('error');\n\t\t\tsocket.removeAllListeners('timeout');\n\t\t\tsocket.removeAllListeners('close');\n\t\t\tsocket.removeAllListeners('end');\n\n\t\t\tsocket.destroy();\n\t\t\tprotocol.close();\n\n\n\t\t\tthat.__connection = null;\n\t\t\tthat.__protocol   = null;\n\n\t\t\tthat.trigger('disconnect');\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "9c784b90",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "socket",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "protocol",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_verify_client": {
+			"chunk": "function(headers, nonce) {\n\n\t\tlet connection = (headers['connection'] || '').toLowerCase();\n\t\tlet upgrade    = (headers['upgrade']    || '').toLowerCase();\n\t\tlet protocol   = (headers['sec-websocket-protocol'] || '').toLowerCase();\n\n\t\tif (connection === 'upgrade' && upgrade === 'websocket' && protocol === 'lycheejs') {\n\n\t\t\tlet accept = (headers['sec-websocket-accept'] || '');\n\t\t\tlet expect = (function(nonce) {\n\n\t\t\t\tlet sha1 = new _SHA1();\n\t\t\t\tsha1.update(nonce + '258EAFA5-E914-47DA-95CA-C5AB0DC85B11');\n\t\t\t\treturn sha1.digest().toString('base64');\n\n\t\t\t})(nonce.toString('base64'));\n\n\n\t\t\tif (accept === expect) {\n\t\t\t\treturn accept;\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn null;\n\n\t}",
+			"type": "function",
+			"hash": "04ff235f",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "headers",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "nonce",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "null",
+					"type": "null",
+					"value": null
+				}
+			]
+		},
+		"_verify_remote": {
+			"chunk": "function(headers) {\n\n\t\tlet connection = (headers['connection'] || '').toLowerCase();\n\t\tlet upgrade    = (headers['upgrade']    || '').toLowerCase();\n\t\tlet protocol   = (headers['sec-websocket-protocol'] || '').toLowerCase();\n\n\t\tif (connection === 'upgrade' && upgrade === 'websocket' && protocol === 'lycheejs') {\n\n\t\t\tlet host   = headers['host']   || null;\n\t\t\tlet nonce  = headers['sec-websocket-key'] || null;\n\t\t\tlet origin = headers['origin'] || null;\n\n\t\t\tif (host !== null && nonce !== null && origin !== null) {\n\n\t\t\t\tlet handshake = '';\n\t\t\t\tlet accept    = (function(nonce) {\n\n\t\t\t\t\tlet sha1 = new _SHA1();\n\t\t\t\t\tsha1.update(nonce + '258EAFA5-E914-47DA-95CA-C5AB0DC85B11');\n\t\t\t\t\treturn sha1.digest().toString('base64');\n\n\t\t\t\t})(nonce);\n\n\n\t\t\t\t// HEAD\n\n\t\t\t\thandshake += 'HTTP/1.1 101 WebSocket Protocol Handshake\\r\\n';\n\t\t\t\thandshake += 'Upgrade: WebSocket\\r\\n';\n\t\t\t\thandshake += 'Connection: Upgrade\\r\\n';\n\n\t\t\t\thandshake += 'Sec-WebSocket-Version: '  + '13'       + '\\r\\n';\n\t\t\t\thandshake += 'Sec-WebSocket-Origin: '   + origin     + '\\r\\n';\n\t\t\t\thandshake += 'Sec-WebSocket-Protocol: ' + 'lycheejs' + '\\r\\n';\n\t\t\t\thandshake += 'Sec-WebSocket-Accept: '   + accept     + '\\r\\n';\n\n\n\t\t\t\t// BODY\n\t\t\t\thandshake += '\\r\\n';\n\n\n\t\t\t\treturn handshake;\n\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn null;\n\n\t}",
+			"type": "function",
+			"hash": "af713f1f",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "headers",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "''",
+					"type": "String",
+					"value": ""
+				},
+				{
+					"chunk": "'HTTP/1.1 101 WebSocket Protocol Handshake\\r\\n'",
+					"type": "String",
+					"value": "HTTP/1.1 101 WebSocket Protocol Handshake\\r\\n"
+				},
+				{
+					"chunk": "'Upgrade: WebSocket\\r\\n'",
+					"type": "String",
+					"value": "Upgrade: WebSocket\\r\\n"
+				},
+				{
+					"chunk": "'Connection: Upgrade\\r\\n'",
+					"type": "String",
+					"value": "Connection: Upgrade\\r\\n"
+				},
+				{
+					"chunk": "'Sec-WebSocket-Version: '  + '13'       + '\\r\\n'",
+					"type": "String",
+					"value": "Sec-WebSocket-Version: '  + '13'       + '\\r\\n"
+				},
+				{
+					"chunk": "'Sec-WebSocket-Origin: '   + origin     + '\\r\\n'",
+					"type": "String",
+					"value": "Sec-WebSocket-Origin: '   + origin     + '\\r\\n"
+				},
+				{
+					"chunk": "'Sec-WebSocket-Protocol: ' + 'lycheejs' + '\\r\\n'",
+					"type": "String",
+					"value": "Sec-WebSocket-Protocol: ' + 'lycheejs' + '\\r\\n"
+				},
+				{
+					"chunk": "'Sec-WebSocket-Accept: '   + accept     + '\\r\\n'",
+					"type": "String",
+					"value": "Sec-WebSocket-Accept: '   + accept     + '\\r\\n"
+				},
+				{
+					"chunk": "'\\r\\n'",
+					"type": "String",
+					"value": "\\r\\n"
+				},
+				{
+					"chunk": "null",
+					"type": "null",
+					"value": null
+				}
+			]
+		},
+		"_upgrade_client": {
+			"chunk": "function(host, port, nonce) {\n\n\t\tlet handshake  = '';\n\t\tlet identifier = lychee.ROOT.project;\n\n\n\t\tif (identifier.startsWith(lychee.ROOT.lychee)) {\n\t\t\tidentifier = lychee.ROOT.project.substr(lychee.ROOT.lychee.length + 1);\n\t\t}\n\n\t\tfor (let n = 0; n < 16; n++) {\n\t\t\tnonce[n] = Math.round(Math.random() * 0xff);\n\t\t}\n\n\n\n\t\t// HEAD\n\n\t\thandshake += 'GET / HTTP/1.1\\r\\n';\n\t\thandshake += 'Host: ' + host + ':' + port + '\\r\\n';\n\t\thandshake += 'Upgrade: WebSocket\\r\\n';\n\t\thandshake += 'Connection: Upgrade\\r\\n';\n\t\thandshake += 'Origin: lycheejs://' + identifier + '\\r\\n';\n\t\thandshake += 'Sec-WebSocket-Key: ' + nonce.toString('base64') + '\\r\\n';\n\t\thandshake += 'Sec-WebSocket-Version: 13\\r\\n';\n\t\thandshake += 'Sec-WebSocket-Protocol: lycheejs\\r\\n';\n\n\n\t\t// BODY\n\t\thandshake += '\\r\\n';\n\n\n\t\tthis.once('data', function(data) {\n\n\t\t\tlet headers = {};\n\t\t\tlet lines   = data.toString('utf8').split('\\r\\n');\n\n\n\t\t\tlines.forEach(function(line) {\n\n\t\t\t\tlet index = line.indexOf(':');\n\t\t\t\tif (index !== -1) {\n\n\t\t\t\t\tlet key = line.substr(0, index).trim().toLowerCase();\n\t\t\t\t\tlet val = line.substr(index + 1, line.length - index - 1).trim();\n\t\t\t\t\tif (/connection|upgrade|sec-websocket-version|sec-websocket-origin|sec-websocket-protocol/g.test(key)) {\n\t\t\t\t\t\theaders[key] = val.toLowerCase();\n\t\t\t\t\t} else if (key === 'sec-websocket-accept') {\n\t\t\t\t\t\theaders[key] = val;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t});\n\n\n\t\t\tif (headers['connection'] === 'upgrade' && headers['upgrade'] === 'websocket') {\n\n\t\t\t\tthis.emit('upgrade', {\n\t\t\t\t\theaders: headers,\n\t\t\t\t\tsocket:  this\n\t\t\t\t});\n\n\t\t\t} else {\n\n\t\t\t\tlet err = new Error('connect ECONNREFUSED');\n\t\t\t\terr.code = 'ECONNREFUSED';\n\n\t\t\t\tthis.emit('error', err);\n\n\t\t\t}\n\n\t\t}.bind(this));\n\n\n\t\tthis.write(handshake, 'ascii');\n\n\t}",
+			"type": "function",
+			"hash": "9f6259f9",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "host",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "port",
+					"type": "undefined"
+				},
+				{
+					"chunk": "Math.round(Math.random() * 0xff)",
+					"name": "nonce",
+					"type": "Number",
+					"value": 1337
+				}
+			],
+			"values": []
+		},
+		"_upgrade_remote": {
+			"chunk": "function(data) {\n\n\t\tlet lines   = data.toString('utf8').split('\\r\\n');\n\t\tlet headers = {};\n\n\n\t\tlines.forEach(function(line) {\n\n\t\t\tlet index = line.indexOf(':');\n\t\t\tif (index !== -1) {\n\n\t\t\t\tlet key = line.substr(0, index).trim().toLowerCase();\n\t\t\t\tlet val = line.substr(index + 1, line.length - index - 1).trim();\n\t\t\t\tif (/host|connection|upgrade|origin|sec-websocket-protocol/g.test(key)) {\n\t\t\t\t\theaders[key] = val.toLowerCase();\n\t\t\t\t} else if (key === 'sec-websocket-key') {\n\t\t\t\t\theaders[key] = val;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t});\n\n\n\t\tif (headers['connection'] === 'upgrade' && headers['upgrade'] === 'websocket') {\n\n\t\t\tthis.emit('upgrade', {\n\t\t\t\theaders: headers,\n\t\t\t\tsocket:  this\n\t\t\t});\n\n\t\t} else {\n\n\t\t\tthis.destroy();\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "32a00640",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function() {\n\n\t\tthis.__connection = null;\n\t\tthis.__protocol   = null;\n\n\n\t\t_Emitter.call(this);\n\n\t}",
+			"type": "function",
+			"hash": "bb238e6f",
+			"parameters": []
+		},
+		"states": {},
+		"properties": {
+			"__connection": {
+				"chunk": "this.__connection = null;",
+				"type": "null",
+				"hash": "0a8f44f8",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"__protocol": {
+				"chunk": "this.__protocol   = null;",
+				"type": "null",
+				"hash": "aaf976d2",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			}
+		},
+		"enums": {},
+		"events": {
+			"error": {
+				"name": "error",
+				"methods": [
+					"connect"
+				],
+				"parameters": []
+			}
+		},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.net.socket.WS';\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "fb831f00",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"connect": {
+				"chunk": "function(host, port, connection) {\n\n\t\t\thost       = typeof host === 'string'       ? host       : null;\n\t\t\tport       = typeof port === 'number'       ? (port | 0) : null;\n\t\t\tconnection = typeof connection === 'object' ? connection : null;\n\n\n\t\t\tlet that = this;\n\n\n\t\t\tif (host !== null && port !== null) {\n\n\t\t\t\tif (connection !== null) {\n\n\t\t\t\t\tconnection.once('data', _upgrade_remote.bind(connection));\n\t\t\t\t\tconnection.resume();\n\n\t\t\t\t\tconnection.once('error', function(err) {\n\n\t\t\t\t\t\tif (lychee.debug === true) {\n\n\t\t\t\t\t\t\tlet code = err.code || '';\n\t\t\t\t\t\t\tif (/ECONNABORTED|ECONNREFUSED|ECONNRESET/.test(code)) {\n\t\t\t\t\t\t\t\tconsole.warn('lychee.net.socket.WS: BAD CONNECTION to ' + host + ':' + port);\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\tthat.trigger('error');\n\t\t\t\t\t\tthat.disconnect();\n\n\t\t\t\t\t});\n\n\t\t\t\t\tconnection.on('upgrade', function(event) {\n\n\t\t\t\t\t\tlet protocol = new _Protocol({\n\t\t\t\t\t\t\ttype: _Protocol.TYPE.remote\n\t\t\t\t\t\t});\n\t\t\t\t\t\tlet socket   = event.socket || null;\n\n\n\t\t\t\t\t\tif (socket !== null) {\n\n\t\t\t\t\t\t\tlet verification = _verify_remote.call(socket, event.headers);\n\t\t\t\t\t\t\tif (verification !== null) {\n\n\t\t\t\t\t\t\t\tsocket.allowHalfOpen = true;\n\t\t\t\t\t\t\t\tsocket.setTimeout(0);\n\t\t\t\t\t\t\t\tsocket.setNoDelay(true);\n\t\t\t\t\t\t\t\tsocket.setKeepAlive(true, 0);\n\t\t\t\t\t\t\t\tsocket.removeAllListeners('timeout');\n\t\t\t\t\t\t\t\tsocket.write(verification, 'ascii');\n\n\n\t\t\t\t\t\t\t\t_connect_socket.call(that, socket, protocol);\n\n\t\t\t\t\t\t\t} else {\n\n\t\t\t\t\t\t\t\tif (lychee.debug === true) {\n\t\t\t\t\t\t\t\t\tconsole.warn('lychee.net.socket.WS: BAD HANDSHAKE to ' + host + ':' + port);\n\t\t\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\t\t\tsocket.write('', 'ascii');\n\t\t\t\t\t\t\t\tsocket.end();\n\t\t\t\t\t\t\t\tsocket.destroy();\n\n\t\t\t\t\t\t\t\tthat.trigger('error');\n\t\t\t\t\t\t\t\tthat.disconnect();\n\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t});\n\n\t\t\t\t} else {\n\n\t\t\t\t\tlet nonce     = new Buffer(16);\n\t\t\t\t\tlet connector = new _net.Socket({\n\t\t\t\t\t\t// fd:       null,\n\t\t\t\t\t\treadable: true,\n\t\t\t\t\t\twritable: true\n\t\t\t\t\t});\n\n\n\t\t\t\t\tconnector.once('connect', _upgrade_client.bind(connector, host, port, nonce));\n\n\t\t\t\t\tconnector.on('upgrade', function(event) {\n\n\t\t\t\t\t\tlet protocol = new _Protocol({\n\t\t\t\t\t\t\ttype: _Protocol.TYPE.client\n\t\t\t\t\t\t});\n\t\t\t\t\t\tlet socket   = event.socket || null;\n\n\n\t\t\t\t\t\tif (socket !== null) {\n\n\t\t\t\t\t\t\tlet verification = _verify_client(event.headers, nonce);\n\t\t\t\t\t\t\tif (verification !== null) {\n\n\t\t\t\t\t\t\t\tsocket.setTimeout(0);\n\t\t\t\t\t\t\t\tsocket.setNoDelay(true);\n\t\t\t\t\t\t\t\tsocket.setKeepAlive(true, 0);\n\t\t\t\t\t\t\t\tsocket.removeAllListeners('timeout');\n\n\n\t\t\t\t\t\t\t\tlet interval_id = _setInterval(function() {\n\n\t\t\t\t\t\t\t\t\tif (socket.writable) {\n\n\t\t\t\t\t\t\t\t\t\tlet chunk = protocol.ping();\n\t\t\t\t\t\t\t\t\t\tif (chunk !== null) {\n\t\t\t\t\t\t\t\t\t\t\t// XXX: nwjs has global scope problems\n\t\t\t\t\t\t\t\t\t\t\t// XXX: Internal Buffer is not our global.Buffer interface\n\t\t\t\t\t\t\t\t\t\t\tsocket.write(_Buffer.from(chunk));\n\t\t\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\t\t} else {\n\n\t\t\t\t\t\t\t\t\t\t_clearInterval(interval_id);\n\t\t\t\t\t\t\t\t\t\tinterval_id = null;\n\n\t\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\t}.bind(this), 60000);\n\n\n\t\t\t\t\t\t\t\t_connect_socket.call(that, socket, protocol);\n\n\t\t\t\t\t\t\t} else {\n\n\t\t\t\t\t\t\t\tif (lychee.debug === true) {\n\t\t\t\t\t\t\t\t\tconsole.warn('lychee.net.socket.WS: BAD HANDSHAKE to ' + host + ':' + port);\n\t\t\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\t\t\tsocket.end();\n\t\t\t\t\t\t\t\tsocket.destroy();\n\n\t\t\t\t\t\t\t\tthat.trigger('error');\n\t\t\t\t\t\t\t\tthat.disconnect();\n\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t});\n\n\t\t\t\t\tconnector.once('error', function(err) {\n\n\t\t\t\t\t\tif (lychee.debug === true) {\n\n\t\t\t\t\t\t\tlet code = err.code || '';\n\t\t\t\t\t\t\tif (/ECONNABORTED|ECONNREFUSED|ECONNRESET/.test(code)) {\n\t\t\t\t\t\t\t\tconsole.warn('lychee.net.socket.WS: BAD CONNECTION to ' + host + ':' + port);\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\tthat.trigger('error');\n\t\t\t\t\t\tthat.disconnect();\n\n\t\t\t\t\t\tthis.end();\n\t\t\t\t\t\tthis.destroy();\n\n\t\t\t\t\t});\n\n\t\t\t\t\tconnector.connect({\n\t\t\t\t\t\thost: host,\n\t\t\t\t\t\tport: port\n\t\t\t\t\t});\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "66483fd8",
+				"parameters": [
+					{
+						"chunk": "typeof host === 'string'       ? host       : null",
+						"name": "host",
+						"type": "String",
+						"value": null
+					},
+					{
+						"chunk": "typeof port === 'number'       ? (port | 0) : null",
+						"name": "port",
+						"type": "Number",
+						"value": null
+					},
+					{
+						"chunk": "typeof connection === 'object' ? connection : null",
+						"name": "connection",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"send": {
+				"chunk": "function(payload, headers, binary) {\n\n\t\t\tpayload = payload instanceof Buffer ? payload : null;\n\t\t\theaders = headers instanceof Object ? headers : null;\n\t\t\tbinary  = binary === true;\n\n\n\t\t\tif (payload !== null) {\n\n\t\t\t\tlet connection = this.__connection;\n\t\t\t\tlet protocol   = this.__protocol;\n\n\t\t\t\tif (connection !== null && protocol !== null) {\n\n\t\t\t\t\tlet chunk = protocol.send(payload, headers, binary);\n\t\t\t\t\tif (chunk !== null) {\n\n\t\t\t\t\t\t// XXX: nwjs has global scope problems\n\t\t\t\t\t\t// XXX: Internal Buffer is not our global.Buffer interface\n\t\t\t\t\t\tconnection.write(_Buffer.from(chunk));\n\n\t\t\t\t\t\treturn true;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "dd411470",
+				"parameters": [
+					{
+						"chunk": "payload instanceof Buffer ? payload : null",
+						"name": "payload",
+						"type": "Buffer",
+						"value": null
+					},
+					{
+						"chunk": "headers instanceof Object ? headers : null",
+						"name": "headers",
+						"type": "Object",
+						"value": null
+					},
+					{
+						"chunk": "binary === true",
+						"name": "binary",
+						"type": "Boolean",
+						"value": true
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"disconnect": {
+				"chunk": "function() {\n\n\t\t\tlet connection = this.__connection;\n\t\t\tlet protocol   = this.__protocol;\n\n\t\t\tif (connection !== null && protocol !== null) {\n\n\t\t\t\t_disconnect_socket.call(this, connection, protocol);\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "64538337",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

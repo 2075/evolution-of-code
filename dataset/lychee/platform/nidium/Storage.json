@@ -1,0 +1,474 @@
+{
+	"header": {
+		"identifier": "lychee.Storage",
+		"attaches": {},
+		"tags": {
+			"platform": "nidium"
+		},
+		"requires": [],
+		"includes": [
+			"lychee.event.Emitter"
+		],
+		"supports": {
+			"body": "function(lychee, global) {\n\n\tif (typeof global.File === 'function') {\n\t\treturn true;\n\t}\n\n\n\treturn false;\n\n}",
+			"hash": "88ff4cc4",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "lychee",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "global",
+					"type": "undefined"
+				}
+			]
+		},
+		"type": "Composite"
+	},
+	"memory": {
+		"_id": {
+			"chunk": "0",
+			"type": "Number",
+			"hash": "d271c07f",
+			"value": 0
+		},
+		"_Emitter": {
+			"chunk": "lychee.import('lychee.event.Emitter')",
+			"type": "lychee.Definition",
+			"hash": "b60271ea",
+			"value": {
+				"reference": "lychee.event.Emitter",
+				"arguments": []
+			}
+		},
+		"_File": {
+			"chunk": "global.File || null",
+			"type": "Object",
+			"hash": "101e7394",
+			"value": {}
+		},
+		"_JSON": {
+			"chunk": "{\n\t\tencode: JSON.stringify,\n\t\tdecode: JSON.parse\n\t}",
+			"type": "Object",
+			"hash": "a6bde9a3",
+			"value": {}
+		},
+		"_PERSISTENT": {
+			"chunk": "{\n\t\tdata: {},\n\t\tread: function() {\n\t\t\treturn false;\n\t\t},\n\t\twrite: function() {\n\t\t\treturn false;\n\t\t}\n\t}",
+			"type": "Object",
+			"hash": "03bbea50",
+			"value": {
+				"data": {}
+			}
+		},
+		"_TEMPORARY": {
+			"chunk": "{\n\t\tdata: {},\n\t\tread: function() {\n\t\t\treturn true;\n\t\t},\n\t\twrite: function() {\n\t\t\treturn true;\n\t\t}\n\t}",
+			"type": "Object",
+			"hash": "b8b719e4",
+			"value": {
+				"data": {}
+			}
+		},
+		"_read_storage": {
+			"chunk": "function(silent) {\n\n\t\tsilent = silent === true;\n\n\n\t\tlet id   = this.id;\n\t\tlet blob = null;\n\n\n\t\tlet type = this.type;\n\t\tif (type === Composite.TYPE.persistent) {\n\t\t\tblob = _PERSISTENT.data[id] || null;\n\t\t} else if (type === Composite.TYPE.temporary) {\n\t\t\tblob = _TEMPORARY.data[id]  || null;\n\t\t}\n\n\n\t\tif (blob !== null) {\n\n\t\t\tif (this.model === null) {\n\n\t\t\t\tif (blob['@model'] instanceof Object) {\n\t\t\t\t\tthis.model = blob['@model'];\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tif (Object.keys(this.__objects).length !== Object.keys(blob['@objects']).length) {\n\n\t\t\t\tif (blob['@objects'] instanceof Object) {\n\n\t\t\t\t\tthis.__objects = {};\n\n\t\t\t\t\tfor (let o in blob['@objects']) {\n\t\t\t\t\t\tthis.__objects[o] = blob['@objects'][o];\n\t\t\t\t\t}\n\n\n\t\t\t\t\tif (silent === false) {\n\t\t\t\t\t\tthis.trigger('sync', [ this.__objects ]);\n\t\t\t\t\t}\n\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn false;\n\n\t}",
+			"type": "function",
+			"hash": "f4705d2f",
+			"parameters": [
+				{
+					"chunk": "silent === true",
+					"name": "silent",
+					"type": "Boolean",
+					"value": true
+				}
+			],
+			"values": [
+				{
+					"chunk": "true",
+					"type": "Boolean",
+					"value": true
+				},
+				{
+					"chunk": "false",
+					"type": "Boolean",
+					"value": false
+				}
+			]
+		},
+		"_write_storage": {
+			"chunk": "function(silent) {\n\n\t\tsilent = silent === true;\n\n\n\t\tlet operations = this.__operations;\n\t\tif (operations.length > 0) {\n\n\t\t\twhile (operations.length > 0) {\n\n\t\t\t\tlet operation = operations.shift();\n\t\t\t\tif (operation.type === 'update') {\n\n\t\t\t\t\tif (this.__objects[operation.id] !== operation.object) {\n\t\t\t\t\t\tthis.__objects[operation.id] = operation.object;\n\t\t\t\t\t}\n\n\t\t\t\t} else if (operation.type === 'remove') {\n\n\t\t\t\t\tif (this.__objects[operation.id] !== undefined) {\n\t\t\t\t\t\tdelete this.__objects[operation.id];\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tlet id   = this.id;\n\t\t\tlet blob = {\n\t\t\t\t'@model':   this.model,\n\t\t\t\t'@objects': this.__objects\n\t\t\t};\n\n\n\t\t\tlet type = this.type;\n\t\t\tif (type === Composite.TYPE.persistent) {\n\n\t\t\t\t_PERSISTENT.data[id] = blob;\n\t\t\t\t_PERSISTENT.write();\n\n\t\t\t} else if (type === Composite.TYPE.temporary) {\n\n\t\t\t\t_TEMPORARY.data[id] = blob;\n\n\t\t\t}\n\n\n\t\t\tif (silent === false) {\n\t\t\t\tthis.trigger('sync', [ this.__objects ]);\n\t\t\t}\n\n\n\t\t\treturn true;\n\n\t\t}\n\n\n\t\treturn false;\n\n\t}",
+			"type": "function",
+			"hash": "35247546",
+			"parameters": [
+				{
+					"chunk": "silent === true",
+					"name": "silent",
+					"type": "Boolean",
+					"value": true
+				}
+			],
+			"values": [
+				{
+					"chunk": "true",
+					"type": "Boolean",
+					"value": true
+				},
+				{
+					"chunk": "false",
+					"type": "Boolean",
+					"value": false
+				}
+			]
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.id    = 'lychee-Storage-' + _id++;\n\t\tthis.model = {};\n\t\tthis.type  = Composite.TYPE.persistent;\n\n\n\t\tthis.__objects    = {};\n\t\tthis.__operations = [];\n\n\n\t\tthis.setId(states.id);\n\t\tthis.setModel(states.model);\n\t\tthis.setType(states.type);\n\n\n\t\t_Emitter.call(this);\n\n\t\tstates = null;\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\t_read_storage.call(this);\n\n\t}",
+			"type": "function",
+			"hash": "2dfb0b1f",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"id": "setId",
+			"model": "setModel",
+			"type": "setType"
+		},
+		"properties": {
+			"id": {
+				"chunk": "this.id    = 'lychee-Storage-' + _id++;",
+				"type": "String",
+				"hash": "86f7a7ca",
+				"value": {
+					"chunk": "'lychee-Storage-' + _id++",
+					"type": "String",
+					"hash": "7a221441",
+					"value": "<string>"
+				}
+			},
+			"model": {
+				"chunk": "this.model = {};",
+				"type": "Object",
+				"hash": "b1d6e912",
+				"value": {
+					"chunk": "{}",
+					"type": "Object",
+					"hash": "30f4c306",
+					"value": {}
+				}
+			},
+			"type": {
+				"chunk": "this.type  = Composite.TYPE.persistent;",
+				"type": "Enum",
+				"hash": "defaaeec",
+				"value": {
+					"chunk": "Composite.TYPE.persistent",
+					"type": "Enum",
+					"hash": "75affda0",
+					"value": "Composite.TYPE.persistent"
+				}
+			},
+			"__objects": {
+				"chunk": "this.__objects    = {};",
+				"type": "Object",
+				"hash": "c8124763",
+				"value": {
+					"chunk": "{}",
+					"type": "Object",
+					"hash": "30f4c306",
+					"value": {}
+				}
+			},
+			"__operations": {
+				"chunk": "this.__operations = [];",
+				"type": "Array",
+				"hash": "d7dc095e",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			}
+		},
+		"enums": {
+			"TYPE": {
+				"values": [
+					{
+						"name": "persistent",
+						"value": {
+							"chunk": "0",
+							"type": "Number",
+							"hash": "d271c07f",
+							"value": 0
+						}
+					},
+					{
+						"name": "temporary",
+						"value": {
+							"chunk": "1",
+							"type": "Number",
+							"hash": "9416ac93",
+							"value": 1
+						}
+					}
+				]
+			}
+		},
+		"events": {},
+		"methods": {
+			"sync": {
+				"chunk": "function(silent) {\n\n\t\t\tsilent = silent === true;\n\n\n\t\t\tlet result = false;\n\n\n\t\t\tif (this.__operations.length > 0) {\n\t\t\t\tresult = _write_storage.call(this, silent);\n\t\t\t} else {\n\t\t\t\tresult = _read_storage.call(this, silent);\n\t\t\t}\n\n\n\t\t\treturn result;\n\n\t\t}",
+				"type": "function",
+				"hash": "b8039ef7",
+				"parameters": [
+					{
+						"chunk": "silent === true",
+						"name": "silent",
+						"type": "Boolean",
+						"value": true
+					}
+				],
+				"values": [
+					{
+						"chunk": "result",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"deserialize": {
+				"chunk": "function(blob) {\n\n\t\t\tif (blob.objects instanceof Object) {\n\n\t\t\t\tthis.__objects = {};\n\n\t\t\t\tfor (let o in blob.objects) {\n\n\t\t\t\t\tlet object = blob.objects[o];\n\n\t\t\t\t\tif (lychee.interfaceof(this.model, object)) {\n\t\t\t\t\t\tthis.__objects[o] = object;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "5ddd34d8",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "blob",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.Storage';\n\n\t\t\tlet states = {};\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.id.startsWith('lychee-Storage-') === false) states.id    = this.id;\n\t\t\tif (Object.keys(this.model).length !== 0)            states.model = this.model;\n\t\t\tif (this.type !== Composite.TYPE.persistent)         states.type  = this.type;\n\n\n\t\t\tif (Object.keys(this.__objects).length > 0) {\n\n\t\t\t\tblob.objects = {};\n\n\t\t\t\tfor (let o in this.__objects) {\n\n\t\t\t\t\tlet object = this.__objects[o];\n\t\t\t\t\tif (object instanceof Object) {\n\t\t\t\t\t\tblob.objects[o] = _JSON.decode(_JSON.encode(object));\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tdata['arguments'][0] = states;\n\t\t\tdata['blob']         = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "d1b64d2d",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"create": {
+				"chunk": "function() {\n\t\t\treturn lychee.assignunlink({}, this.model);\n\t\t}",
+				"type": "function",
+				"hash": "ce4bfdf4",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "lychee.assignunlink({}, this.model)",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"filter": {
+				"chunk": "function(callback, scope) {\n\n\t\t\tcallback = callback instanceof Function ? callback : null;\n\t\t\tscope    = scope !== undefined          ? scope    : this;\n\n\n\t\t\tlet filtered = [];\n\n\n\t\t\tif (callback !== null) {\n\n\t\t\t\tfor (let o in this.__objects) {\n\n\t\t\t\t\tlet object = this.__objects[o];\n\n\t\t\t\t\tif (callback.call(scope, object, o) === true) {\n\t\t\t\t\t\tfiltered.push(object);\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t}\n\n\n\t\t\treturn filtered;\n\n\t\t}",
+				"type": "function",
+				"hash": "71722dd1",
+				"parameters": [
+					{
+						"chunk": "callback instanceof Function ? callback : null",
+						"name": "callback",
+						"type": "Function",
+						"value": null
+					},
+					{
+						"chunk": "scope !== undefined          ? scope    : this",
+						"name": "scope",
+						"type": "Object",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"chunk": "[]",
+						"type": "Array",
+						"value": []
+					}
+				]
+			},
+			"read": {
+				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null) {\n\n\t\t\t\tlet object = this.__objects[id] || null;\n\t\t\t\tif (object !== null) {\n\t\t\t\t\treturn object;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
+				"type": "function",
+				"hash": "2df1e003",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'string' ? id : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "object",
+						"type": "Object",
+						"value": {}
+					},
+					{
+						"chunk": "null",
+						"type": "null",
+						"value": null
+					}
+				]
+			},
+			"remove": {
+				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null) {\n\n\t\t\t\tlet object = this.__objects[id] || null;\n\t\t\t\tif (object !== null) {\n\n\t\t\t\t\tthis.__operations.push({\n\t\t\t\t\t\ttype:   'remove',\n\t\t\t\t\t\tid:     id,\n\t\t\t\t\t\tobject: object\n\t\t\t\t\t});\n\n\n\t\t\t\t\t_write_storage.call(this);\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "ef1ba480",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'string' ? id : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"write": {
+				"chunk": "function(id, object) {\n\n\t\t\tid     = typeof id === 'string'                    ? id     : null;\n\t\t\tobject = lychee.diff(this.model, object) === false ? object : null;\n\n\n\t\t\tif (id !== null && object !== null) {\n\n\t\t\t\tthis.__operations.push({\n\t\t\t\t\ttype:   'update',\n\t\t\t\t\tid:     id,\n\t\t\t\t\tobject: object\n\t\t\t\t});\n\n\n\t\t\t\t_write_storage.call(this);\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "5058dc47",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'string'                    ? id     : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					},
+					{
+						"chunk": "lychee.diff(this.model, object) === false ? object : null",
+						"name": "object",
+						"type": "Object",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setId": {
+				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null) {\n\n\t\t\t\tthis.id = id;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "da8aa1c6",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'string' ? id : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setModel": {
+				"chunk": "function(model) {\n\n\t\t\tmodel = model instanceof Object ? model : null;\n\n\n\t\t\tif (model !== null) {\n\n\t\t\t\tthis.model = _JSON.decode(_JSON.encode(model));\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "44d38950",
+				"parameters": [
+					{
+						"chunk": "model instanceof Object ? model : null",
+						"name": "model",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setType": {
+				"chunk": "function(type) {\n\n\t\t\ttype = lychee.enumof(Composite.TYPE, type) ? type : null;\n\n\n\t\t\tif (type !== null) {\n\n\t\t\t\tthis.type = type;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "454cae67",
+				"parameters": [
+					{
+						"chunk": "lychee.enumof(Composite.TYPE, type) ? type : null",
+						"name": "type",
+						"type": "Enum",
+						"value": "Composite.TYPE"
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

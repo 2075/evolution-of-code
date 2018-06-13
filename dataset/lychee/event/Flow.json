@@ -1,0 +1,177 @@
+{
+	"header": {
+		"identifier": "lychee.event.Flow",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [
+			"lychee.event.Emitter"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Emitter": {
+			"chunk": "lychee.import('lychee.event.Emitter')",
+			"type": "lychee.Definition",
+			"hash": "b60271ea",
+			"value": {
+				"reference": "lychee.event.Emitter",
+				"arguments": []
+			}
+		},
+		"_process_recursive": {
+			"chunk": "function(event, result) {\n\n\t\tif (result === true) {\n\n\t\t\tif (this.___timeout === null) {\n\n\t\t\t\tthis.___timeout = setTimeout(function() {\n\n\t\t\t\t\tthis.___timeout = null;\n\t\t\t\t\t_process_stack.call(this);\n\n\t\t\t\t}.bind(this), 0);\n\n\t\t\t}\n\n\t\t} else {\n\n\t\t\tthis.trigger('error', [ event ]);\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "da2c82cd",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "event",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "result",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_process_stack": {
+			"chunk": "function() {\n\n\t\tlet entry = this.___stack.shift() || null;\n\t\tif (entry !== null) {\n\n\t\t\tlet data  = entry.data;\n\t\t\tlet event = entry.event;\n\t\t\tlet args  = [ event, [] ];\n\n\t\t\tif (data !== null) {\n\t\t\t\targs[1].push.apply(args[1], data);\n\t\t\t}\n\n\t\t\targs[1].push(_process_recursive.bind(this, event));\n\n\n\t\t\tlet result = this.trigger.apply(this, args);\n\t\t\tif (result === false) {\n\t\t\t\tthis.trigger('error', [ event ]);\n\t\t\t}\n\n\t\t} else {\n\n\t\t\tthis.trigger('complete');\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "70eca3b7",
+			"parameters": [],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function() {\n\n\t\tthis.___init    = false;\n\t\tthis.___stack   = [];\n\t\tthis.___timeout = null;\n\n\t\t_Emitter.call(this);\n\n\t}",
+			"type": "function",
+			"hash": "0ab3bd62",
+			"parameters": []
+		},
+		"states": {},
+		"properties": {
+			"___init": {
+				"chunk": "this.___init    = false;",
+				"type": "Boolean",
+				"hash": "4ff1840b",
+				"value": {
+					"chunk": "false",
+					"type": "Boolean",
+					"hash": "d5619e17",
+					"value": false
+				}
+			},
+			"___stack": {
+				"chunk": "this.___stack   = [];",
+				"type": "Array",
+				"hash": "fded5123",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"___timeout": {
+				"chunk": "this.___timeout = null;",
+				"type": "null",
+				"hash": "e531b9f2",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.event.Flow';\n\n\t\t\tlet blob = (data['blob'] || {});\n\n\n\t\t\tif (this.___stack.length > 0) {\n\n\t\t\t\tblob.stack = [];\n\n\t\t\t\tfor (let s = 0, sl = this.___stack.length; s < sl; s++) {\n\n\t\t\t\t\tlet entry = this.___stack[s];\n\n\t\t\t\t\tblob.stack.push({\n\t\t\t\t\t\tevent: entry.event,\n\t\t\t\t\t\tdata:  lychee.serialize(entry.data)\n\t\t\t\t\t});\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "f3bf2736",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"then": {
+				"chunk": "function(event, data) {\n\n\t\t\tevent = typeof event === 'string' ? event : null;\n\t\t\tdata  = data instanceof Array     ? data  : null;\n\n\n\t\t\tif (event !== null) {\n\n\t\t\t\tthis.___stack.push({\n\t\t\t\t\tevent: event,\n\t\t\t\t\tdata:  data\n\t\t\t\t});\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "0371f6a6",
+				"parameters": [
+					{
+						"chunk": "typeof event === 'string' ? event : null",
+						"name": "event",
+						"type": "String",
+						"value": null
+					},
+					{
+						"chunk": "data instanceof Array     ? data  : null",
+						"name": "data",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"init": {
+				"chunk": "function() {\n\n\t\t\tif (this.___init === false) {\n\n\t\t\t\tthis.___init = true;\n\n\n\t\t\t\tif (this.___stack.length > 0) {\n\n\t\t\t\t\t_process_stack.call(this);\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "0ed6bd16",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

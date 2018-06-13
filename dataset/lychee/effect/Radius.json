@@ -1,0 +1,242 @@
+{
+	"header": {
+		"identifier": "lychee.effect.Radius",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(states) {\n\n\t\tthis.type     = Composite.TYPE.easeout;\n\t\tthis.delay    = 0;\n\t\tthis.duration = 250;\n\t\tthis.radius   = 0;\n\n\t\tthis.__origin = null;\n\t\tthis.__start  = null;\n\n\n\t\t// No data validation garbage allowed for effects\n\n\t\tthis.type     = lychee.enumof(Composite.TYPE, states.type) ? states.type           : Composite.TYPE.easeout;\n\t\tthis.delay    = typeof states.delay === 'number'           ? (states.delay | 0)    : 0;\n\t\tthis.duration = typeof states.duration === 'number'        ? (states.duration | 0) : 250;\n\t\tthis.radius   = typeof states.radius === 'number'          ? (states.radius | 0)   : 0;\n\n\t}",
+			"type": "function",
+			"hash": "b564602f",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "states",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {},
+		"properties": {
+			"type": {
+				"chunk": "this.type     = Composite.TYPE.easeout;",
+				"type": "Enum",
+				"hash": "220f9106",
+				"value": {
+					"chunk": "Composite.TYPE.easeout",
+					"type": "Enum",
+					"hash": "1c46a920",
+					"value": "Composite.TYPE.easeout"
+				}
+			},
+			"delay": {
+				"chunk": "this.delay    = 0;",
+				"type": "Number",
+				"hash": "ac4b7c2d",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			},
+			"duration": {
+				"chunk": "this.duration = 250;",
+				"type": "Number",
+				"hash": "9b9962d5",
+				"value": {
+					"chunk": "250",
+					"type": "Number",
+					"hash": "85f0b427",
+					"value": 250
+				}
+			},
+			"radius": {
+				"chunk": "this.radius   = 0;",
+				"type": "Number",
+				"hash": "5bca5324",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			},
+			"__origin": {
+				"chunk": "this.__origin = null;",
+				"type": "null",
+				"hash": "e2381916",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"__start": {
+				"chunk": "this.__start  = null;",
+				"type": "null",
+				"hash": "c8f69835",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			}
+		},
+		"enums": {
+			"TYPE": {
+				"values": [
+					{
+						"name": "linear",
+						"value": {
+							"chunk": "0",
+							"type": "Number",
+							"hash": "d271c07f",
+							"value": 0
+						}
+					},
+					{
+						"name": "easein",
+						"value": {
+							"chunk": "1",
+							"type": "Number",
+							"hash": "9416ac93",
+							"value": 1
+						}
+					},
+					{
+						"name": "easeout",
+						"value": {
+							"chunk": "2",
+							"type": "Number",
+							"hash": "0129e217",
+							"value": 2
+						}
+					},
+					{
+						"name": "bounceeasein",
+						"value": {
+							"chunk": "3",
+							"type": "Number",
+							"hash": "0fc7a1b4",
+							"value": 3
+						}
+					},
+					{
+						"name": "bounceeaseout",
+						"value": {
+							"chunk": "4",
+							"type": "Number",
+							"hash": "e131cc88",
+							"value": 4
+						}
+					}
+				]
+			}
+		},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.type !== Composite.TYPE.easeout) states.type     = this.type;\n\t\t\tif (this.delay !== 0)                     states.delay    = this.delay;\n\t\t\tif (this.duration !== 250)                states.duration = this.duration;\n\t\t\tif (this.radius !== 0)                    states.radius   = this.radius;\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.effect.Radius',\n\t\t\t\t'arguments':   [ states ]\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "dcaba7a1",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.effect.Radius',\n\t\t\t\t'arguments':   [ states ]\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"render": {
+				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t}",
+				"type": "function",
+				"hash": "04f47507",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "renderer",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetX",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetY",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"update": {
+				"chunk": "function(entity, clock, delta) {\n\n\t\t\tif (this.__start === null) {\n\t\t\t\tthis.__start  = clock + this.delay;\n\t\t\t\tthis.__origin = entity.radius || 0;\n\t\t\t}\n\n\n\t\t\tlet t = (clock - this.__start) / this.duration;\n\t\t\tif (t < 0) {\n\t\t\t\treturn true;\n\t\t\t}\n\n\n\t\t\tlet origin = this.__origin;\n\t\t\tlet radius = this.radius;\n\n\t\t\tlet r      = origin;\n\n\t\t\tif (t <= 1) {\n\n\t\t\t\tlet f  = 0;\n\t\t\t\tlet dr = radius - origin;\n\n\n\t\t\t\tlet type = this.type;\n\t\t\t\tif (type === Composite.TYPE.linear) {\n\n\t\t\t\t\tr += t * dr;\n\n\t\t\t\t} else if (type === Composite.TYPE.easein) {\n\n\t\t\t\t\tf = 1 * Math.pow(t, 3);\n\n\t\t\t\t\tr += f * dr;\n\n\t\t\t\t} else if (type === Composite.TYPE.easeout) {\n\n\t\t\t\t\tf = Math.pow(t - 1, 3) + 1;\n\n\t\t\t\t\tr += f * dr;\n\n\t\t\t\t} else if (type === Composite.TYPE.bounceeasein) {\n\n\t\t\t\t\tlet k = 1 - t;\n\n\t\t\t\t\tif ((k /= 1) < (1 / 2.75)) {\n\t\t\t\t\t\tf = 1 * (7.5625 * Math.pow(k, 2));\n\t\t\t\t\t} else if (k < (2 / 2.75)) {\n\t\t\t\t\t\tf = 7.5625 * (k -= (1.5 / 2.75)) * k + 0.75;\n\t\t\t\t\t} else if (k < (2.5 / 2.75)) {\n\t\t\t\t\t\tf = 7.5625 * (k -= (2.25 / 2.75)) * k + 0.9375;\n\t\t\t\t\t} else {\n\t\t\t\t\t\tf = 7.5625 * (k -= (2.625 / 2.75)) * k + 0.984375;\n\t\t\t\t\t}\n\n\t\t\t\t\tr += (1 - f) * dr;\n\n\t\t\t\t} else if (type === Composite.TYPE.bounceeaseout) {\n\n\t\t\t\t\tif ((t /= 1) < (1 / 2.75)) {\n\t\t\t\t\t\tf = 1 * (7.5625 * Math.pow(t, 2));\n\t\t\t\t\t} else if (t < (2 / 2.75)) {\n\t\t\t\t\t\tf = 7.5625 * (t -= (1.5 / 2.75)) * t + 0.75;\n\t\t\t\t\t} else if (t < (2.5 / 2.75)) {\n\t\t\t\t\t\tf = 7.5625 * (t -= (2.25 / 2.75)) * t + 0.9375;\n\t\t\t\t\t} else {\n\t\t\t\t\t\tf = 7.5625 * (t -= (2.625 / 2.75)) * t + 0.984375;\n\t\t\t\t\t}\n\n\t\t\t\t\tr += f * dr;\n\n\t\t\t\t}\n\n\n\t\t\t\tentity.radius = r;\n\n\n\t\t\t\treturn true;\n\n\t\t\t} else {\n\n\t\t\t\tentity.radius = radius;\n\n\n\t\t\t\treturn false;\n\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "053fbe09",
+				"parameters": [
+					{
+						"chunk": "radius",
+						"name": "entity",
+						"type": "Number",
+						"value": 137
+					},
+					{
+						"chunk": null,
+						"name": "clock",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "delta",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

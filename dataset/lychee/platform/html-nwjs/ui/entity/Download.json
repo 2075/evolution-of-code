@@ -1,0 +1,214 @@
+{
+	"header": {
+		"identifier": "lychee.ui.entity.Download",
+		"attaches": {},
+		"tags": {
+			"platform": "html-nwjs"
+		},
+		"requires": [],
+		"includes": [
+			"lychee.ui.entity.Button"
+		],
+		"supports": {
+			"body": "function(lychee, global) {\n\n\tif (\n\t\ttypeof global.require === 'function'\n\t\t&& typeof global.document !== 'undefined'\n\t\t&& typeof global.document.createElement === 'function'\n\t) {\n\n\t\ttry {\n\n\t\t\tglobal.require('fs');\n\n\t\t\treturn true;\n\n\t\t} catch (err) {\n\n\t\t}\n\n\t}\n\n\n\treturn false;\n\n}",
+			"hash": "6b0538",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "lychee",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "global",
+					"type": "undefined"
+				}
+			]
+		},
+		"type": "Composite"
+	},
+	"memory": {
+		"_fs": {
+			"chunk": "{}",
+			"type": "Object",
+			"hash": "2fc852ab",
+			"value": {}
+		},
+		"_Buffer": {
+			"chunk": "function() {}",
+			"type": "Function",
+			"hash": "2e426b83"
+		},
+		"_Button": {
+			"chunk": "lychee.import('lychee.ui.entity.Button')",
+			"type": "lychee.Definition",
+			"hash": "b3693ec1",
+			"value": {
+				"reference": "lychee.ui.entity.Button",
+				"arguments": []
+			}
+		},
+		"_MIME_TYPE": {
+			"chunk": "{\n\t\t'Config':  { name: 'Entity', ext: 'json',    mime: 'application/json',         enc: 'utf8'   },\n\t\t'Font':    { name: 'Entity', ext: 'fnt',     mime: 'application/json',         enc: 'utf8'   },\n\t\t'Music':   {\n\t\t\t'mp3': { name: 'Entity', ext: 'msc.mp3', mime: 'audio/mp3',                enc: 'binary' },\n\t\t\t'ogg': { name: 'Entity', ext: 'msc.ogg', mime: 'application/ogg',          enc: 'binary' }\n\t\t},\n\t\t'Sound':   {\n\t\t\t'mp3': { name: 'Entity', ext: 'snd.mp3', mime: 'audio/mp3',                enc: 'binary' },\n\t\t\t'ogg': { name: 'Entity', ext: 'snd.ogg', mime: 'application/ogg',          enc: 'binary' }\n\t\t},\n\t\t'Texture': { name: 'Entity', ext: 'png',     mime: 'image/png',                enc: 'binary' },\n\t\t'Stuff':   { name: 'Entity', ext: 'stuff',   mime: 'application/octet-stream', enc: 'utf8'   }\n\t}",
+			"type": "Object",
+			"hash": "115cd5bb",
+			"value": {
+				"Config": {
+					"name": "Entity",
+					"ext": "json",
+					"mime": "application/json",
+					"enc": "utf8"
+				},
+				"Font": {
+					"name": "Entity",
+					"ext": "fnt",
+					"mime": "application/json",
+					"enc": "utf8"
+				},
+				"Music": {
+					"mp3": {
+						"name": "Entity",
+						"ext": "msc.mp3",
+						"mime": "audio/mp3",
+						"enc": "binary"
+					},
+					"ogg": {
+						"name": "Entity",
+						"ext": "msc.ogg",
+						"mime": "application/ogg",
+						"enc": "binary"
+					}
+				},
+				"Sound": {
+					"mp3": {
+						"name": "Entity",
+						"ext": "snd.mp3",
+						"mime": "audio/mp3",
+						"enc": "binary"
+					},
+					"ogg": {
+						"name": "Entity",
+						"ext": "snd.ogg",
+						"mime": "application/ogg",
+						"enc": "binary"
+					}
+				},
+				"Texture": {
+					"name": "Entity",
+					"ext": "png",
+					"mime": "image/png",
+					"enc": "binary"
+				},
+				"Stuff": {
+					"name": "Entity",
+					"ext": "stuff",
+					"mime": "application/octet-stream",
+					"enc": "utf8"
+				}
+			}
+		},
+		"_download": {
+			"chunk": "function(asset) {\n\n\t\tlet data = asset.serialize();\n\t\tlet url  = data.arguments[0];\n\t\tlet name = url.split('/').pop();\n\t\tlet mime = _MIME_TYPE[data.constructor] || _MIME_TYPE['Stuff'];\n\n\n\t\tif (data.blob !== null) {\n\n\t\t\tif (/Music|Sound/.test(data.constructor)) {\n\n\t\t\t\tfor (let ext in mime) {\n\n\t\t\t\t\tlet element = global.document.createElement('input');\n\n\t\t\t\t\telement.setAttribute('type',     'file');\n\t\t\t\t\telement.setAttribute('nwsaveas', name + '.' + mime[ext].ext);\n\n\t\t\t\t\telement.onchange = function() {\n\n\t\t\t\t\t\tlet blob = new _Buffer(data.blob.buffer[ext], 'base64');\n\t\t\t\t\t\tlet path = this.value;\n\n\t\t\t\t\t\t_fs.writeFileSync(path, blob, mime[ext].enc);\n\n\t\t\t\t\t};\n\n\t\t\t\t\telement.click();\n\n\t\t\t\t}\n\n\t\t\t} else {\n\n\t\t\t\tif (url.startsWith('data:')) {\n\t\t\t\t\tname = mime.name + '.' + mime.ext;\n\t\t\t\t}\n\n\t\t\t\tlet element = global.document.createElement('input');\n\n\t\t\t\telement.setAttribute('type',     'file');\n\t\t\t\telement.setAttribute('nwsaveas', name);\n\n\t\t\t\telement.onchange = function() {\n\n\t\t\t\t\tlet blob = new _Buffer(data.blob.buffer, 'base64');\n\t\t\t\t\tlet path = this.value;\n\n\t\t\t\t\t_fs.writeFileSync(path, blob, mime.enc);\n\n\t\t\t\t};\n\n\t\t\t\telement.click();\n\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "57a3b0f0",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "asset",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({\n\t\t\tlabel: 'DOWNLOAD'\n\t\t}, data);\n\n\n\t\tthis.value = [];\n\n\n\t\tthis.setValue(states.value);\n\n\t\tdelete states.value;\n\n\n\t\t_Button.call(this, states);\n\n\t\tstates = null;\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tthis.unbind('touch');\n\t\tthis.bind('touch', function() {\n\n\t\t\tthis.value.forEach(function(asset) {\n\t\t\t\t_download(asset);\n\t\t\t});\n\n\t\t}, this);\n\n\t}",
+			"type": "function",
+			"hash": "63d58e85",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"value": "setValue"
+		},
+		"properties": {
+			"value": {
+				"chunk": "this.value = [];",
+				"type": "Array",
+				"hash": "a01d146f",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Button.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.entity.Download';\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "1d615c6b",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"setValue": {
+				"chunk": "function(value) {\n\n\t\t\tvalue = value instanceof Array ? value : null;\n\n\n\t\t\tif (value !== null) {\n\n\t\t\t\tthis.value = value.filter(function(asset) {\n\n\t\t\t\t\tif (asset instanceof global.Config)  return true;\n\t\t\t\t\tif (asset instanceof global.Font)    return true;\n\t\t\t\t\tif (asset instanceof global.Music)   return true;\n\t\t\t\t\tif (asset instanceof global.Sound)   return true;\n\t\t\t\t\tif (asset instanceof global.Texture) return true;\n\t\t\t\t\tif (asset instanceof global.Stuff)   return true;\n\n\n\t\t\t\t\treturn false;\n\n\t\t\t\t});\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "ce16362c",
+				"parameters": [
+					{
+						"chunk": "value instanceof Array ? value : null",
+						"name": "value",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

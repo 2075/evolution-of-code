@@ -1,0 +1,768 @@
+{
+	"header": {
+		"identifier": "lychee.app.State",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"lychee.ai.Layer",
+			"lychee.app.Layer",
+			"lychee.ui.Layer"
+		],
+		"includes": [],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Ai_layer": {
+			"chunk": "lychee.import('lychee.ai.Layer')",
+			"type": "lychee.Definition",
+			"hash": "ef42cf78",
+			"value": {
+				"reference": "lychee.ai.Layer",
+				"arguments": []
+			}
+		},
+		"_App_layer": {
+			"chunk": "lychee.import('lychee.app.Layer')",
+			"type": "lychee.Definition",
+			"hash": "6f9d1207",
+			"value": {
+				"reference": "lychee.app.Layer",
+				"arguments": []
+			}
+		},
+		"_Ui_layer": {
+			"chunk": "lychee.import('lychee.ui.Layer')",
+			"type": "lychee.Definition",
+			"hash": "e94dc51f",
+			"value": {
+				"reference": "lychee.ui.Layer",
+				"arguments": []
+			}
+		},
+		"_validate_layer": {
+			"chunk": "function(layer) {\n\n\t\tif (\n\t\t\tlychee.interfaceof(_Ai_layer, layer)\n\t\t\t|| lychee.interfaceof(_App_layer, layer)\n\t\t\t|| lychee.interfaceof(_Ui_layer, layer)\n\t\t) {\n\t\t\treturn true;\n\t\t}\n\n\n\t\treturn false;\n\n\t}",
+			"type": "function",
+			"hash": "707c3f6f",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "layer",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "true",
+					"type": "Boolean",
+					"value": true
+				},
+				{
+					"chunk": "false",
+					"type": "Boolean",
+					"value": false
+				}
+			]
+		},
+		"_get_id": {
+			"chunk": "function(entity) {\n\n\t\tfor (let id in this.__map) {\n\n\t\t\tif (this.__map[id] === entity) {\n\t\t\t\treturn id;\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn null;\n\n\t}",
+			"type": "function",
+			"hash": "2a49bd21",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "entity",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "id",
+					"type": "String",
+					"value": "<unique identifier>"
+				},
+				{
+					"chunk": "null",
+					"type": "null",
+					"value": null
+				}
+			]
+		},
+		"_recursive_deserialize": {
+			"chunk": "function(oldlayer, newlayer) {\n\n\t\tif (typeof oldlayer.setType === 'function') {\n\t\t\toldlayer.setType(newlayer.type);\n\t\t}\n\n\t\tif (typeof oldlayer.setVisible === 'function') {\n\t\t\toldlayer.setVisible(newlayer.visible);\n\t\t}\n\n\n\t\tfor (let e = 0, el = newlayer.entities.length; e < el; e++) {\n\n\t\t\tlet entity = newlayer.entities[e];\n\t\t\tlet id     = _get_id.call(newlayer, entity);\n\t\t\tlet other  = oldlayer.getEntity(id);\n\n\t\t\tif (other === null) {\n\n\t\t\t\toldlayer.setEntity(id, entity);\n\n\t\t\t} else if (typeof other.entities !== 'undefined' && typeof entity.entities !== 'undefined') {\n\n\t\t\t\t_recursive_deserialize(other, entity);\n\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "7e6852ff",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "oldlayer",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "newlayer",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_on_key": {
+			"chunk": "function(key, name, delta) {\n\n\t\tlet focus = this.__focus;\n\t\tif (focus !== null) {\n\n\t\t\tlet result = focus.trigger('key', [ key, name, delta ]);\n\t\t\tif (result === true) {\n\n\t\t\t\tif (focus.state === 'default') {\n\t\t\t\t\tthis.__focus = null;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "3cd6f4e1",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "key",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "name",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "delta",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_on_reshape": {
+			"chunk": "function(orientation, rotation, width, height) {\n\n\t\tlet renderer = this.renderer;\n\t\tif (renderer !== null) {\n\n\t\t\tlet position = {\n\t\t\t\tx: 1 / 2 * renderer.width,\n\t\t\t\ty: 1 / 2 * renderer.height\n\t\t\t};\n\n\n\t\t\tfor (let id in this.__layers) {\n\n\t\t\t\tlet layer = this.__layers[id];\n\n\t\t\t\tlayer.setPosition(position);\n\t\t\t\tlayer.trigger('relayout');\n\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "6635ba34",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "orientation",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "rotation",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "width",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "height",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_on_scroll": {
+			"chunk": "function(id, direction, position, delta) {\n\n\t\tlet args = [ id, direction, {\n\t\t\tx: 0,\n\t\t\ty: 0\n\t\t}, delta ];\n\n\n\t\tlet x = position.x;\n\t\tlet y = position.y;\n\n\n\t\tlet renderer = this.renderer;\n\t\tif (renderer !== null) {\n\n\t\t\tx -= renderer.offset.x;\n\t\t\ty -= renderer.offset.y;\n\n\t\t}\n\n\n\t\tfor (let lid in this.__layers) {\n\n\t\t\tlet layer = this.__layers[lid];\n\t\t\tif (layer.visible === false) continue;\n\n\t\t\tif (lychee.interfaceof(_Ui_layer, layer)) {\n\n\t\t\t\targs[2].x = x - layer.position.x;\n\t\t\t\targs[2].y = y - layer.position.y;\n\n\n\t\t\t\tlet result = layer.trigger('scroll', args);\n\t\t\t\tif (result !== true && result !== false && result !== null) {\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "c89c9195",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "id",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "direction",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "position",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "delta",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_on_swipe": {
+			"chunk": "function(id, type, position, delta, swipe) {\n\n\t\tlet touch = this.__touches[id];\n\t\tif (touch.entity !== null) {\n\n\t\t\tif (touch.layer.visible === false) return;\n\n\n\t\t\tlet args   = [ id, type, position, delta, swipe ];\n\t\t\tlet result = false;\n\n\t\t\tlet renderer = this.renderer;\n\t\t\tif (renderer !== null) {\n\n\t\t\t\targs[2].x -= renderer.offset.x;\n\t\t\t\targs[2].y -= renderer.offset.y;\n\n\t\t\t}\n\n\n\t\t\tif (type === 'start') {\n\n\t\t\t\t_trace_entity_offset.call(\n\t\t\t\t\ttouch.offset,\n\t\t\t\t\ttouch.entity,\n\t\t\t\t\ttouch.layer\n\t\t\t\t);\n\n\n\t\t\t\targs[2].x -= touch.offset.x;\n\t\t\t\targs[2].y -= touch.offset.y;\n\t\t\t\tresult     = touch.entity.trigger('swipe', args);\n\n\t\t\t\tif (result === false) {\n\t\t\t\t\ttouch.entity = null;\n\t\t\t\t\ttouch.layer  = null;\n\t\t\t\t}\n\n\t\t\t} else if (type === 'move') {\n\n\t\t\t\targs[2].x -= touch.offset.x;\n\t\t\t\targs[2].y -= touch.offset.y;\n\t\t\t\tresult     = touch.entity.trigger('swipe', args);\n\n\t\t\t\tif (result === false) {\n\t\t\t\t\ttouch.entity = null;\n\t\t\t\t\ttouch.layer  = null;\n\t\t\t\t}\n\n\t\t\t} else if (type === 'end') {\n\n\t\t\t\targs[2].x -= touch.offset.x;\n\t\t\t\targs[2].y -= touch.offset.y;\n\t\t\t\tresult     = touch.entity.trigger('swipe', args);\n\n\t\t\t\tif (result === false) {\n\t\t\t\t\ttouch.entity = null;\n\t\t\t\t\ttouch.layer  = null;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "a71ea1bb",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "id",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "type",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "position",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "delta",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "swipe",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_on_touch": {
+			"chunk": "function(id, position, delta) {\n\n\t\tlet args = [ id, {\n\t\t\tx: 0,\n\t\t\ty: 0\n\t\t}, delta ];\n\n\n\t\tlet x = position.x;\n\t\tlet y = position.y;\n\n\n\t\tlet renderer = this.renderer;\n\t\tif (renderer !== null) {\n\n\t\t\tx -= renderer.offset.x;\n\t\t\ty -= renderer.offset.y;\n\n\t\t}\n\n\n\t\tlet touch_layer  = null;\n\t\tlet touch_entity = null;\n\n\t\tfor (let lid in this.__layers) {\n\n\t\t\tlet layer = this.__layers[lid];\n\t\t\tif (layer.visible === false) continue;\n\n\t\t\tif (lychee.interfaceof(_Ui_layer, layer)) {\n\n\t\t\t\targs[1].x = x - layer.position.x;\n\t\t\t\targs[1].y = y - layer.position.y;\n\n\n\t\t\t\tlet result = layer.trigger('touch', args);\n\t\t\t\tif (result !== true && result !== false && result !== null) {\n\n\t\t\t\t\ttouch_entity = result;\n\t\t\t\t\ttouch_layer  = layer;\n\n\t\t\t\t\tbreak;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\n\t\tlet old_focus = this.__focus;\n\t\tlet new_focus = touch_entity;\n\n\t\t// 1. Reset Touch trace data if no Entity was touched\n\t\tif (new_focus === null) {\n\t\t\tthis.__touches[id].entity = null;\n\t\t\tthis.__touches[id].layer  = null;\n\t\t}\n\n\n\t\t// 2. Change Focus State Interaction\n\t\tif (new_focus !== old_focus) {\n\n\t\t\tif (old_focus !== null) {\n\n\t\t\t\tif (old_focus.state !== 'default') {\n\t\t\t\t\told_focus.trigger('blur');\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\tif (new_focus !== null) {\n\n\t\t\t\tif (new_focus.state === 'default') {\n\t\t\t\t\tnew_focus.trigger('focus');\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tthis.__focus = new_focus;\n\n\t\t}\n\n\n\t\t// 3. Prepare UI Swipe event\n\t\tif (touch_entity !== null) {\n\n\t\t\tlet touch = this.__touches[id];\n\n\t\t\ttouch.entity = new_focus;\n\t\t\ttouch.layer  = touch_layer;\n\n\n\t\t\t_trace_entity_offset.call(\n\t\t\t\ttouch.offset,\n\t\t\t\ttouch.entity,\n\t\t\t\ttouch.layer\n\t\t\t);\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "51eeab1f",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "id",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "position",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "delta",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_trace_entity_offset": {
+			"chunk": "function(entity, layer, offsetX, offsetY) {\n\n\t\tif (offsetX === undefined || offsetY === undefined) {\n\n\t\t\tthis.x  = 0;\n\t\t\tthis.y  = 0;\n\t\t\toffsetX = layer.position.x;\n\t\t\toffsetY = layer.position.y;\n\n\t\t}\n\n\n\t\tif (layer === entity) {\n\n\t\t\tthis.x = offsetX;\n\t\t\tthis.y = offsetY;\n\n\t\t\treturn true;\n\n\t\t} else if (layer.entities !== undefined) {\n\n\t\t\tlet entities = layer.entities;\n\t\t\tfor (let e = entities.length - 1; e >= 0; e--) {\n\n\t\t\t\tlet dx = layer.offset.x + entities[e].position.x;\n\t\t\t\tlet dy = layer.offset.y + entities[e].position.y;\n\n\n\t\t\t\tlet result = _trace_entity_offset.call(\n\t\t\t\t\tthis,\n\t\t\t\t\tentity,\n\t\t\t\t\tentities[e],\n\t\t\t\t\toffsetX + dx,\n\t\t\t\t\toffsetY + dy\n\t\t\t\t);\n\n\t\t\t\tif (result === true) {\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn false;\n\n\t}",
+			"type": "function",
+			"hash": "669ca657",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "entity",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "layer",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "offsetX",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "offsetY",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "true",
+					"type": "Boolean",
+					"value": true
+				},
+				{
+					"chunk": "false",
+					"type": "Boolean",
+					"value": false
+				}
+			]
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(main) {\n\n\t\tthis.main     = main          || null;\n\t\tthis.client   = main.client   || null;\n\t\tthis.server   = main.server   || null;\n\n\t\tthis.input    = main.input    || null;\n\t\tthis.jukebox  = main.jukebox  || null;\n\t\tthis.loop     = main.loop     || null;\n\t\tthis.renderer = main.renderer || null;\n\t\tthis.storage  = main.storage  || null;\n\t\tthis.viewport = main.viewport || null;\n\n\n\t\tthis.__layers_map = [];\n\t\tthis.__layers     = {};\n\t\tthis.__focus      = null;\n\t\tthis.__touches    = [\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } }\n\t\t];\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tlet viewport = this.viewport;\n\t\tif (viewport !== null) {\n\t\t\tviewport.bind('reshape', _on_reshape, this);\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "a20ce90b",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "main",
+					"type": "undefined"
+				}
+			]
+		},
+		"states": {},
+		"properties": {
+			"main": {
+				"chunk": "this.main     = main          || null;",
+				"type": "lychee.app.Main",
+				"hash": "a684516c",
+				"value": {
+					"chunk": "main          || null",
+					"type": "lychee.app.Main",
+					"hash": "1ef6aeb1",
+					"value": {
+						"constructor": "lychee.app.Main",
+						"arguments": []
+					}
+				}
+			},
+			"client": {
+				"chunk": "this.client   = main.client   || null;",
+				"type": "Object",
+				"hash": "50208fa0",
+				"value": {
+					"chunk": "main.client   || null",
+					"type": "Object",
+					"hash": "82308541",
+					"value": {}
+				}
+			},
+			"server": {
+				"chunk": "this.server   = main.server   || null;",
+				"type": "Object",
+				"hash": "cc2470b0",
+				"value": {
+					"chunk": "main.server   || null",
+					"type": "Object",
+					"hash": "171f8647",
+					"value": {}
+				}
+			},
+			"input": {
+				"chunk": "this.input    = main.input    || null;",
+				"type": "Object",
+				"hash": "f7cea43f",
+				"value": {
+					"chunk": "main.input    || null",
+					"type": "Object",
+					"hash": "e47dca8a",
+					"value": {}
+				}
+			},
+			"jukebox": {
+				"chunk": "this.jukebox  = main.jukebox  || null;",
+				"type": "Object",
+				"hash": "dc556a0f",
+				"value": {
+					"chunk": "main.jukebox  || null",
+					"type": "Object",
+					"hash": "bd459d65",
+					"value": {}
+				}
+			},
+			"loop": {
+				"chunk": "this.loop     = main.loop     || null;",
+				"type": "Object",
+				"hash": "5fda14a6",
+				"value": {
+					"chunk": "main.loop     || null",
+					"type": "Object",
+					"hash": "14d18a50",
+					"value": {}
+				}
+			},
+			"renderer": {
+				"chunk": "this.renderer = main.renderer || null;",
+				"type": "Object",
+				"hash": "2713c71f",
+				"value": {
+					"chunk": "main.renderer || null",
+					"type": "Object",
+					"hash": "c5af81ca",
+					"value": {}
+				}
+			},
+			"storage": {
+				"chunk": "this.storage  = main.storage  || null;",
+				"type": "Object",
+				"hash": "e6eeba83",
+				"value": {
+					"chunk": "main.storage  || null",
+					"type": "Object",
+					"hash": "401ddf39",
+					"value": {}
+				}
+			},
+			"viewport": {
+				"chunk": "this.viewport = main.viewport || null;",
+				"type": "Object",
+				"hash": "734a423e",
+				"value": {
+					"chunk": "main.viewport || null",
+					"type": "Object",
+					"hash": "36d2b71a",
+					"value": {}
+				}
+			},
+			"__layers_map": {
+				"chunk": "this.__layers_map = [];",
+				"type": "Array",
+				"hash": "f50db781",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"__layers": {
+				"chunk": "this.__layers     = {};",
+				"type": "Object",
+				"hash": "87c4401b",
+				"value": {
+					"chunk": "{}",
+					"type": "Object",
+					"hash": "30f4c306",
+					"value": {}
+				}
+			},
+			"__focus": {
+				"chunk": "this.__focus      = null;",
+				"type": "null",
+				"hash": "f7ded7f1",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"__touches": {
+				"chunk": "this.__touches    = [\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } }\n\t\t];",
+				"type": "Array",
+				"hash": "059bf97e",
+				"value": {
+					"chunk": "[\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } },\n\t\t\t{ entity: null, layer: null, offset: { x: 0, y: 0 } }\n\t\t]",
+					"type": "Array",
+					"hash": "51f9b149",
+					"value": [
+						{
+							"entity": null,
+							"layer": null,
+							"offset": {
+								"x": 0,
+								"y": 0
+							}
+						},
+						{
+							"entity": null,
+							"layer": null,
+							"offset": {
+								"x": 0,
+								"y": 0
+							}
+						},
+						{
+							"entity": null,
+							"layer": null,
+							"offset": {
+								"x": 0,
+								"y": 0
+							}
+						},
+						{
+							"entity": null,
+							"layer": null,
+							"offset": {
+								"x": 0,
+								"y": 0
+							}
+						},
+						{
+							"entity": null,
+							"layer": null,
+							"offset": {
+								"x": 0,
+								"y": 0
+							}
+						},
+						{
+							"entity": null,
+							"layer": null,
+							"offset": {
+								"x": 0,
+								"y": 0
+							}
+						},
+						{
+							"entity": null,
+							"layer": null,
+							"offset": {
+								"x": 0,
+								"y": 0
+							}
+						},
+						{
+							"entity": null,
+							"layer": null,
+							"offset": {
+								"x": 0,
+								"y": 0
+							}
+						},
+						{
+							"entity": null,
+							"layer": null,
+							"offset": {
+								"x": 0,
+								"y": 0
+							}
+						},
+						{
+							"entity": null,
+							"layer": null,
+							"offset": {
+								"x": 0,
+								"y": 0
+							}
+						}
+					]
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {\n\n\t\t\tif (blob.layers) {\n\n\t\t\t\tfor (let laid in blob.layers) {\n\n\t\t\t\t\tlet tmp1 = this.__layers[laid] || null;\n\t\t\t\t\tlet tmp2 = lychee.deserialize(blob.layers[laid]);\n\n\t\t\t\t\tif (tmp1 === null && tmp2 !== null) {\n\n\t\t\t\t\t\tthis.setLayer(laid, tmp2);\n\n\t\t\t\t\t} else if (tmp1 !== null && tmp2 !== null) {\n\n\t\t\t\t\t\t_recursive_deserialize.call(this, tmp1, tmp2);\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "0d3bfe46",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "blob",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet main = this.main !== null ? '#MAIN' : null;\n\t\t\tlet blob = {};\n\n\n\t\t\tif (Object.keys(this.__layers).length > 0) {\n\n\t\t\t\tblob.layers = {};\n\n\t\t\t\tfor (let lid in this.__layers) {\n\t\t\t\t\tblob.layers[lid] = lychee.serialize(this.__layers[lid]);\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.app.State',\n\t\t\t\t'arguments':   [ main ],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "10862a12",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.app.State',\n\t\t\t\t'arguments':   [ main ],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"enter": {
+				"chunk": "function(oncomplete) {\n\n\t\t\toncomplete = oncomplete instanceof Function ? oncomplete : null;\n\n\n\t\t\tlet input = this.input;\n\t\t\tif (input !== null) {\n\t\t\t\tinput.bind('key',    _on_key,    this);\n\t\t\t\tinput.bind('scroll', _on_scroll, this);\n\t\t\t\tinput.bind('swipe',  _on_swipe,  this);\n\t\t\t\tinput.bind('touch',  _on_touch,  this);\n\t\t\t}\n\n\n\t\t\tif (oncomplete !== null) {\n\t\t\t\toncomplete(true);\n\t\t\t}\n\n\n\t\t\treturn true;\n\n\t\t}",
+				"type": "function",
+				"hash": "11965841",
+				"parameters": [
+					{
+						"chunk": "oncomplete instanceof Function ? oncomplete : null",
+						"name": "oncomplete",
+						"type": "Function",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"leave": {
+				"chunk": "function(oncomplete) {\n\n\t\t\toncomplete = oncomplete instanceof Function ? oncomplete : null;\n\n\n\t\t\tlet focus = this.__focus;\n\t\t\tif (focus !== null) {\n\t\t\t\tfocus.trigger('blur');\n\t\t\t}\n\n\n\t\t\tfor (let t = 0, tl = this.__touches.length; t < tl; t++) {\n\n\t\t\t\tlet touch = this.__touches[t];\n\t\t\t\tif (touch.entity !== null) {\n\t\t\t\t\ttouch.entity = null;\n\t\t\t\t\ttouch.layer  = null;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tthis.__focus = null;\n\n\n\t\t\tlet input = this.input;\n\t\t\tif (input !== null) {\n\t\t\t\tinput.unbind('touch',  _on_touch,  this);\n\t\t\t\tinput.unbind('swipe',  _on_swipe,  this);\n\t\t\t\tinput.unbind('scroll', _on_scroll, this);\n\t\t\t\tinput.unbind('key',    _on_key,    this);\n\t\t\t}\n\n\n\t\t\tif (oncomplete !== null) {\n\t\t\t\toncomplete(true);\n\t\t\t}\n\n\n\t\t\treturn true;\n\n\t\t}",
+				"type": "function",
+				"hash": "97f42968",
+				"parameters": [
+					{
+						"chunk": "oncomplete instanceof Function ? oncomplete : null",
+						"name": "oncomplete",
+						"type": "Function",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"query": {
+				"chunk": "function(query) {\n\n\t\t\tquery = typeof query === 'string' ? query : null;\n\n\n\t\t\tif (query !== null) {\n\n\t\t\t\tlet tmp   = query.split(' > ');\n\t\t\t\tlet layer = this.getLayer(tmp[0].trim());\n\t\t\t\tif (layer !== null) {\n\n\t\t\t\t\tlet entity = layer;\n\n\t\t\t\t\tfor (let t = 1, tl = tmp.length; t < tl; t++) {\n\n\t\t\t\t\t\tentity = entity.getEntity(tmp[t].trim());\n\n\t\t\t\t\t\tif (entity === null) {\n\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t\treturn entity;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
+				"type": "function",
+				"hash": "61bb261b",
+				"parameters": [
+					{
+						"chunk": "typeof query === 'string' ? query : null",
+						"name": "query",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "entity",
+						"type": "lychee.app.Entity",
+						"value": {
+							"constructor": "lychee.app.Entity",
+							"arguments": []
+						}
+					},
+					{
+						"chunk": "null",
+						"type": "null",
+						"value": null
+					}
+				]
+			},
+			"render": {
+				"chunk": "function(clock, delta, custom) {\n\n\t\t\tcustom = custom === true;\n\n\n\t\t\tlet renderer = this.renderer;\n\t\t\tif (renderer !== null) {\n\n\t\t\t\tif (custom === false) {\n\t\t\t\t\trenderer.clear();\n\t\t\t\t}\n\n\n\t\t\t\tlet layers_map = this.__layers_map;\n\t\t\t\tfor (let l = 0, ll = layers_map.length; l < ll; l++) {\n\n\t\t\t\t\tlet layer = this.__layers[layers_map[l]];\n\t\t\t\t\tif (layer.visible === false) continue;\n\n\t\t\t\t\tlayer.render(\n\t\t\t\t\t\trenderer,\n\t\t\t\t\t\t0,\n\t\t\t\t\t\t0\n\t\t\t\t\t);\n\n\t\t\t\t}\n\n\n\t\t\t\tif (custom === false) {\n\t\t\t\t\trenderer.flush();\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "a8faec03",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "clock",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "delta",
+						"type": "undefined"
+					},
+					{
+						"chunk": "custom === true",
+						"name": "custom",
+						"type": "Boolean",
+						"value": true
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"update": {
+				"chunk": "function(clock, delta) {\n\n\t\t\tfor (let id in this.__layers) {\n\n\t\t\t\tlet layer = this.__layers[id];\n\t\t\t\tif (layer.visible === false) continue;\n\n\t\t\t\tlayer.update(clock, delta);\n\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "8508c74d",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "clock",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "delta",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"setLayer": {
+				"chunk": "function(id, layer) {\n\n\t\t\tid    = typeof id === 'string'          ? id    : null;\n\t\t\tlayer = _validate_layer(layer) === true ? layer : null;\n\n\n\t\t\tif (id !== null) {\n\n\t\t\t\tif (layer !== null) {\n\n\t\t\t\t\tthis.__layers[id] = layer;\n\t\t\t\t\tthis.__layers_map = Object.keys(this.__layers).sort();\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "043f68b0",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'string'          ? id    : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					},
+					{
+						"chunk": "_validate_layer(layer) === true ? layer : null",
+						"name": "layer",
+						"type": "lychee.app.Layer",
+						"value": {
+							"constructor": "lychee.app.Layer",
+							"arguments": []
+						}
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"getLayer": {
+				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null && this.__layers[id] !== undefined) {\n\t\t\t\treturn this.__layers[id];\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
+				"type": "function",
+				"hash": "b72458bc",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'string' ? id : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this.__layers[id]",
+						"type": "undefined",
+						"value": {
+							"reference": "this.__layers[id]",
+							"arguments": []
+						}
+					},
+					{
+						"chunk": "null",
+						"type": "null",
+						"value": null
+					}
+				]
+			},
+			"removeLayer": {
+				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null && this.__layers[id] !== undefined) {\n\n\t\t\t\tdelete this.__layers[id];\n\t\t\t\tthis.__layers_map = Object.keys(this.__layers).sort();\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "e705e6bc",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'string' ? id : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

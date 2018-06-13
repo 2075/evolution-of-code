@@ -1,0 +1,100 @@
+{
+	"header": {
+		"identifier": "lychee.net.client.Storage",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [
+			"lychee.net.Service"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Service": {
+			"chunk": "lychee.import('lychee.net.Service')",
+			"type": "lychee.Definition",
+			"hash": "1de466ca",
+			"value": {
+				"reference": "lychee.net.Service",
+				"arguments": []
+			}
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(client) {\n\n\t\t_Service.call(this, 'storage', client, _Service.TYPE.client);\n\n\t}",
+			"type": "function",
+			"hash": "2ad7e23a",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "client",
+					"type": "undefined"
+				}
+			]
+		},
+		"states": {},
+		"properties": {},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Service.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.net.client.Storage';\n\t\t\tdata['arguments']   = [ data['arguments'][1] ];\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "aa66cbb4",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"sync": {
+				"chunk": "function(objects) {\n\n\t\t\tobjects = objects instanceof Array ? objects : null;\n\n\n\t\t\tif (objects !== null && this.tunnel !== null) {\n\n\t\t\t\tthis.tunnel.send({\n\t\t\t\t\ttimestamp: Date.now(),\n\t\t\t\t\tobjects:   objects\n\t\t\t\t}, {\n\t\t\t\t\tid:    'storage',\n\t\t\t\t\tevent: 'sync'\n\t\t\t\t});\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "18aa3742",
+				"parameters": [
+					{
+						"chunk": "objects instanceof Array ? objects : null",
+						"name": "objects",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

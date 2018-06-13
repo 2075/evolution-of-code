@@ -1,0 +1,752 @@
+{
+	"header": {
+		"identifier": "lychee.app.Entity",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_validate_effect": {
+			"chunk": "function(effect) {\n\n\t\tif (effect instanceof Object) {\n\n\t\t\tif (\n\t\t\t\ttypeof effect.update === 'function'\n\t\t\t\t&& typeof effect.render === 'function'\n\t\t\t) {\n\t\t\t\treturn true;\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn false;\n\n\t}",
+			"type": "function",
+			"hash": "a333e882",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "effect",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "true",
+					"type": "Boolean",
+					"value": true
+				},
+				{
+					"chunk": "false",
+					"type": "Boolean",
+					"value": false
+				}
+			]
+		},
+		"_sphere_sphere": {
+			"chunk": "function(a, b) {\n\n\t\tlet dx  = Math.sqrt(Math.pow(b.position.x - a.position.x, 2));\n\t\tlet dy  = Math.sqrt(Math.pow(b.position.y - a.position.y, 2));\n\t\tlet dz  = Math.sqrt(Math.pow(b.position.z - a.position.z, 2));\n\n\t\tlet rxy = 0;\n\t\tlet rxz = 0;\n\n\t\tif (a.shape === Composite.SHAPE.sphere) {\n\t\t\trxy += a.radius;\n\t\t\trxz += a.radius;\n\t\t}\n\n\t\tif (b.shape === Composite.SHAPE.sphere) {\n\t\t\trxy += b.radius;\n\t\t\trxz += b.radius;\n\t\t}\n\n\t\treturn ((dx + dy) <= rxy && (dx + dz) <= rxz);\n\n\t}",
+			"type": "function",
+			"hash": "9025213e",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "a",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "b",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "((dx + dy) <= rxy && (dx + dz) <= rxz)",
+					"type": "Boolean",
+					"value": true
+				}
+			]
+		},
+		"_sphere_cuboid": {
+			"chunk": "function(a, b) {\n\n\t\tlet r  = a.radius;\n\t\tlet hw = b.width  / 2;\n\t\tlet hh = b.height / 2;\n\t\tlet hd = b.depth  / 2;\n\n\t\tlet ax = a.position.x;\n\t\tlet ay = a.position.y;\n\t\tlet az = a.position.z;\n\n\t\tlet bx = b.position.x;\n\t\tlet by = b.position.y;\n\t\tlet bz = b.position.z;\n\n\t\tlet colx = (ax + r >= bx - hw) && (ax - r <= bx + hw);\n\t\tlet coly = (ay + r >= by - hh) && (ay - r <= by + hh);\n\n\t\tif (a.shape === Composite.SHAPE.circle) {\n\t\t\tr = 0;\n\t\t}\n\n\t\tlet colz = (az + r >= bz - hd) && (az - r <= bz + hd);\n\n\t\treturn (colx && coly && colz);\n\n\t}",
+			"type": "function",
+			"hash": "2329dd7c",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "a",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "b",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "(colx && coly && colz)",
+					"type": "Boolean",
+					"value": true
+				}
+			]
+		},
+		"_cuboid_cuboid": {
+			"chunk": "function(a, b) {\n\n\t\tlet dx = Math.abs(b.position.x - a.position.x);\n\t\tlet dy = Math.abs(b.position.y - a.position.y);\n\t\tlet dz = Math.abs(b.position.z - a.position.z);\n\n\t\tlet hw = (a.width  + b.width)  / 2;\n\t\tlet hh = (a.height + b.height) / 2;\n\t\tlet hd = (a.depth  + b.depth)  / 2;\n\n\t\treturn (dx <= hw && dy <= hh && dz <= hd);\n\n\t}",
+			"type": "function",
+			"hash": "1ec3ee98",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "a",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "b",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "(dx <= hw && dy <= hh && dz <= hd)",
+					"type": "Boolean",
+					"value": true
+				}
+			]
+		}
+	},
+	"errors": [
+		{
+			"url": "/libraries/lychee/source/app/Entity.js",
+			"rule": "unguessable-return-value",
+			"reference": "collidesWith",
+			"message": "Unguessable return value \"_sphere_sphere(this, entity)\" for method \"collidesWith()\".",
+			"line": 0,
+			"column": 0
+		}
+	],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.width  = typeof states.width === 'number'  ? states.width  : 0;\n\t\tthis.height = typeof states.height === 'number' ? states.height : 0;\n\t\tthis.depth  = typeof states.depth === 'number'  ? states.depth  : 0;\n\t\tthis.radius = typeof states.radius === 'number' ? states.radius : 0;\n\n\t\tthis.alpha     = 1;\n\t\tthis.collision = Composite.COLLISION.none;\n\t\tthis.effects   = [];\n\t\tthis.shape     = Composite.SHAPE.rectangle;\n\t\tthis.state     = 'default';\n\t\tthis.states    = { 'default': null };\n\t\tthis.position  = { x: 0, y: 0, z: 0 };\n\t\tthis.velocity  = { x: 0, y: 0, z: 0 };\n\n\n\t\tthis.setAlpha(states.alpha);\n\t\tthis.setCollision(states.collision);\n\t\tthis.setShape(states.shape);\n\t\tthis.setStates(states.states);\n\t\tthis.setState(states.state);\n\t\tthis.setPosition(states.position);\n\t\tthis.setVelocity(states.velocity);\n\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "3e265903",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"alpha": "setAlpha",
+			"collision": "setCollision",
+			"shape": "setShape",
+			"states": "setStates",
+			"state": "setState",
+			"position": "setPosition",
+			"velocity": "setVelocity"
+		},
+		"properties": {
+			"width": {
+				"chunk": "this.width  = typeof states.width === 'number'  ? states.width  : 0;",
+				"type": "Number",
+				"hash": "ad00799b",
+				"value": {
+					"chunk": "typeof states.width === 'number'  ? states.width  : 0",
+					"type": "Number",
+					"hash": "f39b2b50",
+					"value": 0
+				}
+			},
+			"height": {
+				"chunk": "this.height = typeof states.height === 'number' ? states.height : 0;",
+				"type": "Number",
+				"hash": "989d0ca5",
+				"value": {
+					"chunk": "typeof states.height === 'number' ? states.height : 0",
+					"type": "Number",
+					"hash": "3c1adab7",
+					"value": 0
+				}
+			},
+			"depth": {
+				"chunk": "this.depth  = typeof states.depth === 'number'  ? states.depth  : 0;",
+				"type": "Number",
+				"hash": "c8cffc86",
+				"value": {
+					"chunk": "typeof states.depth === 'number'  ? states.depth  : 0",
+					"type": "Number",
+					"hash": "a44792aa",
+					"value": 0
+				}
+			},
+			"radius": {
+				"chunk": "this.radius = typeof states.radius === 'number' ? states.radius : 0;",
+				"type": "Number",
+				"hash": "23663106",
+				"value": {
+					"chunk": "typeof states.radius === 'number' ? states.radius : 0",
+					"type": "Number",
+					"hash": "6175053e",
+					"value": 0
+				}
+			},
+			"alpha": {
+				"chunk": "this.alpha     = 1;",
+				"type": "Number",
+				"hash": "f930a8f0",
+				"value": {
+					"chunk": "1",
+					"type": "Number",
+					"hash": "9416ac93",
+					"value": 1
+				}
+			},
+			"collision": {
+				"chunk": "this.collision = Composite.COLLISION.none;",
+				"type": "Enum",
+				"hash": "41f30a9b",
+				"value": {
+					"chunk": "Composite.COLLISION.none",
+					"type": "Enum",
+					"hash": "d15708ab",
+					"value": "Composite.COLLISION.none"
+				}
+			},
+			"effects": {
+				"chunk": "this.effects   = [];",
+				"type": "Array",
+				"hash": "7cf9a545",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"shape": {
+				"chunk": "this.shape     = Composite.SHAPE.rectangle;",
+				"type": "Enum",
+				"hash": "7b6deb8a",
+				"value": {
+					"chunk": "Composite.SHAPE.rectangle",
+					"type": "Enum",
+					"hash": "b2ad1be3",
+					"value": "Composite.SHAPE.rectangle"
+				}
+			},
+			"state": {
+				"chunk": "this.state     = 'default';",
+				"type": "String",
+				"hash": "d4d9e6b0",
+				"value": {
+					"chunk": "'default'",
+					"type": "String",
+					"hash": "ec9649c0",
+					"value": "default"
+				}
+			},
+			"states": {
+				"chunk": "this.states    = { 'default': null };",
+				"type": "Object",
+				"hash": "3ff3f41e",
+				"value": {
+					"chunk": "{ 'default': null }",
+					"type": "Object",
+					"hash": "1703d9be",
+					"value": {
+						"default": null
+					}
+				}
+			},
+			"position": {
+				"chunk": "this.position  = { x: 0, y: 0, z: 0 };",
+				"type": "Object",
+				"hash": "be6a373d",
+				"value": {
+					"chunk": "{ x: 0, y: 0, z: 0 }",
+					"type": "Object",
+					"hash": "63c3e4d6",
+					"value": {
+						"x": 0,
+						"y": 0,
+						"z": 0
+					}
+				}
+			},
+			"velocity": {
+				"chunk": "this.velocity  = { x: 0, y: 0, z: 0 };",
+				"type": "Object",
+				"hash": "e548098a",
+				"value": {
+					"chunk": "{ x: 0, y: 0, z: 0 }",
+					"type": "Object",
+					"hash": "63c3e4d6",
+					"value": {
+						"x": 0,
+						"y": 0,
+						"z": 0
+					}
+				}
+			}
+		},
+		"enums": {
+			"COLLISION": {
+				"values": [
+					{
+						"name": "none",
+						"value": {
+							"chunk": "0",
+							"type": "Number",
+							"hash": "d271c07f",
+							"value": 0
+						}
+					},
+					{
+						"name": "A",
+						"value": {
+							"chunk": "1",
+							"type": "Number",
+							"hash": "9416ac93",
+							"value": 1
+						}
+					},
+					{
+						"name": "B",
+						"value": {
+							"chunk": "2",
+							"type": "Number",
+							"hash": "0129e217",
+							"value": 2
+						}
+					},
+					{
+						"name": "C",
+						"value": {
+							"chunk": "3",
+							"type": "Number",
+							"hash": "0fc7a1b4",
+							"value": 3
+						}
+					},
+					{
+						"name": "D",
+						"value": {
+							"chunk": "4",
+							"type": "Number",
+							"hash": "e131cc88",
+							"value": 4
+						}
+					}
+				]
+			},
+			"SHAPE": {
+				"values": [
+					{
+						"name": "circle",
+						"value": {
+							"chunk": "0",
+							"type": "Number",
+							"hash": "d271c07f",
+							"value": 0
+						}
+					},
+					{
+						"name": "rectangle",
+						"value": {
+							"chunk": "1",
+							"type": "Number",
+							"hash": "9416ac93",
+							"value": 1
+						}
+					},
+					{
+						"name": "sphere",
+						"value": {
+							"chunk": "2",
+							"type": "Number",
+							"hash": "0129e217",
+							"value": 2
+						}
+					},
+					{
+						"name": "cuboid",
+						"value": {
+							"chunk": "3",
+							"type": "Number",
+							"hash": "0fc7a1b4",
+							"value": 3
+						}
+					}
+				]
+			}
+		},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.width  !== 0) states.width  = this.width;\n\t\t\tif (this.height !== 0) states.height = this.height;\n\t\t\tif (this.depth  !== 0) states.depth  = this.depth;\n\t\t\tif (this.radius !== 0) states.radius = this.radius;\n\n\t\t\tif (this.alpha !== 1)                            states.alpha     = this.alpha;\n\t\t\tif (this.collision !== Composite.COLLISION.none) states.collision = this.collision;\n\t\t\tif (this.shape !== Composite.SHAPE.rectangle)    states.shape     = this.shape;\n\t\t\tif (this.state !== 'default')                    states.state     = this.state;\n\t\t\tif (Object.keys(this.states).length > 1)         states.states    = this.states;\n\n\n\t\t\tif (this.position.x !== 0 || this.position.y !== 0 || this.position.z !== 0) {\n\n\t\t\t\tstates.position = {};\n\n\t\t\t\tif (this.position.x !== 0) states.position.x = this.position.x;\n\t\t\t\tif (this.position.y !== 0) states.position.y = this.position.y;\n\t\t\t\tif (this.position.z !== 0) states.position.z = this.position.z;\n\n\t\t\t}\n\n\n\t\t\tif (this.velocity.x !== 0 || this.velocity.y !== 0 || this.velocity.z !== 0) {\n\n\t\t\t\tstates.velocity = {};\n\n\t\t\t\tif (this.velocity.x !== 0) states.velocity.x = this.velocity.x;\n\t\t\t\tif (this.velocity.y !== 0) states.velocity.y = this.velocity.y;\n\t\t\t\tif (this.velocity.z !== 0) states.velocity.z = this.velocity.z;\n\n\t\t\t}\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.app.Entity',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        null\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "fb7332d3",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.app.Entity',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"render": {
+				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tlet effects = this.effects;\n\t\t\tfor (let e = 0, el = effects.length; e < el; e++) {\n\t\t\t\teffects[e].render(renderer, offsetX, offsetY);\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "2e563c90",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "renderer",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetX",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetY",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"update": {
+				"chunk": "function(clock, delta) {\n\n\t\t\tlet velocity = this.velocity;\n\n\t\t\tif (velocity.x !== 0 || velocity.y !== 0 || velocity.z !== 0) {\n\n\t\t\t\tlet x = this.position.x;\n\t\t\t\tlet y = this.position.y;\n\t\t\t\tlet z = this.position.z;\n\n\n\t\t\t\tlet vt = delta / 1000;\n\n\t\t\t\tif (velocity.x !== 0) {\n\t\t\t\t\tx += velocity.x * vt;\n\t\t\t\t}\n\n\t\t\t\tif (velocity.y !== 0) {\n\t\t\t\t\ty += velocity.y * vt;\n\t\t\t\t}\n\n\t\t\t\tif (velocity.z !== 0) {\n\t\t\t\t\tz += velocity.z * vt;\n\t\t\t\t}\n\n\n\t\t\t\tthis.position.x = x;\n\t\t\t\tthis.position.y = y;\n\t\t\t\tthis.position.z = z;\n\n\t\t\t}\n\n\n\t\t\tlet effects = this.effects;\n\t\t\tfor (let e = 0, el = effects.length; e < el; e++) {\n\n\t\t\t\tlet effect = effects[e];\n\t\t\t\tif (effect.update(this, clock, delta) === false) {\n\t\t\t\t\tthis.removeEffect(effect);\n\t\t\t\t\tel--;\n\t\t\t\t\te--;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "de02f431",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "clock",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "delta",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"isAtPosition": {
+				"chunk": "function(position) {\n\n\t\t\tposition = position instanceof Object ? position : null;\n\n\n\t\t\tif (position !== null) {\n\n\t\t\t\tif (typeof position.x === 'number' && typeof position.y === 'number') {\n\n\t\t\t\t\tlet ax = position.x;\n\t\t\t\t\tlet ay = position.y;\n\t\t\t\t\tlet az = position.z;\n\t\t\t\t\tlet bx = this.position.x;\n\t\t\t\t\tlet by = this.position.y;\n\t\t\t\t\tlet bz = this.position.z;\n\n\n\t\t\t\t\tlet shape = this.shape;\n\t\t\t\t\tif (shape === Composite.SHAPE.circle) {\n\n\t\t\t\t\t\tlet dist = Math.sqrt(Math.pow(ax - bx, 2) + Math.pow(ay - by, 2));\n\t\t\t\t\t\tif (dist < this.radius) {\n\t\t\t\t\t\t\treturn true;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t} else if (shape === Composite.SHAPE.sphere) {\n\n\t\t\t\t\t\tlet dist = Math.sqrt(Math.pow(ax - bx, 2) + Math.pow(ay - by, 2) + Math.pow(az - bz, 2));\n\t\t\t\t\t\tif (dist < this.radius) {\n\t\t\t\t\t\t\treturn true;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t} else if (shape === Composite.SHAPE.rectangle) {\n\n\t\t\t\t\t\tlet hwidth  = this.width  / 2;\n\t\t\t\t\t\tlet hheight = this.height / 2;\n\t\t\t\t\t\tlet colX    = (ax >= bx - hwidth)  && (ax <= bx + hwidth);\n\t\t\t\t\t\tlet colY    = (ay >= by - hheight) && (ay <= by + hheight);\n\n\n\t\t\t\t\t\treturn colX && colY;\n\n\t\t\t\t\t} else if (shape === Composite.SHAPE.cuboid) {\n\n\t\t\t\t\t\tlet hwidth  = this.width  / 2;\n\t\t\t\t\t\tlet hheight = this.height / 2;\n\t\t\t\t\t\tlet hdepth  = this.depth  / 2;\n\t\t\t\t\t\tlet colX    = (ax >= bx - hwidth)  && (ax <= bx + hwidth);\n\t\t\t\t\t\tlet colY    = (ay >= by - hheight) && (ay <= by + hheight);\n\t\t\t\t\t\tlet colZ    = (az >= bz - hdepth)  && (az <= bz + hdepth);\n\n\n\t\t\t\t\t\treturn colX && colY && colZ;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "cc01b52f",
+				"parameters": [
+					{
+						"chunk": "position instanceof Object ? position : null",
+						"name": "position",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"collidesWith": {
+				"chunk": "function(entity) {\n\n\t\t\tentity = lychee.interfaceof(Composite, entity) ? entity : null;\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tlet none = Composite.COLLISION.none;\n\t\t\t\tif (this.collision !== entity.collision || this.collision === none || entity.collision === none) {\n\t\t\t\t\treturn false;\n\t\t\t\t}\n\n\n\t\t\t\tlet circle    = Composite.SHAPE.circle;\n\t\t\t\tlet sphere    = Composite.SHAPE.sphere;\n\t\t\t\tlet rectangle = Composite.SHAPE.rectangle;\n\t\t\t\tlet cuboid    = Composite.SHAPE.cuboid;\n\n\t\t\t\tlet shapeA    = this.shape;\n\t\t\t\tlet shapeB    = entity.shape;\n\n\t\t\t\tlet issphereA = shapeA === circle    || shapeA === sphere;\n\t\t\t\tlet issphereB = shapeB === circle    || shapeB === sphere;\n\t\t\t\tlet iscuboidA = shapeA === rectangle || shapeA === cuboid;\n\t\t\t\tlet iscuboidB = shapeB === rectangle || shapeB === cuboid;\n\n\t\t\t\tif (issphereA && issphereB) {\n\t\t\t\t\treturn _sphere_sphere(this, entity);\n\t\t\t\t} else if (iscuboidA && iscuboidB) {\n\t\t\t\t\treturn _cuboid_cuboid(this, entity);\n\t\t\t\t} else if (issphereA && iscuboidB) {\n\t\t\t\t\treturn _sphere_cuboid(this, entity);\n\t\t\t\t} else if (iscuboidA && issphereB) {\n\t\t\t\t\treturn _sphere_cuboid(entity, this);\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "fd60fcaa",
+				"parameters": [
+					{
+						"chunk": "lychee.interfaceof(Composite, entity) ? entity : null",
+						"name": "entity",
+						"type": "Composite",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					},
+					{
+						"chunk": "_sphere_sphere(this, entity)",
+						"type": "undefined"
+					}
+				]
+			},
+			"setAlpha": {
+				"chunk": "function(alpha) {\n\n\t\t\talpha = typeof alpha === 'number' ? alpha : null;\n\n\n\t\t\tif (alpha !== null) {\n\n\t\t\t\tthis.alpha = Math.min(Math.max(alpha, 0), 1);\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "8c452654",
+				"parameters": [
+					{
+						"chunk": "typeof alpha === 'number' ? alpha : null",
+						"name": "alpha",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setCollision": {
+				"chunk": "function(collision) {\n\n\t\t\tcollision = lychee.enumof(Composite.COLLISION, collision) ? collision : null;\n\n\n\t\t\tif (collision !== null) {\n\n\t\t\t\tthis.collision = collision;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "490345a5",
+				"parameters": [
+					{
+						"chunk": "lychee.enumof(Composite.COLLISION, collision) ? collision : null",
+						"name": "collision",
+						"type": "Enum",
+						"value": "Composite.COLLISION"
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"addEffect": {
+				"chunk": "function(effect) {\n\n\t\t\teffect = _validate_effect(effect) ? effect : null;\n\n\n\t\t\tif (effect !== null) {\n\n\t\t\t\tlet index = this.effects.indexOf(effect);\n\t\t\t\tif (index === -1) {\n\n\t\t\t\t\tthis.effects.push(effect);\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "09f5f6a1",
+				"parameters": [
+					{
+						"chunk": "_validate_effect(effect) ? effect : null",
+						"name": "effect",
+						"type": "lychee.effect.Alpha",
+						"value": {
+							"constructor": "lychee.effect.Alpha",
+							"arguments": []
+						}
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"removeEffect": {
+				"chunk": "function(effect) {\n\n\t\t\teffect = _validate_effect(effect) ? effect : null;\n\n\n\t\t\tif (effect !== null) {\n\n\t\t\t\tlet index = this.effects.indexOf(effect);\n\t\t\t\tif (index !== -1) {\n\n\t\t\t\t\tthis.effects.splice(index, 1);\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "6b39208a",
+				"parameters": [
+					{
+						"chunk": "_validate_effect(effect) ? effect : null",
+						"name": "effect",
+						"type": "lychee.effect.Alpha",
+						"value": {
+							"constructor": "lychee.effect.Alpha",
+							"arguments": []
+						}
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"removeEffects": {
+				"chunk": "function() {\n\n\t\t\tlet effects = this.effects;\n\n\t\t\tfor (let e = 0, el = effects.length; e < el; e++) {\n\n\t\t\t\teffects[e].update(this, Infinity, 0);\n\t\t\t\tthis.removeEffect(effects[e]);\n\n\t\t\t\tel--;\n\t\t\t\te--;\n\n\t\t\t}\n\n\n\t\t\treturn true;\n\n\t\t}",
+				"type": "function",
+				"hash": "1cbe2218",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"setPosition": {
+				"chunk": "function(position) {\n\n\t\t\tposition = position instanceof Object ? position : null;\n\n\n\t\t\tif (position !== null) {\n\n\t\t\t\tthis.position.x = typeof position.x === 'number' ? position.x : this.position.x;\n\t\t\t\tthis.position.y = typeof position.y === 'number' ? position.y : this.position.y;\n\t\t\t\tthis.position.z = typeof position.z === 'number' ? position.z : this.position.z;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "da2f4510",
+				"parameters": [
+					{
+						"chunk": "position instanceof Object ? position : null",
+						"name": "position",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setShape": {
+				"chunk": "function(shape) {\n\n\t\t\tshape = lychee.enumof(Composite.SHAPE, shape) ? shape : null;\n\n\n\t\t\tif (shape !== null) {\n\n\t\t\t\tthis.shape = shape;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "8ab7a9ce",
+				"parameters": [
+					{
+						"chunk": "lychee.enumof(Composite.SHAPE, shape) ? shape : null",
+						"name": "shape",
+						"type": "Enum",
+						"value": "Composite.SHAPE"
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setStates": {
+				"chunk": "function(states) {\n\n\t\t\tstates = states instanceof Object ? states : null;\n\n\n\t\t\tif (states !== null) {\n\n\t\t\t\tthis.states = {\n\t\t\t\t\t'default': null\n\t\t\t\t};\n\n\t\t\t\tfor (let id in states) {\n\n\t\t\t\t\tif (states.hasOwnProperty(id)) {\n\n\t\t\t\t\t\tlet state = states[id];\n\t\t\t\t\t\tif (state instanceof Object) {\n\t\t\t\t\t\t\tthis.states[id] = states[id];\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "382c9eac",
+				"parameters": [
+					{
+						"chunk": "states instanceof Object ? states : null",
+						"name": "states",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setState": {
+				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null && this.states[id] !== undefined) {\n\n\t\t\t\tthis.state = id;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "570fc1f1",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'string' ? id : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setVelocity": {
+				"chunk": "function(velocity) {\n\n\t\t\tvelocity = velocity instanceof Object ? velocity : null;\n\n\n\t\t\tif (velocity !== null) {\n\n\t\t\t\tthis.velocity.x = typeof velocity.x === 'number' ? velocity.x : this.velocity.x;\n\t\t\t\tthis.velocity.y = typeof velocity.y === 'number' ? velocity.y : this.velocity.y;\n\t\t\t\tthis.velocity.z = typeof velocity.z === 'number' ? velocity.z : this.velocity.z;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "2f270c7d",
+				"parameters": [
+					{
+						"chunk": "velocity instanceof Object ? velocity : null",
+						"name": "velocity",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

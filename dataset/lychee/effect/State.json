@@ -1,0 +1,158 @@
+{
+	"header": {
+		"identifier": "lychee.effect.State",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(states) {\n\n\t\tthis.delay = 0;\n\t\tthis.state = null;\n\n\t\tthis.__start = null;\n\n\n\t\t// No data validation garbage allowed for effects\n\n\t\tthis.delay = typeof states.delay === 'number' ? (states.delay | 0) : 0;\n\t\tthis.state = typeof states.state === 'string' ? states.state       : null;\n\n\t}",
+			"type": "function",
+			"hash": "e1cc05b9",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "states",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {},
+		"properties": {
+			"delay": {
+				"chunk": "this.delay = 0;",
+				"type": "Number",
+				"hash": "a4ace545",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			},
+			"state": {
+				"chunk": "this.state = typeof states.state === 'string' ? states.state       : null;",
+				"type": "String",
+				"hash": "aa35d8cf",
+				"value": {
+					"chunk": "typeof states.state === 'string' ? states.state       : null",
+					"type": "String",
+					"hash": "5c0df5f4",
+					"value": null
+				}
+			},
+			"__start": {
+				"chunk": "this.__start = null;",
+				"type": "null",
+				"hash": "1082e344",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.delay !== 0)    states.delay = this.delay;\n\t\t\tif (this.state !== null) states.state = this.state;\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.effect.State',\n\t\t\t\t'arguments':   [ states ]\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "90f18381",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.effect.State',\n\t\t\t\t'arguments':   [ states ]\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"render": {
+				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t}",
+				"type": "function",
+				"hash": "04f47507",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "renderer",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetX",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetY",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"update": {
+				"chunk": "function(entity, clock, delta) {\n\n\t\t\tif (this.__start === null) {\n\t\t\t\tthis.__start = clock;\n\t\t\t}\n\n\n\t\t\tlet t = (clock - this.__start) / this.delay;\n\t\t\tif (t < 0) {\n\t\t\t\treturn true;\n\t\t\t}\n\n\n\t\t\tlet state = this.state;\n\n\t\t\tif (t <= 1) {\n\n\t\t\t\treturn true;\n\n\t\t\t} else if (state !== null) {\n\n\t\t\t\tif (typeof entity.setState === 'function') {\n\n\t\t\t\t\t// XXX: Allowing setState() using removeEffects()\n\t\t\t\t\tthis.state = null;\n\n\t\t\t\t\tentity.setState(state);\n\n\t\t\t\t}\n\n\n\t\t\t\treturn false;\n\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "2a7f3116",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "entity",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "clock",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "delta",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

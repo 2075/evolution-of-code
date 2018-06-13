@@ -1,0 +1,169 @@
+{
+	"header": {
+		"identifier": "lychee.effect.Visible",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(states) {\n\n\t\tthis.delay    = 0;\n\t\tthis.visible  = true;\n\n\t\tthis.__origin = null;\n\t\tthis.__start  = null;\n\n\n\t\t// No data validation garbage allowed for effects\n\n\t\tthis.delay   = typeof states.delay === 'number' ? (states.delay | 0) : 0;\n\t\tthis.visible = states.visible === true;\n\n\t}",
+			"type": "function",
+			"hash": "2c8c7216",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "states",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {},
+		"properties": {
+			"delay": {
+				"chunk": "this.delay    = 0;",
+				"type": "Number",
+				"hash": "ac4b7c2d",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			},
+			"visible": {
+				"chunk": "this.visible  = true;",
+				"type": "Boolean",
+				"hash": "5f2eb3ac",
+				"value": {
+					"chunk": "true",
+					"type": "Boolean",
+					"hash": "34edcf72",
+					"value": true
+				}
+			},
+			"__origin": {
+				"chunk": "this.__origin = null;",
+				"type": "null",
+				"hash": "e2381916",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"__start": {
+				"chunk": "this.__start  = null;",
+				"type": "null",
+				"hash": "c8f69835",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.delay !== 0)      states.delay   = this.delay;\n\t\t\tif (this.visible !== true) states.visible = this.visible;\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.effect.Visible',\n\t\t\t\t'arguments':   [ states ]\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "f729d9be",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.effect.Visible',\n\t\t\t\t'arguments':   [ states ]\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"render": {
+				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t}",
+				"type": "function",
+				"hash": "04f47507",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "renderer",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetX",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetY",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"update": {
+				"chunk": "function(entity, clock, delta) {\n\n\t\t\tif (this.__start === null) {\n\t\t\t\tthis.__start = clock;\n\t\t\t}\n\n\n\t\t\tlet t = (clock - this.__start) / this.delay;\n\t\t\tif (t < 0) {\n\t\t\t\treturn true;\n\t\t\t} else if (this.__origin === null) {\n\t\t\t\tthis.__origin = entity.visible || false;\n\t\t\t}\n\n\n\t\t\tlet origin  = this.__origin;\n\t\t\tlet visible = this.visible;\n\n\t\t\tif (t <= 1) {\n\n\t\t\t\tentity.visible = origin;\n\n\n\t\t\t\treturn true;\n\n\t\t\t} else {\n\n\t\t\t\tentity.visible = visible;\n\n\n\t\t\t\treturn false;\n\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "07995d7f",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "entity",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "clock",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "delta",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

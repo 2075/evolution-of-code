@@ -1,0 +1,200 @@
+{
+	"header": {
+		"identifier": "lychee.ai.neat.Genome",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_MAX_NODES": {
+			"chunk": "1000000",
+			"type": "Number",
+			"hash": "22f20c40",
+			"value": 1000000
+		},
+		"_MUTATION_RATE": {
+			"chunk": "{\n\t\tbias:        0.4,\n\t\tconnections: 0.25,\n\t\tlinks:       2.0,\n\t\tnodes:       0.5,\n\t\tsteps:       0.1,\n\t\t// XXX: WTF?\n\t\tenable:      0.5,\n\t\tdisable:     0.2\n\t}",
+			"type": "Object",
+			"hash": "ca37716a",
+			"value": {
+				"bias": 0.4,
+				"connections": 0.25,
+				"links": 2,
+				"nodes": 0.5,
+				"steps": 0.1,
+				"enable": 0.5,
+				"disable": 0.2
+			}
+		},
+		"_sigmoid": {
+			"chunk": "function(x) {\n\t\treturn 2 / (1 + Math.exp(-4.9 * x)) - 1;\n\t}",
+			"type": "function",
+			"hash": "655acb4e",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "x",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "2 / (1 + Math.exp(-4.9 * x)) - 1",
+					"type": "Number",
+					"value": 1337
+				}
+			]
+		},
+		"_Neuron": {
+			"chunk": "function() {\n\n\t\tthis.incoming = [];\n\t\tthis.value    = 0.0;\n\n\t}",
+			"type": "function",
+			"hash": "5ce74d22",
+			"parameters": [],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\t\tthis.genes   = [];\n\t\tthis.fitness = 0;\n\t\t// this.network = {};\n\t\tthis.globalRank = 0;\n\n\n\t\tthis.setGenes(states.genes);\n\t\tthis.setFitness(states.fitness);\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "71eb6dd6",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"genes": "setGenes",
+			"fitness": "setFitness"
+		},
+		"properties": {
+			"genes": {
+				"chunk": "this.genes   = [];",
+				"type": "Array",
+				"hash": "d092c833",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"fitness": {
+				"chunk": "this.fitness = 0;",
+				"type": "Number",
+				"hash": "9390b9cb",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			},
+			"globalRank": {
+				"chunk": "this.globalRank = 0;",
+				"type": "Number",
+				"hash": "2f58746c",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.ai.neat.Genome',\n\t\t\t\t'arguments':   []\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "8ee7c21e",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.ai.neat.Genome',\n\t\t\t\t'arguments':   []\n\t\t\t}",
+						"type": "Object",
+						"value": {
+							"constructor": "lychee.ai.neat.Genome",
+							"arguments": []
+						}
+					}
+				]
+			},
+			"clone": {
+				"chunk": "function() {\n\n\t\t\treturn new Composite({\n\t\t\t\tgenes: this.genes.map(lychee.serialize)\n\t\t\t});\n\n\t\t}",
+				"type": "function",
+				"hash": "e2d6f582",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "new Composite({ genes: this.genes.map(lychee.serialize)\n\t\t\t})",
+						"type": "Composite",
+						"value": "new Composite({ genes: this.genes.map(lychee.serialize)\n\t\t\t})"
+					}
+				]
+			},
+			"randomNeuron": {
+				"chunk": "function(input, inputs, outputs) {\n\n\t\t\tinput   = input === true;\n\t\t\tinputs  = inputs instanceof Array  ? inputs  : null;\n\t\t\toutputs = outputs instanceof Array ? outputs : null;\n\n\n\t\t\tlet neurons = [];\n\n\t\t\tif (input === true) {\n\n\t\t\t\tinputs.forEach(function(input, i) {\n\t\t\t\t\tneurons.push(i);\n\t\t\t\t});\n\n\t\t\t\tthis.genes.forEach(function(gene) {\n\n\t\t\t\t\tif (neurons.indexOf(gene.into) === -1) {\n\t\t\t\t\t\tneurons.push(gene.into);\n\t\t\t\t\t}\n\n\t\t\t\t\tif (neurons.indexOf(gene.out) === -1) {\n\t\t\t\t\t\tneurons.push(gene.out);\n\t\t\t\t\t}\n\n\t\t\t\t});\n\n\t\t\t} else {\n\n\t\t\t\tthis.genes.forEach(function(gene) {\n\n\t\t\t\t\tif (neurons.indexOf(gene.into) === -1 && gene.into > inputs.length) {\n\t\t\t\t\t\tneurons.push(gene.into);\n\t\t\t\t\t}\n\n\t\t\t\t\tif (neurons.indexOf(gene.out) === -1 && gene.out > inputs.length) {\n\t\t\t\t\t\tneurons.push(gene.out);\n\t\t\t\t\t}\n\n\t\t\t\t});\n\n\t\t\t}\n\n\t\t\toutputs.forEach(function(output, o) {\n\t\t\t\tneurons.push(_MAX_NODES + o);\n\t\t\t});\n\n\n\t\t\tlet neuron = neurons[(Math.random() * neurons.length) | 0] || null;\n\t\t\tif (neuron === null) {\n\t\t\t\treturn neurons[0];\n\t\t\t}\n\n\t\t\treturn neuron;\n\n\t\t}",
+				"type": "function",
+				"hash": "90f62bd5",
+				"parameters": [
+					{
+						"chunk": "input === true",
+						"name": "input",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "inputs instanceof Array  ? inputs  : null",
+						"name": "inputs",
+						"type": "Array",
+						"value": null
+					},
+					{
+						"chunk": "outputs instanceof Array ? outputs : null",
+						"name": "outputs",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "[]",
+						"type": "Array",
+						"value": []
+					},
+					{
+						"chunk": "neurons[(Math.random() * neurons.length) | 0] || null",
+						"type": "Number",
+						"value": 1337
+					}
+				]
+			}
+		}
+	}
+}

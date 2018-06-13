@@ -1,0 +1,100 @@
+{
+	"header": {
+		"identifier": "lychee.net.client.Stash",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [
+			"lychee.net.Service"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Service": {
+			"chunk": "lychee.import('lychee.net.Service')",
+			"type": "lychee.Definition",
+			"hash": "1de466ca",
+			"value": {
+				"reference": "lychee.net.Service",
+				"arguments": []
+			}
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(client) {\n\n\t\t_Service.call(this, 'stash', client, _Service.TYPE.client);\n\n\t}",
+			"type": "function",
+			"hash": "c7fb5ff4",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "client",
+					"type": "undefined"
+				}
+			]
+		},
+		"states": {},
+		"properties": {},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Service.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.net.client.Stash';\n\t\t\tdata['arguments']   = [ data['arguments'][1] ];\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "2ffd6d4d",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"sync": {
+				"chunk": "function(assets) {\n\n\t\t\tassets = assets instanceof Object ? assets : null;\n\n\n\t\t\tif (assets !== null && this.tunnel !== null) {\n\n\t\t\t\tlet data = {};\n\n\t\t\t\tfor (let id in assets) {\n\t\t\t\t\tdata[id] = lychee.serialize(assets[id]);\n\t\t\t\t}\n\n\n\t\t\t\tthis.tunnel.send({\n\t\t\t\t\ttimestamp: Date.now(),\n\t\t\t\t\tassets:    data\n\t\t\t\t}, {\n\t\t\t\t\tid:    'stash',\n\t\t\t\t\tevent: 'sync'\n\t\t\t\t});\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "ad5714f2",
+				"parameters": [
+					{
+						"chunk": "assets instanceof Object ? assets : null",
+						"name": "assets",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

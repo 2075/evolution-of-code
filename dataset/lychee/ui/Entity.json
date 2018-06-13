@@ -1,0 +1,649 @@
+{
+	"header": {
+		"identifier": "lychee.ui.Entity",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [
+			"lychee.event.Emitter"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Emitter": {
+			"chunk": "lychee.import('lychee.event.Emitter')",
+			"type": "lychee.Definition",
+			"hash": "b60271ea",
+			"value": {
+				"reference": "lychee.event.Emitter",
+				"arguments": []
+			}
+		},
+		"_validate_effect": {
+			"chunk": "function(effect) {\n\n\t\tif (effect instanceof Object) {\n\n\t\t\tif (\n\t\t\t\ttypeof effect.update === 'function'\n\t\t\t\t&& typeof effect.render === 'function'\n\t\t\t) {\n\t\t\t\treturn true;\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn false;\n\n\t}",
+			"type": "function",
+			"hash": "a333e882",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "effect",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "true",
+					"type": "Boolean",
+					"value": true
+				},
+				{
+					"chunk": "false",
+					"type": "Boolean",
+					"value": false
+				}
+			]
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.width  = typeof states.width  === 'number' ? states.width  : 0;\n\t\tthis.height = typeof states.height === 'number' ? states.height : 0;\n\t\tthis.depth  = typeof states.depth === 'number'  ? states.depth  : 0;\n\t\tthis.radius = typeof states.radius === 'number' ? states.radius : 0;\n\n\t\tthis.alpha     = 1;\n\t\tthis.collision = Composite.COLLISION.none;\n\t\tthis.effects   = [];\n\t\tthis.shape     = Composite.SHAPE.rectangle;\n\t\tthis.state     = 'default';\n\t\tthis.states    = { 'default': null, 'active': null };\n\t\tthis.position  = { x: 0, y: 0, z: 0 };\n\t\tthis.visible   = true;\n\n\n\t\tthis.setAlpha(states.alpha);\n\t\tthis.setShape(states.shape);\n\t\tthis.setStates(states.states);\n\t\tthis.setState(states.state);\n\t\tthis.setPosition(states.position);\n\t\tthis.setVisible(states.visible);\n\n\n\t\t_Emitter.call(this);\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "0e8224c6",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"alpha": "setAlpha",
+			"shape": "setShape",
+			"states": "setStates",
+			"state": "setState",
+			"position": "setPosition",
+			"visible": "setVisible"
+		},
+		"properties": {
+			"width": {
+				"chunk": "this.width  = typeof states.width  === 'number' ? states.width  : 0;",
+				"type": "Number",
+				"hash": "a38ad413",
+				"value": {
+					"chunk": "typeof states.width  === 'number' ? states.width  : 0",
+					"type": "Number",
+					"hash": "a921fa08",
+					"value": 0
+				}
+			},
+			"height": {
+				"chunk": "this.height = typeof states.height === 'number' ? states.height : 0;",
+				"type": "Number",
+				"hash": "989d0ca5",
+				"value": {
+					"chunk": "typeof states.height === 'number' ? states.height : 0",
+					"type": "Number",
+					"hash": "3c1adab7",
+					"value": 0
+				}
+			},
+			"depth": {
+				"chunk": "this.depth  = typeof states.depth === 'number'  ? states.depth  : 0;",
+				"type": "Number",
+				"hash": "c8cffc86",
+				"value": {
+					"chunk": "typeof states.depth === 'number'  ? states.depth  : 0",
+					"type": "Number",
+					"hash": "a44792aa",
+					"value": 0
+				}
+			},
+			"radius": {
+				"chunk": "this.radius = typeof states.radius === 'number' ? states.radius : 0;",
+				"type": "Number",
+				"hash": "23663106",
+				"value": {
+					"chunk": "typeof states.radius === 'number' ? states.radius : 0",
+					"type": "Number",
+					"hash": "6175053e",
+					"value": 0
+				}
+			},
+			"alpha": {
+				"chunk": "this.alpha     = 1;",
+				"type": "Number",
+				"hash": "f930a8f0",
+				"value": {
+					"chunk": "1",
+					"type": "Number",
+					"hash": "9416ac93",
+					"value": 1
+				}
+			},
+			"collision": {
+				"chunk": "this.collision = Composite.COLLISION.none;",
+				"type": "Enum",
+				"hash": "41f30a9b",
+				"value": {
+					"chunk": "Composite.COLLISION.none",
+					"type": "Enum",
+					"hash": "d15708ab",
+					"value": "Composite.COLLISION.none"
+				}
+			},
+			"effects": {
+				"chunk": "this.effects   = [];",
+				"type": "Array",
+				"hash": "7cf9a545",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"shape": {
+				"chunk": "this.shape     = Composite.SHAPE.rectangle;",
+				"type": "Enum",
+				"hash": "7b6deb8a",
+				"value": {
+					"chunk": "Composite.SHAPE.rectangle",
+					"type": "Enum",
+					"hash": "b2ad1be3",
+					"value": "Composite.SHAPE.rectangle"
+				}
+			},
+			"state": {
+				"chunk": "this.state     = 'default';",
+				"type": "String",
+				"hash": "d4d9e6b0",
+				"value": {
+					"chunk": "'default'",
+					"type": "String",
+					"hash": "ec9649c0",
+					"value": "default"
+				}
+			},
+			"states": {
+				"chunk": "this.states    = { 'default': null, 'active': null };",
+				"type": "Object",
+				"hash": "57bb2358",
+				"value": {
+					"chunk": "{ 'default': null, 'active': null }",
+					"type": "Object",
+					"hash": "5e99f4bd",
+					"value": {
+						"default": null,
+						"active": null
+					}
+				}
+			},
+			"position": {
+				"chunk": "this.position  = { x: 0, y: 0, z: 0 };",
+				"type": "Object",
+				"hash": "be6a373d",
+				"value": {
+					"chunk": "{ x: 0, y: 0, z: 0 }",
+					"type": "Object",
+					"hash": "63c3e4d6",
+					"value": {
+						"x": 0,
+						"y": 0,
+						"z": 0
+					}
+				}
+			},
+			"visible": {
+				"chunk": "this.visible   = true;",
+				"type": "Boolean",
+				"hash": "1769eaf9",
+				"value": {
+					"chunk": "true",
+					"type": "Boolean",
+					"hash": "34edcf72",
+					"value": true
+				}
+			}
+		},
+		"enums": {
+			"COLLISION": {
+				"values": [
+					{
+						"name": "none",
+						"value": {
+							"chunk": "0",
+							"type": "Number",
+							"hash": "d271c07f",
+							"value": 0
+						}
+					},
+					{
+						"name": "A",
+						"value": {
+							"chunk": "1",
+							"type": "Number",
+							"hash": "9416ac93",
+							"value": 1
+						}
+					},
+					{
+						"name": "B",
+						"value": {
+							"chunk": "2",
+							"type": "Number",
+							"hash": "0129e217",
+							"value": 2
+						}
+					},
+					{
+						"name": "C",
+						"value": {
+							"chunk": "3",
+							"type": "Number",
+							"hash": "0fc7a1b4",
+							"value": 3
+						}
+					},
+					{
+						"name": "D",
+						"value": {
+							"chunk": "4",
+							"type": "Number",
+							"hash": "e131cc88",
+							"value": 4
+						}
+					}
+				]
+			},
+			"SHAPE": {
+				"values": [
+					{
+						"name": "circle",
+						"value": {
+							"chunk": "0",
+							"type": "Number",
+							"hash": "d271c07f",
+							"value": 0
+						}
+					},
+					{
+						"name": "rectangle",
+						"value": {
+							"chunk": "1",
+							"type": "Number",
+							"hash": "9416ac93",
+							"value": 1
+						}
+					},
+					{
+						"name": "sphere",
+						"value": {
+							"chunk": "2",
+							"type": "Number",
+							"hash": "0129e217",
+							"value": 2
+						}
+					},
+					{
+						"name": "cuboid",
+						"value": {
+							"chunk": "3",
+							"type": "Number",
+							"hash": "0fc7a1b4",
+							"value": 3
+						}
+					}
+				]
+			}
+		},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.Entity';\n\n\t\t\tlet states = {};\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.width  !== 0) states.width  = this.width;\n\t\t\tif (this.height !== 0) states.height = this.height;\n\t\t\tif (this.depth !== 0)  states.depth  = this.depth;\n\t\t\tif (this.radius !== 0) states.radius = this.radius;\n\n\t\t\tif (this.alpha !== 1)                         states.alpha   = this.alpha;\n\t\t\tif (this.shape !== Composite.SHAPE.rectangle) states.shape   = this.shape;\n\t\t\tif (this.state !== 'default')                 states.state   = this.state;\n\t\t\tif (Object.keys(this.states).length > 0)      states.states  = this.states;\n\t\t\tif (this.visible !== true)                    states.visible = this.visible;\n\n\n\t\t\tif (this.position.x !== 0 || this.position.y !== 0) {\n\n\t\t\t\tstates.position = {};\n\n\t\t\t\tif (this.position.x !== 0) states.position.x = this.position.x;\n\t\t\t\tif (this.position.y !== 0) states.position.y = this.position.y;\n\n\t\t\t}\n\n\n\t\t\tdata['arguments'][0] = states;\n\t\t\tdata['blob']         = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "a230d725",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"render": {
+				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tlet effects = this.effects;\n\t\t\tfor (let e = 0, el = effects.length; e < el; e++) {\n\t\t\t\teffects[e].render(renderer, offsetX, offsetY);\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "2e563c90",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "renderer",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetX",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetY",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"update": {
+				"chunk": "function(clock, delta) {\n\n\t\t\tlet effects = this.effects;\n\t\t\tfor (let e = 0, el = effects.length; e < el; e++) {\n\n\t\t\t\tlet effect = effects[e];\n\t\t\t\tif (effect.update(this, clock, delta) === false) {\n\t\t\t\t\tthis.removeEffect(effect);\n\t\t\t\t\tel--;\n\t\t\t\t\te--;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "d6e14ede",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "clock",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "delta",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"isAtPosition": {
+				"chunk": "function(position) {\n\n\t\t\tposition = position instanceof Object ? position : null;\n\n\n\t\t\tif (position !== null) {\n\n\t\t\t\tif (typeof position.x === 'number' && typeof position.y === 'number') {\n\n\t\t\t\t\tlet ax = position.x;\n\t\t\t\t\tlet ay = position.y;\n\t\t\t\t\tlet bx = this.position.x;\n\t\t\t\t\tlet by = this.position.y;\n\n\n\t\t\t\t\tlet shape = this.shape;\n\t\t\t\t\tif (shape === Composite.SHAPE.circle) {\n\n\t\t\t\t\t\tlet dist = Math.sqrt(Math.pow(ax - bx, 2) + Math.pow(ay - by, 2));\n\t\t\t\t\t\tif (dist < this.radius) {\n\t\t\t\t\t\t\treturn true;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t} else if (shape === Composite.SHAPE.rectangle) {\n\n\t\t\t\t\t\tlet hwidth  = this.width  / 2;\n\t\t\t\t\t\tlet hheight = this.height / 2;\n\t\t\t\t\t\tlet colX    = (ax >= bx - hwidth)  && (ax <= bx + hwidth);\n\t\t\t\t\t\tlet colY    = (ay >= by - hheight) && (ay <= by + hheight);\n\n\n\t\t\t\t\t\treturn colX && colY;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "669e2ed4",
+				"parameters": [
+					{
+						"chunk": "position instanceof Object ? position : null",
+						"name": "position",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"collidesWith": {
+				"chunk": "function(entity) {\n\n\t\t\tentity = lychee.interfaceof(lychee.ui.Entity, entity) ? entity : null;\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "bfe228f5",
+				"parameters": [
+					{
+						"chunk": "lychee.interfaceof(lychee.ui.Entity, entity) ? entity : null",
+						"name": "entity",
+						"type": "lychee.ui.Entity",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setAlpha": {
+				"chunk": "function(alpha) {\n\n\t\t\talpha = typeof alpha === 'number' ? alpha : null;\n\n\n\t\t\tif (alpha !== null) {\n\n\t\t\t\tthis.alpha = Math.min(Math.max(alpha, 0), 1);\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "8c452654",
+				"parameters": [
+					{
+						"chunk": "typeof alpha === 'number' ? alpha : null",
+						"name": "alpha",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"addEffect": {
+				"chunk": "function(effect) {\n\n\t\t\teffect = _validate_effect(effect) ? effect : null;\n\n\n\t\t\tif (effect !== null) {\n\n\t\t\t\tlet index = this.effects.indexOf(effect);\n\t\t\t\tif (index === -1) {\n\n\t\t\t\t\tthis.effects.push(effect);\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "09f5f6a1",
+				"parameters": [
+					{
+						"chunk": "_validate_effect(effect) ? effect : null",
+						"name": "effect",
+						"type": "lychee.effect.Alpha",
+						"value": {
+							"constructor": "lychee.effect.Alpha",
+							"arguments": []
+						}
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"removeEffect": {
+				"chunk": "function(effect) {\n\n\t\t\teffect = _validate_effect(effect) ? effect : null;\n\n\n\t\t\tif (effect !== null) {\n\n\t\t\t\tlet index = this.effects.indexOf(effect);\n\t\t\t\tif (index !== -1) {\n\n\t\t\t\t\tthis.effects.splice(index, 1);\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "6b39208a",
+				"parameters": [
+					{
+						"chunk": "_validate_effect(effect) ? effect : null",
+						"name": "effect",
+						"type": "lychee.effect.Alpha",
+						"value": {
+							"constructor": "lychee.effect.Alpha",
+							"arguments": []
+						}
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"removeEffects": {
+				"chunk": "function() {\n\n\t\t\tlet effects = this.effects;\n\n\t\t\tfor (let e = 0, el = effects.length; e < el; e++) {\n\n\t\t\t\teffects[e].update(this, Infinity, 0);\n\t\t\t\tthis.removeEffect(effects[e]);\n\n\t\t\t\tel--;\n\t\t\t\te--;\n\n\t\t\t}\n\n\n\t\t\treturn true;\n\n\t\t}",
+				"type": "function",
+				"hash": "1cbe2218",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"setPosition": {
+				"chunk": "function(position) {\n\n\t\t\tposition = position instanceof Object ? position : null;\n\n\n\t\t\tif (position !== null) {\n\n\t\t\t\tthis.position.x = typeof position.x === 'number' ? position.x : this.position.x;\n\t\t\t\tthis.position.y = typeof position.y === 'number' ? position.y : this.position.y;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "bf8c732b",
+				"parameters": [
+					{
+						"chunk": "position instanceof Object ? position : null",
+						"name": "position",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setShape": {
+				"chunk": "function(shape) {\n\n\t\t\tshape = lychee.enumof(Composite.SHAPE, shape) ? shape : null;\n\n\n\t\t\tif (shape !== null) {\n\n\t\t\t\tthis.shape = shape;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "8ab7a9ce",
+				"parameters": [
+					{
+						"chunk": "lychee.enumof(Composite.SHAPE, shape) ? shape : null",
+						"name": "shape",
+						"type": "Enum",
+						"value": "Composite.SHAPE"
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setStates": {
+				"chunk": "function(states) {\n\n\t\t\tstates = states instanceof Object ? states : null;\n\n\n\t\t\tif (states !== null) {\n\n\t\t\t\tthis.states = {\n\t\t\t\t\t'default': null,\n\t\t\t\t\t'active':  null\n\t\t\t\t};\n\n\t\t\t\tfor (let id in states) {\n\n\t\t\t\t\tif (states.hasOwnProperty(id)) {\n\n\t\t\t\t\t\tlet state = states[id];\n\t\t\t\t\t\tif (state instanceof Object) {\n\t\t\t\t\t\t\tthis.states[id] = states[id];\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "619045c1",
+				"parameters": [
+					{
+						"chunk": "states instanceof Object ? states : null",
+						"name": "states",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setState": {
+				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null && this.states[id] !== undefined) {\n\n\t\t\t\tthis.state = id;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "570fc1f1",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'string' ? id : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setVisible": {
+				"chunk": "function(visible) {\n\n\t\t\tvisible = typeof visible === 'boolean' ? visible : null;\n\n\n\t\t\tif (visible !== null) {\n\n\t\t\t\tthis.visible = visible;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "ec37f945",
+				"parameters": [
+					{
+						"chunk": "typeof visible === 'boolean' ? visible : null",
+						"name": "visible",
+						"type": "Boolean",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

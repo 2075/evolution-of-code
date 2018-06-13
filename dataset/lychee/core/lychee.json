@@ -1,0 +1,604 @@
+{
+	"header": {
+		"identifier": "lychee",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [],
+		"supports": {},
+		"type": "Module"
+	},
+	"memory": {},
+	"errors": [],
+	"result": {
+		"constructor": {},
+		"states": {},
+		"properties": {
+			"debug": {
+				"chunk": "\t\tdebug: true",
+				"type": "Boolean",
+				"hash": "d5051d7b",
+				"value": {
+					"chunk": "true",
+					"type": "Boolean",
+					"hash": "34edcf72",
+					"value": true
+				}
+			},
+			"environment": {
+				"chunk": "\t\tenvironment: _environment",
+				"type": "undefined",
+				"hash": "55d8caad",
+				"value": {
+					"chunk": "_environment",
+					"type": "undefined",
+					"hash": "7a896fc5"
+				}
+			},
+			"simulation": {
+				"chunk": "\t\tsimulation:  _simulation",
+				"type": "undefined",
+				"hash": "7bcb8728",
+				"value": {
+					"chunk": "_simulation",
+					"type": "undefined",
+					"hash": "48146c7a"
+				}
+			},
+			"ENVIRONMENTS": {
+				"chunk": "\t\tENVIRONMENTS: {}",
+				"type": "Object",
+				"hash": "02c179e0",
+				"value": {
+					"chunk": "{}",
+					"type": "Object",
+					"hash": "30f4c306",
+					"value": {}
+				}
+			},
+			"FEATURES": {
+				"chunk": "\t\tFEATURES:     {}",
+				"type": "Object",
+				"hash": "dc3759b3",
+				"value": {
+					"chunk": "{}",
+					"type": "Object",
+					"hash": "30f4c306",
+					"value": {}
+				}
+			},
+			"FILENAME": {
+				"chunk": "\t\tFILENAME:     null",
+				"type": "null",
+				"hash": "7b6340cb",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"PLATFORMS": {
+				"chunk": "\t\tPLATFORMS:    []",
+				"type": "Array",
+				"hash": "598a37ae",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"SIMULATIONS": {
+				"chunk": "\t\tSIMULATIONS:  {}",
+				"type": "Object",
+				"hash": "a07f2e44",
+				"value": {
+					"chunk": "{}",
+					"type": "Object",
+					"hash": "30f4c306",
+					"value": {}
+				}
+			},
+			"ROOT": {
+				"chunk": "{\n\t\t\tlychee:  '/opt/lycheejs',\n\t\t\tproject: null\n\t\t}",
+				"type": "Object",
+				"hash": "743739bc",
+				"value": {
+					"chunk": "{\n\t\t\tlychee:  '/opt/lycheejs',\n\t\t\tproject: null\n\t\t}",
+					"type": "Object",
+					"hash": "743739bc",
+					"value": {
+						"lychee": "/opt/lycheejs",
+						"project": null
+					}
+				}
+			},
+			"VERSION": {
+				"chunk": "\t\tVERSION: \"2018-Q1\"",
+				"type": "String",
+				"hash": "668d1469",
+				"value": {
+					"chunk": "\"2018-Q1\"",
+					"type": "String",
+					"hash": "f8bf6a36",
+					"value": "2018-Q1"
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"assignsafe": {
+				"chunk": "function(target) {\n\n\t\t\ttarget = target instanceof Object ? target : {};\n\n\n\t\t\tfor (let a = 1, al = arguments.length; a < al; a++) {\n\n\t\t\t\tlet object = arguments[a];\n\t\t\t\tif (object) {\n\n\t\t\t\t\tfor (let prop in object) {\n\n\t\t\t\t\t\tif (object.hasOwnProperty(prop) === true) {\n\n\t\t\t\t\t\t\tlet tvalue = target[prop];\n\t\t\t\t\t\t\tlet ovalue = object[prop];\n\t\t\t\t\t\t\tif (tvalue instanceof Array && ovalue instanceof Array) {\n\n\t\t\t\t\t\t\t\tModule.assignsafe(target[prop], object[prop]);\n\n\t\t\t\t\t\t\t} else if (tvalue instanceof Object && ovalue instanceof Object) {\n\n\t\t\t\t\t\t\t\tModule.assignsafe(target[prop], object[prop]);\n\n\t\t\t\t\t\t\t} else if (tvalue === null && ovalue !== null) {\n\n\t\t\t\t\t\t\t\ttarget[prop] = object[prop];\n\n\t\t\t\t\t\t\t} else if (typeof tvalue === typeof ovalue) {\n\n\t\t\t\t\t\t\t\ttarget[prop] = object[prop];\n\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn target;\n\n\t\t}",
+				"type": "function",
+				"hash": "c8b197d0",
+				"parameters": [
+					{
+						"chunk": "target instanceof Object ? target : {}",
+						"name": "target",
+						"type": "Object",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"chunk": "target instanceof Object ? target : {}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"assignunlink": {
+				"chunk": "function(target) {\n\n\t\t\ttarget = target instanceof Object ? target : {};\n\n\n\t\t\tfor (let a = 1, al = arguments.length; a < al; a++) {\n\n\t\t\t\tlet object = arguments[a];\n\t\t\t\tif (object) {\n\n\t\t\t\t\tfor (let prop in object) {\n\n\t\t\t\t\t\tif (object.hasOwnProperty(prop) === true) {\n\n\t\t\t\t\t\t\tlet ovalue = object[prop];\n\t\t\t\t\t\t\tif (ovalue instanceof Array) {\n\n\t\t\t\t\t\t\t\ttarget[prop] = [];\n\t\t\t\t\t\t\t\tModule.assignunlink(target[prop], object[prop]);\n\n\t\t\t\t\t\t\t} else if (ovalue instanceof Object) {\n\n\t\t\t\t\t\t\t\ttarget[prop] = {};\n\t\t\t\t\t\t\t\tModule.assignunlink(target[prop], object[prop]);\n\n\t\t\t\t\t\t\t} else {\n\n\t\t\t\t\t\t\t\ttarget[prop] = object[prop];\n\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn target;\n\n\t\t}",
+				"type": "function",
+				"hash": "3c33dbbc",
+				"parameters": [
+					{
+						"chunk": "target instanceof Object ? target : {}",
+						"name": "target",
+						"type": "Object",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"chunk": "target instanceof Object ? target : {}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"blobof": {
+				"chunk": "function(template, blob) {\n\n\t\t\ttemplate = template !== undefined ? template : null;\n\t\t\tblob     = blob instanceof Object ? blob     : null;\n\n\n\t\t\tif (template !== null && blob !== null) {\n\n\t\t\t\tlet tname    = template.displayName;\n\t\t\t\tlet bname    = blob.reference || blob.constructor || null;\n\t\t\t\tlet hashable = typeof tname === 'string' && typeof bname === 'string';\n\t\t\t\tlet hashmap  = _BLOBOF_CACHE;\n\n\n\t\t\t\t// 0. Quick validation for identical constructors\n\t\t\t\tif (hashable === true) {\n\n\t\t\t\t\tif (hashmap[tname] !== undefined && hashmap[tname][bname] !== undefined) {\n\n\t\t\t\t\t\treturn hashmap[tname][bname];\n\n\t\t\t\t\t} else if (tname === bname) {\n\n\t\t\t\t\t\tif (hashmap[tname] === undefined) {\n\t\t\t\t\t\t\thashmap[tname] = {};\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\thashmap[tname][bname] = true;\n\n\t\t\t\t\t\treturn hashmap[tname][bname];\n\n\t\t\t\t\t} else if (tname !== bname) {\n\n\t\t\t\t\t\tlet instance = lychee.deserialize(blob);\n\t\t\t\t\t\tif (lychee.interfaceof(template, instance) === true) {\n\n\t\t\t\t\t\t\tif (hashmap[tname] === undefined) {\n\t\t\t\t\t\t\t\thashmap[tname] = {};\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\thashmap[tname][bname] = true;\n\n\t\t\t\t\t\t\treturn hashmap[tname][bname];\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "1c00d762",
+				"parameters": [
+					{
+						"chunk": "template !== undefined ? template : null",
+						"name": "template",
+						"type": "Object",
+						"value": {}
+					},
+					{
+						"chunk": "blob instanceof Object ? blob     : null",
+						"name": "blob",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"diff": {
+				"chunk": "function(aobject, bobject) {\n\n\t\t\taobject = aobject !== undefined ? aobject : undefined;\n\t\t\tbobject = bobject !== undefined ? bobject : undefined;\n\n\n\t\t\tif (aobject === bobject) {\n\n\t\t\t\treturn false;\n\n\t\t\t} else if (aobject instanceof Array && bobject instanceof Array) {\n\n\t\t\t\tfor (let a = 0, al = aobject.length; a < al; a++) {\n\n\t\t\t\t\tif (bobject[a] !== undefined) {\n\n\t\t\t\t\t\tif (aobject[a] !== null && bobject[a] !== null) {\n\n\t\t\t\t\t\t\tif (aobject[a] instanceof Object && bobject[a] instanceof Object) {\n\n\t\t\t\t\t\t\t\tif (Module.diff(aobject[a], bobject[a]) === true) {\n\n\t\t\t\t\t\t\t\t\t// Allows aobject[a].builds = {} and bobject[a].builds = { stuff: {}}\n\t\t\t\t\t\t\t\t\tif (Object.keys(aobject[a]).length > 0) {\n\t\t\t\t\t\t\t\t\t\treturn true;\n\t\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t} else if (typeof aobject[a] !== typeof bobject[a]) {\n\t\t\t\t\t\t\t\treturn true;\n\t\t\t\t\t\t\t} else if (aobject[a] !== bobject[a]) {\n\t\t\t\t\t\t\t\treturn true;\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t} else {\n\t\t\t\t\t\treturn true;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t} else if (aobject instanceof Date && bobject instanceof Date) {\n\n\t\t\t\tlet astr = aobject.toString();\n\t\t\t\tlet bstr = bobject.toString();\n\n\t\t\t\tif (astr !== bstr) {\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\n\t\t\t} else if (aobject instanceof RegExp && bobject instanceof RegExp) {\n\n\t\t\t\tlet astr = aobject.toString();\n\t\t\t\tlet bstr = bobject.toString();\n\n\t\t\t\tif (astr !== bstr) {\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\n\t\t\t} else if (aobject instanceof Object && bobject instanceof Object) {\n\n\t\t\t\tlet akeys = Object.keys(aobject);\n\t\t\t\tlet bkeys = Object.keys(bobject);\n\n\t\t\t\tif (akeys.length !== bkeys.length) {\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\n\n\t\t\t\tfor (let a = 0, al = akeys.length; a < al; a++) {\n\n\t\t\t\t\tlet key = akeys[a];\n\n\t\t\t\t\tif (bobject[key] !== undefined) {\n\n\t\t\t\t\t\tif (aobject[key] !== null && bobject[key] !== null) {\n\n\t\t\t\t\t\t\tif (aobject[key] instanceof Object && bobject[key] instanceof Object) {\n\n\t\t\t\t\t\t\t\tif (Module.diff(aobject[key], bobject[key]) === true) {\n\n\t\t\t\t\t\t\t\t\t// Allows aobject[key].builds = {} and bobject[key].builds = { stuff: {}}\n\t\t\t\t\t\t\t\t\tif (Object.keys(aobject[key]).length > 0) {\n\t\t\t\t\t\t\t\t\t\treturn true;\n\t\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t} else if (typeof aobject[key] !== typeof bobject[key]) {\n\t\t\t\t\t\t\t\treturn true;\n\t\t\t\t\t\t\t} else if (aobject[key] !== bobject[key]) {\n\t\t\t\t\t\t\t\treturn true;\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t} else {\n\t\t\t\t\t\treturn true;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t} else if (aobject !== bobject) {\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "9faa0b12",
+				"parameters": [
+					{
+						"chunk": "aobject !== undefined ? aobject : undefined",
+						"name": "aobject",
+						"type": "Object",
+						"value": {}
+					},
+					{
+						"chunk": "bobject !== undefined ? bobject : undefined",
+						"name": "bobject",
+						"type": "Object",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					},
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"enumof": {
+				"chunk": "function(template, value) {\n\n\t\t\ttemplate = template instanceof Object ? template : null;\n\t\t\tvalue    = typeof value === 'number'  ? value    : null;\n\n\n\t\t\tif (template !== null && value !== null) {\n\n\t\t\t\tlet valid = false;\n\n\t\t\t\tfor (let val in template) {\n\n\t\t\t\t\tif (value === template[val]) {\n\t\t\t\t\t\tvalid = true;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t\treturn valid;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "9de24623",
+				"parameters": [
+					{
+						"chunk": "template instanceof Object ? template : null",
+						"name": "template",
+						"type": "Object",
+						"value": null
+					},
+					{
+						"chunk": "typeof value === 'number'  ? value    : null",
+						"name": "value",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					},
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"interfaceof": {
+				"chunk": "function(template, instance) {\n\n\t\t\ttemplate = template !== undefined ? template : null;\n\t\t\tinstance = instance !== undefined ? instance : null;\n\n\n\t\t\tif (template !== null && instance !== null) {\n\n\t\t\t\tlet tname    = template.displayName;\n\t\t\t\tlet iname    = instance.displayName;\n\t\t\t\tlet hashable = typeof tname === 'string' && typeof iname === 'string';\n\t\t\t\tlet hashmap  = _INTERFACEOF_CACHE;\n\t\t\t\tlet valid    = false;\n\n\n\t\t\t\t// 0. Quick validation for identical constructors\n\t\t\t\tif (hashable === true) {\n\n\t\t\t\t\tif (hashmap[tname] !== undefined && hashmap[tname][iname] !== undefined) {\n\n\t\t\t\t\t\treturn hashmap[tname][iname];\n\n\t\t\t\t\t} else if (tname === iname) {\n\n\t\t\t\t\t\tif (hashmap[tname] === undefined) {\n\t\t\t\t\t\t\thashmap[tname] = {};\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\thashmap[tname][iname] = true;\n\n\t\t\t\t\t\treturn hashmap[tname][iname];\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\t// 1. Interface validation on Template\n\t\t\t\tif (template instanceof Function && template.prototype instanceof Object && instance instanceof Function && instance.prototype instanceof Object) {\n\n\t\t\t\t\tvalid = true;\n\n\t\t\t\t\tfor (let method in template.prototype) {\n\n\t\t\t\t\t\tif (typeof template.prototype[method] !== typeof instance.prototype[method]) {\n\t\t\t\t\t\t\tvalid = false;\n\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\n\t\t\t\t// 2. Interface validation on Instance\n\t\t\t\t} else if (template instanceof Function && template.prototype instanceof Object && instance instanceof Object) {\n\n\t\t\t\t\tvalid = true;\n\n\t\t\t\t\tfor (let method in template.prototype) {\n\n\t\t\t\t\t\tif (typeof template.prototype[method] !== typeof instance[method]) {\n\t\t\t\t\t\t\tvalid = false;\n\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\n\t\t\t\t// 3. Interface validation on Struct\n\t\t\t\t} else if (template instanceof Object && instance instanceof Object) {\n\n\t\t\t\t\tvalid = true;\n\n\t\t\t\t\tfor (let property in template) {\n\n\t\t\t\t\t\tif (template.hasOwnProperty(property) && instance.hasOwnProperty(property)) {\n\n\t\t\t\t\t\t\tif (typeof template[property] !== typeof instance[property]) {\n\t\t\t\t\t\t\t\tvalid = false;\n\t\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tif (hashable === true) {\n\n\t\t\t\t\tif (hashmap[tname] === undefined) {\n\t\t\t\t\t\thashmap[tname] = {};\n\t\t\t\t\t}\n\n\t\t\t\t\thashmap[tname][iname] = valid;\n\n\t\t\t\t}\n\n\n\t\t\t\treturn valid;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "7b89da1a",
+				"parameters": [
+					{
+						"chunk": "template !== undefined ? template : null",
+						"name": "template",
+						"type": "Object",
+						"value": {}
+					},
+					{
+						"chunk": "instance !== undefined ? instance : null",
+						"name": "instance",
+						"type": "Object",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					},
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"deserialize": {
+				"chunk": "function(data) {\n\n\t\t\tdata = data instanceof Object ? data : null;\n\n\n\t\t\ttry {\n\t\t\t\tdata = JSON.parse(JSON.stringify(data));\n\t\t\t} catch (err) {\n\t\t\t\tdata = null;\n\t\t\t}\n\n\n\t\t\tif (data !== null) {\n\n\t\t\t\tlet instance = null;\n\t\t\t\tlet scope    = (this.environment !== null ? this.environment.global : global);\n\n\n\t\t\t\tif (typeof data.reference === 'string') {\n\n\t\t\t\t\tlet resolved_module = _resolve_reference.call(scope, data.reference);\n\t\t\t\t\tif (typeof resolved_module === 'object') {\n\t\t\t\t\t\tinstance = resolved_module;\n\t\t\t\t\t}\n\n\t\t\t\t} else if (typeof data.constructor === 'string' && data.arguments instanceof Array) {\n\n\t\t\t\t\tlet resolved_composite = _resolve_reference.call(scope, data.constructor);\n\t\t\t\t\tif (typeof resolved_composite === 'function') {\n\n\t\t\t\t\t\tlet bindargs = Array.from(data.arguments).map(function(value) {\n\n\t\t\t\t\t\t\tif (typeof value === 'string' && value.charAt(0) === '#') {\n\n\t\t\t\t\t\t\t\tif (lychee.debug === true) {\n\t\t\t\t\t\t\t\t\tconsole.log('lychee.deserialize: Injecting \"' + value + '\" from global');\n\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\tlet resolved = _resolve_reference.call(scope, value.substr(1));\n\t\t\t\t\t\t\t\tif (resolved !== null) {\n\t\t\t\t\t\t\t\t\tvalue = resolved;\n\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\treturn value;\n\n\t\t\t\t\t\t});\n\n\n\t\t\t\t\t\tbindargs.reverse();\n\t\t\t\t\t\tbindargs.push(resolved_composite);\n\t\t\t\t\t\tbindargs.reverse();\n\n\n\t\t\t\t\t\tinstance = new (\n\t\t\t\t\t\t\tresolved_composite.bind.apply(\n\t\t\t\t\t\t\t\tresolved_composite,\n\t\t\t\t\t\t\t\tbindargs\n\t\t\t\t\t\t\t)\n\t\t\t\t\t\t)();\n\n\t\t\t\t\t}\n\n\t\t\t\t} else if (data instanceof Object) {\n\n\t\t\t\t\tinstance = data;\n\n\t\t\t\t}\n\n\n\t\t\t\tif (instance !== null) {\n\n\t\t\t\t\t// High-Level ENTITY API\n\t\t\t\t\tif (typeof instance.deserialize === 'function') {\n\n\t\t\t\t\t\tlet blob = data.blob || null;\n\t\t\t\t\t\tif (blob !== null) {\n\t\t\t\t\t\t\tinstance.deserialize(blob);\n\t\t\t\t\t\t}\n\n\t\t\t\t\t// Low-Level ASSET API\n\t\t\t\t\t} else if (typeof instance.load === 'function') {\n\t\t\t\t\t\tinstance.load();\n\t\t\t\t\t}\n\n\n\t\t\t\t\treturn instance;\n\n\t\t\t\t} else {\n\n\t\t\t\t\tconsole.info('lychee.deserialize: Require ' + (data.reference || data.constructor) + ' to deserialize it.');\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
+				"type": "function",
+				"hash": "a2de0dfd",
+				"parameters": [
+					{
+						"chunk": "data instanceof Object ? data : null",
+						"name": "data",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "null",
+						"type": "null",
+						"value": null
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function(definition) {\n\n\t\t\tdefinition = definition !== undefined ? definition : null;\n\n\n\t\t\tlet data = null;\n\n\t\t\tif (definition !== null) {\n\n\t\t\t\tif (typeof definition === 'object') {\n\n\t\t\t\t\tif (typeof definition.serialize === 'function') {\n\n\t\t\t\t\t\tdata = definition.serialize();\n\n\t\t\t\t\t} else if (typeof definition.displayName !== 'undefined') {\n\n\t\t\t\t\t\tif (definition.prototype instanceof Object) {\n\t\t\t\t\t\t\tconsole.info('lychee.serialize: Define ' + (definition.displayName) + '.prototype.serialize() to serialize it.');\n\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\tconsole.info('lychee.serialize: Define ' + (definition.displayName) + '.serialize() to serialize it.');\n\t\t\t\t\t\t}\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\ttry {\n\t\t\t\t\t\t\tdata = JSON.parse(JSON.stringify(definition));\n\t\t\t\t\t\t} catch (err) {\n\t\t\t\t\t\t\tdata = null;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t} else if (typeof definition === 'function') {\n\n\t\t\t\t\tdata = definition.toString();\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "b4e5bc6c",
+				"parameters": [
+					{
+						"chunk": "definition !== undefined ? definition : null",
+						"name": "definition",
+						"type": "Object",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"chunk": "null",
+						"type": "null",
+						"value": null
+					},
+					{
+						"chunk": "definition.toString()",
+						"type": "String",
+						"value": "<string>"
+					}
+				]
+			},
+			"assimilate": {
+				"chunk": "function(target) {\n\n\t\t\ttarget = typeof target === 'string' ? target : null;\n\n\n\t\t\tif (target !== null) {\n\n\t\t\t\t_bootstrap_environment.call(this);\n\n\n\t\t\t\tlet that = this;\n\n\n\t\t\t\t// XXX: First sandboxed hierarchy\n\t\t\t\tif (that.environment.sandbox === true) {\n\t\t\t\t\tthat = that.environment.global.lychee;\n\t\t\t\t}\n\n\t\t\t\t// XXX: Second sandboxed hierarchy\n\t\t\t\tif (that.environment.sandbox === true) {\n\t\t\t\t\tthat = that.environment.global.lychee;\n\t\t\t\t}\n\n\t\t\t\t// XXX: Third sandboxed hierarchy\n\t\t\t\tif (that.environment.sandbox === true) {\n\t\t\t\t\tthat = that.environment.global.lychee;\n\t\t\t\t}\n\n\n\t\t\t\tlet asset = new lychee.Asset(target, null, false);\n\t\t\t\tif (asset !== null) {\n\t\t\t\t\tasset.load();\n\t\t\t\t}\n\n\n\t\t\t\treturn asset;\n\n\t\t\t} else {\n\n\t\t\t\tconsole.warn('lychee.assimilate: Invalid target');\n\t\t\t\tconsole.info('lychee.assimilate: Use lychee.assimilate(target) where target is a path to an Asset');\n\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
+				"type": "function",
+				"hash": "f7d58a18",
+				"parameters": [
+					{
+						"chunk": "typeof target === 'string' ? target : null",
+						"name": "target",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "asset",
+						"type": "lychee.Asset",
+						"value": {
+							"constructor": "lychee.Asset",
+							"arguments": []
+						}
+					},
+					{
+						"chunk": "null",
+						"type": "null",
+						"value": null
+					}
+				]
+			},
+			"define": {
+				"chunk": "function(identifier) {\n\n\t\t\tidentifier = typeof identifier === 'string' ? identifier : null;\n\n\n\t\t\tif (identifier !== null) {\n\n\t\t\t\t_bootstrap_environment.call(this);\n\n\n\t\t\t\tlet that       = this;\n\t\t\t\tlet definition = new lychee.Definition({\n\t\t\t\t\tid:  identifier,\n\t\t\t\t\turl: lychee.FILENAME || null\n\t\t\t\t});\n\n\n\t\t\t\t// XXX: First sandboxed hierarchy\n\t\t\t\tif (that.environment.sandbox === true) {\n\t\t\t\t\tthat = that.environment.global.lychee;\n\t\t\t\t}\n\n\t\t\t\t// XXX: Second sandboxed hierarchy\n\t\t\t\tif (that.environment.sandbox === true) {\n\t\t\t\t\tthat = that.environment.global.lychee;\n\t\t\t\t}\n\n\t\t\t\t// XXX: Third sandboxed hierarchy\n\t\t\t\tif (that.environment.sandbox === true) {\n\t\t\t\t\tthat = that.environment.global.lychee;\n\t\t\t\t}\n\n\n\t\t\t\tdefinition.exports = function(callback) {\n\n\t\t\t\t\tlychee.Definition.prototype.exports.call(this, callback);\n\t\t\t\t\tthat.environment.define(this, false);\n\n\t\t\t\t};\n\n\n\t\t\t\treturn definition;\n\n\t\t\t} else {\n\n\t\t\t\tconsole.warn('lychee.define: Invalid identifier');\n\t\t\t\tconsole.info('lychee.define: Use lychee.define(id).exports(function(lychee, global, attachments) {})');\n\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
+				"type": "function",
+				"hash": "98859101",
+				"parameters": [
+					{
+						"chunk": "typeof identifier === 'string' ? identifier : null",
+						"name": "identifier",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "null",
+						"type": "null",
+						"value": null
+					}
+				]
+			},
+			"export": {
+				"chunk": "function(reference, sandbox) {\n\n\t\t\treference = typeof reference === 'string' ? reference : null;\n\t\t\tsandbox   = sandbox !== undefined         ? sandbox   : global;\n\n\n\t\t\tif (reference !== null && sandbox !== null) {\n\n\t\t\t\t_bootstrap_environment.call(this);\n\n\n\t\t\t\tlet definition = this.environment.definitions[reference] || null;\n\t\t\t\tif (definition !== null) {\n\t\t\t\t\treturn definition.export(sandbox);\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "273232d2",
+				"parameters": [
+					{
+						"chunk": "typeof reference === 'string' ? reference : null",
+						"name": "reference",
+						"type": "String",
+						"value": null
+					},
+					{
+						"chunk": "sandbox !== undefined         ? sandbox   : global",
+						"name": "sandbox",
+						"type": "Object",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"import": {
+				"chunk": "function(reference) {\n\n\t\t\treference = typeof reference === 'string' ? reference : null;\n\n\n\t\t\tif (reference !== null) {\n\n\t\t\t\t_bootstrap_environment.call(this);\n\n\n\t\t\t\tlet instance = null;\n\t\t\t\tlet that     = this;\n\n\t\t\t\t// XXX: First sandboxed hierarchy\n\t\t\t\tif (that.environment.sandbox === true) {\n\t\t\t\t\tthat = that.environment.global.lychee;\n\t\t\t\t}\n\n\t\t\t\t// XXX: Second sandboxed hierarchy\n\t\t\t\tif (that.environment.sandbox === true) {\n\t\t\t\t\tthat = that.environment.global.lychee;\n\t\t\t\t}\n\n\t\t\t\t// XXX: Third sandboxed hierarchy\n\t\t\t\tif (that.environment.sandbox === true) {\n\t\t\t\t\tthat = that.environment.global.lychee;\n\t\t\t\t}\n\n\n\t\t\t\tlet resolved_module = _resolve_reference.call(that.environment.global, reference);\n\t\t\t\tif (resolved_module !== null) {\n\t\t\t\t\tinstance = resolved_module;\n\t\t\t\t}\n\n\n\t\t\t\tif (instance === null) {\n\t\t\t\t\tconsole.info('lychee.deserialize: Require ' + (reference) + ' to import it.');\n\t\t\t\t}\n\n\n\t\t\t\treturn instance;\n\n\t\t\t} else {\n\n\t\t\t\tconsole.warn('lychee.import: Invalid reference');\n\t\t\t\tconsole.info('lychee.import: Use lychee.import(reference)');\n\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
+				"type": "function",
+				"hash": "467b9815",
+				"parameters": [
+					{
+						"chunk": "typeof reference === 'string' ? reference : null",
+						"name": "reference",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "null",
+						"type": "null",
+						"value": null
+					}
+				]
+			},
+			"init": {
+				"chunk": "function(environment, settings, callback) {\n\n\t\t\tlet message = environment !== null;\n\n\t\t\tenvironment = _validate_environment(environment) === true ? environment : null;\n\t\t\tsettings    = settings instanceof Object                  ? settings    : null;\n\t\t\tcallback    = callback instanceof Function                ? callback    : null;\n\n\n\t\t\t_bootstrap_environment.call(this);\n\t\t\t_bootstrap_simulation.call(this);\n\n\n\t\t\tif (environment !== null && settings !== null) {\n\n\t\t\t\tif (_environment !== null) {\n\n\t\t\t\t\tif (environment instanceof lychee.Environment) {\n\n\t\t\t\t\t\tObject.values(_environment.definitions).forEach(function(definition) {\n\t\t\t\t\t\t\tenvironment.define(definition, true);\n\t\t\t\t\t\t});\n\n\t\t\t\t\t} else if (environment instanceof lychee.Simulation) {\n\n\t\t\t\t\t\tObject.values(_environment.definitions).forEach(function(definition) {\n\t\t\t\t\t\t\tenvironment.environment.define(definition, true);\n\t\t\t\t\t\t});\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tif (environment.id.startsWith('lychee-Environment-')) {\n\t\t\t\t\tenvironment.setId((lychee.ROOT.project || '').substr((lychee.ROOT.lychee || '').length) + '/custom');\n\t\t\t\t}\n\n\t\t\t\tfor (let id in settings) {\n\n\t\t\t\t\tlet method = 'set' + id.charAt(0).toUpperCase() + id.substr(1);\n\t\t\t\t\tif (typeof environment[method] === 'function') {\n\t\t\t\t\t\tenvironment[method](settings[id]);\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tif (environment instanceof lychee.Environment) {\n\n\t\t\t\t\tif (callback === null) {\n\n\t\t\t\t\t\tlet code    = '';\n\t\t\t\t\t\tlet profile = settings.profile || {};\n\n\t\t\t\t\t\tcode += '\\n\\n';\n\t\t\t\t\t\tcode += 'if (sandbox === null) {\\n';\n\t\t\t\t\t\tcode += '\\tconsole.error(\\'lychee: environment.init() failed.\\');\\n';\n\t\t\t\t\t\tcode += '\\treturn;\\n';\n\t\t\t\t\t\tcode += '}\\n';\n\t\t\t\t\t\tcode += '\\n\\n';\n\t\t\t\t\t\tcode += 'let lychee = sandbox.lychee;\\n';\n\n\t\t\t\t\t\tlet packages = environment.packages;\n\t\t\t\t\t\tif (packages instanceof Object && Array.isArray(packages) === false) {\n\n\t\t\t\t\t\t\tfor (let pid in packages) {\n\n\t\t\t\t\t\t\t\tif (pid !== 'lychee' && /$([a-z]+)/g.test(pid)) {\n\t\t\t\t\t\t\t\t\tcode += 'let ' + pid + ' = sandbox.' + pid + ';\\n';\n\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\tcode += '\\n\\n';\n\t\t\t\t\t\tcode += 'sandbox.MAIN = new ' + environment.target + '(' + JSON.stringify(profile) + ');\\n';\n\t\t\t\t\t\tcode += '\\n\\n';\n\t\t\t\t\t\tcode += 'if (typeof sandbox.MAIN.init === \\'function\\') {\\n';\n\t\t\t\t\t\tcode += '\\tsandbox.MAIN.init();\\n';\n\t\t\t\t\t\tcode += '}\\n';\n\n\t\t\t\t\t\tcallback = new Function('sandbox', code);\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\tlychee.setEnvironment(environment);\n\t\t\t\t\tenvironment.init(callback);\n\n\t\t\t\t} else if (environment instanceof lychee.Simulation) {\n\n\t\t\t\t\tlet simulation = environment;\n\n\t\t\t\t\tenvironment = simulation.environment;\n\n\n\t\t\t\t\tif (callback === null) {\n\n\t\t\t\t\t\tlet code = '';\n\n\t\t\t\t\t\tcode += '\\n\\n';\n\t\t\t\t\t\tcode += 'if (sandbox_sim === null) {\\n';\n\t\t\t\t\t\tcode += '\\tconsole.error(\\'lychee: simulation.init() failed.\\');\\n';\n\t\t\t\t\t\tcode += '\\treturn;\\n';\n\t\t\t\t\t\tcode += '}\\n';\n\t\t\t\t\t\tcode += '\\n\\n';\n\t\t\t\t\t\tcode += 'console.info(\\'lychee: simulation.init() succeeded.\\');\\n';\n\n\t\t\t\t\t\tcallback = new Function('sandbox_sim', code);\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\tlychee.setEnvironment(environment);\n\n\t\t\t\t\tenvironment.init(function(sandbox) {\n\n\t\t\t\t\t\tif (sandbox === null) {\n\t\t\t\t\t\t\tconsole.error('lychee: environment.init() failed.');\n\t\t\t\t\t\t\treturn;\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\tconsole.info('lychee: environment.init() succeeded.');\n\n\t\t\t\t\t\tlychee.setSimulation(simulation);\n\t\t\t\t\t\tsimulation.init(callback);\n\n\t\t\t\t\t});\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t} else if (message === true) {\n\n\t\t\t\tconsole.warn('lychee.init: Invalid environment');\n\t\t\t\tconsole.info('lychee.init: Use lychee.init(env, settings, callback) where env can be a lychee.Environment or lychee.Simulation instance.');\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "a295f8b8",
+				"parameters": [
+					{
+						"chunk": "_validate_environment(environment) === true ? environment : null",
+						"name": "environment",
+						"type": "lychee.Environment",
+						"value": {
+							"constructor": "lychee.Environment",
+							"arguments": []
+						}
+					},
+					{
+						"chunk": "settings instanceof Object                  ? settings    : null",
+						"name": "settings",
+						"type": "Object",
+						"value": null
+					},
+					{
+						"chunk": "callback instanceof Function                ? callback    : null",
+						"name": "callback",
+						"type": "Function",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"inject": {
+				"chunk": "function(environment) {\n\n\t\t\tlet message = environment !== null;\n\n\t\t\tenvironment = environment instanceof lychee.Environment ? environment : null;\n\n\n\t\t\t_bootstrap_environment.call(this);\n\n\n\t\t\tif (environment !== null) {\n\n\t\t\t\tif (this.environment !== null) {\n\n\t\t\t\t\tlet that = this;\n\n\t\t\t\t\tObject.values(environment.definitions).forEach(function(definition) {\n\t\t\t\t\t\tthat.environment.define(definition, true);\n\t\t\t\t\t});\n\n\t\t\t\t\tlet build_old = this.environment.definitions[this.environment.target] || null;\n\t\t\t\t\tlet build_new = environment.definitions[environment.target]           || null;\n\n\t\t\t\t\tif (build_old === null && build_new !== null) {\n\t\t\t\t\t\tthis.environment.target = environment.target;\n\t\t\t\t\t\tthis.environment.type   = environment.type;\n\t\t\t\t\t}\n\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t} else {\n\n\t\t\t\t\tconsole.warn('lychee.inject: Invalid default environment for injection.');\n\t\t\t\t\tconsole.info('lychee.inject: Use lychee.setEnvironment(env) before using lychee.inject(other).');\n\n\t\t\t\t}\n\n\t\t\t} else if (message === true) {\n\n\t\t\t\tconsole.warn('lychee.inject: Invalid environment');\n\t\t\t\tconsole.info('lychee.inject: Use lychee.inject(env) where env is a lychee.Environment instance');\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "46dc8b7b",
+				"parameters": [
+					{
+						"chunk": "environment instanceof lychee.Environment ? environment : null",
+						"name": "environment",
+						"type": "lychee.Environment",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"pkg": {
+				"chunk": "function(type, id, callback) {\n\n\t\t\ttype     = typeof type === 'string'     ? type       : null;\n\t\t\tid       = typeof id === 'string'       ? id         : null;\n\t\t\tcallback = callback instanceof Function ? callback   : null;\n\n\n\t\t\tif (id !== null && type !== null && callback !== null) {\n\n\t\t\t\tif (/^(build|review|source)$/g.test(type)) {\n\n\t\t\t\t\tlet config = new Config('./lychee.pkg');\n\n\t\t\t\t\tconfig.onload = function() {\n\n\t\t\t\t\t\tlet buffer = this.buffer || null;\n\t\t\t\t\t\tif (buffer instanceof Object) {\n\n\t\t\t\t\t\t\tlet settings = buffer[type].environments[id] || null;\n\t\t\t\t\t\t\tif (settings instanceof Object) {\n\n\t\t\t\t\t\t\t\tlet environment = null;\n\t\t\t\t\t\t\t\tlet profile     = settings.profile || null;\n\n\t\t\t\t\t\t\t\tif (profile !== null) {\n\t\t\t\t\t\t\t\t\tdelete settings.profile;\n\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\tif (type === 'build' || type === 'source') {\n\t\t\t\t\t\t\t\t\tenvironment = new lychee.Environment(JSON.parse(JSON.stringify(settings)));\n\t\t\t\t\t\t\t\t} else if (type === 'review') {\n\t\t\t\t\t\t\t\t\tenvironment = new lychee.Simulation(JSON.parse(JSON.stringify(settings)));\n\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\tcallback(environment, profile);\n\n\t\t\t\t\t\t\t} else {\n\n\t\t\t\t\t\t\t\tconsole.warn('lychee.pkg: Invalid settings for \"' + id + '\" in lychee.pkg.');\n\t\t\t\t\t\t\t\tconsole.info('lychee.pkg: Insert settings at \"/' + type + '/environments/' + id + '\" in lychee.pkg.');\n\n\t\t\t\t\t\t\t\tcallback(null, null);\n\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t} else {\n\n\t\t\t\t\t\t\tconsole.warn('lychee.pkg: Invalid package at \"' + this.url + '\".');\n\t\t\t\t\t\t\tconsole.info('lychee.pkg: Replace lychee.pkg with the one from \"/projects/boilerplate\".');\n\n\t\t\t\t\t\t\tcallback(null, null);\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t};\n\n\t\t\t\t\tconfig.load();\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "58740f13",
+				"parameters": [
+					{
+						"chunk": "typeof type === 'string'     ? type       : null",
+						"name": "type",
+						"type": "String",
+						"value": null
+					},
+					{
+						"chunk": "typeof id === 'string'       ? id         : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					},
+					{
+						"chunk": "callback instanceof Function ? callback   : null",
+						"name": "callback",
+						"type": "Function",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"specify": {
+				"chunk": "function(identifier) {\n\n\t\t\tidentifier = typeof identifier === 'string' ? identifier : null;\n\n\n\t\t\tif (identifier !== null) {\n\n\t\t\t\t_bootstrap_simulation.call(this);\n\n\n\t\t\t\tlet that          = this;\n\t\t\t\tlet specification = new lychee.Specification({\n\t\t\t\t\tid:  identifier,\n\t\t\t\t\turl: lychee.FILENAME || null\n\t\t\t\t});\n\n\n\t\t\t\tspecification.exports = function(callback) {\n\n\t\t\t\t\tlychee.Specification.prototype.exports.call(this, callback);\n\t\t\t\t\tthat.simulation.specify(this, false);\n\n\t\t\t\t};\n\n\n\t\t\t\treturn specification;\n\n\t\t\t} else {\n\n\t\t\t\tconsole.warn('lychee.specify: Invalid identifier');\n\t\t\t\tconsole.info('lychee.specify: Use lychee.specify(id).exports(function(lychee, global, simulation) {})');\n\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
+				"type": "function",
+				"hash": "5732fc36",
+				"parameters": [
+					{
+						"chunk": "typeof identifier === 'string' ? identifier : null",
+						"name": "identifier",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "null",
+						"type": "null",
+						"value": null
+					}
+				]
+			},
+			"setEnvironment": {
+				"chunk": "function(environment) {\n\n\t\t\tenvironment = environment instanceof lychee.Environment ? environment : null;\n\n\n\t\t\tif (environment !== null) {\n\n\t\t\t\tthis.environment = environment;\n\t\t\t\tthis.debug       = this.environment.debug;\n\n\t\t\t\treturn true;\n\n\t\t\t} else {\n\n\t\t\t\tthis.environment = _environment;\n\t\t\t\tthis.debug       = this.environment.debug;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "9fd505e8",
+				"parameters": [
+					{
+						"chunk": "environment instanceof lychee.Environment ? environment : null",
+						"name": "environment",
+						"type": "lychee.Environment",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setSimulation": {
+				"chunk": "function(simulation) {\n\n\t\t\tsimulation = simulation instanceof lychee.Simulation ? simulation : null;\n\n\n\t\t\tif (simulation !== null) {\n\n\t\t\t\tthis.simulation = simulation;\n\n\t\t\t\treturn true;\n\n\t\t\t} else {\n\n\t\t\t\tthis.simulation = _simulation;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "f6dd9ad5",
+				"parameters": [
+					{
+						"chunk": "simulation instanceof lychee.Simulation ? simulation : null",
+						"name": "simulation",
+						"type": "lychee.Simulation",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

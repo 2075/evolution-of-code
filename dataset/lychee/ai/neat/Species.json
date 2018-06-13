@@ -1,0 +1,66 @@
+{
+	"header": {
+		"identifier": "lychee.ai.neat.Species",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "47f583b2",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {},
+		"properties": {},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.ai.neat.Species',\n\t\t\t\t'arguments':   []\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "4dad1055",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.ai.neat.Species',\n\t\t\t\t'arguments':   []\n\t\t\t}",
+						"type": "Object",
+						"value": {
+							"constructor": "lychee.ai.neat.Species",
+							"arguments": []
+						}
+					}
+				]
+			}
+		}
+	}
+}

@@ -1,0 +1,321 @@
+{
+	"header": {
+		"identifier": "lychee.ui.entity.List",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [
+			"lychee.ui.Entity"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Entity": {
+			"chunk": "lychee.import('lychee.ui.Entity')",
+			"type": "lychee.Definition",
+			"hash": "adc9fb14",
+			"value": {
+				"reference": "lychee.ui.Entity",
+				"arguments": []
+			}
+		},
+		"_FONT": {
+			"chunk": "attachments[\"fnt\"]",
+			"type": "Font",
+			"hash": "3076ee3c",
+			"value": {
+				"constructor": "Font",
+				"arguments": []
+			}
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.font    = _FONT;\n\t\tthis.options = [];\n\t\tthis.value   = {};\n\n\t\tthis.__cursor = {\n\t\t\tactive:   false,\n\t\t\talpha:    0.0,\n\t\t\tduration: 600,\n\t\t\tprevious: null,\n\t\t\tstart:    null,\n\t\t\tpingpong: false\n\t\t};\n\n\n\t\tthis.setFont(states.font);\n\t\tthis.setOptions(states.options);\n\t\tthis.setValue(states.value);\n\n\t\tdelete states.font;\n\t\tdelete states.options;\n\t\tdelete states.value;\n\n\n\t\tstates.width  = typeof states.width === 'number'  ? states.width  : 128;\n\t\tstates.height = typeof states.height === 'number' ? states.height :  32;\n\t\tstates.shape  = _Entity.SHAPE.rectangle;\n\n\n\t\t_Entity.call(this, states);\n\n\t\tstates = null;\n\n\n\t\tif (this.options.length > 1) {\n\t\t\tthis.height = this.options.length * this.height;\n\t\t}\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tthis.bind('touch', function(id, position, delta) {\n\n\t\t\tif (this.options.length === 0) return;\n\n\n\t\t\tlet lh  = this.height / this.options.length;\n\t\t\tlet pos = (position.y + this.height / 2);\n\n\t\t\tlet q = (pos / lh) | 0;\n\t\t\tif (q >= 0) {\n\n\t\t\t\tlet tmp = {};\n\t\t\t\tlet option = this.options[q] || null;\n\t\t\t\tif (option !== null) {\n\n\t\t\t\t\ttmp[option] = !(this.value[option]);\n\n\t\t\t\t\tlet result = this.setValue(tmp);\n\t\t\t\t\tif (result === true) {\n\t\t\t\t\t\tthis.trigger('change', [ this.value ]);\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}, this);\n\n\t\tthis.bind('key', function(key, name, delta) {\n\n\t\t\tif (this.options.length === 0) return;\n\n\n\t\t\tif (this.state === 'active') {\n\n\t\t\t\tlet option = this.__cursor.previous;\n\t\t\t\tlet q      = this.options.indexOf(option);\n\n\t\t\t\tif (key === 'w' || key === 'arrow-up')   option = this.options[--q] || this.options[0];\n\t\t\t\tif (key === 's' || key === 'arrow-down') option = this.options[++q] || this.options[this.options.length - 1];\n\n\n\t\t\t\tif (key === 'space' || key === 'enter') {\n\n\t\t\t\t\tlet tmp = {};\n\t\t\t\t\ttmp[option] = !(this.value[option]);\n\n\n\t\t\t\t\tlet result = this.setValue(tmp);\n\t\t\t\t\tif (result === true) {\n\t\t\t\t\t\tthis.trigger('change', [ this.value ]);\n\t\t\t\t\t}\n\n\t\t\t\t} else {\n\n\t\t\t\t\tthis.__cursor.previous = option;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}, this);\n\n\t\tthis.bind('focus', function() {\n\t\t\tthis.setState('active');\n\t\t}, this);\n\n\t\tthis.bind('blur', function() {\n\t\t\tthis.setState('default');\n\t\t}, this);\n\n\t}",
+			"type": "function",
+			"hash": "1db829c6",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"font": "setFont",
+			"options": "setOptions",
+			"value": "setValue"
+		},
+		"properties": {
+			"font": {
+				"chunk": "this.font    = _FONT;",
+				"type": "Font",
+				"hash": "e56dda85",
+				"value": {
+					"chunk": "_FONT",
+					"type": "Font",
+					"hash": "b185383f",
+					"value": {
+						"constructor": "Font",
+						"arguments": [
+							"/tmp/Font.fnt"
+						]
+					}
+				}
+			},
+			"options": {
+				"chunk": "this.options = [];",
+				"type": "Array",
+				"hash": "408bc3ea",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"value": {
+				"chunk": "this.value   = {};",
+				"type": "Object",
+				"hash": "cbcafc2f",
+				"value": {
+					"chunk": "{}",
+					"type": "Object",
+					"hash": "30f4c306",
+					"value": {}
+				}
+			},
+			"__cursor": {
+				"chunk": "this.__cursor = {\n\t\t\tactive:   false,\n\t\t\talpha:    0.0,\n\t\t\tduration: 600,\n\t\t\tprevious: null,\n\t\t\tstart:    null,\n\t\t\tpingpong: false\n\t\t};",
+				"type": "Object",
+				"hash": "615313a9",
+				"value": {
+					"chunk": "{\n\t\t\tactive:   false,\n\t\t\talpha:    0.0,\n\t\t\tduration: 600,\n\t\t\tprevious: null,\n\t\t\tstart:    null,\n\t\t\tpingpong: false\n\t\t}",
+					"type": "Object",
+					"hash": "7f3974a7",
+					"value": {
+						"active": false,
+						"alpha": 0,
+						"duration": 600,
+						"previous": null,
+						"start": null,
+						"pingpong": false
+					}
+				}
+			},
+			"height": {
+				"chunk": "this.height = this.options.length * this.height;",
+				"type": "Number",
+				"hash": "ca043c08",
+				"value": {
+					"chunk": "this.options.length * this.height",
+					"type": "Number",
+					"hash": "55415205",
+					"value": 1337
+				}
+			}
+		},
+		"enums": {},
+		"events": {
+			"change": {
+				"name": "change",
+				"methods": [],
+				"parameters": [
+					{
+						"chunk": "this.value",
+						"type": "undefined",
+						"hash": "8d57048e",
+						"value": {
+							"reference": "this.value",
+							"arguments": []
+						}
+					}
+				]
+			}
+		},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {\n\n\t\t\tlet font = lychee.deserialize(blob.font);\n\t\t\tif (font !== null) {\n\t\t\t\tthis.setFont(font);\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "814dbb80",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "blob",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Entity.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.entity.List';\n\n\t\t\tlet states = data['arguments'][0];\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.options.length !== 0)          states.options = Array.from(this.options);\n\t\t\tif (Object.keys(this.value).length > 0) states.value   = this.value;\n\n\n\t\t\tif (this.font !== null) blob.font = lychee.serialize(this.font);\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "d6712005",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"update": {
+				"chunk": "function(clock, delta) {\n\n\t\t\tlet cursor = this.__cursor;\n\t\t\tif (cursor.active === true) {\n\n\t\t\t\tif (cursor.start === null) {\n\t\t\t\t\tcursor.start = clock;\n\t\t\t\t}\n\n\n\t\t\t\tlet ct = (clock - cursor.start) / cursor.duration;\n\t\t\t\tif (ct <= 1) {\n\t\t\t\t\tcursor.alpha = cursor.pingpong === true ? (1 - ct) : ct;\n\t\t\t\t} else {\n\t\t\t\t\tcursor.start    = clock;\n\t\t\t\t\tcursor.pingpong = !cursor.pingpong;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\t_Entity.prototype.update.call(this, clock, delta);\n\n\t\t}",
+				"type": "function",
+				"hash": "5ace9996",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "clock",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "delta",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"render": {
+				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tif (this.visible === false) return;\n\n\n\t\t\tlet alpha    = this.alpha;\n\t\t\tlet position = this.position;\n\t\t\tlet cursor   = this.__cursor;\n\t\t\tlet font     = this.font;\n\t\t\tlet value    = this.value;\n\t\t\tlet x        = position.x + offsetX;\n\t\t\tlet y        = position.y + offsetY;\n\t\t\tlet hwidth   = this.width  / 2;\n\t\t\tlet hheight  = this.height / 2;\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(alpha);\n\t\t\t}\n\n\n\t\t\tlet x1 = x - hwidth;\n\t\t\tlet lh = this.height / this.options.length;\n\n\t\t\tfor (let o = 0, ol = this.options.length; o < ol; o++) {\n\n\t\t\t\tlet option = this.options[o];\n\t\t\t\tlet y1     = y - hheight + o * lh;\n\t\t\t\tlet val    = value[option];\n\n\t\t\t\tif (val === true) {\n\n\t\t\t\t\trenderer.drawCircle(\n\t\t\t\t\t\tx1 + 16,\n\t\t\t\t\t\ty1 + 16,\n\t\t\t\t\t\t11,\n\t\t\t\t\t\t'#32afe5',\n\t\t\t\t\t\tfalse,\n\t\t\t\t\t\t2\n\t\t\t\t\t);\n\n\t\t\t\t} else {\n\n\t\t\t\t\trenderer.drawCircle(\n\t\t\t\t\t\tx1 + 16,\n\t\t\t\t\t\ty1 + 16,\n\t\t\t\t\t\t11,\n\t\t\t\t\t\t'#545454',\n\t\t\t\t\t\tfalse,\n\t\t\t\t\t\t2\n\t\t\t\t\t);\n\n\t\t\t\t}\n\n\n\t\t\t\tif (cursor.active === true && option === cursor.previous) {\n\n\t\t\t\t\trenderer.drawCircle(\n\t\t\t\t\t\tx1 + 16,\n\t\t\t\t\t\ty1 + 16,\n\t\t\t\t\t\t11,\n\t\t\t\t\t\tval === true ? '#32afe5' : '#545454',\n\t\t\t\t\t\tfalse,\n\t\t\t\t\t\t2\n\t\t\t\t\t);\n\n\t\t\t\t\trenderer.setAlpha(cursor.alpha);\n\n\t\t\t\t\trenderer.drawCircle(\n\t\t\t\t\t\tx1 + 16,\n\t\t\t\t\t\ty1 + 16,\n\t\t\t\t\t\t12,\n\t\t\t\t\t\t'#32afe5',\n\t\t\t\t\t\ttrue\n\t\t\t\t\t);\n\n\t\t\t\t\trenderer.setAlpha(alpha);\n\n\n\t\t\t\t}\n\n\n\t\t\t\trenderer.drawText(\n\t\t\t\t\tx1 + 36,\n\t\t\t\t\ty1 + (font.lineheight / 2),\n\t\t\t\t\toption,\n\t\t\t\t\tfont,\n\t\t\t\t\tfalse\n\t\t\t\t);\n\n\t\t\t}\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(1.0);\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "63edfd3d",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "renderer",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetX",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetY",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"setFont": {
+				"chunk": "function(font) {\n\n\t\t\tfont = font instanceof Font ? font : null;\n\n\n\t\t\tif (font !== null) {\n\n\t\t\t\tthis.font = font;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "33a08bbc",
+				"parameters": [
+					{
+						"chunk": "font instanceof Font ? font : null",
+						"name": "font",
+						"type": "Font",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setOptions": {
+				"chunk": "function(options) {\n\n\t\t\toptions = options instanceof Array ? options.unique() : null;\n\n\n\t\t\tif (options !== null) {\n\n\t\t\t\tlet height = this.height || null;\n\t\t\t\tif (height !== null) {\n\n\t\t\t\t\tif (this.options.length > 0) {\n\t\t\t\t\t\tthis.height = (height / this.options.length) * options.length;\n\t\t\t\t\t} else {\n\t\t\t\t\t\tthis.height = height * options.length;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t\tthis.options = options.map(function(option) {\n\t\t\t\t\treturn '' + option;\n\t\t\t\t});\n\n\t\t\t\tthis.options.forEach(function(option) {\n\t\t\t\t\tthis.value[option] = this.value[option] === true;\n\t\t\t\t}.bind(this));\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "34faadd7",
+				"parameters": [
+					{
+						"chunk": "options instanceof Array ? options.unique() : null",
+						"name": "options",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setState": {
+				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null) {\n\n\t\t\t\tlet result = _Entity.prototype.setState.call(this, id);\n\t\t\t\tif (result === true) {\n\n\t\t\t\t\tlet cursor = this.__cursor;\n\n\n\t\t\t\t\tif (id === 'active') {\n\n\t\t\t\t\t\tcursor.start  = null;\n\t\t\t\t\t\tcursor.active = true;\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tcursor.active = false;\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "17dd4c32",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'string' ? id : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setValue": {
+				"chunk": "function(value) {\n\n\t\t\tvalue = value instanceof Object ? value : null;\n\n\n\t\t\tif (value !== null) {\n\n\t\t\t\tlet cursor = this.__cursor;\n\t\t\t\tlet prev   = Object.keys(value)[0] || null;\n\n\n\t\t\t\tthis.options.forEach(function(option) {\n\t\t\t\t\tvalue[option] = value[option] !== undefined ? value[option] === true : this.value[option];\n\t\t\t\t}.bind(this));\n\n\t\t\t\tcursor.previous = prev;\n\t\t\t\tthis.value      = value;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "b15fd391",
+				"parameters": [
+					{
+						"chunk": "value instanceof Object ? value : null",
+						"name": "value",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

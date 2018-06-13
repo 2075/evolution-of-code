@@ -1,0 +1,289 @@
+{
+	"header": {
+		"identifier": "lychee.codec.DIXY",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [],
+		"supports": {},
+		"type": "Module"
+	},
+	"memory": {
+		"_WHITESPACE": {
+			"chunk": "' ' + new Array(256).fill(' ').join(' ')",
+			"type": "String",
+			"hash": "620838c0",
+			"value": "<string>"
+		},
+		"_CHARS_SEARCH": {
+			"chunk": "/[\\\\\"\\u0000-\\u001f\\u007f-\\u009f\\u00ad\\u0600-\\u0604\\u070f\\u17b4\\u17b5\\u200c-\\u200f\\u2028-\\u202f\\u2060-\\u206f\\ufeff\\ufff0-\\uffff]/g",
+			"type": "RegExp",
+			"hash": "e6eb0c95",
+			"value": {
+				"constructor": "RegExp",
+				"arguments": [
+					"[\\\\\"\\u0000-\\u001f\\u007f-\\u009f\\u00ad\\u0600-\\u0604\\u070f\\u17b4\\u17b5\\u200c-\\u200f\\u2028-\\u202f\\u2060-\\u206f\\ufeff\\ufff0-\\uffff]",
+					"g"
+				]
+			}
+		},
+		"_CHARS_META": {
+			"chunk": "{\n\t\t'\\r': '',    // FUCK YOU, Microsoft!\n\t\t'\\b': '\\\\b',\n\t\t'\\t': '\\\\t',\n\t\t'\\f': '\\\\f',\n\t\t'\"':  '\\\\\"',\n\t\t'\\\\': '\\\\\\\\'\n\t}",
+			"type": "Object",
+			"hash": "c64e777e",
+			"value": {
+				"\r": "",
+				"\b": "\\b",
+				"\t": "\\t",
+				"\f": "\\f",
+				"\"": "\\\"",
+				"\\": "\\\\"
+			}
+		},
+		"_desanitize_string": {
+			"chunk": "function(san) {\n\n\t\tlet str = san;\n\n\t\t// str = str.replace(/\\\\b/g, '\\b');\n\t\t// str = str.replace(/\\\\f/g, '\\f');\n\t\tstr = str.replace(/\\\\t/g, '\\t');\n\t\tstr = str.replace(/\\\\\\\\/g, '\\\\');\n\n\t\treturn str;\n\n\t}",
+			"type": "function",
+			"hash": "543c93c1",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "san",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_sanitize_string": {
+			"chunk": "function(str) {\n\n\t\tlet san = str;\n\n\t\tif (_CHARS_SEARCH.test(san)) {\n\n\t\t\tsan = san.replace(_CHARS_SEARCH, function(char) {\n\n\t\t\t\tlet meta = _CHARS_META[char];\n\t\t\t\tif (meta !== undefined) {\n\t\t\t\t\treturn meta;\n\t\t\t\t} else {\n\t\t\t\t\treturn '\\\\u' + (char.charCodeAt(0).toString(16)).slice(-4);\n\t\t\t\t}\n\n\t\t\t});\n\n\t\t}\n\n\t\treturn san;\n\n\t}",
+			"type": "function",
+			"hash": "f5737fda",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "str",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_Stream": {
+			"chunk": "function(buffer) {\n\n\t\tthis.__buffer = typeof buffer === 'string' ? buffer : '';\n\t\tthis.__index  = 0;\n\n\t}",
+			"type": "function",
+			"hash": "7f26013b",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "buffer",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_encode": {
+			"chunk": "function(stream, data, indent, offset) {\n\n\t\tindent = typeof indent === 'string' ? indent : '';\n\t\toffset = typeof offset === 'number' ? offset : 0;\n\n\n\t\t// Boolean, Null (or EOS), Undefined, Infinity, NaN\n\t\tif (\n\t\t\ttypeof data === 'boolean'\n\t\t\t|| data === null\n\t\t\t|| data === undefined\n\t\t\t|| (\n\t\t\t\ttypeof data === 'number'\n\t\t\t\t&& (\n\t\t\t\t\tdata === Infinity\n\t\t\t\t\t|| data === -Infinity\n\t\t\t\t\t|| isNaN(data) === true\n\t\t\t\t)\n\t\t\t)\n\t\t) {\n\n\t\t\tif (data === null) {\n\t\t\t\tstream.write('null');\n\t\t\t} else if (data === undefined) {\n\t\t\t\tstream.write('undefined');\n\t\t\t} else if (data === false) {\n\t\t\t\tstream.write('false');\n\t\t\t} else if (data === true) {\n\t\t\t\tstream.write('true');\n\t\t\t} else if (data === Infinity) {\n\t\t\t\tstream.write('Infinity');\n\t\t\t} else if (data === -Infinity) {\n\t\t\t\tstream.write('-Infinity');\n\t\t\t} else if (isNaN(data) === true) {\n\t\t\t\tstream.write('NaN');\n\t\t\t}\n\n\t\t// 123, 12.3: Integer or Float\n\t\t} else if (typeof data === 'number') {\n\n\t\t\tlet type = 1;\n\t\t\tif (data < 268435456 && data !== (data | 0)) {\n\t\t\t\ttype = 2;\n\t\t\t}\n\n\n\t\t\t// Negative value\n\t\t\tlet sign = 0;\n\t\t\tif (data < 0) {\n\t\t\t\tdata = -data;\n\t\t\t\tsign = 1;\n\t\t\t}\n\n\n\t\t\tif (sign === 1) {\n\t\t\t\tstream.write('-');\n\t\t\t}\n\n\n\t\t\tif (type === 1) {\n\t\t\t\tstream.write('' + data.toString());\n\t\t\t} else {\n\t\t\t\tstream.write('' + data.toString());\n\t\t\t}\n\n\t\t// \"\": String\n\t\t} else if (typeof data === 'string') {\n\n\t\t\tif (data.indexOf('\\n') !== -1) {\n\n\t\t\t\tlet lines = data.split('\\n');\n\t\t\t\tlet first = _sanitize_string(lines[0]);\n\n\t\t\t\tstream.write(first + '\\n');\n\n\t\t\t\tfor (let l = 1, ll = lines.length; l < ll; l++) {\n\n\t\t\t\t\tlet line = _sanitize_string(lines[l]);\n\n\t\t\t\t\tstream.write(indent.substr(0, indent.length - 1));\n\n\t\t\t\t\tif (offset > 0) {\n\t\t\t\t\t\tstream.write(_WHITESPACE.substr(0, offset));\n\t\t\t\t\t}\n\n\t\t\t\t\tstream.write(line);\n\n\t\t\t\t\tif (l < ll - 1) {\n\t\t\t\t\t\tstream.write('\\n');\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t} else {\n\n\t\t\t\tdata = _sanitize_string(data);\n\n\t\t\t\tstream.write(data);\n\n\t\t\t}\n\n\t\t// <index>:<value> Array\n\t\t} else if (data instanceof Array) {\n\n\t\t\tfor (let d = 0, dl = data.length; d < dl; d++) {\n\n\t\t\t\tlet key = d;\n\t\t\t\tlet val = data[d];\n\n\t\t\t\tstream.write(indent + key + ': ');\n\n\t\t\t\tif (val instanceof Array || val instanceof Object) {\n\t\t\t\t\tstream.write('\\n');\n\t\t\t\t}\n\n\t\t\t\t_encode(stream, val, indent + '\\t', key.length + 2);\n\n\t\t\t\tif (d < dl - 1) {\n\t\t\t\t\tstream.write('\\n');\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t// <key>:<value> Object\n\t\t} else if (data instanceof Object && typeof data.serialize !== 'function') {\n\n\t\t\tlet keys = Object.keys(data);\n\n\t\t\tfor (let k = 0, kl = keys.length; k < kl; k++) {\n\n\t\t\t\tlet key = keys[k];\n\t\t\t\tlet val = data[key];\n\n\t\t\t\tstream.write(indent + key + ': ');\n\n\t\t\t\tif (val instanceof Array || val instanceof Object) {\n\t\t\t\t\tstream.write('\\n');\n\t\t\t\t}\n\n\t\t\t\t_encode(stream, val, indent + '\\t', key.length + 2);\n\n\t\t\t\tif (k < kl - 1) {\n\t\t\t\t\tstream.write('\\n');\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t// Custom High-Level Implementation\n\t\t} else if (data instanceof Object && typeof data.serialize === 'function') {\n\n\t\t\t// TODO: Figure out a deserialize/serialize way\n\t\t\t// which does not require a nested for loop\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "92c49974",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "stream",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "undefined"
+				},
+				{
+					"chunk": "typeof indent === 'string' ? indent : ''",
+					"name": "indent",
+					"type": "String",
+					"value": ""
+				},
+				{
+					"chunk": "typeof offset === 'number' ? offset : 0",
+					"name": "offset",
+					"type": "Number",
+					"value": 0
+				}
+			],
+			"values": []
+		},
+		"_decode_indent": {
+			"chunk": "function(line) {\n\n\t\tlet indent = 0;\n\n\t\tfor (let l = 0, ll = line.length; l < ll; l++) {\n\n\t\t\tlet chunk = line[l];\n\t\t\tif (chunk === '\\t') {\n\t\t\t\tindent++;\n\t\t\t} else {\n\t\t\t\tbreak;\n\t\t\t}\n\n\t\t}\n\n\t\treturn indent;\n\n\t}",
+			"type": "function",
+			"hash": "19ed1202",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "line",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "0",
+					"type": "Number",
+					"value": 0
+				}
+			]
+		},
+		"_EOL": {
+			"chunk": "{ unique: '<EOL DUMMY>' }",
+			"type": "Object",
+			"hash": "f708eef5",
+			"value": {
+				"unique": "<EOL DUMMY>"
+			}
+		},
+		"_decode_value": {
+			"chunk": "function(chunk) {\n\n\t\tlet seek = chunk.substr(0, 1);\n\n\t\tif (chunk === '') {\n\t\t\treturn _EOL;\n\n\t\t} else if (chunk === 'null') {\n\t\t\treturn null;\n\n\t\t} else if (chunk === 'undefined') {\n\t\t\treturn undefined;\n\n\t\t} else if (chunk === 'false') {\n\t\t\treturn false;\n\n\t\t} else if (chunk === 'true') {\n\t\t\treturn true;\n\n\t\t} else if (chunk === 'Infinity') {\n\t\t\treturn Infinity;\n\n\t\t} else if (chunk === '-Infinity') {\n\t\t\treturn -Infinity;\n\n\t\t} else if (chunk === 'NaN') {\n\t\t\treturn NaN;\n\n\t\t} else if (seek === '-' || isNaN(parseInt(seek, 10)) === false) {\n\n\t\t\tif (chunk.indexOf('.') !== -1) {\n\n\t\t\t\tlet tmp = parseFloat(chunk, 10);\n\t\t\t\tif (isNaN(tmp) === false && (tmp).toString() === chunk) {\n\t\t\t\t\treturn tmp;\n\t\t\t\t}\n\n\t\t\t} else {\n\n\t\t\t\tlet tmp = parseInt(chunk, 10);\n\t\t\t\tif (isNaN(tmp) === false && (tmp).toString() === chunk) {\n\t\t\t\t\treturn tmp;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\t\treturn _desanitize_string(chunk);\n\n\t}",
+			"type": "function",
+			"hash": "29ba7eb1",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "chunk",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "_EOL",
+					"type": "undefined"
+				},
+				{
+					"chunk": "null",
+					"type": "null",
+					"value": null
+				},
+				{
+					"chunk": "false",
+					"type": "Boolean",
+					"value": false
+				},
+				{
+					"chunk": "true",
+					"type": "Boolean",
+					"value": true
+				},
+				{
+					"chunk": "Infinity",
+					"type": "Number",
+					"value": "Infinity"
+				}
+			]
+		},
+		"_decode_line": {
+			"chunk": "function(line) {\n\n\t\tlet chunk = line.trim();\n\t\tlet dot   = chunk.indexOf(':');\n\n\t\t// Array or Object key: value\n\t\tif (dot !== -1) {\n\n\t\t\tlet key = chunk.substr(0, dot);\n\t\t\tlet val = chunk.substr(dot + 1).trim();\n\n\t\t\tif (/^([0-9]+)$/g.test(key)) {\n\n\t\t\t\tlet tmp = parseInt(key, 10);\n\t\t\t\tif (isNaN(tmp) === false && (tmp).toString() === key) {\n\t\t\t\t\tkey = tmp;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\treturn {\n\t\t\t\tindent: _decode_indent(line),\n\t\t\t\tkey:    key,\n\t\t\t\tval:    _decode_value(val)\n\t\t\t};\n\n\t\t// Multiline String\n\t\t} else if (chunk.length > 0) {\n\n\t\t\treturn {\n\t\t\t\tindent: _decode_indent(line),\n\t\t\t\tkey:    null,\n\t\t\t\tval:    _desanitize_string(chunk)\n\t\t\t};\n\n\t\t}\n\n\n\t\treturn {\n\t\t\tindent: _decode_indent(line),\n\t\t\tkey:    null,\n\t\t\tval:    null\n\t\t};\n\n\t}",
+			"type": "function",
+			"hash": "a8bc3aee",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "line",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "{ indent: _decode_indent(line),\n\t\t\t\tkey:    key,\n\t\t\t\tval:    _decode_value(val)\n\t\t\t}",
+					"type": "Object",
+					"value": {}
+				}
+			]
+		},
+		"_decode": {
+			"chunk": "undefined",
+			"type": "undefined",
+			"hash": "3fb211a9"
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {},
+		"states": {},
+		"properties": {},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\treturn {\n\t\t\t\t'reference': 'lychee.codec.DIXY',\n\t\t\t\t'blob':      null\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "9b66ddf1",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'reference': 'lychee.codec.DIXY',\n\t\t\t\t'blob':      null\n\t\t\t}",
+						"type": "Object",
+						"value": {
+							"reference": "lychee.codec.DIXY",
+							"blob": null
+						}
+					}
+				]
+			},
+			"encode": {
+				"chunk": "function(data) {\n\n\t\t\tdata = data instanceof Object ? data : null;\n\n\n\t\t\tif (data !== null) {\n\n\t\t\t\tlet stream = new _Stream('');\n\n\t\t\t\t_encode(stream, data, '');\n\n\t\t\t\tstream.write('\\n');\n\n\t\t\t\treturn new Buffer(stream.toString(), 'utf8');\n\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "2b7c7fd8",
+				"parameters": [
+					{
+						"chunk": "data instanceof Object ? data : null",
+						"name": "data",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "new Buffer(stream.toString(), 'utf8')",
+						"type": "Buffer"
+					}
+				]
+			},
+			"decode": {
+				"chunk": "function(data) {\n\n\t\t\tdata = data instanceof Buffer ? data : null;\n\n\n\t\t\tif (data !== null) {\n\n\t\t\t\tlet stream = new _Stream(data.toString('utf8'));\n\t\t\t\tlet object = _decode(stream);\n\t\t\t\tif (object !== undefined) {\n\t\t\t\t\treturn object;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
+				"type": "function",
+				"hash": "5be01c5f",
+				"parameters": [
+					{
+						"chunk": "data instanceof Buffer ? data : null",
+						"name": "data",
+						"type": "Buffer",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "object",
+						"type": "Object",
+						"value": {}
+					},
+					{
+						"chunk": "null",
+						"type": "null",
+						"value": null
+					}
+				]
+			}
+		}
+	}
+}

@@ -1,0 +1,262 @@
+{
+	"header": {
+		"identifier": "lychee.ui.entity.Joystick",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [
+			"lychee.ui.Entity"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Entity": {
+			"chunk": "lychee.import('lychee.ui.Entity')",
+			"type": "lychee.Definition",
+			"hash": "adc9fb14",
+			"value": {
+				"reference": "lychee.ui.Entity",
+				"arguments": []
+			}
+		},
+		"_update_cursor": {
+			"chunk": "function() {\n\n\t\tlet val = this.value;\n\t\tlet map = this.__cursor.map;\n\n\n\t\tmap.x = (val.x / 2) * (this.width  - 44);\n\t\tmap.y = (val.y / 2) * (this.height - 44);\n\n\n\t\tthis.__isDirty = false;\n\n\t}",
+			"type": "function",
+			"hash": "6d3bb4e9",
+			"parameters": [],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.value = { x: 0, y: 0 };\n\n\t\tthis.__cursor = {\n\t\t\tactive:   false,\n\t\t\talpha:    0.0,\n\t\t\tduration: 600,\n\t\t\tstart:    null,\n\t\t\tpingpong: false,\n\t\t\tmap:      {\n\t\t\t\tx: 0,\n\t\t\t\ty: 0\n\t\t\t}\n\t\t};\n\t\tthis.__pulse = {\n\t\t\tactive:   false,\n\t\t\tduration: 300,\n\t\t\tstart:    null,\n\t\t\talpha:    0.0\n\t\t};\n\t\tthis.__isDirty = true;\n\n\n\t\tthis.setValue(states.value);\n\n\t\tdelete states.value;\n\n\n\t\tstates.width  = typeof states.width === 'number'  ? states.width  : 128;\n\t\tstates.height = typeof states.height === 'number' ? states.height : 128;\n\t\tstates.shape  = _Entity.SHAPE.rectangle;\n\n\n\t\t_Entity.call(this, states);\n\n\t\tstates = null;\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tthis.bind('relayout', function() {\n\t\t\tthis.__isDirty = true;\n\t\t}, this);\n\n\t\tthis.bind('touch', function(id, position, delta) {\n\n\t\t\tlet val = { x: 0, y: 0 };\n\t\t\tlet qx  = Math.max(-0.5, Math.min(0.5, position.x / (this.width  - 44)));\n\t\t\tlet qy  = Math.max(-0.5, Math.min(0.5, position.y / (this.height - 44)));\n\n\t\t\tval.x = qx * 2;\n\t\t\tval.y = qy * 2;\n\n\n\t\t\tlet result = this.setValue(val);\n\t\t\tif (result === true) {\n\t\t\t\tthis.trigger('change', [ val ]);\n\t\t\t}\n\n\t\t}, this);\n\n\t\tthis.bind('swipe', function(id, state, position, delta, swipe) {\n\n\t\t\tlet val = { x: 0, y: 0 };\n\t\t\tlet qx  = Math.max(-0.5, Math.min(0.5, position.x / (this.width  - 44)));\n\t\t\tlet qy  = Math.max(-0.5, Math.min(0.5, position.y / (this.height - 44)));\n\n\t\t\tval.x = qx * 2;\n\t\t\tval.y = qy * 2;\n\n\n\t\t\tlet result = this.setValue(val);\n\t\t\tif (result === true) {\n\t\t\t\tthis.trigger('change', [ val ]);\n\t\t\t}\n\n\t\t}, this);\n\n\t\tthis.bind('key', function(key, name, delta) {\n\n\t\t\tif (this.state === 'active') {\n\n\t\t\t\tlet val = { x: this.value.x, y: this.value.y };\n\n\n\t\t\t\tif (key === 'a' || key === 'arrow-left') {\n\t\t\t\t\tval.x = -1.0;\n\t\t\t\t\tval.y = 0.0;\n\t\t\t\t}\n\n\t\t\t\tif (key === 'd' || key === 'arrow-right') {\n\t\t\t\t\tval.x = 1.0;\n\t\t\t\t\tval.y = 0.0;\n\t\t\t\t}\n\n\t\t\t\tif (key === 'w' || key === 'arrow-up') {\n\t\t\t\t\tval.y = -1.0;\n\t\t\t\t\tval.x = 0.0;\n\t\t\t\t}\n\n\t\t\t\tif (key === 's' || key === 'arrow-down') {\n\t\t\t\t\tval.y = 1.0;\n\t\t\t\t\tval.x = 0.0;\n\t\t\t\t}\n\n\t\t\t\tif (key === 'enter' || key === 'space') {\n\t\t\t\t\tval.x = 0;\n\t\t\t\t\tval.y = 0;\n\t\t\t\t}\n\n\n\t\t\t\tlet result = this.setValue(val);\n\t\t\t\tif (result === true) {\n\t\t\t\t\tthis.trigger('change', [ val ]);\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}, this);\n\n\t\tthis.bind('focus', function() {\n\t\t\tthis.setState('active');\n\t\t}, this);\n\n\t\tthis.bind('blur', function() {\n\n\t\t\tthis.setValue({ x: 0, y: 0 });\n\t\t\tthis.setState('default');\n\n\t\t}, this);\n\n\t}",
+			"type": "function",
+			"hash": "2f0ee351",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"value": "setValue"
+		},
+		"properties": {
+			"value": {
+				"chunk": "this.value = { x: 0, y: 0 };",
+				"type": "Object",
+				"hash": "1d12c9a0",
+				"value": {
+					"chunk": "{ x: 0, y: 0 }",
+					"type": "Object",
+					"hash": "8278b3e8",
+					"value": {
+						"x": 0,
+						"y": 0
+					}
+				}
+			},
+			"__cursor": {
+				"chunk": "this.__cursor = {\n\t\t\tactive:   false,\n\t\t\talpha:    0.0,\n\t\t\tduration: 600,\n\t\t\tstart:    null,\n\t\t\tpingpong: false,\n\t\t\tmap:      {\n\t\t\t\tx: 0,\n\t\t\t\ty: 0\n\t\t\t}\n\t\t};",
+				"type": "Object",
+				"hash": "063f9f8d",
+				"value": {
+					"chunk": "{\n\t\t\tactive:   false,\n\t\t\talpha:    0.0,\n\t\t\tduration: 600,\n\t\t\tstart:    null,\n\t\t\tpingpong: false,\n\t\t\tmap:      {\n\t\t\t\tx: 0,\n\t\t\t\ty: 0\n\t\t\t}\n\t\t}",
+					"type": "Object",
+					"hash": "c871c67c",
+					"value": {
+						"active": false,
+						"alpha": 0,
+						"duration": 600,
+						"start": null,
+						"pingpong": false,
+						"map": {
+							"x": 0,
+							"y": 0
+						}
+					}
+				}
+			},
+			"__pulse": {
+				"chunk": "this.__pulse = {\n\t\t\tactive:   false,\n\t\t\tduration: 300,\n\t\t\tstart:    null,\n\t\t\talpha:    0.0\n\t\t};",
+				"type": "Object",
+				"hash": "9415017f",
+				"value": {
+					"chunk": "{\n\t\t\tactive:   false,\n\t\t\tduration: 300,\n\t\t\tstart:    null,\n\t\t\talpha:    0.0\n\t\t}",
+					"type": "Object",
+					"hash": "8ecccaa3",
+					"value": {
+						"active": false,
+						"duration": 300,
+						"start": null,
+						"alpha": 0
+					}
+				}
+			},
+			"__isDirty": {
+				"chunk": "this.__isDirty = true;",
+				"type": "Boolean",
+				"hash": "0ce9596a",
+				"value": {
+					"chunk": "true",
+					"type": "Boolean",
+					"hash": "34edcf72",
+					"value": true
+				}
+			}
+		},
+		"enums": {},
+		"events": {
+			"change": {
+				"name": "change",
+				"methods": [],
+				"parameters": [
+					{
+						"chunk": "val",
+						"type": "Object",
+						"hash": "85f0b427",
+						"value": {
+							"x": 0,
+							"y": 0
+						}
+					}
+				]
+			}
+		},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Entity.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.entity.Joystick';\n\n\t\t\tlet states = data['arguments'][0];\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.value.x !== 0 || this.value.y !== 0) {\n\n\t\t\t\tstates.value = {};\n\n\t\t\t\tif (this.value.x !== 0) states.value.x = this.value.x;\n\t\t\t\tif (this.value.y !== 0) states.value.y = this.value.y;\n\n\t\t\t}\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "5616586c",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"update": {
+				"chunk": "function(clock, delta) {\n\n\t\t\tlet pulse = this.__pulse;\n\t\t\tif (pulse.active === true) {\n\n\t\t\t\tif (pulse.start === null) {\n\t\t\t\t\tpulse.start = clock;\n\t\t\t\t}\n\n\t\t\t\tlet pt = (clock - pulse.start) / pulse.duration;\n\t\t\t\tif (pt <= 1) {\n\t\t\t\t\tpulse.alpha = (1 - pt);\n\t\t\t\t} else {\n\t\t\t\t\tpulse.alpha  = 0.0;\n\t\t\t\t\tpulse.active = false;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tlet cursor = this.__cursor;\n\t\t\tif (cursor.active === true) {\n\n\t\t\t\tif (cursor.start === null) {\n\t\t\t\t\tcursor.start = clock;\n\t\t\t\t}\n\n\n\t\t\t\tlet ct = (clock - cursor.start) / cursor.duration;\n\t\t\t\tif (ct <= 1) {\n\t\t\t\t\tcursor.alpha = cursor.pingpong === true ? (1 - ct) : ct;\n\t\t\t\t} else {\n\t\t\t\t\tcursor.start    = clock;\n\t\t\t\t\tcursor.pingpong = !cursor.pingpong;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tif (this.__isDirty === true) {\n\t\t\t\t_update_cursor.call(this);\n\t\t\t}\n\n\n\t\t\t_Entity.prototype.update.call(this, clock, delta);\n\n\t\t}",
+				"type": "function",
+				"hash": "91c8d200",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "clock",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "delta",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"render": {
+				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tif (this.visible === false) return;\n\n\n\t\t\tlet alpha    = this.alpha;\n\t\t\tlet position = this.position;\n\t\t\tlet cursor   = this.__cursor;\n\t\t\tlet x        = position.x + offsetX;\n\t\t\tlet y        = position.y + offsetY;\n\t\t\tlet hwidth   = (this.width  - 2) / 2;\n\t\t\tlet hheight  = (this.height - 2) / 2;\n\n\n\t\t\tlet col = this.state === 'active' ? '#32afe5' : '#545454';\n\t\t\tlet map = cursor.map;\n\t\t\tlet cx  = x + map.x;\n\t\t\tlet cy  = y + map.y;\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(alpha);\n\t\t\t}\n\n\t\t\trenderer.drawBox(\n\t\t\t\tx - hwidth,\n\t\t\t\ty - hheight,\n\t\t\t\tx + hwidth,\n\t\t\t\ty + hheight,\n\t\t\t\tcol,\n\t\t\t\tfalse,\n\t\t\t\t2\n\t\t\t);\n\n\t\t\trenderer.drawBox(\n\t\t\t\tx - hwidth  + 9,\n\t\t\t\ty - hheight + 9,\n\t\t\t\tx + hwidth  - 9,\n\t\t\t\ty + hheight - 9,\n\t\t\t\tcol,\n\t\t\t\tfalse,\n\t\t\t\t1\n\t\t\t);\n\n\t\t\trenderer.drawLine(\n\t\t\t\tx - hwidth  + 10,\n\t\t\t\ty,\n\t\t\t\tx + hwidth  - 10,\n\t\t\t\ty,\n\t\t\t\tcol,\n\t\t\t\tfalse,\n\t\t\t\t1\n\t\t\t);\n\n\t\t\trenderer.drawLine(\n\t\t\t\tx,\n\t\t\t\ty - hheight + 10,\n\t\t\t\tx,\n\t\t\t\ty + hheight - 10,\n\t\t\t\tcol,\n\t\t\t\tfalse,\n\t\t\t\t1\n\t\t\t);\n\n\t\t\trenderer.drawCircle(\n\t\t\t\tcx,\n\t\t\t\tcy,\n\t\t\t\t11,\n\t\t\t\tcol,\n\t\t\t\tfalse,\n\t\t\t\t2\n\t\t\t);\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(1.0);\n\t\t\t}\n\n\n\t\t\tif (cursor.active === true) {\n\n\t\t\t\trenderer.setAlpha(cursor.alpha);\n\n\t\t\t\trenderer.drawCircle(\n\t\t\t\t\tcx,\n\t\t\t\t\tcy,\n\t\t\t\t\t12,\n\t\t\t\t\t'#32afe5',\n\t\t\t\t\ttrue\n\t\t\t\t);\n\n\t\t\t\trenderer.setAlpha(1.0);\n\n\t\t\t}\n\n\n\t\t\tlet pulse = this.__pulse;\n\t\t\tif (pulse.active === true) {\n\n\t\t\t\trenderer.setAlpha(pulse.alpha);\n\n\t\t\t\trenderer.drawBox(\n\t\t\t\t\tx - hwidth,\n\t\t\t\t\ty - hheight,\n\t\t\t\t\tx + hwidth,\n\t\t\t\t\ty + hheight,\n\t\t\t\t\t'#32afe5',\n\t\t\t\t\ttrue\n\t\t\t\t);\n\n\t\t\t\trenderer.setAlpha(1.0);\n\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "47b78d02",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "renderer",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetX",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetY",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"setState": {
+				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null) {\n\n\t\t\t\tlet result = _Entity.prototype.setState.call(this, id);\n\t\t\t\tif (result === true) {\n\n\t\t\t\t\tlet cursor = this.__cursor;\n\t\t\t\t\tlet pulse  = this.__pulse;\n\n\n\t\t\t\t\tif (id === 'active') {\n\n\t\t\t\t\t\tcursor.start  = null;\n\t\t\t\t\t\tcursor.active = true;\n\n\t\t\t\t\t\tpulse.alpha   = 1.0;\n\t\t\t\t\t\tpulse.start   = null;\n\t\t\t\t\t\tpulse.active  = true;\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tcursor.active = false;\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "998628dc",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'string' ? id : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setValue": {
+				"chunk": "function(value) {\n\n\t\t\tvalue = value instanceof Object ? value : null;\n\n\n\t\t\tif (value !== null) {\n\n\t\t\t\tthis.value.x = typeof value.x === 'number' ? value.x : this.value.x;\n\t\t\t\tthis.value.y = typeof value.y === 'number' ? value.y : this.value.y;\n\n\n\t\t\t\tlet val = 0;\n\n\t\t\t\tval = this.value.x;\n\t\t\t\tval = val >= -1.0 ? val : -1.0;\n\t\t\t\tval = val <=  1.0 ? val :  1.0;\n\t\t\t\tthis.value.x = val;\n\n\t\t\t\tval = this.value.y;\n\t\t\t\tval = val >= -1.0 ? val : -1.0;\n\t\t\t\tval = val <=  1.0 ? val :  1.0;\n\t\t\t\tthis.value.y = val;\n\n\n\t\t\t\tthis.__isDirty = true;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "3b25e31c",
+				"parameters": [
+					{
+						"chunk": "value instanceof Object ? value : null",
+						"name": "value",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

@@ -1,0 +1,131 @@
+{
+	"header": {
+		"identifier": "lychee.policy.Shake",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(states) {\n\n\t\tthis.entity = states.entity instanceof Object ? states.entity : null;\n\t\tthis.limit  = { x: Infinity, y: Infinity, z: Infinity };\n\n\n\t\tif (states.limit instanceof Object) {\n\t\t\tthis.limit.x = typeof states.limit.x === 'number' ? (states.limit.x | 0) : Infinity;\n\t\t\tthis.limit.y = typeof states.limit.y === 'number' ? (states.limit.y | 0) : Infinity;\n\t\t\tthis.limit.z = typeof states.limit.z === 'number' ? (states.limit.z | 0) : Infinity;\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "a16bba36",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "states",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {},
+		"properties": {
+			"entity": {
+				"chunk": "this.entity = states.entity instanceof Object ? states.entity : null;",
+				"type": "Object",
+				"hash": "2efd4e0b",
+				"value": {
+					"chunk": "states.entity instanceof Object ? states.entity : null",
+					"type": "Object",
+					"hash": "234e56d0",
+					"value": null
+				}
+			},
+			"limit": {
+				"chunk": "this.limit  = { x: Infinity, y: Infinity, z: Infinity };",
+				"type": "Object",
+				"hash": "5bb01d30",
+				"value": {
+					"chunk": "{ x: Infinity, y: Infinity, z: Infinity }",
+					"type": "Object",
+					"hash": "ba0eb185",
+					"value": {
+						"x": null,
+						"y": null,
+						"z": null
+					}
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet states = {\n\t\t\t\tentity: null,\n\t\t\t\tlimit:  this.limit\n\t\t\t};\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.policy.Shake',\n\t\t\t\t'arguments':   [ states ]\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "2ff0beac",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.policy.Shake',\n\t\t\t\t'arguments':   [ states ]\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"sensor": {
+				"chunk": "function() {\n\n\t\t\tlet entity = this.entity;\n\t\t\tlet limit  = this.limit;\n\t\t\tlet values = [ 0.5, 0.5, 0.5 ];\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tlet hlx = limit.x / 2;\n\t\t\t\tlet hly = limit.y / 2;\n\t\t\t\tlet hlz = limit.z / 2;\n\n\t\t\t\tvalues[0] = (hlx + entity.shake.x) / (hlx * 2);\n\t\t\t\tvalues[1] = (hly + entity.shake.y) / (hly * 2);\n\t\t\t\tvalues[2] = (hlz + entity.shake.z) / (hlz * 2);\n\n\t\t\t}\n\n\n\t\t\treturn values;\n\n\t\t}",
+				"type": "function",
+				"hash": "98c57d1d",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "[ 0.5, 0.5, 0.5 ]",
+						"type": "Array",
+						"value": [
+							0.5,
+							0.5,
+							0.5
+						]
+					}
+				]
+			},
+			"control": {
+				"chunk": "function(values) {\n\n\t\t\tlet entity = this.entity;\n\t\t\tlet limit  = this.limit;\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tlet hlx = limit.x / 2;\n\t\t\t\tlet hly = limit.y / 2;\n\t\t\t\tlet hlz = limit.z / 2;\n\n\t\t\t\tentity.shake.x = (values[0] * (hlx * 2)) - hlx;\n\t\t\t\tentity.shake.y = (values[1] * (hly * 2)) - hly;\n\t\t\t\tentity.shake.z = (values[2] * (hlz * 2)) - hlz;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "46b0ba30",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "values",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

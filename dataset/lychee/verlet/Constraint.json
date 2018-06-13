@@ -1,0 +1,184 @@
+{
+	"header": {
+		"identifier": "lychee.verlet.Constraint",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"lychee.math.Vector3"
+		],
+		"includes": [],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Vector3": {
+			"chunk": "lychee.import('lychee.math.Vector3')",
+			"type": "lychee.Definition",
+			"hash": "0ab205ed",
+			"value": {
+				"reference": "lychee.math.Vector3",
+				"arguments": []
+			}
+		},
+		"_CACHE": {
+			"chunk": "new _Vector3()",
+			"type": "_Vector3",
+			"hash": "0a6b8202"
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(a_vector, b_vector, rigidity) {\n\n\t\tthis.__a_vector = a_vector instanceof _Vector3 ? a_vector : null;\n\t\tthis.__b_vector = b_vector instanceof _Vector3 ? b_vector : null;\n\t\tthis.__distance = 0;\n\n\t\tthis.rigidity = typeof rigidity === 'number' ? rigidity : 1;\n\n\n\t\tif (this.__a_vector !== null && this.__b_vector !== null) {\n\n\t\t\tthis.__a_vector.copy(_CACHE);\n\t\t\t_CACHE.subtract(this.__b_vector);\n\t\t\tthis.__distance = _CACHE.squaredLength();\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "af8bed8d",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "a_vector",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "b_vector",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "rigidity",
+					"type": "undefined"
+				}
+			]
+		},
+		"states": {},
+		"properties": {
+			"__a_vector": {
+				"chunk": "this.__a_vector = a_vector instanceof _Vector3 ? a_vector : null;",
+				"type": "_Vector3",
+				"hash": "7a5b1779",
+				"value": {
+					"chunk": "a_vector instanceof _Vector3 ? a_vector : null",
+					"type": "_Vector3",
+					"hash": "a8aaefff",
+					"value": null
+				}
+			},
+			"__b_vector": {
+				"chunk": "this.__b_vector = b_vector instanceof _Vector3 ? b_vector : null;",
+				"type": "_Vector3",
+				"hash": "f9acd13a",
+				"value": {
+					"chunk": "b_vector instanceof _Vector3 ? b_vector : null",
+					"type": "_Vector3",
+					"hash": "f28310f1",
+					"value": null
+				}
+			},
+			"__distance": {
+				"chunk": "this.__distance = 0;",
+				"type": "Number",
+				"hash": "f7ec768e",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			},
+			"rigidity": {
+				"chunk": "this.rigidity = typeof rigidity === 'number' ? rigidity : 1;",
+				"type": "Number",
+				"hash": "8d209903",
+				"value": {
+					"chunk": "typeof rigidity === 'number' ? rigidity : 1",
+					"type": "Number",
+					"hash": "0bbae170",
+					"value": 1
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet a_vector = lychee.serialize(this.__a_vector);\n\t\t\tlet b_vector = lychee.serialize(this.__b_vector);\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.verlet.Constraint',\n\t\t\t\t'arguments':   [ a_vector, b_vector, this.rigidity ],\n\t\t\t\t'blob':        null\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "c0815cfa",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.verlet.Constraint',\n\t\t\t\t'arguments':   [ a_vector, b_vector, this.rigidity ],\n\t\t\t\t'blob':        null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"update": {
+				"chunk": "function(clock, delta) {\n\n\t\t\tlet u = delta / 1000;\n\t\t\tlet a = this.__a_vector;\n\t\t\tlet b = this.__b_vector;\n\n\n\t\t\tif (a !== null && b !== null) {\n\n\t\t\t\ta.copy(_CACHE);\n\t\t\t\t_CACHE.sub(b);\n\n\t\t\t\tlet distance = this.__distance;\n\t\t\t\tlet rigidity = this.rigidity;\n\t\t\t\tlet m        = _CACHE.squaredLength();\n\t\t\t\tlet scale    = ((distance - m) / m) * rigidity * u;\n\n\t\t\t\t_CACHE.scale(scale);\n\t\t\t\ta.add(_CACHE);\n\t\t\t\tb.sub(_CACHE);\n\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "276b0a47",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "clock",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "delta",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"render": {
+				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tlet a = this.__a_vector;\n\t\t\tlet b = this.__b_vector;\n\n\n\t\t\tif (a !== null && b !== null) {\n\n\t\t\t\trenderer.drawLine(\n\t\t\t\t\ta.x + offsetX,\n\t\t\t\t\ta.y + offsetY,\n\t\t\t\t\tb.x + offsetX,\n\t\t\t\t\tb.y + offsetY,\n\t\t\t\t\t'#ff0000',\n\t\t\t\t\t2\n\t\t\t\t);\n\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "cf138ad0",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "renderer",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetX",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetY",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			}
+		}
+	}
+}

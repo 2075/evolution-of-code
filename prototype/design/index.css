@@ -1,0 +1,182 @@
+
+body {
+	color: #fff;
+	background: #222;
+	font-size: 16px;
+}
+
+body * {
+	font-size: 16px;
+	font-family: monospace;
+}
+
+main {
+	display: block;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	width: 90%;
+	height: 90%;
+	transform: translate(-50%, -50%);
+}
+
+section {
+	display: block;
+	position: absolute;
+	width: auto;
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+	top: auto;
+	right: auto;
+	bottom: auto;
+	left: auto;
+}
+
+section#dataset,
+section#testset {
+	width: 256px;
+	border: 2px solid #aaa;
+	border-radius: 8px;
+	user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-webkit-user-select: none;
+}
+
+section#dataset {
+	left: 0px;
+}
+
+section#preview,
+section#network {
+	width: calc(100% - 512px - 4em);
+	left: 50%;
+	transform: translate(-50%, 0%);
+	border: 2px solid #aaa;
+	border-radius: 8px;
+	opacity: 0;
+	z-index: 10;
+	transition: all 250ms ease-out;
+}
+
+section#preview {
+	overflow: scroll;
+	background: #1e1e1e;
+}
+
+section#preview > pre {
+	display: block;
+	position: static;
+}
+
+section#preview > pre > code {
+	display: block;
+	position: static;
+	overflow: unset;
+}
+
+section#preview.active,
+section#network.active {
+	opacity: 1;
+	z-index: 20;
+	transition: all 250ms ease-out;
+}
+
+section#testset {
+	right: 0px;
+}
+
+
+
+section input {
+	display: block;
+	width: calc(100% - 2em - 0.5em);
+	line-height: 1em;
+	margin: 1em;
+	padding: 0.25em;
+	color: #32afe5;
+	border: 2px solid #32afe5;
+	background: #111;
+	border-radius: 4px;
+	outline: none;
+}
+
+section button {
+	display: block;
+	position: absolute;
+	bottom: 1em;
+	right: 1em;
+	margin: 0px;
+	padding: 0.25em;
+	color: #32afe5;
+	border: 2px solid #32afe5;
+	background: #111;
+	border-radius: 4px;
+	outline: none;
+}
+
+
+section ul.select,
+section ul.search {
+	display: block;
+	position: absolute;
+	top: calc(2em + 0.5em + 4px);
+	left: 0px;
+	right: 0px;
+	bottom: 1em;
+	margin: 1em;
+	padding: 1em 0px;
+	opacity: 0;
+	transition: all 250ms ease-out;
+	font-size: 16px;
+	line-height: 32px;
+	border-top: 2px solid #aaa;
+	list-style: none;
+	overflow: auto;
+	z-index: 10;
+}
+
+section ul.select li,
+section ul.search li {
+	display: block;
+	margin: 0.5em 0px;
+	padding: 0px;
+	height: 1em;
+	line-height: 1em;
+	font-size: 1em;
+	overflow: hidden;
+}
+
+section ul.select.active,
+section ul.search.active {
+	opacity: 1;
+	z-index: 20;
+	transition: all 250ms ease-out;
+}
+
+section ul.select li b,
+section ul.search li b {
+	display: inline-block;
+	width: 2em;
+	height: 1em;
+	line-height: 1em;
+	vertical-align: top;
+	margin: 0px 0.5em 0px 0px;
+}
+
+section ul.select li abbr,
+section ul.search li abbr {
+	display: inline-block;
+	width: calc(100% - 2em - 0.5em);
+	height: 1em;
+	line-height: 1em;
+	vertical-align: top;
+	text-decoration: none;
+}
+
+section ul.select li div,
+section ul.search li div {
+	text-align: center;
+}
+

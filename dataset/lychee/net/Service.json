@@ -1,0 +1,322 @@
+{
+	"header": {
+		"identifier": "lychee.net.Service",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [
+			"lychee.event.Emitter"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Emitter": {
+			"chunk": "lychee.import('lychee.event.Emitter')",
+			"type": "lychee.Definition",
+			"hash": "b60271ea",
+			"value": {
+				"reference": "lychee.event.Emitter",
+				"arguments": []
+			}
+		},
+		"_SERVICES": {
+			"chunk": "{}",
+			"type": "Object",
+			"hash": "30f4c306",
+			"value": {}
+		},
+		"_plug_broadcast": {
+			"chunk": "function() {\n\n\t\tlet id = this.id;\n\t\tif (id !== null) {\n\n\t\t\tlet cache = _SERVICES[id] || null;\n\t\t\tif (cache === null) {\n\t\t\t\tcache = _SERVICES[id] = [];\n\t\t\t}\n\n\n\t\t\tlet found = false;\n\n\t\t\tfor (let c = 0, cl = cache.length; c < cl; c++) {\n\n\t\t\t\tif (cache[c] === this) {\n\t\t\t\t\tfound = true;\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tif (found === false) {\n\t\t\t\tcache.push(this);\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "44ca01d9",
+			"parameters": [],
+			"values": []
+		},
+		"_unplug_broadcast": {
+			"chunk": "function() {\n\n\t\tthis.setMulticast([]);\n\n\n\t\tlet id = this.id;\n\t\tif (id !== null) {\n\n\t\t\tlet cache = _SERVICES[id] || null;\n\t\t\tif (cache !== null) {\n\n\t\t\t\tfor (let c = 0, cl = cache.length; c < cl; c++) {\n\n\t\t\t\t\tif (cache[c] === this) {\n\t\t\t\t\t\tcache.splice(c, 1);\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "7d81e7c5",
+			"parameters": [],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(id, tunnel, type) {\n\n\t\tthis.id     = typeof id === 'string'                        ? id     : null;\n\t\tthis.tunnel = lychee.interfaceof(lychee.net.Tunnel, tunnel) ? tunnel : null;\n\t\tthis.type   = lychee.enumof(Composite.TYPE, type)           ? type   : null;\n\n\t\tthis.__multicast = [];\n\n\n\t\tif (lychee.debug === true) {\n\n\t\t\tif (this.id === null) {\n\t\t\t\tconsole.error('lychee.net.Service: Invalid (string) id. It has to be kept in sync with the lychee.net.Client and lychee.net.Remote instance.');\n\t\t\t}\n\n\t\t\tif (this.tunnel === null) {\n\t\t\t\tconsole.error('lychee.net.Service: Invalid (lychee.net.Tunnel) tunnel.');\n\t\t\t}\n\n\t\t\tif (this.type === null) {\n\t\t\t\tconsole.error('lychee.net.Service: Invalid (lychee.net.Service.TYPE) type.');\n\t\t\t}\n\n\t\t}\n\n\n\t\t_Emitter.call(this);\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tif (this.type === Composite.TYPE.remote) {\n\n\t\t\tthis.bind('plug',   _plug_broadcast,   this);\n\t\t\tthis.bind('unplug', _unplug_broadcast, this);\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "314e9d57",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "id",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "tunnel",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "type",
+					"type": "undefined"
+				}
+			]
+		},
+		"states": {},
+		"properties": {
+			"id": {
+				"chunk": "this.id     = typeof id === 'string'                        ? id     : null;",
+				"type": "String",
+				"hash": "6ce8e4b7",
+				"value": {
+					"chunk": "typeof id === 'string'                        ? id     : null",
+					"type": "String",
+					"hash": "e11c0a61",
+					"value": null
+				}
+			},
+			"tunnel": {
+				"chunk": "this.tunnel = lychee.interfaceof(lychee.net.Tunnel, tunnel) ? tunnel : null;",
+				"type": "lychee.net.Tunnel",
+				"hash": "4e019021",
+				"value": {
+					"chunk": "lychee.interfaceof(lychee.net.Tunnel, tunnel) ? tunnel : null",
+					"type": "lychee.net.Tunnel",
+					"hash": "497655ec",
+					"value": null
+				}
+			},
+			"type": {
+				"chunk": "this.type   = lychee.enumof(Composite.TYPE, type)           ? type   : null;",
+				"type": "Enum",
+				"hash": "5036e0d8",
+				"value": {
+					"chunk": "lychee.enumof(Composite.TYPE, type)           ? type   : null",
+					"type": "Enum",
+					"hash": "a4744624",
+					"value": "Composite.TYPE"
+				}
+			},
+			"__multicast": {
+				"chunk": "this.__multicast = [];",
+				"type": "Array",
+				"hash": "d8336d97",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			}
+		},
+		"enums": {
+			"TYPE": {
+				"values": [
+					{
+						"name": "client",
+						"value": {
+							"chunk": "1",
+							"type": "Number",
+							"hash": "9416ac93",
+							"value": 1
+						}
+					},
+					{
+						"name": "remote",
+						"value": {
+							"chunk": "2",
+							"type": "Number",
+							"hash": "0129e217",
+							"value": 2
+						}
+					}
+				]
+			}
+		},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.net.Service';\n\n\t\t\tlet id     = null;\n\t\t\tlet tunnel = null;\n\t\t\tlet type   = null;\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.id !== null)   id   = this.id;\n\t\t\tif (this.type !== null) type = this.type;\n\n\t\t\tif (this.type === Composite.TYPE.client) {\n\t\t\t\ttunnel = '#MAIN.client';\n\t\t\t} else {\n\t\t\t\ttunnel = null;\n\t\t\t}\n\n\n\t\t\tdata['arguments'][0] = id;\n\t\t\tdata['arguments'][1] = tunnel;\n\t\t\tdata['arguments'][2] = type;\n\t\t\tdata['blob']         = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "24046df9",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"multicast": {
+				"chunk": "function(data, service) {\n\n\t\t\tdata    = data instanceof Object    ? data    : null;\n\t\t\tservice = service instanceof Object ? service : null;\n\n\n\t\t\tif (data === null) {\n\t\t\t\treturn false;\n\t\t\t}\n\n\n\t\t\tlet type = this.type;\n\t\t\tif (type === Composite.TYPE.client) {\n\n\t\t\t\tif (service === null) {\n\n\t\t\t\t\tservice = {\n\t\t\t\t\t\tid:    this.id,\n\t\t\t\t\t\tevent: 'multicast'\n\t\t\t\t\t};\n\n\t\t\t\t}\n\n\n\t\t\t\tif (this.tunnel !== null) {\n\n\t\t\t\t\tthis.tunnel.send({\n\t\t\t\t\t\tdata:    data,\n\t\t\t\t\t\tservice: service\n\t\t\t\t\t}, {\n\t\t\t\t\t\tid:     this.id,\n\t\t\t\t\t\tmethod: 'multicast'\n\t\t\t\t\t});\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t} else if (type === Composite.TYPE.remote) {\n\n\t\t\t\tif (data.service !== null) {\n\n\t\t\t\t\tfor (let m = 0, ml = this.__multicast.length; m < ml; m++) {\n\n\t\t\t\t\t\tlet tunnel = this.__multicast[m];\n\t\t\t\t\t\tif (tunnel !== this.tunnel) {\n\n\t\t\t\t\t\t\tdata.data.tid = this.tunnel.host + ':' + this.tunnel.port;\n\n\t\t\t\t\t\t\ttunnel.send(\n\t\t\t\t\t\t\t\tdata.data,\n\t\t\t\t\t\t\t\tdata.service\n\t\t\t\t\t\t\t);\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "4f94966a",
+				"parameters": [
+					{
+						"chunk": "data instanceof Object    ? data    : null",
+						"name": "data",
+						"type": "Object",
+						"value": null
+					},
+					{
+						"chunk": "service instanceof Object ? service : null",
+						"name": "service",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					},
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"broadcast": {
+				"chunk": "function(data, service) {\n\n\t\t\tdata    = data instanceof Object    ? data    : null;\n\t\t\tservice = service instanceof Object ? service : null;\n\n\n\t\t\tif (data === null || this.id === null) {\n\t\t\t\treturn false;\n\t\t\t}\n\n\n\t\t\tlet type = this.type;\n\t\t\tif (type === Composite.TYPE.client) {\n\n\t\t\t\tif (service === null) {\n\n\t\t\t\t\tservice = {\n\t\t\t\t\t\tid:    this.id,\n\t\t\t\t\t\tevent: 'broadcast'\n\t\t\t\t\t};\n\n\t\t\t\t}\n\n\n\t\t\t\tif (this.tunnel !== null) {\n\n\t\t\t\t\tthis.tunnel.send({\n\t\t\t\t\t\tdata:    data,\n\t\t\t\t\t\tservice: service\n\t\t\t\t\t}, {\n\t\t\t\t\t\tid:     this.id,\n\t\t\t\t\t\tmethod: 'broadcast'\n\t\t\t\t\t});\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t} else if (type === Composite.TYPE.remote) {\n\n\t\t\t\t// XXX: Allow method calls from remote side\n\t\t\t\tif (data !== null && service !== null) {\n\n\t\t\t\t\tdata = {\n\t\t\t\t\t\tdata:    data,\n\t\t\t\t\t\tservice: service\n\t\t\t\t\t};\n\n\t\t\t\t}\n\n\n\t\t\t\tif (data.service !== null) {\n\n\t\t\t\t\tlet broadcast = _SERVICES[this.id] || null;\n\t\t\t\t\tif (broadcast !== null) {\n\n\t\t\t\t\t\tfor (let b = 0, bl = broadcast.length; b < bl; b++) {\n\n\t\t\t\t\t\t\tlet tunnel = broadcast[b].tunnel;\n\t\t\t\t\t\t\tif (tunnel !== this.tunnel) {\n\n\t\t\t\t\t\t\t\tdata.data.tid = this.tunnel.host + ':' + this.tunnel.port;\n\n\t\t\t\t\t\t\t\ttunnel.send(\n\t\t\t\t\t\t\t\t\tdata.data,\n\t\t\t\t\t\t\t\t\tdata.service\n\t\t\t\t\t\t\t\t);\n\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\treturn true;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "bde99fb6",
+				"parameters": [
+					{
+						"chunk": "data instanceof Object    ? data    : null",
+						"name": "data",
+						"type": "Object",
+						"value": null
+					},
+					{
+						"chunk": "service instanceof Object ? service : null",
+						"name": "service",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					},
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"accept": {
+				"chunk": "function(message, blob) {\n\n\t\t\tmessage = typeof message === 'string' ? message : null;\n\t\t\tblob    = blob instanceof Object      ? blob    : null;\n\n\n\t\t\tif (message !== null) {\n\n\t\t\t\tlet tunnel = this.tunnel;\n\t\t\t\tif (tunnel !== null) {\n\n\t\t\t\t\ttunnel.send({\n\t\t\t\t\t\tmessage: message,\n\t\t\t\t\t\tblob:    blob\n\t\t\t\t\t}, {\n\t\t\t\t\t\tid:    this.id,\n\t\t\t\t\t\tevent: 'success'\n\t\t\t\t\t});\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "df4f98a8",
+				"parameters": [
+					{
+						"chunk": "typeof message === 'string' ? message : null",
+						"name": "message",
+						"type": "String",
+						"value": null
+					},
+					{
+						"chunk": "blob instanceof Object      ? blob    : null",
+						"name": "blob",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"reject": {
+				"chunk": "function(message, blob) {\n\n\t\t\tmessage = typeof message === 'string' ? message : null;\n\t\t\tblob    = blob instanceof Object      ? blob    : null;\n\n\n\t\t\tif (message !== null) {\n\n\t\t\t\tlet tunnel = this.tunnel;\n\t\t\t\tif (tunnel !== null) {\n\n\t\t\t\t\ttunnel.send({\n\t\t\t\t\t\tmessage: message,\n\t\t\t\t\t\tblob:    blob\n\t\t\t\t\t}, {\n\t\t\t\t\t\tid:    this.id,\n\t\t\t\t\t\tevent: 'error'\n\t\t\t\t\t});\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "11823db1",
+				"parameters": [
+					{
+						"chunk": "typeof message === 'string' ? message : null",
+						"name": "message",
+						"type": "String",
+						"value": null
+					},
+					{
+						"chunk": "blob instanceof Object      ? blob    : null",
+						"name": "blob",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setMulticast": {
+				"chunk": "function(multicast) {\n\n\t\t\tmulticast = multicast instanceof Array ? multicast : null;\n\n\n\t\t\tif (multicast !== null) {\n\n\t\t\t\tthis.__multicast = multicast.filter(function(instance) {\n\t\t\t\t\treturn lychee.interfaceof(lychee.net.Tunnel, instance);\n\t\t\t\t});\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "f2aeb84a",
+				"parameters": [
+					{
+						"chunk": "multicast instanceof Array ? multicast : null",
+						"name": "multicast",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

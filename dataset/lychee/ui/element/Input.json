@@ -1,0 +1,111 @@
+{
+	"header": {
+		"identifier": "lychee.ui.element.Input",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"lychee.Input",
+			"lychee.ui.entity.Slider",
+			"lychee.ui.entity.Switch"
+		],
+		"includes": [
+			"lychee.ui.Element"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Element": {
+			"chunk": "lychee.import('lychee.ui.Element')",
+			"type": "lychee.Definition",
+			"hash": "8e05c4c6",
+			"value": {
+				"reference": "lychee.ui.Element",
+				"arguments": []
+			}
+		},
+		"_Slider": {
+			"chunk": "lychee.import('lychee.ui.entity.Slider')",
+			"type": "lychee.Definition",
+			"hash": "5df67169",
+			"value": {
+				"reference": "lychee.ui.entity.Slider",
+				"arguments": []
+			}
+		},
+		"_Switch": {
+			"chunk": "lychee.import('lychee.ui.entity.Switch')",
+			"type": "lychee.Definition",
+			"hash": "768f1f33",
+			"value": {
+				"reference": "lychee.ui.entity.Switch",
+				"arguments": []
+			}
+		},
+		"_read": {
+			"chunk": "function() {\n\n\t\tlet main = global.MAIN || null;\n\t\tif (main !== null) {\n\n\t\t\tlet input = main.input || null;\n\t\t\tif (input !== null) {\n\n\t\t\t\tlet delay       = input.delay;\n\t\t\t\tlet key         = input.key;\n\t\t\t\tlet keymodifier = input.keymodifier;\n\t\t\t\tlet touch       = input.touch;\n\t\t\t\tlet swipe       = input.swipe;\n\n\n\t\t\t\tthis.getEntity('delay').setValue(delay);\n\t\t\t\tthis.getEntity('key').setValue(key === true ? 'on' : 'off');\n\t\t\t\tthis.getEntity('keymodifier').setValue(keymodifier === true ? 'on' : 'off');\n\t\t\t\tthis.getEntity('touch').setValue(touch === true ? 'on' : 'off');\n\t\t\t\tthis.getEntity('swipe').setValue(swipe === true ? 'on' : 'off');\n\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "87f2d3f1",
+			"parameters": [],
+			"values": []
+		},
+		"_save": {
+			"chunk": "function() {\n\n\t\tlet main = global.MAIN || null;\n\t\tif (main !== null) {\n\n\t\t\tlet input = main.input || null;\n\t\t\tif (input !== null) {\n\n\t\t\t\tlet delay       = this.getEntity('delay').value;\n\t\t\t\tlet key         = this.getEntity('key').value;\n\t\t\t\tlet keymodifier = this.getEntity('keymodifier').value;\n\t\t\t\tlet touch       = this.getEntity('touch').value;\n\t\t\t\tlet swipe       = this.getEntity('swipe').value;\n\n\n\t\t\t\tinput.setDelay(delay);\n\t\t\t\tinput.setKey(key === 'on' ? true : false);\n\t\t\t\tinput.setKeyModifier(keymodifier === 'on' ? true : false);\n\t\t\t\tinput.setTouch(touch === 'on' ? true : false);\n\t\t\t\tinput.setSwipe(swipe === 'on' ? true : false);\n\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "38891a0c",
+			"parameters": [],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tstates.label    = 'Input';\n\t\tstates.options  = [ 'Save' ];\n\t\tstates.relayout = true;\n\n\n\t\t_Element.call(this, states);\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tthis.setEntity('delay', new _Slider({\n\t\t\ttype:  _Slider.TYPE.horizontal,\n\t\t\tmin:   0,\n\t\t\tmax:   1000,\n\t\t\tstep:  100,\n\t\t\tvalue: 0\n\t\t}));\n\n\t\tthis.setEntity('key', new _Switch({\n\t\t\tvalue: 'on'\n\t\t}));\n\n\t\tthis.setEntity('keymodifier', new _Switch({\n\t\t\tvalue: 'on'\n\t\t}));\n\n\t\tthis.setEntity('touch', new _Switch({\n\t\t\tvalue: 'on'\n\t\t}));\n\n\t\tthis.setEntity('swipe', new _Switch({\n\t\t\tvalue: 'on'\n\t\t}));\n\n\t\tthis.bind('change', function(action) {\n\n\t\t\tif (action === 'save') {\n\t\t\t\t_save.call(this);\n\t\t\t}\n\n\t\t}, this);\n\n\n\t\t_read.call(this);\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "62d2d4c0",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {},
+		"properties": {},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Element.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.element.Input';\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "a6073add",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			}
+		}
+	}
+}

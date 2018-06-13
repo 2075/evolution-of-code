@@ -1,0 +1,329 @@
+{
+	"header": {
+		"identifier": "lychee.net.socket.HTTP",
+		"attaches": {},
+		"tags": {
+			"platform": "html"
+		},
+		"requires": [
+			"lychee.net.protocol.HTTP"
+		],
+		"includes": [
+			"lychee.event.Emitter"
+		],
+		"supports": {
+			"body": "function(lychee, global) {\n\n\tif (\n\t\ttypeof global.XMLHttpRequest === 'function'\n\t\t|| typeof global.XMLHttpRequest === 'object'\n\t) {\n\t\treturn true;\n\t}\n\n\n\treturn false;\n\n}",
+			"hash": "20a94320",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "lychee",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "global",
+					"type": "undefined"
+				}
+			]
+		},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Emitter": {
+			"chunk": "lychee.import('lychee.event.Emitter')",
+			"type": "lychee.Definition",
+			"hash": "b60271ea",
+			"value": {
+				"reference": "lychee.event.Emitter",
+				"arguments": []
+			}
+		},
+		"_Protocol": {
+			"chunk": "lychee.import('lychee.net.protocol.HTTP')",
+			"type": "lychee.Definition",
+			"hash": "6a5596ae",
+			"value": {
+				"reference": "lychee.net.protocol.HTTP",
+				"arguments": []
+			}
+		},
+		"_XHR": {
+			"chunk": "function() {}",
+			"type": "Function",
+			"hash": "455b736e"
+		},
+		"_uppercase": {
+			"chunk": "function(str) {\n\n\t\tlet tmp = str.split('-');\n\n\t\tfor (let t = 0, tl = tmp.length; t < tl; t++) {\n\t\t\tlet ch = tmp[t];\n\t\t\ttmp[t] = ch.charAt(0).toUpperCase() + ch.substr(1);\n\t\t}\n\n\t\treturn tmp.join('-');\n\n\t}",
+			"type": "function",
+			"hash": "cec3fc9d",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "str",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "tmp.join('-')",
+					"type": "String",
+					"value": "<string>"
+				}
+			]
+		},
+		"_receive_xhr": {
+			"chunk": "function(raw_headers, raw_payload) {\n\n\t\tlet blob = null;\n\t\tlet view = null;\n\n\n\t\tif (typeof raw_payload === 'string') {\n\n\t\t\tblob = new Buffer(raw_payload, 'utf8');\n\n\t\t} else if (raw_payload instanceof ArrayBuffer) {\n\n\t\t\tblob = new Buffer(raw_payload.byteLength);\n\t\t\tview = new Uint8Array(raw_payload);\n\n\t\t\tfor (let v = 0, vl = blob.length; v < vl; v++) {\n\t\t\t\tblob[v] = view[v];\n\t\t\t}\n\n\t\t}\n\n\n\t\tlet headers = {};\n\t\tlet payload = blob;\n\n\t\traw_headers.split('\\r\\n').forEach(function(line) {\n\n\t\t\tlet i1 = line.indexOf(':');\n\t\t\tif (i1 !== -1) {\n\n\t\t\t\tlet key = line.substr(0, i1).trim().toLowerCase();\n\t\t\t\tlet val = line.substr(i1 + 1).trim();\n\n\t\t\t\tif (key.startsWith('x-')) {\n\t\t\t\t\theaders['@' + key.substr(2)] = val;\n\t\t\t\t} else if (key.length > 0) {\n\t\t\t\t\theaders[key.toLowerCase()] = val;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t});\n\n\n\t\treturn [{\n\t\t\theaders: headers,\n\t\t\tpayload: payload\n\t\t}];\n\n\t}",
+			"type": "function",
+			"hash": "7321f724",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "raw_headers",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "raw_payload",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "[{ headers: headers,\n\t\t\tpayload: payload\n\t\t}]",
+					"type": "Array",
+					"value": []
+				}
+			]
+		},
+		"_reconnect_xhr": {
+			"chunk": "function(chunk, headers, binary) {\n\n\t\tlet connection = this.__connection;\n\t\tif (connection !== null) {\n\n\t\t\tlet tmp    = chunk.toString('utf8').split('\\n')[0].trim().split(' ');\n\t\t\tlet method = tmp[0];\n\t\t\tlet url    = 'http://' + connection.host + ':' + connection.port + tmp[1];\n\t\t\tlet socket = new _XHR();\n\t\t\tlet that   = this;\n\n\n\t\t\tsocket.open(method, url, true);\n\t\t\tsocket.responseType = binary === true ? 'arraybuffer' : 'text';\n\n\t\t\tsocket.onload = function() {\n\n\t\t\t\tlet chunks = _receive_xhr.call(that, socket.getAllResponseHeaders(), socket.response);\n\t\t\t\tif (chunks.length > 0) {\n\n\t\t\t\t\tfor (let c = 0, cl = chunks.length; c < cl; c++) {\n\n\t\t\t\t\t\tlet chunk = chunks[c];\n\t\t\t\t\t\tif (chunk.payload !== null) {\n\t\t\t\t\t\t\tthat.trigger('receive', [ chunk.payload, chunk.headers ]);\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t};\n\n\t\t\tsocket.onerror = function() {\n\t\t\t\tthat.trigger('error');\n\t\t\t\tthat.disconnect();\n\t\t\t};\n\n\t\t\tsocket.ontimeout = function() {\n\t\t\t\tthat.trigger('error');\n\t\t\t\tthat.disconnect();\n\t\t\t};\n\n\t\t\tfor (let key in headers) {\n\n\t\t\t\tif (key.charAt(0) === '@') {\n\t\t\t\t\tsocket.setRequestHeader(_uppercase('x-' + key.substr(1)), headers[key]);\n\t\t\t\t} else {\n\t\t\t\t\tsocket.setRequestHeader(_uppercase(key), headers[key]);\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn socket;\n\n\t\t}\n\n\n\t\treturn null;\n\n\t}",
+			"type": "function",
+			"hash": "12784c5f",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "chunk",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "headers",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "binary",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "new _XHR()",
+					"type": "_XHR"
+				},
+				{
+					"chunk": "null",
+					"type": "null",
+					"value": null
+				}
+			]
+		},
+		"_connect_socket": {
+			"chunk": "function(socket, protocol) {\n\n\t\tlet that = this;\n\t\tif (that.__connection !== socket) {\n\n\t\t\t// TODO: connect socket events\n\n\t\t\tthat.__connection = socket;\n\t\t\tthat.__protocol   = protocol;\n\n\t\t\tthat.trigger('connect');\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "ea7a4b37",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "socket",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "protocol",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_disconnect_socket": {
+			"chunk": "function(socket, protocol) {\n\n\t\tlet that = this;\n\t\tif (that.__connection === socket) {\n\n\t\t\t// TODO: disconnect socket events\n\n\t\t\t// socket.destroy();\n\t\t\tprotocol.close();\n\n\n\t\t\tthat.__connection = null;\n\t\t\tthat.__protocol   = null;\n\n\n\t\t\tsetTimeout(function() {\n\t\t\t\tthat.trigger('disconnect');\n\t\t\t}, 0);\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "551457f6",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "socket",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "protocol",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function() {\n\n\t\tthis.__connection = null;\n\t\tthis.__protocol   = null;\n\n\n\t\t_Emitter.call(this);\n\n\t}",
+			"type": "function",
+			"hash": "bb238e6f",
+			"parameters": []
+		},
+		"states": {},
+		"properties": {
+			"__connection": {
+				"chunk": "this.__connection = null;",
+				"type": "null",
+				"hash": "0a8f44f8",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"__protocol": {
+				"chunk": "this.__protocol   = null;",
+				"type": "null",
+				"hash": "aaf976d2",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.net.socket.HTTP';\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "9391ec9b",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"connect": {
+				"chunk": "function(host, port, connection) {\n\n\t\t\thost       = typeof host === 'string'       ? host       : null;\n\t\t\tport       = typeof port === 'number'       ? (port | 0) : null;\n\t\t\tconnection = typeof connection === 'object' ? connection : null;\n\n\n\t\t\tlet that     = this;\n\t\t\tlet protocol = null;\n\n\n\t\t\tif (host !== null && port !== null) {\n\n\t\t\t\tif (connection !== null) {\n\n\t\t\t\t\tprotocol   = new _Protocol({\n\t\t\t\t\t\ttype: _Protocol.TYPE.remote\n\t\t\t\t\t});\n\t\t\t\t\tconnection = null;\n\n\t\t\t\t\t// TODO: Remote Socket API\n\n\t\t\t\t\t// _connect_socket.call(that, connection, protocol);\n\t\t\t\t\t// connection.resume();\n\n\t\t\t\t} else {\n\n\t\t\t\t\tprotocol   = new _Protocol({\n\t\t\t\t\t\ttype: _Protocol.TYPE.client\n\t\t\t\t\t});\n\t\t\t\t\tconnection = {\n\t\t\t\t\t\thost: host,\n\t\t\t\t\t\tport: port\n\t\t\t\t\t};\n\n\n\t\t\t\t\t_connect_socket.call(that, connection, protocol);\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "186f9816",
+				"parameters": [
+					{
+						"chunk": "typeof host === 'string'       ? host       : null",
+						"name": "host",
+						"type": "String",
+						"value": null
+					},
+					{
+						"chunk": "typeof port === 'number'       ? (port | 0) : null",
+						"name": "port",
+						"type": "Number",
+						"value": null
+					},
+					{
+						"chunk": "typeof connection === 'object' ? connection : null",
+						"name": "connection",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"send": {
+				"chunk": "function(payload, headers, binary) {\n\n\t\t\tpayload = payload instanceof Buffer ? payload : null;\n\t\t\theaders = headers instanceof Object ? headers : null;\n\t\t\tbinary  = binary === true;\n\n\n\t\t\tif (payload !== null) {\n\n\t\t\t\tlet connection = this.__connection;\n\t\t\t\tlet protocol   = this.__protocol;\n\n\t\t\t\tif (connection !== null && protocol !== null) {\n\n\t\t\t\t\t// XXX: HTML XHR does not support Buffer data\n\t\t\t\t\tlet chunk = protocol.send(payload, headers, binary);\n\n\n\t\t\t\t\t// XXX: Web XHR does not support halfopen Sockets\n\t\t\t\t\tconnection = _reconnect_xhr.call(this, chunk, headers, binary);\n\t\t\t\t\tchunk      = payload;\n\n\n\t\t\t\t\tif (connection !== null && chunk !== null) {\n\n\t\t\t\t\t\tif (binary === true) {\n\n\t\t\t\t\t\t\tlet blob = new ArrayBuffer(chunk.length);\n\t\t\t\t\t\t\tlet view = new Uint8Array(blob);\n\n\t\t\t\t\t\t\tfor (let c = 0, cl = chunk.length; c < cl; c++) {\n\t\t\t\t\t\t\t\tview[c] = chunk[c];\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\tconnection.send(blob);\n\n\t\t\t\t\t\t} else {\n\n\t\t\t\t\t\t\tconnection.send(chunk.toString('utf8'));\n\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\treturn true;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "115a53b9",
+				"parameters": [
+					{
+						"chunk": "payload instanceof Buffer ? payload : null",
+						"name": "payload",
+						"type": "Buffer",
+						"value": null
+					},
+					{
+						"chunk": "headers instanceof Object ? headers : null",
+						"name": "headers",
+						"type": "Object",
+						"value": null
+					},
+					{
+						"chunk": "binary === true",
+						"name": "binary",
+						"type": "Boolean",
+						"value": true
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"disconnect": {
+				"chunk": "function() {\n\n\t\t\tlet connection = this.__connection;\n\t\t\tlet protocol   = this.__protocol;\n\n\t\t\tif (connection !== null && protocol !== null) {\n\n\t\t\t\t_disconnect_socket.call(this, connection, protocol);\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "64538337",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

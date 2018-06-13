@@ -1,0 +1,503 @@
+{
+	"header": {
+		"identifier": "lychee.app.Loop",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [
+			"lychee.event.Emitter"
+		],
+		"supports": {
+			"body": "function(lychee, global) {\n\n\tif (typeof global.setInterval === 'function') {\n\t\treturn true;\n\t}\n\n\treturn false;\n\n}",
+			"hash": "96b4e703",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "lychee",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "global",
+					"type": "undefined"
+				}
+			]
+		},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Emitter": {
+			"chunk": "lychee.import('lychee.event.Emitter')",
+			"type": "lychee.Definition",
+			"hash": "b60271ea",
+			"value": {
+				"reference": "lychee.event.Emitter",
+				"arguments": []
+			}
+		},
+		"_INSTANCES": {
+			"chunk": "[]",
+			"type": "Array",
+			"hash": "30f4c306",
+			"value": []
+		},
+		"_id": {
+			"chunk": "0",
+			"type": "Number",
+			"hash": "d271c07f",
+			"value": 0
+		},
+		"_listeners": {
+			"chunk": "{\n\n\t\tinterval: function() {\n\n\t\t\tlet now = Date.now();\n\n\t\t\tfor (let i = 0, l = _INSTANCES.length; i < l; i++) {\n\n\t\t\t\tlet instance = _INSTANCES[i];\n\t\t\t\tlet clock    = now - instance.__start;\n\n\t\t\t\t_update_loop.call(instance, clock);\n\t\t\t\t_render_loop.call(instance, clock);\n\n\t\t\t}\n\n\t\t},\n\n\t\tupdate: function() {\n\n\t\t\tlet now = Date.now();\n\n\t\t\tfor (let i = 0, l = _INSTANCES.length; i < l; i++) {\n\n\t\t\t\tlet instance = _INSTANCES[i];\n\t\t\t\tlet clock    = now - instance.__start;\n\n\t\t\t\t_update_loop.call(instance, clock);\n\n\t\t\t}\n\n\t\t},\n\n\t\t// XXX: render loop is inlined for maximum performance\n\t\trender: function() {\n\n\t\t\tlet now = Date.now();\n\n\t\t\tfor (let i = 0, l = _INSTANCES.length; i < l; i++) {\n\n\t\t\t\tlet instance = _INSTANCES[i];\n\t\t\t\tif (instance.__state === 1) {\n\n\t\t\t\t\tlet clock = now   - instance.__start;\n\t\t\t\t\tlet delta = clock - instance.__renderclock;\n\t\t\t\t\tif (delta >= instance.__renderdelay) {\n\t\t\t\t\t\tinstance.trigger('render', [ clock, delta ]);\n\t\t\t\t\t\tinstance.__renderclock = clock;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\tglobal.requestAnimationFrame(_listeners.render);\n\n\t\t}\n\n\t}",
+			"type": "Boolean",
+			"hash": "dce6bff2",
+			"value": true
+		},
+		"_update_loop": {
+			"chunk": "function(clock) {\n\n\t\tif (this.__state !== 1) return;\n\n\n\t\tlet delta = clock - this.__updateclock;\n\t\tif (delta >= this.__updatedelay) {\n\n\t\t\tthis.trigger('update', [ clock, delta ]);\n\n\n\t\t\tfor (let iid in this.__intervals) {\n\n\t\t\t\tlet interval = this.__intervals[iid];\n\n\t\t\t\tif (clock >= interval.clock) {\n\n\t\t\t\t\tinterval.callback.call(\n\t\t\t\t\t\tinterval.scope,\n\t\t\t\t\t\tclock,\n\t\t\t\t\t\tclock - interval.clock,\n\t\t\t\t\t\tinterval.step++\n\t\t\t\t\t);\n\n\t\t\t\t\tinterval.clock = clock + interval.delta;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tfor (let tid in this.__timeouts) {\n\n\t\t\t\tlet timeout = this.__timeouts[tid];\n\t\t\t\tif (clock >= timeout.clock) {\n\n\t\t\t\t\ttimeout.callback.call(\n\t\t\t\t\t\ttimeout.scope,\n\t\t\t\t\t\tclock,\n\t\t\t\t\t\tclock - timeout.clock\n\t\t\t\t\t);\n\n\t\t\t\t\tdelete this.__timeouts[tid];\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tthis.__updateclock = clock;\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "3a47e22d",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "clock",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_render_loop": {
+			"chunk": "function(clock) {\n\n\t\tif (this.__state !== 1) return;\n\n\n\t\tlet delta = clock - this.__renderclock;\n\t\tif (delta >= this.__renderdelay) {\n\n\t\t\tthis.trigger('render', [ clock, delta ]);\n\n\n\t\t\tthis.__renderclock = clock;\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "d4e28b76",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "clock",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.update = 40;\n\t\tthis.render = 40;\n\n\t\tthis.__timeouts  = {};\n\t\tthis.__intervals = {};\n\n\t\tthis.__pause       = 0;\n\t\tthis.__start       = Date.now();\n\t\tthis.__state       = 1;\n\t\tthis.__renderclock = 0;\n\t\tthis.__renderdelay = 1000 / this.update;\n\t\tthis.__updateclock = 0;\n\t\tthis.__updatedelay = 1000 / this.render;\n\n\n\t\tthis.setUpdate(states.update);\n\t\tthis.setRender(states.render);\n\n\n\t\t_Emitter.call(this);\n\n\t\t_INSTANCES.push(this);\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "88672410",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"update": "setUpdate",
+			"render": "setRender"
+		},
+		"properties": {
+			"update": {
+				"chunk": "this.update = 40;",
+				"type": "Number",
+				"hash": "e6f5dfea",
+				"value": {
+					"chunk": "40",
+					"type": "Number",
+					"hash": "30f4c306",
+					"value": 40
+				}
+			},
+			"render": {
+				"chunk": "this.render = 40;",
+				"type": "Number",
+				"hash": "16bcb954",
+				"value": {
+					"chunk": "40",
+					"type": "Number",
+					"hash": "30f4c306",
+					"value": 40
+				}
+			},
+			"__timeouts": {
+				"chunk": "this.__timeouts  = {};",
+				"type": "Object",
+				"hash": "babe3ee4",
+				"value": {
+					"chunk": "{}",
+					"type": "Object",
+					"hash": "30f4c306",
+					"value": {}
+				}
+			},
+			"__intervals": {
+				"chunk": "this.__intervals = {};",
+				"type": "Object",
+				"hash": "e2f23cd4",
+				"value": {
+					"chunk": "{}",
+					"type": "Object",
+					"hash": "30f4c306",
+					"value": {}
+				}
+			},
+			"__pause": {
+				"chunk": "this.__pause       = 0;",
+				"type": "Number",
+				"hash": "1c7218b4",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			},
+			"__start": {
+				"chunk": "this.__start       = Date.now();",
+				"type": "Number",
+				"hash": "2b012e45",
+				"value": {
+					"chunk": "Date.now()",
+					"type": "Number",
+					"hash": "8ca22c8e",
+					"value": 1333333333337
+				}
+			},
+			"__state": {
+				"chunk": "this.__state       = 1;",
+				"type": "Number",
+				"hash": "48d803b5",
+				"value": {
+					"chunk": "1",
+					"type": "Number",
+					"hash": "9416ac93",
+					"value": 1
+				}
+			},
+			"__renderclock": {
+				"chunk": "this.__renderclock = 0;",
+				"type": "Number",
+				"hash": "9a0562bd",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			},
+			"__renderdelay": {
+				"chunk": "this.__renderdelay = 1000 / this.update;",
+				"type": "Number",
+				"hash": "d2b9c7e4",
+				"value": {
+					"chunk": "1000 / this.update",
+					"type": "Number",
+					"hash": "9c8ea67a",
+					"value": 1337
+				}
+			},
+			"__updateclock": {
+				"chunk": "this.__updateclock = 0;",
+				"type": "Number",
+				"hash": "7d897141",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			},
+			"__updatedelay": {
+				"chunk": "this.__updatedelay = 1000 / this.render;",
+				"type": "Number",
+				"hash": "bd208809",
+				"value": {
+					"chunk": "1000 / this.render",
+					"type": "Number",
+					"hash": "f3ffab27",
+					"value": 1337
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"destroy": {
+				"chunk": "function() {\n\n\t\t\tlet found = false;\n\n\t\t\tfor (let i = 0, il = _INSTANCES.length; i < il; i++) {\n\n\t\t\t\tif (_INSTANCES[i] === this) {\n\t\t\t\t\t_INSTANCES.splice(i, 1);\n\t\t\t\t\tfound = true;\n\t\t\t\t\til--;\n\t\t\t\t\ti--;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\tthis.unbind();\n\n\n\t\t\treturn found;\n\n\t\t}",
+				"type": "function",
+				"hash": "a596dbf3",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					},
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"deserialize": {
+				"chunk": "function(blob) {\n\n\t\t\tif (typeof blob.state === 'number') {\n\n\t\t\t\tthis.__state = blob.state;\n\t\t\t\tthis.__pause = blob.pause;\n\n\t\t\t}\n\n\t\t\tif (typeof blob.updateclock === 'number') this.__updateclock = blob.updateclock;\n\t\t\tif (typeof blob.renderclock === 'number') this.__renderclock = blob.renderclock;\n\n\n\t\t\tif (blob.timeouts instanceof Array) {\n\t\t\t\t// TODO: deserialize timeouts\n\t\t\t}\n\n\t\t\tif (blob.intervals instanceof Array) {\n\t\t\t\t// TODO: deserialize intervals\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "3cab440b",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "blob",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.app.Loop';\n\n\n\t\t\tlet states = {};\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.update !== 40) states.update = this.update;\n\t\t\tif (this.render !== 40) states.render = this.render;\n\n\n\t\t\tif (Object.keys(this.__timeouts).length > 0) {\n\n\t\t\t\tblob.timeouts = [];\n\n\t\t\t\tfor (let tid in this.__timeouts) {\n\n\t\t\t\t\tlet timeout = this.__timeouts[tid];\n\n\t\t\t\t\tblob.timeouts.push({\n\t\t\t\t\t\tdelta:    timeout.clock - this.__updateclock,\n\t\t\t\t\t\tcallback: lychee.serialize(timeout.callback),\n\t\t\t\t\t\t// scope:    lychee.serialize(timeout.scope)\n\t\t\t\t\t\tscope:    null\n\t\t\t\t\t});\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tif (Object.keys(this.__intervals).length > 0) {\n\n\t\t\t\tblob.intervals = [];\n\n\t\t\t\tfor (let iid in this.__intervals) {\n\n\t\t\t\t\tlet interval = this.__intervals[iid];\n\n\t\t\t\t\tblob.intervals.push({\n\t\t\t\t\t\tclock:    interval.clock - this.__updateclock,\n\t\t\t\t\t\tdelta:    interval.delta,\n\t\t\t\t\t\tstep:     interval.step,\n\t\t\t\t\t\tcallback: lychee.serialize(interval.callback),\n\t\t\t\t\t\t// scope:    lychee.serialize(interval.scope)\n\t\t\t\t\t\tscope:    null\n\t\t\t\t\t});\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tif (this.__state !== 1) {\n\n\t\t\t\tblob.pause = this.__pause;\n\t\t\t\tblob.state = this.__state;\n\n\t\t\t}\n\n\t\t\tblob.updateclock = this.__updateclock;\n\t\t\tblob.renderclock = this.__renderclock;\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.app.Loop',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        null\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "6b72f3f3",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.app.Loop',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"start": {
+				"chunk": "function() {\n\n\t\t\tthis.__state = 1;\n\t\t\tthis.__start = Date.now();\n\n\t\t\treturn true;\n\n\t\t}",
+				"type": "function",
+				"hash": "30693e16",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"stop": {
+				"chunk": "function() {\n\n\t\t\tthis.__state = 0;\n\n\t\t\treturn true;\n\n\t\t}",
+				"type": "function",
+				"hash": "4e87db53",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"pause": {
+				"chunk": "function() {\n\n\t\t\tthis.__state = 0;\n\t\t\tthis.__pause = Date.now() - this.__start;\n\n\t\t\treturn true;\n\n\t\t}",
+				"type": "function",
+				"hash": "a8d6d505",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"resume": {
+				"chunk": "function() {\n\n\t\t\tthis.__state = 1;\n\t\t\tthis.__start = Date.now() - this.__pause;\n\t\t\tthis.__pause = 0;\n\n\t\t\treturn true;\n\n\t\t}",
+				"type": "function",
+				"hash": "ca074c3e",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"setTimeout": {
+				"chunk": "function(delta, callback, scope) {\n\n\t\t\tdelta    = typeof delta === 'number'    ? delta    : null;\n\t\t\tcallback = callback instanceof Function ? callback : null;\n\t\t\tscope    = scope !== undefined          ? scope    : global;\n\n\n\t\t\tif (delta === null || callback === null) {\n\t\t\t\treturn null;\n\t\t\t}\n\n\n\t\t\tlet id = _id++;\n\n\t\t\tthis.__timeouts[id] = {\n\t\t\t\tclock:    this.__updateclock + delta,\n\t\t\t\tcallback: callback,\n\t\t\t\tscope:    scope\n\t\t\t};\n\n\n\t\t\treturn id;\n\n\t\t}",
+				"type": "function",
+				"hash": "de9757da",
+				"parameters": [
+					{
+						"chunk": "typeof delta === 'number'    ? delta    : null",
+						"name": "delta",
+						"type": "Number",
+						"value": null
+					},
+					{
+						"chunk": "callback instanceof Function ? callback : null",
+						"name": "callback",
+						"type": "Function",
+						"value": null
+					},
+					{
+						"chunk": "scope !== undefined          ? scope    : global",
+						"name": "scope",
+						"type": "Object",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"chunk": "null",
+						"type": "null",
+						"value": null
+					},
+					{
+						"chunk": "id",
+						"type": "String",
+						"value": "<unique identifier>"
+					}
+				]
+			},
+			"removeTimeout": {
+				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'number' ? id : null;\n\n\n\t\t\tif (id !== null && this.__timeouts[id] !== undefined) {\n\n\t\t\t\tdelete this.__timeouts[id];\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "ce6a3657",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'number' ? id : null",
+						"name": "id",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setInterval": {
+				"chunk": "function(delta, callback, scope) {\n\n\t\t\tdelta    = typeof delta === 'number'    ? delta    : null;\n\t\t\tcallback = callback instanceof Function ? callback : null;\n\t\t\tscope    = scope !== undefined          ? scope    : global;\n\n\n\t\t\tif (delta === null || callback === null) {\n\t\t\t\treturn null;\n\t\t\t}\n\n\n\t\t\tlet id = _id++;\n\n\t\t\tthis.__intervals[id] = {\n\t\t\t\tclock:    this.__updateclock + delta,\n\t\t\t\tdelta:    delta,\n\t\t\t\tstep:     1,\n\t\t\t\tcallback: callback,\n\t\t\t\tscope:    scope\n\t\t\t};\n\n\n\t\t\treturn id;\n\n\t\t}",
+				"type": "function",
+				"hash": "98bdf070",
+				"parameters": [
+					{
+						"chunk": "typeof delta === 'number'    ? delta    : null",
+						"name": "delta",
+						"type": "Number",
+						"value": null
+					},
+					{
+						"chunk": "callback instanceof Function ? callback : null",
+						"name": "callback",
+						"type": "Function",
+						"value": null
+					},
+					{
+						"chunk": "scope !== undefined          ? scope    : global",
+						"name": "scope",
+						"type": "Object",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"chunk": "null",
+						"type": "null",
+						"value": null
+					},
+					{
+						"chunk": "id",
+						"type": "String",
+						"value": "<unique identifier>"
+					}
+				]
+			},
+			"removeInterval": {
+				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'number' ? id : null;\n\n\n\t\t\tif (id !== null && this.__intervals[id] !== undefined) {\n\n\t\t\t\tdelete this.__intervals[id];\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "9471b42f",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'number' ? id : null",
+						"name": "id",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setUpdate": {
+				"chunk": "function(update) {\n\n\t\t\tupdate = typeof update === 'number' ? update : null;\n\n\n\t\t\tif (update !== null && update > 0) {\n\n\t\t\t\tthis.update        = update;\n\t\t\t\tthis.__updatedelay = 1000 / update;\n\n\t\t\t\treturn true;\n\n\t\t\t} else if (update === 0) {\n\n\t\t\t\tthis.update        = update;\n\t\t\t\tthis.__updatedelay = Infinity;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "5664e7b8",
+				"parameters": [
+					{
+						"chunk": "typeof update === 'number' ? update : null",
+						"name": "update",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setRender": {
+				"chunk": "function(render) {\n\n\t\t\trender = typeof render === 'number' ? render : null;\n\n\n\t\t\tif (render !== null && render > 0) {\n\n\t\t\t\tthis.render        = render;\n\t\t\t\tthis.__renderdelay = 1000 / render;\n\n\t\t\t\treturn true;\n\n\t\t\t} else if (render === 0) {\n\n\t\t\t\tthis.render        = render;\n\t\t\t\tthis.__renderdelay = Infinity;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "3d44f291",
+				"parameters": [
+					{
+						"chunk": "typeof render === 'number' ? render : null",
+						"name": "render",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

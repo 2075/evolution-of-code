@@ -1,0 +1,158 @@
+{
+	"header": {
+		"identifier": "lychee.effect.Music",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(states) {\n\n\t\tthis.delay = 0;\n\t\tthis.music = null;\n\n\t\tthis.__start = null;\n\n\n\t\t// No data validation garbage allowed for effects\n\n\t\tthis.delay = typeof states.delay === 'number' ? (states.delay | 0) : 0;\n\t\tthis.music = states.music instanceof Music    ? states.music       : null;\n\n\t}",
+			"type": "function",
+			"hash": "86d3bc76",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "states",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {},
+		"properties": {
+			"delay": {
+				"chunk": "this.delay = 0;",
+				"type": "Number",
+				"hash": "a4ace545",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			},
+			"music": {
+				"chunk": "this.music = states.music instanceof Music    ? states.music       : null;",
+				"type": "Music",
+				"hash": "b538e722",
+				"value": {
+					"chunk": "states.music instanceof Music    ? states.music       : null",
+					"type": "Music",
+					"hash": "d4369f4a",
+					"value": null
+				}
+			},
+			"__start": {
+				"chunk": "this.__start = null;",
+				"type": "null",
+				"hash": "1082e344",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.delay !== 0)    states.delay = this.delay;\n\t\t\tif (this.music !== null) states.music = this.music;\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.effect.Music',\n\t\t\t\t'arguments':   [ states ]\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "7b001912",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.effect.Music',\n\t\t\t\t'arguments':   [ states ]\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"render": {
+				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t}",
+				"type": "function",
+				"hash": "04f47507",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "renderer",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetX",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetY",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"update": {
+				"chunk": "function(entity, clock, delta) {\n\n\t\t\tif (this.__start === null) {\n\t\t\t\tthis.__start = clock;\n\t\t\t}\n\n\n\t\t\tlet t = (clock - this.__start) / this.delay;\n\t\t\tif (t < 0) {\n\t\t\t\treturn true;\n\t\t\t}\n\n\n\t\t\tif (t <= 1) {\n\n\t\t\t\treturn true;\n\n\t\t\t} else {\n\n\t\t\t\tlet music = this.music;\n\t\t\t\tif (music !== null) {\n\t\t\t\t\tmusic.play();\n\t\t\t\t}\n\n\n\t\t\t\treturn false;\n\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "a1ee337b",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "entity",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "clock",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "delta",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

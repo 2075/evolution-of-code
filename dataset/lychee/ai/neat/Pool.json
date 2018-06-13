@@ -1,0 +1,152 @@
+{
+	"header": {
+		"identifier": "lychee.ai.neat.Pool",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Species": {
+			"chunk": "function() {\n\n\t\tthis.topFitness = 0;\n\t\tthis.staleness = 0;\n\t\tthis.genomes = [];\n\t\tthis.averageFitness = 0;\n\n\t}",
+			"type": "function",
+			"hash": "1b50d295",
+			"parameters": [],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\t\tthis.species = [];\n\t\tthis.generation = 0;\n\t\tthis.innovation = 1000000;\n\t\tthis.currentSpecies = 1;\n\t\tthis.currentGenome = 1;\n\t\tthis.currentFrame = 0;\n\t\tthis.maxFitness = 0;\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "97c4df3b",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {},
+		"properties": {
+			"species": {
+				"chunk": "this.species = [];",
+				"type": "Array",
+				"hash": "b3906f8a",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"generation": {
+				"chunk": "this.generation = 0;",
+				"type": "Number",
+				"hash": "71137e",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			},
+			"innovation": {
+				"chunk": "this.innovation = 1000000;",
+				"type": "Number",
+				"hash": "308ee09b",
+				"value": {
+					"chunk": "1000000",
+					"type": "Number",
+					"hash": "22f20c40",
+					"value": 1000000
+				}
+			},
+			"currentSpecies": {
+				"chunk": "this.currentSpecies = 1;",
+				"type": "Number",
+				"hash": "634ab833",
+				"value": {
+					"chunk": "1",
+					"type": "Number",
+					"hash": "9416ac93",
+					"value": 1
+				}
+			},
+			"currentGenome": {
+				"chunk": "this.currentGenome = 1;",
+				"type": "Number",
+				"hash": "f2fe3d76",
+				"value": {
+					"chunk": "1",
+					"type": "Number",
+					"hash": "9416ac93",
+					"value": 1
+				}
+			},
+			"currentFrame": {
+				"chunk": "this.currentFrame = 0;",
+				"type": "Number",
+				"hash": "b601b1ab",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			},
+			"maxFitness": {
+				"chunk": "this.maxFitness = 0;",
+				"type": "Number",
+				"hash": "4ac705a3",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.ai.neat.Pool',\n\t\t\t\t'arguments':   []\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "31f96e34",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.ai.neat.Pool',\n\t\t\t\t'arguments':   []\n\t\t\t}",
+						"type": "Object",
+						"value": {
+							"constructor": "lychee.ai.neat.Pool",
+							"arguments": []
+						}
+					}
+				]
+			}
+		}
+	}
+}

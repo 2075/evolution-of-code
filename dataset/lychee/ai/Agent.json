@@ -1,0 +1,331 @@
+{
+	"header": {
+		"identifier": "lychee.ai.Agent",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_validate_brain": {
+			"chunk": "function(brain) {\n\n\t\tif (brain instanceof Object) {\n\n\t\t\tif (typeof brain.update === 'function' && typeof brain.setControls === 'function' && typeof brain.setSensors === 'function') {\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn false;\n\n\t}",
+			"type": "function",
+			"hash": "573e95a9",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "brain",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "true",
+					"type": "Boolean",
+					"value": true
+				},
+				{
+					"chunk": "false",
+					"type": "Boolean",
+					"value": false
+				}
+			]
+		},
+		"_train_brain": {
+			"chunk": "function() {\n\n\t\tlet brain = this.brain;\n\t\tif (brain !== null) {\n\n\t\t\tlet trainings = this.trainings;\n\n\t\t\tfor (let t = 0, tl = trainings.length; t < tl; t++) {\n\n\t\t\t\tlet training   = trainings[t];\n\t\t\t\tlet iterations = training.iterations || 1;\n\n\t\t\t\tfor (let i = 0; i < iterations; i++) {\n\t\t\t\t\tbrain.learn(training.inputs, training.outputs);\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "d7a53071",
+			"parameters": [],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.alive     = true;\n\t\tthis.brain     = null;\n\t\tthis.fitness   = 0;\n\t\tthis.trainings = [];\n\n\n\t\tthis.setAlive(states.alive);\n\t\tthis.setBrain(states.brain);\n\t\tthis.setFitness(states.fitness);\n\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "394f4781",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"alive": "setAlive",
+			"brain": "setBrain",
+			"fitness": "setFitness"
+		},
+		"properties": {
+			"alive": {
+				"chunk": "this.alive     = true;",
+				"type": "Boolean",
+				"hash": "0c0648aa",
+				"value": {
+					"chunk": "true",
+					"type": "Boolean",
+					"hash": "34edcf72",
+					"value": true
+				}
+			},
+			"brain": {
+				"chunk": "this.brain     = null;",
+				"type": "null",
+				"hash": "3b427ded",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"fitness": {
+				"chunk": "this.fitness   = 0;",
+				"type": "Number",
+				"hash": "0dd945f9",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			},
+			"trainings": {
+				"chunk": "this.trainings = [];",
+				"type": "Array",
+				"hash": "506a9f59",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {\n\n\t\t\tlet brain = lychee.deserialize(blob.brain);\n\t\t\tif (brain !== null) {\n\t\t\t\tthis.setBrain(brain);\n\t\t\t}\n\n\t\t\tif (blob.trainings instanceof Array) {\n\t\t\t\tthis.trainings = blob.trainings.map(lychee.deserialize);\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "adef3712",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "blob",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet states = {};\n\t\t\tlet blob   = {};\n\n\n\t\t\tif (this.fitness !== 0) states.fitness = this.fitness;\n\n\n\t\t\tif (this.brain !== null)       blob.brain     = lychee.serialize(this.brain);\n\t\t\tif (this.trainings.length > 0) blob.trainings = this.trainings.map(lychee.serialize);\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.ai.Agent',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "c0673a40",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.ai.Agent',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"update": {
+				"chunk": "function(clock, delta) {\n\n\t\t\tlet brain = this.brain;\n\t\t\tif (brain !== null) {\n\t\t\t\tbrain.update(clock, delta);\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "668e0f81",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "clock",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "delta",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"crossover": {
+				"chunk": "function(agent) {\n\n\t\t\tagent = agent instanceof Composite ? agent : null;\n\n\n\t\t\tif (agent !== null) {\n\n\t\t\t\t// XXX: This is implemented by AI Agents\n\n\t\t\t\tlet zw_agent = lychee.deserialize(lychee.serialize(this));\n\t\t\t\tlet zz_agent = lychee.deserialize(lychee.serialize(agent));\n\n\t\t\t\treturn [ zw_agent, zz_agent ];\n\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
+				"type": "function",
+				"hash": "53fb9e98",
+				"parameters": [
+					{
+						"chunk": "agent instanceof Composite ? agent : null",
+						"name": "agent",
+						"type": "Composite",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "[ zw_agent, zz_agent ]",
+						"type": "Array",
+						"value": []
+					},
+					{
+						"chunk": "null",
+						"type": "null",
+						"value": null
+					}
+				]
+			},
+			"reward": {
+				"chunk": "function(diff, training) {\n\n\t\t\tdiff     = typeof diff === 'number'   ? Math.abs(diff | 0) : 1;\n\t\t\ttraining = training instanceof Object ? training           : null;\n\n\n\t\t\tthis.fitness += diff;\n\n\n\t\t\tif (training !== null) {\n\n\t\t\t\ttraining.iterations = diff;\n\t\t\t\tthis.trainings.push(training);\n\t\t\t\t_train_brain.call(this);\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "f429278d",
+				"parameters": [
+					{
+						"chunk": "typeof diff === 'number'   ? Math.abs(diff | 0) : 1",
+						"name": "diff",
+						"type": "Number",
+						"value": 1
+					},
+					{
+						"chunk": "training instanceof Object ? training           : null",
+						"name": "training",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"punish": {
+				"chunk": "function(diff, training) {\n\n\t\t\tdiff     = typeof diff === 'number'   ? Math.abs(diff | 0) : 1;\n\t\t\ttraining = training instanceof Object ? training           : null;\n\n\n\t\t\tthis.fitness -= diff;\n\n\n\t\t\tif (training !== null) {\n\n\t\t\t\ttraining.iterations = diff;\n\t\t\t\tthis.trainings.push(training);\n\t\t\t\t_train_brain.call(this);\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "0802e191",
+				"parameters": [
+					{
+						"chunk": "typeof diff === 'number'   ? Math.abs(diff | 0) : 1",
+						"name": "diff",
+						"type": "Number",
+						"value": 1
+					},
+					{
+						"chunk": "training instanceof Object ? training           : null",
+						"name": "training",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setAlive": {
+				"chunk": "function(alive) {\n\n\t\t\talive = typeof alive === 'boolean' ? alive : null;\n\n\n\t\t\tif (alive !== null) {\n\n\t\t\t\tthis.alive = alive;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "8cf46f57",
+				"parameters": [
+					{
+						"chunk": "typeof alive === 'boolean' ? alive : null",
+						"name": "alive",
+						"type": "Boolean",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setBrain": {
+				"chunk": "function(brain) {\n\n\t\t\tbrain = _validate_brain(brain) === true ? brain : null;\n\n\n\t\t\tif (brain !== null) {\n\n\t\t\t\tthis.brain = brain;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "c2c47346",
+				"parameters": [
+					{
+						"chunk": "_validate_brain(brain) === true ? brain : null",
+						"name": "brain",
+						"type": "lychee.ai.*.Brain",
+						"value": {
+							"constructor": "lychee.ai.enn.Brain",
+							"arguments": []
+						}
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setFitness": {
+				"chunk": "function(fitness) {\n\n\t\t\tfitness = typeof fitness === 'number' ? (fitness | 0) : null;\n\n\n\t\t\tif (fitness !== null) {\n\n\t\t\t\tthis.fitness = fitness;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "d7629d77",
+				"parameters": [
+					{
+						"chunk": "typeof fitness === 'number' ? (fitness | 0) : null",
+						"name": "fitness",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

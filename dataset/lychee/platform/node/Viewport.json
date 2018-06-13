@@ -1,0 +1,234 @@
+{
+	"header": {
+		"identifier": "lychee.Viewport",
+		"attaches": {},
+		"tags": {
+			"platform": "node"
+		},
+		"requires": [],
+		"includes": [
+			"lychee.event.Emitter"
+		],
+		"supports": {
+			"body": "function(lychee, global) {\n\n\tif (\n\t\ttypeof global.process !== 'undefined'\n\t\t&& typeof global.process.stdout === 'object'\n\t\t&& typeof global.process.stdout.on === 'function'\n\t) {\n\t\treturn true;\n\t}\n\n\n\treturn false;\n\n}",
+			"hash": "c23ce4d5",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "lychee",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "global",
+					"type": "undefined"
+				}
+			]
+		},
+		"type": "Composite"
+	},
+	"memory": {
+		"_process": {
+			"chunk": "{\"env\":{\"APPDATA\":null,\"HOME\":\"/home/dev\"},\"stdin\":{},\"stdout\":{}}",
+			"type": "Object",
+			"hash": "c057d77a",
+			"value": {
+				"env": {
+					"APPDATA": null,
+					"HOME": "/home/dev"
+				},
+				"stdin": {},
+				"stdout": {}
+			}
+		},
+		"_Emitter": {
+			"chunk": "lychee.import('lychee.event.Emitter')",
+			"type": "lychee.Definition",
+			"hash": "b60271ea",
+			"value": {
+				"reference": "lychee.event.Emitter",
+				"arguments": []
+			}
+		},
+		"_INSTANCES": {
+			"chunk": "[]",
+			"type": "Array",
+			"hash": "30f4c306",
+			"value": []
+		},
+		"_listeners": {
+			"chunk": "{\n\n\t\tresize: function() {\n\n\t\t\tfor (let i = 0, l = _INSTANCES.length; i < l; i++) {\n\t\t\t\t_process_reshape.call(_INSTANCES[i], _process.stdout.columns, _process.stdout.rows);\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "Object",
+			"hash": "765ba813",
+			"value": {}
+		},
+		"_process_reshape": {
+			"chunk": "function(width, height) {\n\n\t\tif (width === this.width && height === this.height) {\n\t\t\treturn false;\n\t\t}\n\n\n\t\tthis.width  = width;\n\t\tthis.height = height;\n\n\n\t\tlet orientation = null;\n\t\tlet rotation    = null;\n\n\t\tif (width > height) {\n\n\t\t\torientation = 'landscape';\n\t\t\trotation    = 'landscape';\n\n\t\t} else {\n\n\t\t\torientation = 'landscape';\n\t\t\trotation    = 'landscape';\n\n\t\t}\n\n\n\t\treturn this.trigger('reshape', [ orientation, rotation, width, height ]);\n\n\t}",
+			"type": "function",
+			"hash": "7f6292a6",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "width",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "height",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "false",
+					"type": "Boolean",
+					"value": false
+				},
+				{
+					"chunk": "this.trigger('reshape', [ orientation, rotation, width, height ])",
+					"type": "undefined",
+					"value": {
+						"reference": "this.trigger('reshape', [ orientation, rotation, width, height ])",
+						"arguments": []
+					}
+				}
+			]
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.fullscreen = false;\n\t\tthis.width      = _process.stdout.columns;\n\t\tthis.height     = _process.stdout.rows;\n\n\t\tthis.__orientation = 0;\n\n\n\t\t_Emitter.call(this);\n\n\t\t_INSTANCES.push(this);\n\n\n\t\tthis.setFullscreen(states.fullscreen);\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tsetTimeout(function() {\n\n\t\t\tthis.width  = 0;\n\t\t\tthis.height = 0;\n\n\t\t\t_process_reshape.call(this, _process.stdout.columns, _process.stdout.rows);\n\n\t\t}.bind(this), 100);\n\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "debcc842",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"fullscreen": "setFullscreen"
+		},
+		"properties": {
+			"fullscreen": {
+				"chunk": "this.fullscreen = false;",
+				"type": "Boolean",
+				"hash": "8cec35c8",
+				"value": {
+					"chunk": "false",
+					"type": "Boolean",
+					"hash": "d5619e17",
+					"value": false
+				}
+			},
+			"width": {
+				"chunk": "this.width  = 0;",
+				"type": "Number",
+				"hash": "10c41557",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			},
+			"height": {
+				"chunk": "this.height = 0;",
+				"type": "Number",
+				"hash": "13aafcf5",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			},
+			"__orientation": {
+				"chunk": "this.__orientation = 0;",
+				"type": "Number",
+				"hash": "8d9eb5ba",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"destroy": {
+				"chunk": "function() {\n\n\t\t\tlet found = false;\n\n\t\t\tfor (let i = 0, il = _INSTANCES.length; i < il; i++) {\n\n\t\t\t\tif (_INSTANCES[i] === this) {\n\t\t\t\t\t_INSTANCES.splice(i, 1);\n\t\t\t\t\tfound = true;\n\t\t\t\t\til--;\n\t\t\t\t\ti--;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\tthis.unbind();\n\n\n\t\t\treturn found;\n\n\t\t}",
+				"type": "function",
+				"hash": "a596dbf3",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					},
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.Viewport';\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.fullscreen !== false) states.fullscreen = this.fullscreen;\n\n\n\t\t\tdata['arguments'][0] = states;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "cf868d0c",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"setFullscreen": {
+				"chunk": "function(fullscreen) {\n\n\t\t\tfullscreen = typeof fullscreen === 'boolean' ? fullscreen : null;\n\n\n\t\t\tif (fullscreen !== null) {\n\n\t\t\t\t// XXX: No fullscreen support\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "8840be59",
+				"parameters": [
+					{
+						"chunk": "typeof fullscreen === 'boolean' ? fullscreen : null",
+						"name": "fullscreen",
+						"type": "Boolean",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

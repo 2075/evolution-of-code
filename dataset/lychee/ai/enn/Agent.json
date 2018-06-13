@@ -1,0 +1,172 @@
+{
+	"header": {
+		"identifier": "lychee.ai.enn.Agent",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"lychee.ai.enn.Brain",
+			"lychee.ai.enn.Genome"
+		],
+		"includes": [
+			"lychee.ai.Agent"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Agent": {
+			"chunk": "lychee.import('lychee.ai.Agent')",
+			"type": "lychee.Definition",
+			"hash": "d54840fa",
+			"value": {
+				"reference": "lychee.ai.Agent",
+				"arguments": []
+			}
+		},
+		"_Brain": {
+			"chunk": "lychee.import('lychee.ai.enn.Brain')",
+			"type": "lychee.Definition",
+			"hash": "da3bac49",
+			"value": {
+				"reference": "lychee.ai.enn.Brain",
+				"arguments": []
+			}
+		},
+		"_Genome": {
+			"chunk": "lychee.import('lychee.ai.enn.Genome')",
+			"type": "lychee.Definition",
+			"hash": "a3bd2b1a",
+			"value": {
+				"reference": "lychee.ai.enn.Genome",
+				"arguments": []
+			}
+		},
+		"_MUTATION_RANGE": {
+			"chunk": "0.25",
+			"type": "Number",
+			"hash": "2600e267",
+			"value": 0.25
+		},
+		"_MUTATION_RATE": {
+			"chunk": "0.1",
+			"type": "Number",
+			"hash": "85f0b427",
+			"value": 0.1
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.genome = null;\n\n\n\t\tstates.brain  = states.brain  || new _Brain();\n\t\tstates.genome = states.genome || new _Genome();\n\n\t\t_Agent.call(this, states);\n\n\n\t\tthis.setGenome(states.genome);\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "fb6a7369",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"genome": "setGenome"
+		},
+		"properties": {
+			"genome": {
+				"chunk": "this.genome = null;",
+				"type": "null",
+				"hash": "0aa20676",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Agent.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ai.enn.Agent';\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "e254f7fe",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.ai.Agent',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"crossover": {
+				"chunk": "function(agent) {\n\n\t\t\tagent = lychee.interfaceof(Composite, agent) ? agent : null;\n\n\n\t\t\tif (agent !== null) {\n\n\t\t\t\tlet zw_brain  = this.brain;\n\t\t\t\tlet zw_genome = this.genome;\n\t\t\t\tlet zz_brain  = agent.brain;\n\t\t\t\tlet zz_genome = agent.genome;\n\n\n\t\t\t\tif (zw_brain !== null && zz_brain !== null) {\n\t\t\t\t\tzw_genome.setGene('weights', zw_brain.getWeights());\n\t\t\t\t\tzz_genome.setGene('weights', zz_brain.getWeights());\n\t\t\t\t}\n\n\n\t\t\t\tlet zw_dna = zw_genome.getGene('weights');\n\t\t\t\tlet zz_dna = zz_genome.getGene('weights');\n\n\t\t\t\tif (zw_dna.length === zz_dna.length) {\n\n\t\t\t\t\tlet zw0_dna   = [];\n\t\t\t\t\tlet zw1_dna   = [];\n\t\t\t\t\tlet dna_split = (Math.random() * zw_dna.length) | 0;\n\n\n\t\t\t\t\tfor (let d = 0, dl = zw_dna.length; d < dl; d++) {\n\n\t\t\t\t\t\tif (d <= dna_split) {\n\t\t\t\t\t\t\tzw0_dna.push(zw_dna[d]);\n\t\t\t\t\t\t\tzw1_dna.push(zz_dna[d]);\n\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\tzw0_dna.push(zz_dna[d]);\n\t\t\t\t\t\t\tzw1_dna.push(zw_dna[d]);\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\tif (Math.random() <= _MUTATION_RATE) {\n\t\t\t\t\t\t\tzw0_dna[d] += (Math.random() * _MUTATION_RANGE * 2) - _MUTATION_RANGE;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\tif (Math.random() <= _MUTATION_RATE) {\n\t\t\t\t\t\t\tzw1_dna[d] += (Math.random() * _MUTATION_RANGE * 2) - _MUTATION_RANGE;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\tlet zw0_brain = null;\n\t\t\t\t\tlet zw1_brain = null;\n\n\t\t\t\t\tif (zw_brain !== null && zz_brain !== null) {\n\n\t\t\t\t\t\tzw0_brain = lychee.deserialize(lychee.serialize(zw_brain));\n\t\t\t\t\t\tzw0_brain.setWeights(zw0_dna);\n\n\t\t\t\t\t\tzw1_brain = lychee.deserialize(lychee.serialize(zz_brain));\n\t\t\t\t\t\tzw1_brain.setWeights(zw1_dna);\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\tlet zw0_genome = lychee.deserialize(lychee.serialize(zw_genome));\n\t\t\t\t\tlet zw1_genome = lychee.deserialize(lychee.serialize(zz_genome));\n\n\t\t\t\t\tzw0_genome.setGene('weights', zw0_dna);\n\t\t\t\t\tzw1_genome.setGene('weights', zw1_dna);\n\n\t\t\t\t\tlet zw0_baby = new Composite({ brain: zw0_brain, genome: zw0_genome });\n\t\t\t\t\tlet zw1_baby = new Composite({ brain: zw1_brain, genome: zw1_genome });\n\n\n\t\t\t\t\treturn [ zw0_baby, zw1_baby ];\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
+				"type": "function",
+				"hash": "2a6eb9ac",
+				"parameters": [
+					{
+						"chunk": "lychee.interfaceof(Composite, agent) ? agent : null",
+						"name": "agent",
+						"type": "Composite",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "[ zw0_baby, zw1_baby ]",
+						"type": "Array",
+						"value": []
+					},
+					{
+						"chunk": "null",
+						"type": "null",
+						"value": null
+					}
+				]
+			},
+			"setGenome": {
+				"chunk": "function(genome) {\n\n\t\t\tgenome = genome instanceof _Genome ? genome : null;\n\n\n\t\t\tif (genome !== null) {\n\n\t\t\t\tthis.genome = genome;\n\n\n\t\t\t\tlet brain = this.brain;\n\t\t\t\tif (brain !== null) {\n\n\t\t\t\t\tlet gene = genome.getGene('weights');\n\t\t\t\t\tif (gene !== null && gene.length > 0) {\n\n\t\t\t\t\t\tbrain.setWeights(gene);\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tgenome.setGene('weights', brain.getWeights());\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "c9bbc52b",
+				"parameters": [
+					{
+						"chunk": "genome instanceof _Genome ? genome : null",
+						"name": "genome",
+						"type": "_Genome",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

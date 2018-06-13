@@ -1,0 +1,221 @@
+{
+	"header": {
+		"identifier": "lychee.ai.neat.Agent",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"lychee.ai.neat.Brain",
+			"lychee.ai.neat.Genome"
+		],
+		"includes": [
+			"lychee.ai.Agent"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Agent": {
+			"chunk": "lychee.import('lychee.ai.Agent')",
+			"type": "lychee.Definition",
+			"hash": "d54840fa",
+			"value": {
+				"reference": "lychee.ai.Agent",
+				"arguments": []
+			}
+		},
+		"_Genome": {
+			"chunk": "lychee.import('lychee.ai.neat.Genome')",
+			"type": "lychee.Definition",
+			"hash": "bfef6b65",
+			"value": {
+				"reference": "lychee.ai.neat.Genome",
+				"arguments": []
+			}
+		},
+		"_Brain": {
+			"chunk": "lychee.import('lychee.ai.neat.Brain')",
+			"type": "lychee.Definition",
+			"hash": "1d0257df",
+			"value": {
+				"reference": "lychee.ai.neat.Brain",
+				"arguments": []
+			}
+		},
+		"_MUTATION_BIAS": {
+			"chunk": "0.40",
+			"type": "Number",
+			"hash": "907532e8",
+			"value": 0.4
+		},
+		"_MUTATION_LINK": {
+			"chunk": "0.50",
+			"type": "Number",
+			"hash": "165c9a9e",
+			"value": 0.5
+		},
+		"_MUTATION_NODE": {
+			"chunk": "0.50",
+			"type": "Number",
+			"hash": "165c9a9e",
+			"value": 0.5
+		},
+		"_MUTATION_ENABLE": {
+			"chunk": "0.30",
+			"type": "Number",
+			"hash": "a7cb558e",
+			"value": 0.3
+		},
+		"_MUTATION_DISABLE": {
+			"chunk": "0.40",
+			"type": "Number",
+			"hash": "907532e8",
+			"value": 0.4
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tstates.brain = states.brain || new _Brain();\n\n\t\t_Agent.call(this, states);\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "d305709f",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {},
+		"properties": {},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Agent.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ai.neat.Agent';\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "9a08febd",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.ai.Agent',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"crossover": {
+				"chunk": "function(agent) {\n\n\t\t\tagent = lychee.interfaceof(Composite, agent) ? agent : null;\n\n\n\t\t\tif (agent !== null) {\n\n\t\t\t\tlet zw_brain = null;\n\t\t\t\tlet zz_brain = null;\n\n\t\t\t\tif (agent.fitness > this.fitness) {\n\t\t\t\t\tzw_brain = this.brain;\n\t\t\t\t\tzz_brain = agent.brain;\n\t\t\t\t} else {\n\t\t\t\t\tzw_brain = agent.brain;\n\t\t\t\t\tzz_brain = this.brain;\n\t\t\t\t}\n\n\n\t\t\t\tlet zw_genes    = zw_brain.getGenes();\n\t\t\t\tlet zz_genes    = zz_brain.getGenes();\n\t\t\t\tlet zw0_genes   = [];\n\t\t\t\tlet innovations = {};\n\n\n\t\t\t\tfor (let z = 0, zl = zw_genes.length; z < zl; z++) {\n\n\t\t\t\t\tlet gene2 = zw_genes[z];\n\t\t\t\t\tinnovations[gene2.innovation] = gene2;\n\n\t\t\t\t}\n\n\t\t\t\tfor (let z = 0, zl = zz_genes.length; z < zl; z++) {\n\n\t\t\t\t\tlet gene1 = zz_genes[z];\n\t\t\t\t\tlet gene2 = innovations[gene1.innovation] || null;\n\t\t\t\t\tlet rand2 = Math.random();\n\n\t\t\t\t\tif (gene2 !== null && gene2.enabled === true && rand2 > 0.5) {\n\t\t\t\t\t\tzw0_genes.push(Object.assign({}, gene2));\n\t\t\t\t\t} else {\n\t\t\t\t\t\tzw0_genes.push(Object.assign({}, gene1));\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tlet zw0_agent = new Composite({\n\t\t\t\t\tbrain: new _Brain({\n\t\t\t\t\t\tgenes: zw0_genes\n\t\t\t\t\t})\n\t\t\t\t});\n\n\n\t\t\t\treturn zw0_agent;\n\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
+				"type": "function",
+				"hash": "47603039",
+				"parameters": [
+					{
+						"chunk": "lychee.interfaceof(Composite, agent) ? agent : null",
+						"name": "agent",
+						"type": "Composite",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "null",
+						"type": "null",
+						"value": null
+					}
+				]
+			},
+			"mutate": {
+				"chunk": "function() {\n\n\t\t\tfor (let mid in this.__mutation) {\n\n\t\t\t\tif (Math.random() > 0.5) {\n\t\t\t\t\tthis.__mutation[mid] *= 0.95;\n\t\t\t\t} else {\n\t\t\t\t\tthis.__mutation[mid] *= 1.05263;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tif (Math.random() > 0.25) {\n\t\t\t\t// TODO: pointMutate(genome);\n\t\t\t}\n\n\t\t\tif (Math.random() > _MUTATION_LINK) {\n\t\t\t\t// TODO: linkMutate(genome, false);\n\t\t\t}\n\n\t\t\tif (Math.random() > _MUTATION_BIAS) {\n\t\t\t\t// TODO: linkMutate(genome, true);\n\t\t\t}\n\n\n\t\t\tif (Math.random() > _MUTATION_NODE) {\n\t\t\t\t// TODO: nodeMutate(genome);\n\t\t\t}\n\n\t\t\tif (Math.random() > _MUTATION_ENABLE) {\n\t\t\t\t// TODO: Find an enabled gene and disable it\n\t\t\t}\n\n\t\t\tif (Math.random() > _MUTATION_DISABLE) {\n\t\t\t\t// TODO: Find a disabled gene and enable it\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "70ad83fb",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"reward": {
+				"chunk": "function(diff, training) {\n\n\t\t\tdiff     = typeof diff === 'number'   ? Math.abs(diff | 0) : 1;\n\t\t\ttraining = training instanceof Object ? training           : null;\n\n\n\t\t\tthis.fitness += diff;\n\n\t\t\tif (training !== null) {\n\n\t\t\t\t// XXX: No Reinforcement Learning\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "23d9c57e",
+				"parameters": [
+					{
+						"chunk": "typeof diff === 'number'   ? Math.abs(diff | 0) : 1",
+						"name": "diff",
+						"type": "Number",
+						"value": 1
+					},
+					{
+						"chunk": "training instanceof Object ? training           : null",
+						"name": "training",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"punish": {
+				"chunk": "function(diff, training) {\n\n\t\t\tdiff     = typeof diff === 'number'   ? Math.abs(diff | 0) : 1;\n\t\t\ttraining = training instanceof Object ? training           : null;\n\n\n\t\t\tthis.fitness -= diff;\n\n\t\t\tif (training !== null) {\n\n\t\t\t\t// XXX: No Reinforcement Learning\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "c2954767",
+				"parameters": [
+					{
+						"chunk": "typeof diff === 'number'   ? Math.abs(diff | 0) : 1",
+						"name": "diff",
+						"type": "Number",
+						"value": 1
+					},
+					{
+						"chunk": "training instanceof Object ? training           : null",
+						"name": "training",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

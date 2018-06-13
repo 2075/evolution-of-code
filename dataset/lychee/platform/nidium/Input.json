@@ -1,0 +1,657 @@
+{
+	"header": {
+		"identifier": "lychee.Input",
+		"attaches": {},
+		"tags": {
+			"platform": "nidium"
+		},
+		"requires": [],
+		"includes": [
+			"lychee.event.Emitter"
+		],
+		"supports": {
+			"body": "function(lychee, global) {\n\n\tif (\n\t\ttypeof global.window === 'object'\n\t\t&& typeof global.window.addEventListener === 'function'\n\t\t&& typeof global.window.__nidium__ === 'object'\n\t) {\n\t\treturn true;\n\t}\n\n\n\treturn false;\n\n}",
+			"hash": "4bfe2a32",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "lychee",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "global",
+					"type": "undefined"
+				}
+			]
+		},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Emitter": {
+			"chunk": "lychee.import('lychee.event.Emitter')",
+			"type": "lychee.Definition",
+			"hash": "b60271ea",
+			"value": {
+				"reference": "lychee.event.Emitter",
+				"arguments": []
+			}
+		},
+		"_INSTANCES": {
+			"chunk": "[]",
+			"type": "Array",
+			"hash": "30f4c306",
+			"value": []
+		},
+		"_window": {
+			"chunk": "{\"innerWidth\":1337,\"innerHeight\":1337,\"left\":0,\"top\":0,\"_onblur\":null,\"_onfocus\":null,\"__nidium__\":{\"build\":\"abcdef0123456789\",\"revision\":\"abcdef0123456789\",\"version\":\"0.2\"}}",
+			"type": "Object",
+			"hash": "b8386771",
+			"value": {
+				"innerWidth": 1337,
+				"innerHeight": 1337,
+				"left": 0,
+				"top": 0,
+				"_onblur": null,
+				"_onfocus": null,
+				"__nidium__": {
+					"build": "abcdef0123456789",
+					"revision": "abcdef0123456789",
+					"version": "0.2"
+				}
+			}
+		},
+		"_mouseactive": {
+			"chunk": "false",
+			"type": "Boolean",
+			"hash": "d5619e17",
+			"value": false
+		},
+		"_listeners": {
+			"chunk": "{\n\n\t\tkeydown: function(event) {\n\n\t\t\tlet handled = false;\n\n\t\t\tfor (let i = 0, l = _INSTANCES.length; i < l; i++) {\n\t\t\t\thandled = _process_key.call(_INSTANCES[i], event.keyCode, event.ctrlKey, event.altKey, event.shiftKey) || handled;\n\t\t\t}\n\n\t\t},\n\n\t\tmousedown: function(event) {\n\n\t\t\t_mouseactive = true;\n\n\n\t\t\tlet handled = false;\n\n\t\t\tfor (let i = 0, l = _INSTANCES.length; i < l; i++) {\n\t\t\t\thandled = _process_touch.call(_INSTANCES[i], 0, event.x, event.y) || handled;\n\t\t\t}\n\n\t\t},\n\n\t\tmousemove: function(event) {\n\n\t\t\tif (_mouseactive === false) {\n\t\t\t\treturn;\n\t\t\t}\n\n\n\t\t\tlet handled = false;\n\n\t\t\tfor (let i = 0, l = _INSTANCES.length; i < l; i++) {\n\t\t\t\thandled = _process_swipe.call(_INSTANCES[i], 0, 'move', event.x, event.y) || handled;\n\t\t\t}\n\n\t\t},\n\n\t\tmouseup: function(event) {\n\n\t\t\tif (_mouseactive === false) return;\n\n\t\t\t_mouseactive = false;\n\n\t\t\tfor (let i = 0, l = _INSTANCES.length; i < l; i++) {\n\t\t\t\t_process_swipe.call(_INSTANCES[i], 0, 'end', event.x, event.y);\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "Boolean",
+			"hash": "dada0c26",
+			"value": true
+		},
+		"_KEYMAP": {
+			"chunk": "{\n\n\t\t8:  'backspace',\n\t\t9:  'tab',\n\t\t13:  'enter',\n\t\t16:  'shift',\n\t\t17:  'ctrl',\n\t\t18:  'alt',\n\t\t19:  'pause',\n\t\t// 20:  'capslock',\n\n\t\t27:  'escape',\n\t\t32:  'space',\n\t\t33:  'page-up',\n\t\t34:  'page-down',\n\t\t35:  'end',\n\t\t36:  'home',\n\n\t\t37:  'arrow-left',\n\t\t38:  'arrow-up',\n\t\t39:  'arrow-right',\n\t\t40:  'arrow-down',\n\n\t\t// 45:  'insert', // XXX: nidium fires incorrect 73\n\t\t// 46:  'delete', // XXX: nidium fires incorrect 127\n\n\t\t65:  'a',\n\t\t66:  'b',\n\t\t67:  'c',\n\t\t68:  'd',\n\t\t69:  'e',\n\t\t70:  'f',\n\t\t71:  'g',\n\t\t72:  'h',\n\t\t73:  'i',\n\t\t74:  'j',\n\t\t75:  'k',\n\t\t76:  'l',\n\t\t77:  'm',\n\t\t78:  'n',\n\t\t79:  'o',\n\t\t80:  'p',\n\t\t81:  'q',\n\t\t82:  'r',\n\t\t83:  's',\n\t\t84:  't',\n\t\t85:  'u',\n\t\t86:  'v',\n\t\t87:  'w',\n\t\t88:  'x',\n\t\t89:  'y',\n\t\t90:  'z',\n\n\t\t96:  '0',\n\t\t97:  '1',\n\t\t98:  '2',\n\t\t99:  '3',\n\t\t100: '4',\n\t\t101: '5',\n\t\t102: '6',\n\t\t103: '7',\n\t\t104: '8',\n\t\t105: '9',\n\t\t106: '*',\n\t\t107: '+',\n\t\t109: '-',\n\t\t110: '.',\n\t\t111: '/'\n\n\t\t// 112: 'f1',  // XXX: nidium fires incorrect 58\n\t\t// 113: 'f2',  // XXX: nidium fires incorrect 59\n\t\t// 114: 'f3',  // XXX: nidium fires incorrect 60\n\t\t// 115: 'f4',  // XXX: nidium fires incorrect 187\n\t\t// 116: 'f5',  // XXX: nidium fires incorrect 62\n\t\t// 117: 'f6',  // XXX: nidium fires incorrect 63\n\t\t// 118: 'f7',  // XXX: nidium fires incorrect 64\n\t\t// 119: 'f8',  // XXX: nidium fires incorrect 65\n\t\t// 120: 'f9',  // XXX: nidium fires incorrect 66\n\t\t// 121: 'f10', // XXX: nidium fires incorrect 67\n\t\t// 122: 'f11', // XXX: nidium fires incorrect 68\n\t\t// 123: 'f12'  // XXX: nidium fires incorrect 69\n\n\t}",
+			"type": "Object",
+			"hash": "e7ad1e97",
+			"value": {
+				"8": "backspace",
+				"9": "tab",
+				"13": "enter",
+				"16": "shift",
+				"17": "ctrl",
+				"18": "alt",
+				"19": "pause",
+				"27": "escape",
+				"32": "space",
+				"33": "page-up",
+				"34": "page-down",
+				"35": "end",
+				"36": "home",
+				"37": "arrow-left",
+				"38": "arrow-up",
+				"39": "arrow-right",
+				"40": "arrow-down",
+				"65": "a",
+				"66": "b",
+				"67": "c",
+				"68": "d",
+				"69": "e",
+				"70": "f",
+				"71": "g",
+				"72": "h",
+				"73": "i",
+				"74": "j",
+				"75": "k",
+				"76": "l",
+				"77": "m",
+				"78": "n",
+				"79": "o",
+				"80": "p",
+				"81": "q",
+				"82": "r",
+				"83": "s",
+				"84": "t",
+				"85": "u",
+				"86": "v",
+				"87": "w",
+				"88": "x",
+				"89": "y",
+				"90": "z",
+				"96": "0",
+				"97": "1",
+				"98": "2",
+				"99": "3",
+				"100": "4",
+				"101": "5",
+				"102": "6",
+				"103": "7",
+				"104": "8",
+				"105": "9",
+				"106": "*",
+				"107": "+",
+				"109": "-",
+				"110": ".",
+				"111": "/"
+			}
+		},
+		"_SPECIALMAP": {
+			"chunk": "{\n\n\t\t48:  [ '0', ')' ],\n\t\t49:  [ '1', '!' ],\n\t\t50:  [ '2', '@' ],\n\t\t51:  [ '3', '#' ],\n\t\t52:  [ '4', '$' ],\n\t\t53:  [ '5', '%' ],\n\t\t54:  [ '6', '^' ],\n\t\t55:  [ '7', '&' ],\n\t\t56:  [ '8', '*' ],\n\t\t// 57:  [ '9', '(' ], // XXX: nidium fires incorrect 20\n\n\n\t\t// 186: [ ';', ':' ], // XXX: nidium fires incorrect 59\n\t\t187: [ '=', '+' ],\n\t\t188: [ ',', '<' ],\n\t\t189: [ '-', '_' ]\n\t\t// 190: [ '.', '>' ], // XXX: nidium fires incorrect 46\n\t\t// 191: [ '/', '?' ], // XXX: nidium fires incorrect 47\n\t\t// 192: [ '`', '~' ], // XXX: nidium fires incorrect 96\n\n\t\t// 219: [ '[',  '{' ], // XXX: nidium fires incirrect 91\n\t\t// 220: [ '\\\\', '|' ], // XXX: nidium fires incorrect 92\n\t\t// 221: [ ']',  '}' ], // XXX: nidium fires incorrect 93\n\t\t// 222: [ '\\'', '\"' ]  // XXX: nidium fires incorrect 39\n\n\t}",
+			"type": "Object",
+			"hash": "d7a3bc78",
+			"value": {
+				"48": [
+					"0",
+					")"
+				],
+				"49": [
+					"1",
+					"!"
+				],
+				"50": [
+					"2",
+					"@"
+				],
+				"51": [
+					"3",
+					"#"
+				],
+				"52": [
+					"4",
+					"$"
+				],
+				"53": [
+					"5",
+					"%"
+				],
+				"54": [
+					"6",
+					"^"
+				],
+				"55": [
+					"7",
+					"&"
+				],
+				"56": [
+					"8",
+					"*"
+				],
+				"187": [
+					"=",
+					"+"
+				],
+				"188": [
+					",",
+					"<"
+				],
+				"189": [
+					"-",
+					"_"
+				]
+			}
+		},
+		"_process_key": {
+			"chunk": "function(code, ctrl, alt, shift) {\n\n\t\tif (this.key === false) {\n\t\t\treturn false;\n\t\t}\n\n\n\t\tctrl  =  ctrl === true;\n\t\talt   =   alt === true;\n\t\tshift = shift === true;\n\n\n\t\tconsole.log(code, _KEYMAP[code], _SPECIALMAP[code]);\n\n\t\tif (_KEYMAP[code] === undefined && _SPECIALMAP[code] === undefined) {\n\n\t\t\treturn false;\n\n\t\t} else if (this.keymodifier === false) {\n\n\t\t\tif (code === 16 && shift === true) {\n\t\t\t\treturn true;\n\t\t\t}\n\n\t\t\tif (code === 17 && ctrl === true) {\n\t\t\t\treturn true;\n\t\t\t}\n\n\t\t\tif (code === 18 && alt === true) {\n\t\t\t\treturn true;\n\t\t\t}\n\n\t\t}\n\n\n\t\tlet key     = null;\n\t\tlet name    = null;\n\t\tlet tmp     = null;\n\t\tlet handled = false;\n\t\tlet delta   = Date.now() - this.__clock.key;\n\n\t\tif (delta < this.delay) {\n\t\t\treturn true;\n\t\t} else {\n\t\t\tthis.__clock.key = Date.now();\n\t\t}\n\n\n\t\t// 0. Computation of Special Characters\n\t\tif (_SPECIALMAP[code] !== undefined) {\n\n\t\t\ttmp  = _SPECIALMAP[code];\n\t\t\tkey  = shift === true ? tmp[1] : tmp[0];\n\t\t\tname = '';\n\n\t\t\tif (ctrl  === true) name += 'ctrl-';\n\t\t\tif (alt   === true) name += 'alt-';\n\t\t\tif (shift === true) name += 'shift-';\n\n\t\t\tname += tmp[0];\n\n\t\t\t// 0. Computation of Normal Characters\n\t\t} else if (_KEYMAP[code] !== undefined) {\n\n\t\t\tkey  = _KEYMAP[code];\n\t\t\tname = '';\n\n\t\t\tif (ctrl  === true && key !== 'ctrl')  name += 'ctrl-';\n\t\t\tif (alt   === true && key !== 'alt')   name += 'alt-';\n\t\t\tif (shift === true && key !== 'shift') name += 'shift-';\n\n\n\t\t\tif (shift === true && key !== 'ctrl' && key !== 'alt' && key !== 'shift') {\n\n\t\t\t\ttmp = String.fromCharCode(code);\n\t\t\t\tkey = tmp.trim() !== '' ? tmp : key;\n\n\t\t\t}\n\n\n\t\t\tname += key.toLowerCase();\n\n\t\t}\n\n\n\t\t// 1. Event API\n\t\tif (key !== null) {\n\n\t\t\t// bind('key') and bind('ctrl-a');\n\t\t\t// bind('!')   and bind('shift-1');\n\n\t\t\thandled = this.trigger('key', [ key, name, delta ]) || handled;\n\t\t\thandled = this.trigger(name,  [ delta ])            || handled;\n\n\t\t}\n\n\n\t\treturn handled;\n\n\t}",
+			"type": "function",
+			"hash": "a9d61f49",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "code",
+					"type": "undefined"
+				},
+				{
+					"chunk": "ctrl === true",
+					"name": "ctrl",
+					"type": "Boolean",
+					"value": true
+				},
+				{
+					"chunk": "alt === true",
+					"name": "alt",
+					"type": "Boolean",
+					"value": true
+				},
+				{
+					"chunk": "shift === true",
+					"name": "shift",
+					"type": "Boolean",
+					"value": true
+				}
+			],
+			"values": [
+				{
+					"chunk": "false",
+					"type": "Boolean",
+					"value": false
+				},
+				{
+					"chunk": "true",
+					"type": "Boolean",
+					"value": true
+				},
+				{
+					"chunk": "this.trigger('key', [ key, name, delta ]) || handled",
+					"type": "undefined",
+					"value": {
+						"reference": "this.trigger('key', [ key, name, delta ]) || handled",
+						"arguments": []
+					}
+				},
+				{
+					"chunk": "this.trigger(name,  [ delta ])            || handled",
+					"type": "undefined",
+					"value": {
+						"reference": "this.trigger(name,  [ delta ])            || handled",
+						"arguments": []
+					}
+				}
+			]
+		},
+		"_process_swipe": {
+			"chunk": "function(id, state, x, y) {\n\n\t\tif (this.swipe === false) {\n\t\t\treturn false;\n\t\t}\n\n\n\t\tlet position = { x: x, y: y };\n\t\tlet swipe    = { x: 0, y: 0 };\n\t\tlet handled  = false;\n\t\tlet delta    = Date.now() - this.__clock.swipe;\n\n\t\tif (delta < this.delay) {\n\t\t\treturn true;\n\t\t} else {\n\t\t\tthis.__clock.swipe = Date.now();\n\t\t}\n\n\n\t\t// 0. Computation of Swipe\n\t\tif (this.__swipes[id] !== null) {\n\n\t\t\t// FIX for touchend events\n\t\t\tif (state === 'end' && x === 0 && y === 0) {\n\t\t\t\tposition.x = this.__swipes[id].x;\n\t\t\t\tposition.y = this.__swipes[id].y;\n\t\t\t}\n\n\t\t\tswipe.x = x - this.__swipes[id].x;\n\t\t\tswipe.y = y - this.__swipes[id].y;\n\n\t\t}\n\n\n\t\t// 1. Event API\n\t\tif (state === 'start') {\n\n\t\t\thandled = this.trigger(\n\t\t\t\t'swipe',\n\t\t\t\t[ id, 'start', position, delta, swipe ]\n\t\t\t) || handled;\n\n\t\t\tthis.__swipes[id] = {\n\t\t\t\tx: x, y: y\n\t\t\t};\n\n\t\t} else if (state === 'move') {\n\n\t\t\thandled = this.trigger(\n\t\t\t\t'swipe',\n\t\t\t\t[ id, 'move', position, delta, swipe ]\n\t\t\t) || handled;\n\n\t\t} else if (state === 'end') {\n\n\t\t\thandled = this.trigger(\n\t\t\t\t'swipe',\n\t\t\t\t[ id, 'end', position, delta, swipe ]\n\t\t\t) || handled;\n\n\t\t\tthis.__swipes[id] = null;\n\n\t\t}\n\n\n\t\treturn handled;\n\n\t}",
+			"type": "function",
+			"hash": "d25b3ddb",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "id",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "state",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "x",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "y",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "false",
+					"type": "Boolean",
+					"value": false
+				},
+				{
+					"chunk": "true",
+					"type": "Boolean",
+					"value": true
+				}
+			]
+		},
+		"_process_touch": {
+			"chunk": "function(id, x, y) {\n\n\t\tif (this.touch === false && this.swipe === true) {\n\n\t\t\tif (this.__swipes[id] === null) {\n\t\t\t\t_process_swipe.call(this, id, 'start', x, y);\n\t\t\t}\n\n\t\t\treturn true;\n\n\t\t} else if (this.touch === false) {\n\n\t\t\treturn false;\n\n\t\t}\n\n\n\t\tlet position = { x: x, y: y };\n\t\tlet handled  = false;\n\t\tlet delta    = Date.now() - this.__clock.touch;\n\n\t\tif (delta < this.delay) {\n\t\t\treturn true;\n\t\t} else {\n\t\t\tthis.__clock.touch = Date.now();\n\t\t}\n\n\n\t\t// 1. Event API\n\t\thandled = this.trigger('touch', [ id, position, delta ]) || handled;\n\n\n\t\t// 1. Event API: Swipe only for tracked Touches\n\t\tif (this.__swipes[id] === null) {\n\t\t\thandled = _process_swipe.call(this, id, 'start', x, y) || handled;\n\t\t}\n\n\n\t\treturn handled;\n\n\t}",
+			"type": "function",
+			"hash": "3955c99c",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "id",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "x",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "y",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "true",
+					"type": "Boolean",
+					"value": true
+				},
+				{
+					"chunk": "false",
+					"type": "Boolean",
+					"value": false
+				},
+				{
+					"chunk": "this.trigger('touch', [ id, position, delta ]) || handled",
+					"type": "undefined",
+					"value": {
+						"reference": "this.trigger('touch', [ id, position, delta ]) || handled",
+						"arguments": []
+					}
+				},
+				{
+					"chunk": "_process_swipe.call(this, id, 'start', x, y) || handled",
+					"type": "undefined"
+				}
+			]
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.delay       = 0;\n\t\tthis.key         = false;\n\t\tthis.keymodifier = false;\n\t\tthis.touch       = false;\n\t\tthis.scroll      = false;\n\t\tthis.swipe       = false;\n\n\t\tthis.__clock   = {\n\t\t\tkey:    Date.now(),\n\t\t\tscroll: Date.now(),\n\t\t\tswipe:  Date.now(),\n\t\t\ttouch:  Date.now()\n\t\t};\n\t\tthis.__swipes  = {\n\t\t\t0: null\n\t\t};\n\n\n\t\tthis.setDelay(states.delay);\n\t\tthis.setKey(states.key);\n\t\tthis.setKeyModifier(states.keymodifier);\n\t\tthis.setScroll(states.scroll);\n\t\tthis.setSwipe(states.swipe);\n\t\tthis.setTouch(states.touch);\n\n\n\t\t_Emitter.call(this);\n\n\t\t_INSTANCES.push(this);\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "a4676b29",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"delay": "setDelay",
+			"key": "setKey",
+			"keymodifier": "setKeyModifier",
+			"scroll": "setScroll",
+			"swipe": "setSwipe",
+			"touch": "setTouch"
+		},
+		"properties": {
+			"delay": {
+				"chunk": "this.delay       = 0;",
+				"type": "Number",
+				"hash": "27f61e73",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			},
+			"key": {
+				"chunk": "this.key         = false;",
+				"type": "Boolean",
+				"hash": "73aa68ed",
+				"value": {
+					"chunk": "false",
+					"type": "Boolean",
+					"hash": "d5619e17",
+					"value": false
+				}
+			},
+			"keymodifier": {
+				"chunk": "this.keymodifier = false;",
+				"type": "Boolean",
+				"hash": "21cdcdf5",
+				"value": {
+					"chunk": "false",
+					"type": "Boolean",
+					"hash": "d5619e17",
+					"value": false
+				}
+			},
+			"touch": {
+				"chunk": "this.touch       = false;",
+				"type": "Boolean",
+				"hash": "6ba833d2",
+				"value": {
+					"chunk": "false",
+					"type": "Boolean",
+					"hash": "d5619e17",
+					"value": false
+				}
+			},
+			"scroll": {
+				"chunk": "this.scroll      = false;",
+				"type": "Boolean",
+				"hash": "3a768d8f",
+				"value": {
+					"chunk": "false",
+					"type": "Boolean",
+					"hash": "d5619e17",
+					"value": false
+				}
+			},
+			"swipe": {
+				"chunk": "this.swipe       = false;",
+				"type": "Boolean",
+				"hash": "07f93157",
+				"value": {
+					"chunk": "false",
+					"type": "Boolean",
+					"hash": "d5619e17",
+					"value": false
+				}
+			},
+			"__clock": {
+				"chunk": "this.__clock   = {\n\t\t\tkey:    Date.now(),\n\t\t\tscroll: Date.now(),\n\t\t\tswipe:  Date.now(),\n\t\t\ttouch:  Date.now()\n\t\t};",
+				"type": "Object",
+				"hash": "6b8e4223",
+				"value": {
+					"chunk": "{\n\t\t\tkey:    Date.now(),\n\t\t\tscroll: Date.now(),\n\t\t\tswipe:  Date.now(),\n\t\t\ttouch:  Date.now()\n\t\t}",
+					"type": "Object",
+					"hash": "ae8beaac",
+					"value": {
+						"key": 1528842379337,
+						"scroll": 1528842379337,
+						"swipe": 1528842379337,
+						"touch": 1528842379337
+					}
+				}
+			},
+			"__swipes": {
+				"chunk": "this.__swipes  = {\n\t\t\t0: null\n\t\t};",
+				"type": "Object",
+				"hash": "13fdc371",
+				"value": {
+					"chunk": "{\n\t\t\t0: null\n\t\t}",
+					"type": "Object",
+					"hash": "2ce8aade",
+					"value": {
+						"0": null
+					}
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"destroy": {
+				"chunk": "function() {\n\n\t\t\tlet found = false;\n\n\t\t\tfor (let i = 0, il = _INSTANCES.length; i < il; i++) {\n\n\t\t\t\tif (_INSTANCES[i] === this) {\n\t\t\t\t\t_INSTANCES.splice(i, 1);\n\t\t\t\t\tfound = true;\n\t\t\t\t\til--;\n\t\t\t\t\ti--;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\tthis.unbind();\n\n\n\t\t\treturn found;\n\n\t\t}",
+				"type": "function",
+				"hash": "a596dbf3",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					},
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.Input';\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.delay !== 0)           states.delay       = this.delay;\n\t\t\tif (this.key !== false)         states.key         = this.key;\n\t\t\tif (this.keymodifier !== false) states.keymodifier = this.keymodifier;\n\t\t\tif (this.touch !== false)       states.touch       = this.touch;\n\t\t\tif (this.swipe !== false)       states.swipe       = this.swipe;\n\n\n\t\t\tdata['arguments'][0] = states;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "8581f469",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"setDelay": {
+				"chunk": "function(delay) {\n\n\t\t\tdelay = typeof delay === 'number' ? delay : null;\n\n\n\t\t\tif (delay !== null) {\n\n\t\t\t\tthis.delay = delay;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "e667e003",
+				"parameters": [
+					{
+						"chunk": "typeof delay === 'number' ? delay : null",
+						"name": "delay",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setKey": {
+				"chunk": "function(key) {\n\n\t\t\tkey = typeof key === 'boolean' ? key : null;\n\n\n\t\t\tif (key !== null) {\n\n\t\t\t\tthis.key = key;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "f5d2bcc1",
+				"parameters": [
+					{
+						"chunk": "typeof key === 'boolean' ? key : null",
+						"name": "key",
+						"type": "Boolean",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setKeyModifier": {
+				"chunk": "function(keymodifier) {\n\n\t\t\tkeymodifier = typeof keymodifier === 'boolean' ? keymodifier : null;\n\n\n\t\t\tif (keymodifier !== null) {\n\n\t\t\t\tthis.keymodifier = keymodifier;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "981c834f",
+				"parameters": [
+					{
+						"chunk": "typeof keymodifier === 'boolean' ? keymodifier : null",
+						"name": "keymodifier",
+						"type": "Boolean",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setTouch": {
+				"chunk": "function(touch) {\n\n\t\t\ttouch = typeof touch === 'boolean' ? touch : null;\n\n\n\t\t\tif (touch !== null) {\n\n\t\t\t\tthis.touch = touch;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "7c114448",
+				"parameters": [
+					{
+						"chunk": "typeof touch === 'boolean' ? touch : null",
+						"name": "touch",
+						"type": "Boolean",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setScroll": {
+				"chunk": "function(scroll) {\n\n\t\t\tscroll = typeof scroll === 'boolean' ? scroll : null;\n\n\n\t\t\tif (scroll !== null) {\n\n\t\t\t\t// XXX: Nidium has not (yet) scroll support\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "07d1b951",
+				"parameters": [
+					{
+						"chunk": "typeof scroll === 'boolean' ? scroll : null",
+						"name": "scroll",
+						"type": "Boolean",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setSwipe": {
+				"chunk": "function(swipe) {\n\n\t\t\tswipe = typeof swipe === 'boolean' ? swipe : null;\n\n\n\t\t\tif (swipe !== null) {\n\n\t\t\t\tthis.swipe = swipe;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "49938078",
+				"parameters": [
+					{
+						"chunk": "typeof swipe === 'boolean' ? swipe : null",
+						"name": "swipe",
+						"type": "Boolean",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

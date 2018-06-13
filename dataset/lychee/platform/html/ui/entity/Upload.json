@@ -1,0 +1,274 @@
+{
+	"header": {
+		"identifier": "lychee.ui.entity.Upload",
+		"attaches": {},
+		"tags": {
+			"platform": "html"
+		},
+		"requires": [],
+		"includes": [
+			"lychee.ui.entity.Button"
+		],
+		"supports": {
+			"body": "function(lychee, global) {\n\n\tif (\n\t\ttypeof global.addEventListener === 'function'\n\t\t&& typeof global.document !== 'undefined'\n\t\t&& typeof global.document.createElement === 'function'\n\t\t&& typeof global.FileReader !== 'undefined'\n\t\t&& typeof global.FileReader.prototype.readAsDataURL === 'function'\n\t) {\n\t\treturn true;\n\t}\n\n\n\treturn false;\n\n}",
+			"hash": "b60cb1f2",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "lychee",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "global",
+					"type": "undefined"
+				}
+			]
+		},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Button": {
+			"chunk": "lychee.import('lychee.ui.entity.Button')",
+			"type": "lychee.Definition",
+			"hash": "b3693ec1",
+			"value": {
+				"reference": "lychee.ui.entity.Button",
+				"arguments": []
+			}
+		},
+		"_FileReader": {
+			"chunk": "function() {}",
+			"type": "Function",
+			"hash": "83c5a973"
+		},
+		"_INSTANCES": {
+			"chunk": "[]",
+			"type": "Array",
+			"hash": "30f4c306",
+			"value": []
+		},
+		"_WRAPPERS": {
+			"chunk": "[]",
+			"type": "Array",
+			"hash": "30f4c306",
+			"value": []
+		},
+		"_wrap": {
+			"chunk": "function(instance) {\n\n\t\tlet allowed = [ 'json', 'fnt', 'ogg', 'mp3', 'png', 'js', 'tpl', 'md' ];\n\t\tlet element = global.document.createElement('input');\n\n\n\t\tlet type = instance.type;\n\t\tif (type === Composite.TYPE.all) {\n\t\t\tallowed = [ '*' ];\n\t\t} else if (type === Composite.TYPE.config) {\n\t\t\tallowed = [ 'json' ];\n\t\t} else if (type === Composite.TYPE.font) {\n\t\t\tallowed = [ 'fnt' ];\n\t\t} else if (type === Composite.TYPE.music) {\n\t\t\tallowed = [ 'mp3', 'ogg' ];\n\t\t} else if (type === Composite.TYPE.sound) {\n\t\t\tallowed = [ 'mp3', 'ogg' ];\n\t\t} else if (type === Composite.TYPE.texture) {\n\t\t\tallowed = [ 'png' ];\n\t\t} else if (type === Composite.TYPE.stuff) {\n\t\t\tallowed = [ '*' ];\n\t\t}\n\n\n\t\telement._visible = false;\n\t\telement.setAttribute('accept',   allowed.map(function(v) {\n\t\t\treturn '.' + v;\n\t\t}).join(','));\n\t\telement.setAttribute('type',     'file');\n\t\telement.setAttribute('multiple', '');\n\n\t\telement.onclick  = function() {\n\t\t\telement._visible = true;\n\t\t};\n\n\t\telement.oncancel = function() {\n\t\t\telement._visible = false;\n\t\t\telement.value    = '';\n\t\t\tinstance.trigger('change', [ null ]);\n\t\t};\n\n\t\telement.onchange = function() {\n\n\t\t\tif (element._visible === false) {\n\t\t\t\treturn;\n\t\t\t} else {\n\t\t\t\telement._visible = false;\n\t\t\t}\n\n\n\t\t\tlet val   = [];\n\t\t\tlet files = Array.from(this.files);\n\n\t\t\tif (files.length > 0) {\n\n\t\t\t\tlet check_mp3 = files.find(function(file) {\n\t\t\t\t\treturn file.name.endsWith('.mp3');\n\t\t\t\t}) || null;\n\n\t\t\t\tlet check_ogg = files.find(function(file) {\n\t\t\t\t\treturn file.name.endsWith('.ogg');\n\t\t\t\t}) || null;\n\n\t\t\t\tif (check_mp3 !== null || check_ogg !== null) {\n\n\t\t\t\t\tlet name = (check_mp3 || check_ogg).name.split('/').pop();\n\t\t\t\t\tif (name.endsWith('.mp3') || name.endsWith('.ogg')) {\n\t\t\t\t\t\tname = name.split('.').slice(0, -1).join('.');\n\t\t\t\t\t}\n\n\t\t\t\t\tif (type === Composite.TYPE.music && name.endsWith('.msc') === false) {\n\t\t\t\t\t\tname = name + '.msc';\n\t\t\t\t\t} else if (type === Composite.TYPE.sound && name.endsWith('.snd') === false) {\n\t\t\t\t\t\tname = name + '.snd';\n\t\t\t\t\t}\n\n\n\t\t\t\t\tlet tmp = {\n\t\t\t\t\t\tmp3: null,\n\t\t\t\t\t\togg: null\n\t\t\t\t\t};\n\n\t\t\t\t\tif (check_mp3 !== null) {\n\n\t\t\t\t\t\tlet reader = new _FileReader();\n\n\t\t\t\t\t\treader.onload = function() {\n\n\t\t\t\t\t\t\ttmp['mp3'] = reader.result;\n\n\t\t\t\t\t\t\tif (check_ogg === null || tmp['ogg'] !== null) {\n\n\t\t\t\t\t\t\t\tlet asset = new lychee.Asset('/tmp/' + name, null, true);\n\t\t\t\t\t\t\t\tif (asset !== null) {\n\n\t\t\t\t\t\t\t\t\tasset.deserialize({\n\t\t\t\t\t\t\t\t\t\tbuffer: {\n\t\t\t\t\t\t\t\t\t\t\tmp3: tmp['mp3'],\n\t\t\t\t\t\t\t\t\t\t\togg: tmp['ogg']\n\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t});\n\n\t\t\t\t\t\t\t\t\tval.push(asset);\n\n\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t};\n\n\t\t\t\t\t\treader.readAsDataURL(check_mp3);\n\n\t\t\t\t\t}\n\n\t\t\t\t\tif (check_ogg !== null) {\n\n\t\t\t\t\t\tlet reader = new _FileReader();\n\n\t\t\t\t\t\treader.onload = function() {\n\n\t\t\t\t\t\t\ttmp['ogg'] = reader.result;\n\n\t\t\t\t\t\t\tif (check_mp3 === null || tmp['mp3'] !== null) {\n\n\t\t\t\t\t\t\t\tlet asset = new lychee.Asset('/tmp/' + name, null, true);\n\t\t\t\t\t\t\t\tif (asset !== null) {\n\n\t\t\t\t\t\t\t\t\tasset.deserialize({\n\t\t\t\t\t\t\t\t\t\tbuffer: {\n\t\t\t\t\t\t\t\t\t\t\tmp3: tmp['mp3'],\n\t\t\t\t\t\t\t\t\t\t\togg: tmp['ogg']\n\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t});\n\n\t\t\t\t\t\t\t\t\tval.push(asset);\n\n\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t};\n\n\t\t\t\t\t\treader.readAsDataURL(check_ogg);\n\n\t\t\t\t\t}\n\n\t\t\t\t} else {\n\n\t\t\t\t\tfiles.forEach(function(file) {\n\n\t\t\t\t\t\tlet reader = new _FileReader();\n\n\t\t\t\t\t\treader.onload = function() {\n\n\t\t\t\t\t\t\tlet asset = new lychee.Asset('/tmp/' + file.name, null, true);\n\t\t\t\t\t\t\tif (asset !== null) {\n\n\t\t\t\t\t\t\t\tasset.deserialize({\n\t\t\t\t\t\t\t\t\tbuffer: reader.result\n\t\t\t\t\t\t\t\t});\n\n\t\t\t\t\t\t\t\tval.push(asset);\n\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t};\n\n\t\t\t\t\t\treader.readAsDataURL(file);\n\n\t\t\t\t\t});\n\n\t\t\t\t}\n\n\n\t\t\t\tsetTimeout(function() {\n\n\t\t\t\t\tlet result = instance.setValue(val);\n\t\t\t\t\tif (result === true) {\n\t\t\t\t\t\tinstance.trigger('change', [ val ]);\n\t\t\t\t\t} else {\n\t\t\t\t\t\tinstance.trigger('change', [ null ]);\n\t\t\t\t\t}\n\n\t\t\t\t}, 500);\n\n\t\t\t} else {\n\n\t\t\t\tinstance.trigger('change', [ null ]);\n\n\t\t\t}\n\n\t\t};\n\n\n\t\treturn element;\n\n\t}",
+			"type": "function",
+			"hash": "634f4f1d",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "instance",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "{\"value\":\"\"}",
+					"type": "Object",
+					"value": {
+						"value": ""
+					}
+				}
+			]
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({\n\t\t\tlabel: 'UPLOAD'\n\t\t}, data);\n\n\n\t\tthis.type  = Composite.TYPE.asset;\n\t\tthis.value = [];\n\n\n\t\tthis.setType(states.type);\n\t\tthis.setValue(states.value);\n\n\t\tdelete states.type;\n\t\tdelete states.value;\n\n\n\t\t_Button.call(this, states);\n\n\t\tstates = null;\n\n\n\t\t_INSTANCES.push(this);\n\t\t_WRAPPERS.push(_wrap(this));\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tthis.unbind('touch');\n\t\tthis.bind('touch', function() {\n\n\t\t\tlet wrapper = _WRAPPERS[_INSTANCES.indexOf(this)] || null;\n\t\t\tif (wrapper !== null) {\n\n\t\t\t\t// XXX: Removing this causes endless loop\n\t\t\t\tsetTimeout(function() {\n\t\t\t\t\twrapper.click();\n\t\t\t\t}, 250);\n\n\t\t\t}\n\n\t\t}, this);\n\n\t}",
+			"type": "function",
+			"hash": "c2f92b41",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"type": "setType",
+			"value": "setValue"
+		},
+		"properties": {
+			"type": {
+				"chunk": "this.type  = Composite.TYPE.asset;",
+				"type": "Enum",
+				"hash": "b9cf2ab5",
+				"value": {
+					"chunk": "Composite.TYPE.asset",
+					"type": "Enum",
+					"hash": "b01e1fa7",
+					"value": "Composite.TYPE.asset"
+				}
+			},
+			"value": {
+				"chunk": "this.value = [];",
+				"type": "Array",
+				"hash": "a01d146f",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			}
+		},
+		"enums": {
+			"TYPE": {
+				"values": [
+					{
+						"name": "all",
+						"value": {
+							"chunk": "0",
+							"type": "Number",
+							"hash": "d271c07f",
+							"value": 0
+						}
+					},
+					{
+						"name": "config",
+						"value": {
+							"chunk": "1",
+							"type": "Number",
+							"hash": "9416ac93",
+							"value": 1
+						}
+					},
+					{
+						"name": "font",
+						"value": {
+							"chunk": "2",
+							"type": "Number",
+							"hash": "0129e217",
+							"value": 2
+						}
+					},
+					{
+						"name": "music",
+						"value": {
+							"chunk": "3",
+							"type": "Number",
+							"hash": "0fc7a1b4",
+							"value": 3
+						}
+					},
+					{
+						"name": "sound",
+						"value": {
+							"chunk": "4",
+							"type": "Number",
+							"hash": "e131cc88",
+							"value": 4
+						}
+					},
+					{
+						"name": "texture",
+						"value": {
+							"chunk": "5",
+							"type": "Number",
+							"hash": "531a35e4",
+							"value": 5
+						}
+					},
+					{
+						"name": "stuff",
+						"value": {
+							"chunk": "6",
+							"type": "Number",
+							"hash": "27fa7cc0",
+							"value": 6
+						}
+					}
+				]
+			}
+		},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Button.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.entity.Upload';\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "3585a5d7",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"setType": {
+				"chunk": "function(type) {\n\n\t\t\ttype = lychee.enumof(Composite.TYPE, type) ? type : null;\n\n\n\t\t\tif (type !== null) {\n\n\t\t\t\tthis.type = type;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "454cae67",
+				"parameters": [
+					{
+						"chunk": "lychee.enumof(Composite.TYPE, type) ? type : null",
+						"name": "type",
+						"type": "Enum",
+						"value": "Composite.TYPE"
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setValue": {
+				"chunk": "function(value) {\n\n\t\t\tvalue = value instanceof Array ? value : null;\n\n\n\t\t\tif (value !== null) {\n\n\t\t\t\tthis.value = value.filter(function(asset) {\n\n\t\t\t\t\tif (asset instanceof global.Config)  return true;\n\t\t\t\t\tif (asset instanceof global.Font)    return true;\n\t\t\t\t\tif (asset instanceof global.Music)   return true;\n\t\t\t\t\tif (asset instanceof global.Sound)   return true;\n\t\t\t\t\tif (asset instanceof global.Texture) return true;\n\t\t\t\t\tif (asset instanceof global.Stuff)   return true;\n\n\n\t\t\t\t\treturn false;\n\n\t\t\t\t});\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "ce16362c",
+				"parameters": [
+					{
+						"chunk": "value instanceof Array ? value : null",
+						"name": "value",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

@@ -1,0 +1,106 @@
+{
+	"header": {
+		"identifier": "lychee.net.Remote",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"lychee.net.remote.Debugger",
+			"lychee.net.remote.Stash",
+			"lychee.net.remote.Storage"
+		],
+		"includes": [
+			"lychee.net.Tunnel"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Debugger": {
+			"chunk": "lychee.import('lychee.net.remote.Debugger')",
+			"type": "lychee.Definition",
+			"hash": "ab815cb4",
+			"value": {
+				"reference": "lychee.net.remote.Debugger",
+				"arguments": []
+			}
+		},
+		"_Stash": {
+			"chunk": "lychee.import('lychee.net.remote.Stash')",
+			"type": "lychee.Definition",
+			"hash": "cf1f2d60",
+			"value": {
+				"reference": "lychee.net.remote.Stash",
+				"arguments": []
+			}
+		},
+		"_Storage": {
+			"chunk": "lychee.import('lychee.net.remote.Storage')",
+			"type": "lychee.Definition",
+			"hash": "e5a6d033",
+			"value": {
+				"reference": "lychee.net.remote.Storage",
+				"arguments": []
+			}
+		},
+		"_Tunnel": {
+			"chunk": "lychee.import('lychee.net.Tunnel')",
+			"type": "lychee.Definition",
+			"hash": "5a91c3b4",
+			"value": {
+				"reference": "lychee.net.Tunnel",
+				"arguments": []
+			}
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\t_Tunnel.call(this, states);\n\n\t\tstates = null;\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tif (lychee.debug === true) {\n\n\t\t\tthis.bind('connect', function() {\n\t\t\t\tthis.addService(new _Debugger(this));\n\t\t\t}, this);\n\n\t\t}\n\n\n\t\tthis.bind('connect', function() {\n\n\t\t\tthis.addService(new _Stash(this));\n\t\t\tthis.addService(new _Storage(this));\n\n\t\t}, this);\n\n\t}",
+			"type": "function",
+			"hash": "7e16538c",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {},
+		"properties": {},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Tunnel.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.net.Remote';\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "abd4a453",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			}
+		}
+	}
+}

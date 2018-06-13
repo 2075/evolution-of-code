@@ -1,0 +1,370 @@
+{
+	"header": {
+		"identifier": "lychee.ui.Notice",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"lychee.effect.Alpha",
+			"lychee.effect.Position",
+			"lychee.effect.State",
+			"lychee.ui.entity.Button",
+			"lychee.ui.entity.Label"
+		],
+		"includes": [
+			"lychee.ui.Layer"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Alpha": {
+			"chunk": "lychee.import('lychee.effect.Alpha')",
+			"type": "lychee.Definition",
+			"hash": "bece9a80",
+			"value": {
+				"reference": "lychee.effect.Alpha",
+				"arguments": []
+			}
+		},
+		"_Button": {
+			"chunk": "lychee.import('lychee.ui.entity.Button')",
+			"type": "lychee.Definition",
+			"hash": "b3693ec1",
+			"value": {
+				"reference": "lychee.ui.entity.Button",
+				"arguments": []
+			}
+		},
+		"_Label": {
+			"chunk": "lychee.import('lychee.ui.entity.Label')",
+			"type": "lychee.Definition",
+			"hash": "4c341244",
+			"value": {
+				"reference": "lychee.ui.entity.Label",
+				"arguments": []
+			}
+		},
+		"_Layer": {
+			"chunk": "lychee.import('lychee.ui.Layer')",
+			"type": "lychee.Definition",
+			"hash": "e94dc51f",
+			"value": {
+				"reference": "lychee.ui.Layer",
+				"arguments": []
+			}
+		},
+		"_Position": {
+			"chunk": "lychee.import('lychee.effect.Position')",
+			"type": "lychee.Definition",
+			"hash": "46e05d0c",
+			"value": {
+				"reference": "lychee.effect.Position",
+				"arguments": []
+			}
+		},
+		"_State": {
+			"chunk": "lychee.import('lychee.effect.State')",
+			"type": "lychee.Definition",
+			"hash": "d7d96ebc",
+			"value": {
+				"reference": "lychee.effect.State",
+				"arguments": []
+			}
+		},
+		"_FONT": {
+			"chunk": "attachments[\"fnt\"]",
+			"type": "Font",
+			"hash": "3076ee3c",
+			"value": {
+				"constructor": "Font",
+				"arguments": []
+			}
+		},
+		"_on_relayout": {
+			"chunk": "function() {\n\n\t\tlet button = this.getEntity('@options-next');\n\t\tlet label  = this.getEntity('@label');\n\t\tlet x2     = 1 / 2 * this.width;\n\n\n\t\tif (button.visible === true) {\n\t\t\tlabel.position.x = -48 - 8;\n\t\t} else {\n\t\t\tlabel.position.x = 0;\n\t\t}\n\n\n\t\tbutton.width      = 96;\n\t\tbutton.position.x = x2 - button.width / 2 - 16;\n\n\t}",
+			"type": "function",
+			"hash": "7944b2a1",
+			"parameters": [],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.font    = _FONT;\n\t\tthis.label   = 'Changes applied.';\n\t\tthis.options = [ 'Undo' ];\n\t\tthis.state   = 'default';\n\t\tthis.states  = { 'default': null, 'active': null };\n\n\t\tthis.__boundary = 0;\n\n\n\t\tthis.setState(states.state);\n\n\t\tdelete states.state;\n\n\n\t\tstates.width    = 512;\n\t\tstates.height   =  64;\n\t\tstates.alpha    = 0.0;\n\t\tstates.relayout = false;\n\n\n\t\t_Layer.call(this, states);\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tthis.unbind('touch');\n\t\tthis.bind('touch', function(id, position, delta) {\n\n\t\t\tlet button = this.getEntity('@options-next');\n\t\t\tif (button.visible === true && button.isAtPosition(position) === true) {\n\n\t\t\t\tbutton.trigger('touch', [ id, {\n\t\t\t\t\tx: position.x - button.position.x,\n\t\t\t\t\ty: position.y - button.position.y\n\t\t\t\t}, delta ]);\n\n\t\t\t\treturn button;\n\n\t\t\t}\n\n\t\t}, this);\n\n\t\tthis.bind('relayout', _on_relayout, this);\n\t\tthis.bind('reshape',  function(orientation, rotation, width, height) {\n\n\t\t\tif (typeof width === 'number' && typeof height === 'number') {\n\n\t\t\t\tthis.__boundary = 1 / 2 * height;\n\t\t\t\tthis.position.y = 1 / 2 * height + this.height / 2;\n\n\t\t\t\t_on_relayout.call(this);\n\n\t\t\t}\n\n\t\t}, this);\n\n\n\t\tthis.setEntity('@label', new _Label({\n\t\t\tfont:  this.font,\n\t\t\tvalue: this.label\n\t\t}));\n\n\t\tthis.setEntity('@options-next', new _Button({\n\t\t\tlabel: this.options[0],\n\t\t\tvalue: this.options[0].toLowerCase()\n\t\t}));\n\n\n\t\tthis.getEntity('@options-next').bind('change', function(value) {\n\t\t\tconsole.log('WHAT');\n\t\t\tthis.trigger('change', [ value ]);\n\t\t}, this);\n\n\n\t\tthis.setFont(states.font);\n\t\tthis.setLabel(states.label);\n\t\tthis.setOptions(states.options);\n\n\t\tdelete states.font;\n\t\tdelete states.label;\n\t\tdelete states.options;\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "c8888dc0",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"state": "setState",
+			"font": "setFont",
+			"label": "setLabel",
+			"options": "setOptions"
+		},
+		"properties": {
+			"font": {
+				"chunk": "this.font    = _FONT;",
+				"type": "Font",
+				"hash": "e56dda85",
+				"value": {
+					"chunk": "_FONT",
+					"type": "Font",
+					"hash": "b185383f",
+					"value": {
+						"constructor": "Font",
+						"arguments": [
+							"/tmp/Font.fnt"
+						]
+					}
+				}
+			},
+			"label": {
+				"chunk": "this.label   = 'Changes applied.';",
+				"type": "String",
+				"hash": "68ad7f32",
+				"value": {
+					"chunk": "'Changes applied.'",
+					"type": "String",
+					"hash": "84d4df5a",
+					"value": "Changes applied."
+				}
+			},
+			"options": {
+				"chunk": "this.options = [ 'Undo' ];",
+				"type": "Array",
+				"hash": "8907ac8e",
+				"value": {
+					"chunk": "[ 'Undo' ]",
+					"type": "Array",
+					"hash": "dc82085a",
+					"value": [
+						"Undo"
+					]
+				}
+			},
+			"state": {
+				"chunk": "this.state   = 'default';",
+				"type": "String",
+				"hash": "58c2bf0b",
+				"value": {
+					"chunk": "'default'",
+					"type": "String",
+					"hash": "ec9649c0",
+					"value": "default"
+				}
+			},
+			"states": {
+				"chunk": "this.states  = { 'default': null, 'active': null };",
+				"type": "Object",
+				"hash": "ab918371",
+				"value": {
+					"chunk": "{ 'default': null, 'active': null }",
+					"type": "Object",
+					"hash": "5e99f4bd",
+					"value": {
+						"default": null,
+						"active": null
+					}
+				}
+			},
+			"__boundary": {
+				"chunk": "this.__boundary = 0;",
+				"type": "Number",
+				"hash": "2eaf604d",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			}
+		},
+		"enums": {},
+		"events": {
+			"change": {
+				"name": "change",
+				"methods": [],
+				"parameters": [
+					{
+						"chunk": "value",
+						"type": "undefined",
+						"hash": "d9093f6e"
+					}
+				]
+			},
+			"relayout": {
+				"name": "relayout",
+				"methods": [
+					"setOptions"
+				],
+				"parameters": []
+			}
+		},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {\n\n\t\t\tlet font = lychee.deserialize(blob.font);\n\t\t\tif (font !== null) {\n\t\t\t\tthis.setFont(font);\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "814dbb80",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "blob",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Layer.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.Notice';\n\n\t\t\tlet states = data['arguments'][0];\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.label !== 'Changes applied.') states.label   = this.label;\n\t\t\tif (this.options.join(',') !== 'Undo') states.options = this.options.slice(0, this.options.length);\n\t\t\tif (this.state !== 'default')          states.state   = this.state;\n\n\n\t\t\tif (this.font !== null) blob.font = lychee.serialize(this.font);\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "fc425820",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"render": {
+				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tif (this.visible === false) return;\n\n\n\t\t\tlet alpha    = this.alpha;\n\t\t\tlet position = this.position;\n\n\n\t\t\tlet x  = position.x + offsetX;\n\t\t\tlet y  = position.y + offsetY;\n\t\t\tlet x1 = x - this.width  / 2;\n\t\t\tlet y1 = y - this.height / 2;\n\t\t\tlet x2 = x + this.width  / 2;\n\t\t\tlet y2 = y + this.height / 2;\n\n\n\t\t\trenderer.drawBox(\n\t\t\t\tx1,\n\t\t\t\ty1,\n\t\t\t\tx2,\n\t\t\t\ty2,\n\t\t\t\t'#363f3e',\n\t\t\t\ttrue\n\t\t\t);\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(alpha);\n\t\t\t}\n\n\n\t\t\tif (alpha !== 0) {\n\t\t\t\t_Layer.prototype.render.call(this, renderer, offsetX, offsetY);\n\t\t\t}\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(1.0);\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "5d371e77",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "renderer",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetX",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetY",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"setFont": {
+				"chunk": "function(font) {\n\n\t\t\tfont = font instanceof Font ? font : null;\n\n\n\t\t\tif (font !== null) {\n\n\t\t\t\tthis.getEntity('@label').setFont(font);\n\t\t\t\tthis.font = font;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "b5ff0b4e",
+				"parameters": [
+					{
+						"chunk": "font instanceof Font ? font : null",
+						"name": "font",
+						"type": "Font",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setLabel": {
+				"chunk": "function(label) {\n\n\t\t\tlabel = typeof label === 'string' ? label : null;\n\n\n\t\t\tif (label !== null) {\n\n\t\t\t\tthis.getEntity('@label').setValue(label);\n\t\t\t\tthis.label = label;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "4c7b0e33",
+				"parameters": [
+					{
+						"chunk": "typeof label === 'string' ? label : null",
+						"name": "label",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setOptions": {
+				"chunk": "function(options) {\n\n\t\t\toptions = options instanceof Array ? options : null;\n\n\n\t\t\tif (options !== null) {\n\n\t\t\t\tthis.options = options.map(function(option) {\n\t\t\t\t\treturn '' + option;\n\t\t\t\t});\n\n\n\t\t\t\tlet next = this.getEntity('@options-next');\n\n\t\t\t\tif (this.options.length === 0) {\n\n\t\t\t\t\tnext.visible = false;\n\t\t\t\t\tthis.trigger('relayout');\n\n\t\t\t\t} else if (this.options.length === 1) {\n\n\t\t\t\t\tnext.visible = true;\n\t\t\t\t\tnext.setLabel(this.options[0]);\n\t\t\t\t\tnext.setValue(this.options[0].toLowerCase());\n\t\t\t\t\tthis.trigger('relayout');\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "dc1c6196",
+				"parameters": [
+					{
+						"chunk": "options instanceof Array ? options : null",
+						"name": "options",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setState": {
+				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null && id !== this.state && this.states[id] !== undefined) {\n\n\t\t\t\tif (id === 'active') {\n\n\t\t\t\t\tthis.removeEffects();\n\n\t\t\t\t\tthis.setPosition({\n\t\t\t\t\t\ty: this.__boundary + this.height / 2\n\t\t\t\t\t});\n\n\t\t\t\t\tthis.addEffect(new _Alpha({\n\t\t\t\t\t\ttype:     _Alpha.TYPE.easeout,\n\t\t\t\t\t\tdelay:    300,\n\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\talpha:    1.0\n\t\t\t\t\t}));\n\n\t\t\t\t\tthis.addEffect(new _Position({\n\t\t\t\t\t\ttype:     _Position.TYPE.easeout,\n\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\tposition: {\n\t\t\t\t\t\t\ty: this.__boundary - this.height / 2\n\t\t\t\t\t\t}\n\t\t\t\t\t}));\n\n\t\t\t\t\tthis.addEffect(new _State({\n\t\t\t\t\t\tdelay: 3000,\n\t\t\t\t\t\tstate: 'default'\n\t\t\t\t\t}));\n\n\t\t\t\t} else {\n\n\t\t\t\t\tthis.removeEffects();\n\n\t\t\t\t\tthis.addEffect(new _Alpha({\n\t\t\t\t\t\ttype:     _Alpha.TYPE.easeout,\n\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\talpha:    0.0\n\t\t\t\t\t}));\n\n\t\t\t\t\tthis.addEffect(new _Position({\n\t\t\t\t\t\ttype:     _Position.TYPE.easeout,\n\t\t\t\t\t\tdelay:    300,\n\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\tposition: {\n\t\t\t\t\t\t\ty: this.__boundary + this.height / 2\n\t\t\t\t\t\t}\n\t\t\t\t\t}));\n\n\t\t\t\t}\n\n\n\t\t\t\tthis.state = id;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "c416d12c",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'string' ? id : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

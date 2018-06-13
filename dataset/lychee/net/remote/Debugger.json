@@ -1,0 +1,107 @@
+{
+	"header": {
+		"identifier": "lychee.net.remote.Debugger",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [
+			"lychee.net.Service"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Service": {
+			"chunk": "lychee.import('lychee.net.Service')",
+			"type": "lychee.Definition",
+			"hash": "1de466ca",
+			"value": {
+				"reference": "lychee.net.Service",
+				"arguments": []
+			}
+		},
+		"_TUNNELS": {
+			"chunk": "[]",
+			"type": "Array",
+			"hash": "30f4c306",
+			"value": []
+		},
+		"_bind_console": {
+			"chunk": "function(event) {\n\n\t\tthis.bind(event, function(data) {\n\n\t\t\tif (this.tunnel !== null) {\n\n\t\t\t\tlet receiver = data.tid || null;\n\t\t\t\tif (receiver !== null) {\n\n\t\t\t\t\tlet tunnel = _TUNNELS.find(function(client) {\n\t\t\t\t\t\treturn (client.host + ':' + client.port) === receiver;\n\t\t\t\t\t}) || null;\n\n\t\t\t\t\tif (tunnel !== null) {\n\n\t\t\t\t\t\ttunnel.send(data, {\n\t\t\t\t\t\t\tid:    'debugger',\n\t\t\t\t\t\t\tevent: 'console'\n\t\t\t\t\t\t});\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}, this);\n\n\t}",
+			"type": "function",
+			"hash": "a6da01bb",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "event",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_bind_relay": {
+			"chunk": "function(event) {\n\n\t\tthis.bind(event, function(data) {\n\n\t\t\tlet sender   = null;\n\t\t\tlet receiver = data.tid || null;\n\n\t\t\tif (this.tunnel !== null) {\n\t\t\t\tsender = this.tunnel.host + ':' + this.tunnel.port;\n\t\t\t}\n\n\n\t\t\tif (sender !== null && receiver !== null) {\n\n\t\t\t\tlet tunnel = _TUNNELS.find(function(client) {\n\t\t\t\t\treturn (client.host + ':' + client.port) === receiver;\n\t\t\t\t}) || null;\n\n\t\t\t\tif (tunnel !== null) {\n\n\t\t\t\t\tdata.receiver = sender;\n\n\t\t\t\t\ttunnel.send(data, {\n\t\t\t\t\t\tid:    'debugger',\n\t\t\t\t\t\tevent: event\n\t\t\t\t\t});\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}, this);\n\n\t}",
+			"type": "function",
+			"hash": "40e2b913",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "event",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(remote) {\n\n\t\t_Service.call(this, 'debugger', remote, _Service.TYPE.remote);\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tthis.bind('plug', function() {\n\n\t\t\t_TUNNELS.push(this.tunnel);\n\n\t\t}, this);\n\n\t\tthis.bind('unplug', function() {\n\n\t\t\tlet index = _TUNNELS.indexOf(this.tunnel);\n\t\t\tif (index !== -1) {\n\t\t\t\t_TUNNELS.splice(index, 1);\n\t\t\t}\n\n\t\t}, this);\n\n\n\t\t// Relay events to proper tunnel (data.tid)\n\t\t_bind_relay.call(this, 'define');\n\t\t_bind_relay.call(this, 'execute');\n\t\t_bind_relay.call(this, 'expose');\n\t\t_bind_relay.call(this, 'snapshot');\n\n\t\t// Relay events to proper tunnel (data.receiver > data.tid)\n\t\t_bind_console.call(this, 'define-value');\n\t\t_bind_console.call(this, 'execute-value');\n\t\t_bind_console.call(this, 'expose-value');\n\t\t_bind_console.call(this, 'snapshot-value');\n\n\t}",
+			"type": "function",
+			"hash": "6e98b09a",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "remote",
+					"type": "undefined"
+				}
+			]
+		},
+		"states": {},
+		"properties": {},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Service.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.net.remote.Debugger';\n\t\t\tdata['arguments']   = [];\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "e75c48fb",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			}
+		}
+	}
+}

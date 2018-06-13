@@ -1,0 +1,165 @@
+{
+	"header": {
+		"identifier": "lychee.policy.Color",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_rgb_to_color": {
+			"chunk": "function(r, g, b) {\n\n\t\tlet strr = r > 15 ? (r).toString(16) : '0' + (r).toString(16);\n\t\tlet strg = g > 15 ? (g).toString(16) : '0' + (g).toString(16);\n\t\tlet strb = b > 15 ? (b).toString(16) : '0' + (b).toString(16);\n\n\t\treturn '#' + strr + strg + strb;\n\n\t}",
+			"type": "function",
+			"hash": "b82908c0",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "r",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "g",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "b",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "'#' + strr + strg + strb",
+					"type": "String",
+					"value": "<string>"
+				}
+			]
+		},
+		"_color_to_rgb": {
+			"chunk": "function(color) {\n\n\t\tlet r = parseInt(color.substr(1, 2), 16) || 0;\n\t\tlet g = parseInt(color.substr(3, 2), 16) || 0;\n\t\tlet b = parseInt(color.substr(5, 2), 16) || 0;\n\n\t\treturn [ r, g, b ];\n\n\t}",
+			"type": "function",
+			"hash": "2325198f",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "color",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "[ r, g, b ]",
+					"type": "Array",
+					"value": []
+				}
+			]
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(states) {\n\n\t\tthis.entity = states.entity instanceof Object ? states.entity : null;\n\n\t}",
+			"type": "function",
+			"hash": "7e9d3f57",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "states",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {},
+		"properties": {
+			"entity": {
+				"chunk": "this.entity = states.entity instanceof Object ? states.entity : null;",
+				"type": "Object",
+				"hash": "2efd4e0b",
+				"value": {
+					"chunk": "states.entity instanceof Object ? states.entity : null",
+					"type": "Object",
+					"hash": "234e56d0",
+					"value": null
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet states = {\n\t\t\t\tentity: null\n\t\t\t};\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.policy.Color',\n\t\t\t\t'arguments':   [ states ]\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "1c42ef8f",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.policy.Color',\n\t\t\t\t'arguments':   [ states ]\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"sensor": {
+				"chunk": "function() {\n\n\t\t\tlet entity = this.entity;\n\t\t\tlet values = [ 0.5, 0.5, 0.5 ];\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tlet color = _color_to_rgb(entity.color || '#000000');\n\n\t\t\t\tvalues[0] = color[0] / 256;\n\t\t\t\tvalues[1] = color[1] / 256;\n\t\t\t\tvalues[2] = color[2] / 256;\n\n\t\t\t}\n\n\n\t\t\treturn values;\n\n\t\t}",
+				"type": "function",
+				"hash": "eeec1222",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "[ 0.5, 0.5, 0.5 ]",
+						"type": "Array",
+						"value": [
+							0.5,
+							0.5,
+							0.5
+						]
+					}
+				]
+			},
+			"control": {
+				"chunk": "function(values) {\n\n\t\t\tlet entity = this.entity;\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tentity.color = _rgb_to_color(\n\t\t\t\t\t(values[0] * 256) | 0,\n\t\t\t\t\t(values[1] * 256) | 0,\n\t\t\t\t\t(values[1] * 256) | 0\n\t\t\t\t);\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "0eb408b0",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "values",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

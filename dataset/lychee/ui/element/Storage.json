@@ -1,0 +1,127 @@
+{
+	"header": {
+		"identifier": "lychee.ui.element.Storage",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"lychee.Storage",
+			"lychee.ui.entity.Input",
+			"lychee.ui.entity.Select"
+		],
+		"includes": [
+			"lychee.ui.Element"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Element": {
+			"chunk": "lychee.import('lychee.ui.Element')",
+			"type": "lychee.Definition",
+			"hash": "8e05c4c6",
+			"value": {
+				"reference": "lychee.ui.Element",
+				"arguments": []
+			}
+		},
+		"_Input": {
+			"chunk": "lychee.import('lychee.ui.entity.Input')",
+			"type": "lychee.Definition",
+			"hash": "42594032",
+			"value": {
+				"reference": "lychee.ui.entity.Input",
+				"arguments": []
+			}
+		},
+		"_Select": {
+			"chunk": "lychee.import('lychee.ui.entity.Select')",
+			"type": "lychee.Definition",
+			"hash": "ebc6bc7f",
+			"value": {
+				"reference": "lychee.ui.entity.Select",
+				"arguments": []
+			}
+		},
+		"_Storage": {
+			"chunk": "lychee.import('lychee.Storage')",
+			"type": "lychee.Definition",
+			"hash": "43a5e8ad",
+			"value": {
+				"reference": "lychee.Storage",
+				"arguments": []
+			}
+		},
+		"_clear": {
+			"chunk": "function() {\n\n\t\tlet main = global.MAIN || null;\n\t\tif (main !== null) {\n\n\t\t\tlet storage = main.storage || null;\n\t\t\tif (storage !== null) {\n\n\t\t\t\tlet data = lychee.serialize(storage);\n\t\t\t\tif (data !== null) {\n\n\t\t\t\t\tlet blob = data.blob || null;\n\t\t\t\t\tif (blob !== null) {\n\t\t\t\t\t\tdelete data.blob;\n\t\t\t\t\t}\n\n\t\t\t\t\tmain.storage = lychee.deserialize(data);\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "82f460f4",
+			"parameters": [],
+			"values": []
+		},
+		"_read": {
+			"chunk": "function() {\n\n\t\tlet main = global.MAIN || null;\n\t\tif (main !== null) {\n\n\t\t\tlet storage = main.storage || null;\n\t\t\tif (storage !== null) {\n\n\t\t\t\tlet id   = storage.id;\n\t\t\t\tlet type = storage.type;\n\n\n\t\t\t\tthis.getEntity('id').setValue(id);\n\n\t\t\t\tif (type === _Storage.TYPE.persistent) {\n\t\t\t\t\tthis.getEntity('mode').setValue('persistent');\n\t\t\t\t} else if (type === _Storage.TYPE.temporary) {\n\t\t\t\t\tthis.getEntity('mode').setValue('temporary');\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "34ff3307",
+			"parameters": [],
+			"values": []
+		},
+		"_save": {
+			"chunk": "function() {\n\n\t\tlet main = global.MAIN || null;\n\t\tif (main !== null) {\n\n\t\t\tlet storage = main.storage || null;\n\t\t\tif (storage !== null) {\n\n\t\t\t\tlet id   = this.getEntity('id').value;\n\t\t\t\tlet mode = this.getEntity('mode').value;\n\n\n\t\t\t\tstorage.setId(id);\n\n\t\t\t\tif (mode === 'persistent') {\n\t\t\t\t\tstorage.setType(_Storage.TYPE.persistent);\n\t\t\t\t} else if (mode === 'temporary') {\n\t\t\t\t\tstorage.setType(_Storage.TYPE.temporary);\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "7c1b1539",
+			"parameters": [],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tstates.label    = 'Storage';\n\t\tstates.options  = [ 'Save', 'Clear' ];\n\t\tstates.relayout = true;\n\n\n\t\t_Element.call(this, states);\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tthis.setEntity('mode', new _Select({\n\t\t\toptions: [ 'persistent', 'temporary' ],\n\t\t\tvalue:   'persistent'\n\t\t}));\n\n\t\tthis.setEntity('id', new _Input({\n\t\t\ttype:  _Input.TYPE.text,\n\t\t\tvalue: 'app'\n\t\t}));\n\n\t\tthis.bind('change', function(action) {\n\n\t\t\tif (action === 'clear') {\n\t\t\t\t_clear.call(this);\n\t\t\t} else if (action === 'save') {\n\t\t\t\t_save.call(this);\n\t\t\t}\n\n\t\t}, this);\n\n\n\t\t_read.call(this);\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "116e8028",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {},
+		"properties": {},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Element.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.element.Storage';\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "ce93308d",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			}
+		}
+	}
+}

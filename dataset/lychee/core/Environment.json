@@ -1,0 +1,541 @@
+{
+	"header": {
+		"identifier": "lychee.Environment",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.id          = 'lychee-Environment-' + _id++;\n\t\tthis.debug       = true;\n\t\tthis.definitions = {};\n\t\tthis.global      = global !== undefined ? global : {};\n\t\tthis.packages    = {};\n\t\tthis.sandbox     = false;\n\t\tthis.tags        = {};\n\t\tthis.target      = 'app.Main';\n\t\tthis.timeout     = 10000;\n\t\tthis.type        = 'source';\n\n\t\tthis.__cache    = {\n\t\t\tactive:        false,\n\t\t\tassimilations: [],\n\t\t\tstart:         0,\n\t\t\tend:           0,\n\t\t\tretries:       0,\n\t\t\ttimeout:       0,\n\t\t\tload:          [],\n\t\t\ttrace:         [],\n\t\t\trequired_by:   []\n\t\t};\n\t\tthis.__features = {};\n\n\n\t\t// Alternative API for lychee.pkg\n\n\t\tif (states.packages instanceof Array) {\n\n\t\t\tthis.global.console.error('lychee.Environment (\"' + this.id + '\"): Invalid Packages.');\n\t\t\tdelete states.packages;\n\n\t\t} else if (states.packages instanceof Object) {\n\n\t\t\tfor (let pid in states.packages) {\n\n\t\t\t\tlet value = states.packages[pid];\n\t\t\t\tif (typeof value === 'string') {\n\n\t\t\t\t\tstates.packages[pid] = new _lychee.Package({\n\t\t\t\t\t\tid:          pid,\n\t\t\t\t\t\turl:         value,\n\t\t\t\t\t\ttype:        'source',\n\t\t\t\t\t\tenvironment: this\n\t\t\t\t\t});\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\n\t\tthis.setSandbox(states.sandbox);\n\t\tthis.setDebug(states.debug);\n\n\t\tthis.setDefinitions(states.definitions);\n\t\tthis.setId(states.id);\n\t\tthis.setPackages(states.packages);\n\t\tthis.setTags(states.tags);\n\t\tthis.setTimeout(states.timeout);\n\n\t\t// Needs this.packages to be ready\n\t\tthis.setType(states.type);\n\n\t\t// Needs this.type to be ready\n\t\tthis.setTarget(states.target);\n\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "db61490a",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"sandbox": "setSandbox",
+			"debug": "setDebug",
+			"definitions": "setDefinitions",
+			"id": "setId",
+			"packages": "setPackages",
+			"tags": "setTags",
+			"timeout": "setTimeout",
+			"type": "setType",
+			"target": "setTarget"
+		},
+		"properties": {
+			"id": {
+				"chunk": "this.id          = 'lychee-Environment-' + _id++;",
+				"type": "String",
+				"hash": "1af02e1a",
+				"value": {
+					"chunk": "'lychee-Environment-' + _id++",
+					"type": "String",
+					"hash": "7ad34e1d",
+					"value": "<string>"
+				}
+			},
+			"debug": {
+				"chunk": "this.debug       = true;",
+				"type": "Boolean",
+				"hash": "504e74a2",
+				"value": {
+					"chunk": "true",
+					"type": "Boolean",
+					"hash": "34edcf72",
+					"value": true
+				}
+			},
+			"definitions": {
+				"chunk": "this.definitions = {};",
+				"type": "Object",
+				"hash": "cc23aac7",
+				"value": {
+					"chunk": "{}",
+					"type": "Object",
+					"hash": "30f4c306",
+					"value": {}
+				}
+			},
+			"global": {
+				"chunk": "this.global      = global !== undefined ? global : {};",
+				"type": "Object",
+				"hash": "3ed66abc",
+				"value": {
+					"chunk": "global !== undefined ? global : {}",
+					"type": "Object",
+					"hash": "30ab5871",
+					"value": {}
+				}
+			},
+			"packages": {
+				"chunk": "this.packages    = {};",
+				"type": "Object",
+				"hash": "e58fc733",
+				"value": {
+					"chunk": "{}",
+					"type": "Object",
+					"hash": "30f4c306",
+					"value": {}
+				}
+			},
+			"sandbox": {
+				"chunk": "this.sandbox     = false;",
+				"type": "Boolean",
+				"hash": "29a9cd0a",
+				"value": {
+					"chunk": "false",
+					"type": "Boolean",
+					"hash": "d5619e17",
+					"value": false
+				}
+			},
+			"tags": {
+				"chunk": "this.tags        = {};",
+				"type": "Object",
+				"hash": "1534006e",
+				"value": {
+					"chunk": "{}",
+					"type": "Object",
+					"hash": "30f4c306",
+					"value": {}
+				}
+			},
+			"target": {
+				"chunk": "this.target      = 'app.Main';",
+				"type": "String",
+				"hash": "24d20266",
+				"value": {
+					"chunk": "'app.Main'",
+					"type": "String",
+					"hash": "3919e4e1",
+					"value": "app.Main"
+				}
+			},
+			"timeout": {
+				"chunk": "this.timeout     = 10000;",
+				"type": "Number",
+				"hash": "6092a80d",
+				"value": {
+					"chunk": "10000",
+					"type": "Number",
+					"hash": "7e7d9208",
+					"value": 10000
+				}
+			},
+			"type": {
+				"chunk": "this.type        = 'source';",
+				"type": "String",
+				"hash": "e70a020a",
+				"value": {
+					"chunk": "'source'",
+					"type": "String",
+					"hash": "4ebeb9cd",
+					"value": "source"
+				}
+			},
+			"__cache": {
+				"chunk": "this.__cache    = {\n\t\t\tactive:        false,\n\t\t\tassimilations: [],\n\t\t\tstart:         0,\n\t\t\tend:           0,\n\t\t\tretries:       0,\n\t\t\ttimeout:       0,\n\t\t\tload:          [],\n\t\t\ttrace:         [],\n\t\t\trequired_by:   []\n\t\t};",
+				"type": "Object",
+				"hash": "f322e496",
+				"value": {
+					"chunk": "{\n\t\t\tactive:        false,\n\t\t\tassimilations: [],\n\t\t\tstart:         0,\n\t\t\tend:           0,\n\t\t\tretries:       0,\n\t\t\ttimeout:       0,\n\t\t\tload:          [],\n\t\t\ttrace:         [],\n\t\t\trequired_by:   []\n\t\t}",
+					"type": "Object",
+					"hash": "6cb71d1d",
+					"value": {
+						"active": false,
+						"assimilations": [],
+						"start": 0,
+						"end": 0,
+						"retries": 0,
+						"timeout": 0,
+						"load": [],
+						"trace": [],
+						"required_by": []
+					}
+				}
+			},
+			"__features": {
+				"chunk": "this.__features = {};",
+				"type": "Object",
+				"hash": "4141c8b2",
+				"value": {
+					"chunk": "{}",
+					"type": "Object",
+					"hash": "30f4c306",
+					"value": {}
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {\n\n\t\t\tif (blob.definitions instanceof Object) {\n\n\t\t\t\tfor (let did in blob.definitions) {\n\t\t\t\t\tthis.definitions[did] = _lychee.deserialize(blob.definitions[did]);\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\tlet features = _lychee.deserialize(blob.features);\n\t\t\tif (features !== null) {\n\t\t\t\tthis.__features = features;\n\t\t\t}\n\n\t\t\tif (blob.global instanceof Object) {\n\n\t\t\t\tthis.global = new _Sandbox(blob.global.arguments[0], this.tags.platform || null);\n\n\t\t\t\tif (blob.global.blob !== null) {\n\t\t\t\t\tthis.global.deserialize(blob.global.blob);\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "46b65185",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "blob",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet states = {};\n\t\t\tlet blob   = {};\n\n\n\t\t\tif (this.id !== '')             states.id      = this.id;\n\t\t\tif (this.debug !== true)        states.debug   = this.debug;\n\t\t\tif (this.sandbox !== false)     states.sandbox = this.sandbox;\n\t\t\tif (this.timeout !== 10000)     states.timeout = this.timeout;\n\t\t\tif (this.target !== 'app.Main') states.target  = this.target;\n\t\t\tif (this.type !== 'source')     states.type    = this.type;\n\n\n\t\t\tif (Object.keys(this.packages).length > 0) {\n\n\t\t\t\tstates.packages = {};\n\n\t\t\t\tfor (let pid in this.packages) {\n\t\t\t\t\tstates.packages[pid] = this.packages[pid].url;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\tif (Object.keys(this.tags).length > 0) {\n\n\t\t\t\tstates.tags = {};\n\n\t\t\t\tfor (let tagid in this.tags) {\n\t\t\t\t\tstates.tags[tagid] = this.tags[tagid];\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tif (Object.keys(this.definitions).length > 0) {\n\n\t\t\t\tblob.definitions = {};\n\n\t\t\t\tfor (let did in this.definitions) {\n\t\t\t\t\tblob.definitions[did] = _lychee.serialize(this.definitions[did]);\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\tif (Object.keys(this.__features).length > 0) blob.features = _lychee.serialize(this.__features);\n\n\t\t\tif (this.sandbox === true) {\n\t\t\t\tblob.global = this.global.serialize();\n\t\t\t}\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.Environment',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "12243468",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.Environment',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"load": {
+				"chunk": "function(identifier) {\n\n\t\t\tidentifier = typeof identifier === 'string' ? identifier : null;\n\n\n\t\t\tif (identifier !== null) {\n\n\t\t\t\tlet tmp    = identifier.split('.');\n\t\t\t\tlet pkg_id = tmp[0];\n\t\t\t\tlet def_id = tmp.slice(1).join('.');\n\n\n\t\t\t\tlet definition = this.definitions[identifier] || null;\n\t\t\t\tif (definition !== null) {\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t} else {\n\n\t\t\t\t\tlet pkg = this.packages[pkg_id] || null;\n\t\t\t\t\tif (pkg !== null && pkg.config !== null) {\n\n\t\t\t\t\t\tlet result = pkg.load(def_id, this.tags);\n\t\t\t\t\t\tif (result === true) {\n\n\t\t\t\t\t\t\tif (this.debug === true) {\n\t\t\t\t\t\t\t\tthis.global.console.log('lychee.Environment (\"' + this.id + '\"): Loading \"' + identifier + '\" from Package \"' + pkg.id + '\".');\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\treturn result;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "92833d8d",
+				"parameters": [
+					{
+						"chunk": "typeof identifier === 'string' ? identifier : null",
+						"name": "identifier",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"define": {
+				"chunk": "function(definition, inject) {\n\n\t\t\tdefinition = definition instanceof _lychee.Definition ? definition : null;\n\t\t\tinject     = inject === true;\n\n\n\t\t\tif (definition !== null) {\n\n\t\t\t\tlet url = definition.url || null;\n\t\t\t\tif (url !== null && inject === false) {\n\n\t\t\t\t\tlet assimilation = true;\n\t\t\t\t\tlet new_pkg_id   = null;\n\t\t\t\t\tlet old_pkg_id   = definition.id.split('.')[0];\n\t\t\t\t\tlet packages     = this.packages;\n\n\t\t\t\t\tfor (let pid in packages) {\n\n\t\t\t\t\t\tlet pkg = packages[pid];\n\n\t\t\t\t\t\tif (url.startsWith(pkg.root)) {\n\t\t\t\t\t\t\tnew_pkg_id = pkg.id;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\tif (pid === old_pkg_id || pid === new_pkg_id) {\n\t\t\t\t\t\t\tassimilation = false;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\tif (assimilation === true) {\n\n\t\t\t\t\t\tif (this.debug === true) {\n\t\t\t\t\t\t\tthis.global.console.log('lychee.Environment (\"' + this.id + '\"): Assimilating Definition \"' + definition.id + '\".');\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\tthis.__cache.assimilations.push(definition.id);\n\n\t\t\t\t\t} else if (new_pkg_id !== null && new_pkg_id !== old_pkg_id) {\n\n\t\t\t\t\t\tif (this.debug === true) {\n\t\t\t\t\t\t\tthis.global.console.log('lychee.Environment (\"' + this.id + '\"): Injecting Definition \"' + definition.id + '\" into Package \"' + new_pkg_id + '\".');\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\tdefinition.id = new_pkg_id + '.' + definition.id.split('.').slice(1).join('.');\n\n\t\t\t\t\t\tfor (let i = 0, il = definition._includes.length; i < il; i++) {\n\n\t\t\t\t\t\t\tlet inc = definition._includes[i];\n\t\t\t\t\t\t\tif (inc.startsWith(old_pkg_id)) {\n\t\t\t\t\t\t\t\tdefinition._includes[i] = new_pkg_id + inc.substr(old_pkg_id.length);\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\tfor (let r = 0, rl = definition._requires.length; r < rl; r++) {\n\n\t\t\t\t\t\t\tlet req = definition._requires[r];\n\t\t\t\t\t\t\tif (req.startsWith(old_pkg_id)) {\n\t\t\t\t\t\t\t\tdefinition._requires[r] = new_pkg_id + req.substr(old_pkg_id.length);\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t} else {\n\n\t\t\t\t\t// XXX: Direct injection has no auto-mapping\n\n\t\t\t\t}\n\n\n\t\t\t\tif (_validate_definition.call(this, definition) === true) {\n\n\t\t\t\t\tif (this.debug === true) {\n\t\t\t\t\t\tlet info = Object.keys(definition._tags).length > 0 ? (' (' + JSON.stringify(definition._tags) + ')') : '.';\n\t\t\t\t\t\tthis.global.console.log('lychee.Environment (\"' + this.id + '\"): Mapping Definition \"' + definition.id + '\"' + info);\n\t\t\t\t\t}\n\n\t\t\t\t\tthis.definitions[definition.id] = definition;\n\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tlet info = Object.keys(definition._tags).length > 0 ? (' (' + JSON.stringify(definition._tags) + ').') : '.';\n\t\t\tthis.global.console.error('lychee.Environment (\"' + this.id + '\"): Invalid Definition \"' + definition.id + '\"' + info);\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "f4f18e35",
+				"parameters": [
+					{
+						"chunk": "definition instanceof _lychee.Definition ? definition : null",
+						"name": "definition",
+						"type": "_lychee.Definition",
+						"value": null
+					},
+					{
+						"chunk": "inject === true",
+						"name": "inject",
+						"type": "Boolean",
+						"value": true
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"init": {
+				"chunk": "function(callback) {\n\n\t\t\tcallback = callback instanceof Function ? callback : function() {};\n\n\n\t\t\tif (this.debug === true) {\n\t\t\t\tthis.global.lychee.ENVIRONMENTS[this.id] = this;\n\t\t\t}\n\n\n\t\t\tlet cache  = this.__cache;\n\t\t\tlet target = this.target;\n\n\t\t\tif (target !== null && cache.active === false) {\n\n\t\t\t\tlet result = this.load(target);\n\t\t\t\tif (result === true) {\n\n\t\t\t\t\tif (this.debug === true) {\n\t\t\t\t\t\tthis.global.console.info('lychee.Environment (\"' + this.id + '\"): BUILD START (\"' + target + '\").');\n\t\t\t\t\t}\n\n\n\t\t\t\t\tcache.start       = Date.now();\n\t\t\t\t\tcache.timeout     = Date.now() + this.timeout;\n\t\t\t\t\tcache.load        = [ target ];\n\t\t\t\t\tcache.trace       = [];\n\t\t\t\t\tcache.required_by = [];\n\t\t\t\t\tcache.active      = true;\n\n\n\t\t\t\t\tlet interval = setInterval(function() {\n\n\t\t\t\t\t\tlet cache = this.__cache;\n\t\t\t\t\t\tif (cache.active === true) {\n\n\t\t\t\t\t\t\t_build_loop.call(this, cache);\n\n\t\t\t\t\t\t} else if (cache.active === false) {\n\n\t\t\t\t\t\t\tif (interval !== null) {\n\t\t\t\t\t\t\t\tclearInterval(interval);\n\t\t\t\t\t\t\t\tinterval = null;\n\t\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\t\tlet assimilations = cache.assimilations;\n\t\t\t\t\t\t\tif (assimilations.length > 0) {\n\n\t\t\t\t\t\t\t\tfor (let a = 0, al = assimilations.length; a < al; a++) {\n\n\t\t\t\t\t\t\t\t\tlet identifier = assimilations[a];\n\t\t\t\t\t\t\t\t\tlet definition = this.definitions[identifier] || null;\n\t\t\t\t\t\t\t\t\tif (definition !== null) {\n\t\t\t\t\t\t\t\t\t\tdefinition.export(this.global);\n\t\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\t\tcache.end = Date.now();\n\n\n\t\t\t\t\t\t\tif (cache.end > cache.timeout) {\n\t\t\t\t\t\t\t\t_on_build_timeout.call(this, cache, callback);\n\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\t_on_build_success.call(this, cache, callback);\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}.bind(this), (1000 / 60) | 0);\n\n\t\t\t\t} else {\n\n\t\t\t\t\tcache.retries++;\n\n\n\t\t\t\t\tif (cache.retries < 10) {\n\n\t\t\t\t\t\tif (this.debug === true) {\n\t\t\t\t\t\t\tthis.global.console.warn('lychee.Environment (\"' + this.id + '\"): Unready Package \"' + target + '\" (retrying in 100ms ...).');\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\tsetTimeout(function() {\n\t\t\t\t\t\t\tthis.init(callback);\n\t\t\t\t\t\t}.bind(this), 100);\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tthis.global.console.error('lychee.Environment (\"' + this.id + '\"): Invalid Dependencies\\n\\t - ' + target + ' (target).');\n\n\n\t\t\t\t\t\ttry {\n\t\t\t\t\t\t\tcallback.call(this.global, null);\n\t\t\t\t\t\t} catch (err) {\n\t\t\t\t\t\t\t_lychee.Debugger.report(this, err, null);\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\ttry {\n\t\t\t\tcallback.call(this.global, null);\n\t\t\t} catch (err) {\n\t\t\t\t_lychee.Debugger.report(this, err, null);\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "ec23968c",
+				"parameters": [
+					{
+						"chunk": "callback instanceof Function ? callback : function() {}",
+						"name": "callback",
+						"type": "Function"
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"resolve": {
+				"chunk": "function(path) {\n\n\t\t\tpath = typeof path === 'string' ? path : '';\n\n\n\t\t\tlet proto = path.split(':')[0] || '';\n\t\t\tif (/^http|https/g.test(proto) === false) {\n\n\t\t\t\tif (path.startsWith(_lychee.ROOT.lychee) === false) {\n\n\t\t\t\t\tif (path.startsWith('/')) {\n\t\t\t\t\t\tpath = _lychee.ROOT.lychee + path;\n\t\t\t\t\t} else {\n\t\t\t\t\t\tpath = _lychee.ROOT.project + '/' + path;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tlet tmp = path.split('/');\n\n\t\t\tfor (let t = 0, tl = tmp.length; t < tl; t++) {\n\n\t\t\t\tif (tmp[t] === '.') {\n\t\t\t\t\ttmp.splice(t, 1);\n\t\t\t\t\ttl--;\n\t\t\t\t\tt--;\n\t\t\t\t} else if (tmp[t] === '..') {\n\t\t\t\t\ttmp.splice(t - 1, 2);\n\t\t\t\t\ttl -= 2;\n\t\t\t\t\tt  -= 2;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\treturn tmp.join('/');\n\n\t\t}",
+				"type": "function",
+				"hash": "f9d4e6a3",
+				"parameters": [
+					{
+						"chunk": "typeof path === 'string' ? path : ''",
+						"name": "path",
+						"type": "String",
+						"value": ""
+					}
+				],
+				"values": [
+					{
+						"chunk": "tmp.join('/')",
+						"type": "String",
+						"value": "<string>"
+					}
+				]
+			},
+			"setDebug": {
+				"chunk": "function(debug) {\n\n\t\t\tdebug = typeof debug === 'boolean' ? debug : null;\n\n\n\t\t\tif (debug !== null) {\n\n\t\t\t\tthis.debug = debug;\n\n\t\t\t\tif (this.sandbox === true) {\n\t\t\t\t\tthis.global.lychee.debug = debug;\n\t\t\t\t}\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "4e09fae0",
+				"parameters": [
+					{
+						"chunk": "typeof debug === 'boolean' ? debug : null",
+						"name": "debug",
+						"type": "Boolean",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setDefinitions": {
+				"chunk": "function(definitions) {\n\n\t\t\tdefinitions = definitions instanceof Object ? definitions : null;\n\n\n\t\t\tif (definitions !== null) {\n\n\t\t\t\tfor (let identifier in definitions) {\n\n\t\t\t\t\tlet definition = definitions[identifier];\n\t\t\t\t\tif (definition instanceof _lychee.Definition) {\n\t\t\t\t\t\tthis.definitions[identifier] = definition;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "f9cd3220",
+				"parameters": [
+					{
+						"chunk": "definitions instanceof Object ? definitions : null",
+						"name": "definitions",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setId": {
+				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null) {\n\n\t\t\t\tthis.id = id;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "da8aa1c6",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'string' ? id : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setPackages": {
+				"chunk": "function(packages) {\n\n\t\t\tpackages = packages instanceof Object ? packages : null;\n\n\n\t\t\tif (packages !== null) {\n\n\t\t\t\tfor (let pid in this.packages) {\n\n\t\t\t\t\tif (pid !== 'lychee') {\n\t\t\t\t\t\tthis.packages[pid].setEnvironment(null);\n\t\t\t\t\t\tdelete this.packages[pid];\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tfor (let pid in packages) {\n\n\t\t\t\t\tlet pkg = packages[pid];\n\t\t\t\t\tif (pkg instanceof _lychee.Package) {\n\n\t\t\t\t\t\tif (this.debug === true) {\n\t\t\t\t\t\t\tthis.global.console.log('lychee.Environment (\"' + this.id + '\"): Adding Package \"' + pkg.id + '\".');\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\tpkg.setEnvironment(this);\n\t\t\t\t\t\tthis.packages[pid] = pkg;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tlet type = this.type;\n\t\t\t\tif (/^(export|source)$/g.test(type)) {\n\n\t\t\t\t\tlet lychee_pkg = this.packages['lychee'] || null;\n\t\t\t\t\tif (lychee_pkg === null) {\n\n\t\t\t\t\t\tlychee_pkg = new _lychee.Package({\n\t\t\t\t\t\t\tid:          'lychee',\n\t\t\t\t\t\t\turl:         '/libraries/lychee/lychee.pkg',\n\t\t\t\t\t\t\tenvironment: this\n\t\t\t\t\t\t});\n\n\t\t\t\t\t\tif (this.debug === true) {\n\t\t\t\t\t\t\tthis.global.console.log('lychee.Environment (\"' + this.id + '\"): Injecting Package \"lychee\".');\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\tthis.packages['lychee'] = lychee_pkg;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "e42cea11",
+				"parameters": [
+					{
+						"chunk": "packages instanceof Object ? packages : null",
+						"name": "packages",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setSandbox": {
+				"chunk": "function(sandbox) {\n\n\t\t\tsandbox = typeof sandbox === 'boolean' ? sandbox : null;\n\n\n\t\t\tif (sandbox !== null) {\n\n\t\t\t\tif (sandbox !== this.sandbox) {\n\n\t\t\t\t\tthis.sandbox = sandbox;\n\n\n\t\t\t\t\tif (sandbox === true) {\n\n\t\t\t\t\t\tthis.global = new _Sandbox(null, this.tags.platform || null);\n\t\t\t\t\t\tthis.global.lychee.setEnvironment(this);\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tthis.global = global;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "02b1bc7b",
+				"parameters": [
+					{
+						"chunk": "typeof sandbox === 'boolean' ? sandbox : null",
+						"name": "sandbox",
+						"type": "Boolean",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setTags": {
+				"chunk": "function(tags) {\n\n\t\t\ttags = tags instanceof Object ? tags : null;\n\n\n\t\t\tif (tags !== null) {\n\n\t\t\t\tthis.tags = {};\n\n\t\t\t\tfor (let type in tags) {\n\n\t\t\t\t\tlet values = tags[type];\n\t\t\t\t\tif (values instanceof Array) {\n\n\t\t\t\t\t\tthis.tags[type] = values.filter(function(value) {\n\t\t\t\t\t\t\treturn typeof value === 'string';\n\t\t\t\t\t\t});\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "bc5f2f91",
+				"parameters": [
+					{
+						"chunk": "tags instanceof Object ? tags : null",
+						"name": "tags",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setTimeout": {
+				"chunk": "function(timeout) {\n\n\t\t\ttimeout = typeof timeout === 'number' ? (timeout | 0) : null;\n\n\n\t\t\tif (timeout !== null) {\n\n\t\t\t\tthis.timeout = timeout;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "2b8fca99",
+				"parameters": [
+					{
+						"chunk": "typeof timeout === 'number' ? (timeout | 0) : null",
+						"name": "timeout",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setTarget": {
+				"chunk": "function(identifier) {\n\n\t\t\tidentifier = typeof identifier === 'string' ? identifier : null;\n\n\n\t\t\tif (identifier !== null) {\n\n\t\t\t\tlet type = this.type;\n\t\t\t\tif (type === 'build') {\n\n\t\t\t\t\tthis.target = identifier;\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t} else {\n\n\t\t\t\t\tlet pid = identifier.split('.')[0];\n\t\t\t\t\tlet pkg = this.packages[pid] || null;\n\t\t\t\t\tif (pkg !== null) {\n\n\t\t\t\t\t\tthis.target = identifier;\n\n\t\t\t\t\t\treturn true;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "ec58d90a",
+				"parameters": [
+					{
+						"chunk": "typeof identifier === 'string' ? identifier : null",
+						"name": "identifier",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setType": {
+				"chunk": "function(type) {\n\n\t\t\ttype = typeof type === 'string' ? type : null;\n\n\n\t\t\tif (type !== null) {\n\n\t\t\t\tif (/^(build|export|source)$/g.test(type)) {\n\n\t\t\t\t\tthis.type = type;\n\n\n\t\t\t\t\tif (type === 'export') {\n\t\t\t\t\t\ttype = 'source';\n\t\t\t\t\t}\n\n\n\t\t\t\t\tfor (let pid in this.packages) {\n\t\t\t\t\t\tthis.packages[pid].setType(type);\n\t\t\t\t\t}\n\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "af6f8ed9",
+				"parameters": [
+					{
+						"chunk": "typeof type === 'string' ? type : null",
+						"name": "type",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

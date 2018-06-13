@@ -1,0 +1,425 @@
+{
+	"header": {
+		"identifier": "lychee.ui.Blueprint",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"lychee.effect.Offset",
+			"lychee.effect.Position",
+			"lychee.ui.Element"
+		],
+		"includes": [
+			"lychee.ui.Layer"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Element": {
+			"chunk": "lychee.import('lychee.ui.Element')",
+			"type": "lychee.Definition",
+			"hash": "8e05c4c6",
+			"value": {
+				"reference": "lychee.ui.Element",
+				"arguments": []
+			}
+		},
+		"_Layer": {
+			"chunk": "lychee.import('lychee.ui.Layer')",
+			"type": "lychee.Definition",
+			"hash": "e94dc51f",
+			"value": {
+				"reference": "lychee.ui.Layer",
+				"arguments": []
+			}
+		},
+		"_Offset": {
+			"chunk": "lychee.import('lychee.effect.Offset')",
+			"type": "lychee.Definition",
+			"hash": "a2400fd4",
+			"value": {
+				"reference": "lychee.effect.Offset",
+				"arguments": []
+			}
+		},
+		"_Position": {
+			"chunk": "lychee.import('lychee.effect.Position')",
+			"type": "lychee.Definition",
+			"hash": "46e05d0c",
+			"value": {
+				"reference": "lychee.effect.Position",
+				"arguments": []
+			}
+		},
+		"_validate_entity": {
+			"chunk": "function(entity) {\n\n\t\tif (entity instanceof Object) {\n\n\t\t\tif (\n\t\t\t\ttypeof entity.update === 'function'\n\t\t\t\t&& typeof entity.render === 'function'\n\t\t\t\t&& typeof entity.shape === 'number'\n\t\t\t\t&& typeof entity.setOrder === 'function'\n\t\t\t\t&& typeof entity.isAtPosition === 'function'\n\t\t\t) {\n\t\t\t\treturn true;\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn false;\n\n\t}",
+			"type": "function",
+			"hash": "d201e3e1",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "entity",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "true",
+					"type": "Boolean",
+					"value": true
+				},
+				{
+					"chunk": "false",
+					"type": "Boolean",
+					"value": false
+				}
+			]
+		},
+		"_on_relayout": {
+			"chunk": "function() {\n\n\t\tlet fade     = this.__fade;\n\t\tlet entities = this.entities;\n\t\tlet visible  = this.visible;\n\n\t\tif (entities.length > 0 && visible === true) {\n\n\t\t\tlet entity = null;\n\t\t\tlet other  = null;\n\t\t\tlet type   = this.type;\n\t\t\tlet x1     = -1 / 2 * this.width;\n\t\t\tlet x2     =  1 / 2 * this.width;\n\t\t\tlet y1     = -1 / 2 * this.height;\n\t\t\tlet off_x  = x1 + 32;\n\t\t\tlet off_y  = y1 + 32;\n\t\t\tlet pos_x  = 0;\n\t\t\tlet pos_y  = 0;\n\n\n\t\t\tthis.__scroll.max_x = 0;\n\t\t\tthis.__scroll.min_y = 0;\n\t\t\tthis.__scroll.delta = 0;\n\n\n\t\t\tif (type === Composite.TYPE.grid) {\n\n\t\t\t\tfor (let e = 0, el = entities.length; e < el; e++) {\n\n\t\t\t\t\tentity = entities[e];\n\t\t\t\t\tpos_x  = off_x + entity.width  / 2;\n\t\t\t\t\tpos_y  = off_y + entity.height / 2;\n\n\t\t\t\t\tif (pos_x + entity.width / 2 > x2 - 32) {\n\n\t\t\t\t\t\toff_x  = x1 + 32;\n\t\t\t\t\t\toff_y += entity.height + 32;\n\n\t\t\t\t\t\tpos_x = off_x + entity.width  / 2;\n\t\t\t\t\t\tpos_y = off_y + entity.height / 2;\n\n\t\t\t\t\t\toff_x += entity.width + 32;\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tpos_x = off_x + entity.width  / 2;\n\t\t\t\t\t\tpos_y = off_y + entity.height / 2;\n\n\t\t\t\t\t\toff_x += entity.width + 32;\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\tentity.trigger('relayout');\n\t\t\t\t\tentity.setOrder(e + 1);\n\n\n\t\t\t\t\tif (fade === true) {\n\n\t\t\t\t\t\tentity.setPosition({\n\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\ty: pos_y - 3 / 2 * this.height\n\t\t\t\t\t\t});\n\n\t\t\t\t\t\tentity.addEffect(new _Position({\n\t\t\t\t\t\t\ttype:     _Position.TYPE.easeout,\n\t\t\t\t\t\t\tdelay:    100 * e,\n\t\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\t\tposition: {\n\t\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\t\ty: pos_y\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}));\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tentity.setPosition({\n\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\ty: pos_y\n\t\t\t\t\t\t});\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\tthis.__scroll.min_y = Math.min(this.__scroll.min_y, -1 * (y1 + pos_y + entity.height / 2 + 32));\n\t\t\t\t\tthis.__scroll.delta = Math.max(this.__scroll.delta, entity.height + 32);\n\n\t\t\t\t}\n\n\t\t\t} else if (type === Composite.TYPE.view) {\n\n\t\t\t\tif (entities.length === 2) {\n\n\t\t\t\t\tentity        = entities[0];\n\t\t\t\t\tentity.width  = 320;\n\t\t\t\t\tentity.height = this.height;\n\n\t\t\t\t\tpos_x = x1 + 32 + entity.width / 2;\n\t\t\t\t\tpos_y = y1 + entity.height / 2;\n\n\t\t\t\t\tentity.trigger('relayout');\n\t\t\t\t\tentity.setOrder(1);\n\n\n\t\t\t\t\tif (fade === true) {\n\n\t\t\t\t\t\tentity.setPosition({\n\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\ty: pos_y - 3 / 2 * this.height\n\t\t\t\t\t\t});\n\n\t\t\t\t\t\tentity.addEffect(new _Position({\n\t\t\t\t\t\t\ttype:     _Position.TYPE.easeout,\n\t\t\t\t\t\t\tdelay:    100,\n\t\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\t\tposition: {\n\t\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\t\ty: pos_y\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}));\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tentity.setPosition({\n\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\ty: pos_y\n\t\t\t\t\t\t});\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\tentity        = entities[1];\n\t\t\t\t\tentity.width  = Math.max(480, this.width - 64 - 320);\n\t\t\t\t\tentity.height = this.height;\n\n\t\t\t\t\tpos_x = x1 + 320 + 64 + entity.width / 2;\n\t\t\t\t\tpos_y = y1 + entity.height / 2;\n\n\t\t\t\t\tentity.trigger('relayout');\n\t\t\t\t\tentity.setOrder(2);\n\n\n\t\t\t\t\tif (fade === true) {\n\n\t\t\t\t\t\tentity.setPosition({\n\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\ty: pos_y - 3 / 2 * this.height\n\t\t\t\t\t\t});\n\n\t\t\t\t\t\tentity.addEffect(new _Position({\n\t\t\t\t\t\t\ttype:     _Position.TYPE.easeout,\n\t\t\t\t\t\t\tdelay:    100,\n\t\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\t\tposition: {\n\t\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\t\ty: pos_y\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}));\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tentity.setPosition({\n\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\ty: pos_y\n\t\t\t\t\t\t});\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\tthis.__scroll.max_x = Math.min(this.__scroll.max_x, -1 * (x1 + pos_x + entity.width / 2 + 32));\n\n\t\t\t\t} else if (entities.length === 1) {\n\n\t\t\t\t\tentity        = entities[0];\n\t\t\t\t\tentity.width  = 320;\n\t\t\t\t\tentity.height = this.height;\n\n\t\t\t\t\tpos_x = x1 + 32 + entity.width / 2;\n\t\t\t\t\tpos_y = y1 + entity.height / 2;\n\n\t\t\t\t\tentity.trigger('relayout');\n\t\t\t\t\tentity.setOrder(1);\n\n\n\t\t\t\t\tif (fade === true) {\n\n\t\t\t\t\t\tentity.setPosition({\n\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\ty: pos_y - 3 / 2 * this.height\n\t\t\t\t\t\t});\n\n\t\t\t\t\t\tentity.addEffect(new _Position({\n\t\t\t\t\t\t\ttype:     _Position.TYPE.easeout,\n\t\t\t\t\t\t\tdelay:    100,\n\t\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\t\tposition: {\n\t\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\t\ty: pos_y\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}));\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tentity.setPosition({\n\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\ty: pos_y\n\t\t\t\t\t\t});\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t} else if (type === Composite.TYPE.full) {\n\n\t\t\t\tfor (let e = 0, el = entities.length; e < el; e++) {\n\n\t\t\t\t\tentity = entities[e];\n\n\t\t\t\t\tentity.position.x = 0;\n\t\t\t\t\tentity.position.y = 0;\n\n\t\t\t\t}\n\n\t\t\t} else if (type === Composite.TYPE.auto) {\n\n\t\t\t\tif (entities.length === 2) {\n\n\t\t\t\t\tentity = entities[0];\n\n\t\t\t\t\tpos_x = x1 + 32 + entity.width / 2;\n\t\t\t\t\tpos_y = 0;\n\n\t\t\t\t\tentity.trigger('relayout');\n\t\t\t\t\tentity.setOrder(1);\n\n\n\t\t\t\t\tif (fade === true) {\n\n\t\t\t\t\t\tentity.setPosition({\n\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\ty: pos_y - 3 / 2 * this.height\n\t\t\t\t\t\t});\n\n\t\t\t\t\t\tentity.addEffect(new _Position({\n\t\t\t\t\t\t\ttype:     _Position.TYPE.easeout,\n\t\t\t\t\t\t\tdelay:    100,\n\t\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\t\tposition: {\n\t\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\t\ty: pos_y\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}));\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tentity.setPosition({\n\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\ty: pos_y\n\t\t\t\t\t\t});\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\tentity = entities[1];\n\t\t\t\t\tother  = entities[0];\n\n\t\t\t\t\tpos_x = other.position.x + other.width / 2 + 32 + entity.width / 2;\n\t\t\t\t\tpos_y = 0;\n\n\t\t\t\t\tentity.trigger('relayout');\n\t\t\t\t\tentity.setOrder(2);\n\n\n\t\t\t\t\tif (fade === true) {\n\n\t\t\t\t\t\tentity.setPosition({\n\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\ty: pos_y - 3 / 2 * this.height\n\t\t\t\t\t\t});\n\n\t\t\t\t\t\tentity.addEffect(new _Position({\n\t\t\t\t\t\t\ttype:     _Position.TYPE.easeout,\n\t\t\t\t\t\t\tdelay:    100,\n\t\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\t\tposition: {\n\t\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\t\ty: pos_y\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}));\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tentity.setPosition({\n\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\ty: pos_y\n\t\t\t\t\t\t});\n\n\t\t\t\t\t}\n\n\t\t\t\t} else if (entities.length === 3) {\n\n\t\t\t\t\t// XXX: Stretch widest entity\n\t\t\t\t\tlet tmp_entity = entities[0];\n\t\t\t\t\tlet tmp_width  = 0;\n\n\t\t\t\t\tfor (let e = 0, el = entities.length; e < el; e++) {\n\n\t\t\t\t\t\tlet entity = entities[e];\n\t\t\t\t\t\tif (entity.width > tmp_entity.width) {\n\t\t\t\t\t\t\ttmp_entity = entity;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\ttmp_width += entity.width;\n\t\t\t\t\t\ttmp_width += 32;\n\n\t\t\t\t\t}\n\n\t\t\t\t\tif (tmp_width - 32 < this.width) {\n\t\t\t\t\t\ttmp_entity.width = tmp_entity.width + (this.width - tmp_width - 32);\n\t\t\t\t\t}\n\n\n\n\t\t\t\t\tentity = entities[0];\n\n\t\t\t\t\tpos_x = x1 + 32 + entity.width / 2;\n\t\t\t\t\tpos_y = 0;\n\n\t\t\t\t\tentity.trigger('relayout');\n\t\t\t\t\tentity.setOrder(1);\n\n\n\t\t\t\t\tif (fade === true) {\n\n\t\t\t\t\t\tentity.setPosition({\n\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\ty: pos_y - 3 / 2 * this.height\n\t\t\t\t\t\t});\n\n\t\t\t\t\t\tentity.addEffect(new _Position({\n\t\t\t\t\t\t\ttype:     _Position.TYPE.easeout,\n\t\t\t\t\t\t\tdelay:    100,\n\t\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\t\tposition: {\n\t\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\t\ty: pos_y\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}));\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tentity.setPosition({\n\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\ty: pos_y\n\t\t\t\t\t\t});\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\tentity = entities[1];\n\t\t\t\t\tother  = entities[0];\n\n\t\t\t\t\tpos_x = pos_x + other.width / 2 + 32 + entity.width / 2;\n\t\t\t\t\tpos_y = 0;\n\n\t\t\t\t\tentity.trigger('relayout');\n\t\t\t\t\tentity.setOrder(2);\n\n\n\t\t\t\t\tif (fade === true) {\n\n\t\t\t\t\t\tentity.setPosition({\n\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\ty: pos_y - 3 / 2 * this.height\n\t\t\t\t\t\t});\n\n\t\t\t\t\t\tentity.addEffect(new _Position({\n\t\t\t\t\t\t\ttype:     _Position.TYPE.easeout,\n\t\t\t\t\t\t\tdelay:    100,\n\t\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\t\tposition: {\n\t\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\t\ty: pos_y\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}));\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tentity.setPosition({\n\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\ty: pos_y\n\t\t\t\t\t\t});\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\tentity = entities[2];\n\t\t\t\t\tother  = entities[1];\n\n\t\t\t\t\tpos_x = pos_x + other.width / 2 + 32 + entity.width / 2;\n\t\t\t\t\tpos_y = 0;\n\n\t\t\t\t\tentity.trigger('relayout');\n\t\t\t\t\tentity.setOrder(3);\n\n\n\t\t\t\t\tif (fade === true) {\n\n\t\t\t\t\t\tentity.setPosition({\n\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\ty: pos_y - 3 / 2 * this.height\n\t\t\t\t\t\t});\n\n\t\t\t\t\t\tentity.addEffect(new _Position({\n\t\t\t\t\t\t\ttype:     _Position.TYPE.easeout,\n\t\t\t\t\t\t\tdelay:    100,\n\t\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\t\tposition: {\n\t\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\t\ty: pos_y\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}));\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tentity.setPosition({\n\t\t\t\t\t\t\tx: pos_x,\n\t\t\t\t\t\t\ty: pos_y\n\t\t\t\t\t\t});\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\n\t\tif (fade === true) {\n\t\t\tthis.__fade = false;\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "30096747",
+			"parameters": [],
+			"values": []
+		},
+		"_on_tab": {
+			"chunk": "function(name) {\n\n\t\tif (this.__focus.element === null) {\n\t\t\tthis.__focus.element = this.entities[0] || null;\n\t\t}\n\n\n\t\tlet focus = this.__focus;\n\t\tif (focus.element !== null) {\n\n\t\t\tlet entities  = focus.element.entities;\n\t\t\tlet triggered = null;\n\n\n\t\t\tif (name === 'tab') {\n\n\t\t\t\tfor (let e = focus.entity !== null ? entities.indexOf(focus.entity) : 0, el = entities.length; e < el; e++) {\n\n\t\t\t\t\tlet entity = entities[e];\n\t\t\t\t\tif (entity === focus.entity) {\n\n\t\t\t\t\t\tentity.trigger('blur');\n\n\t\t\t\t\t} else if (entity.visible === true) {\n\n\t\t\t\t\t\tlet result = entity.trigger('focus');\n\t\t\t\t\t\tif (result === true && entity.state === 'active') {\n\t\t\t\t\t\t\ttriggered = entity;\n\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tif (triggered === null) {\n\n\t\t\t\t\tlet index = this.entities.indexOf(focus.element);\n\t\t\t\t\tif (index !== -1) {\n\n\t\t\t\t\t\tfocus.element = this.entities[index + 1] || null;\n\t\t\t\t\t\tfocus.entity  = null;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t} else if (name === 'shift-tab') {\n\n\t\t\t\tfor (let e = focus.entity !== null ? entities.indexOf(focus.entity) : entities.length - 1; e >= 0; e--) {\n\n\t\t\t\t\tlet entity = entities[e];\n\t\t\t\t\tif (entity === focus.entity) {\n\n\t\t\t\t\t\tentity.trigger('blur');\n\n\t\t\t\t\t} else if (entity.visible === true) {\n\n\t\t\t\t\t\tlet result = entity.trigger('focus');\n\t\t\t\t\t\tif (result === true && entity.state === 'active') {\n\t\t\t\t\t\t\ttriggered = entity;\n\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tif (triggered === null) {\n\n\t\t\t\t\tlet index = this.entities.indexOf(focus.element);\n\t\t\t\t\tif (index !== -1) {\n\n\t\t\t\t\t\tfocus.element = this.entities[index - 1] || null;\n\t\t\t\t\t\tfocus.entity  = null;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\n\t\t\tif (triggered !== null) {\n\t\t\t\tfocus.entity = triggered;\n\t\t\t} else if (focus.element !== null) {\n\t\t\t\t_on_tab.call(this, name);\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "fcea188b",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "name",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_on_touch": {
+			"chunk": "function(id, position, delta) {\n\n\t\tif (this.visible === false) return null;\n\n\n\t\tlet triggered = null;\n\t\tlet args      = [ id, {\n\t\t\tx: position.x - this.offset.x,\n\t\t\ty: position.y - this.offset.y\n\t\t}, delta ];\n\n\n\t\tlet entity = this.getEntity(null, args[1]);\n\t\tif (entity !== null) {\n\n\t\t\tif (typeof entity.trigger === 'function') {\n\n\t\t\t\targs[1].x -= entity.position.x;\n\t\t\t\targs[1].y -= entity.position.y;\n\n\t\t\t\tlet result = entity.trigger('touch', args);\n\t\t\t\tif (result === true) {\n\t\t\t\t\ttriggered = entity;\n\t\t\t\t} else if (result !== false) {\n\t\t\t\t\ttriggered = result;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t} else {\n\n\t\t\ttriggered = this;\n\n\t\t}\n\n\n\t\treturn triggered;\n\n\t}",
+			"type": "function",
+			"hash": "b1324402",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "id",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "position",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "delta",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "null",
+					"type": "null",
+					"value": null
+				},
+				{
+					"chunk": "entity",
+					"type": "lychee.app.Entity",
+					"value": {
+						"constructor": "lychee.app.Entity",
+						"arguments": []
+					}
+				},
+				{
+					"chunk": "result",
+					"type": "Boolean",
+					"value": true
+				},
+				{
+					"chunk": "this",
+					"type": "Object",
+					"value": "this"
+				}
+			]
+		},
+		"_on_swipe": {
+			"chunk": "function(id, state, position, delta, swipe) {\n\n\t\tif (this.effects.length === 0) {\n\n\t\t\tlet scroll = this.__scroll;\n\t\t\tlet type   = this.type;\n\n\n\t\t\tif (type === Composite.TYPE.grid) {\n\n\t\t\t\tif (state === 'start') {\n\n\t\t\t\t\tscroll.start = this.offset.y;\n\n\t\t\t\t} else if (state === 'move' || state === 'end') {\n\n\t\t\t\t\tif (scroll.start === null) {\n\t\t\t\t\t\tscroll.start = this.offset.x;\n\t\t\t\t\t}\n\n\n\t\t\t\t\tif (Math.abs(swipe.y) >= 128) {\n\n\t\t\t\t\t\tlet offset_y = scroll.start;\n\n\t\t\t\t\t\tif (swipe.y > 0) {\n\t\t\t\t\t\t\toffset_y += scroll.delta;\n\t\t\t\t\t\t} else if (swipe.y < 0) {\n\t\t\t\t\t\t\toffset_y -= scroll.delta;\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\tif (offset_y < scroll.min_y) {\n\t\t\t\t\t\t\toffset_y = scroll.min_y;\n\t\t\t\t\t\t} else if (offset_y > 0) {\n\t\t\t\t\t\t\toffset_y = 0;\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\tthis.addEffect(new _Offset({\n\t\t\t\t\t\t\ttype:     _Offset.TYPE.easeout,\n\t\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\t\toffset:   {\n\t\t\t\t\t\t\t\ty: offset_y\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}));\n\n\n\t\t\t\t\t\treturn false;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t} else if (type === Composite.TYPE.view) {\n\n\t\t\t\tif (state === 'start') {\n\n\t\t\t\t\tscroll.start = this.offset.x;\n\n\t\t\t\t} else if (state === 'move' || state === 'end') {\n\n\t\t\t\t\tif (scroll.start === null) {\n\t\t\t\t\t\tscroll.start = this.offset.x;\n\t\t\t\t\t}\n\n\n\t\t\t\t\tif (Math.abs(swipe.x) >= 128) {\n\n\t\t\t\t\t\tlet offset_x = scroll.start;\n\n\t\t\t\t\t\tif (swipe.x > 0) {\n\t\t\t\t\t\t\toffset_x += scroll.delta;\n\t\t\t\t\t\t} else if (swipe.x < 0) {\n\t\t\t\t\t\t\toffset_x -= scroll.delta;\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\tif (offset_x > scroll.max_x) {\n\t\t\t\t\t\t\toffset_x = scroll.max_x;\n\t\t\t\t\t\t} else if (offset_x < 0) {\n\t\t\t\t\t\t\toffset_x = 0;\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\tthis.addEffect(new _Offset({\n\t\t\t\t\t\t\ttype:     _Offset.TYPE.easeout,\n\t\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\t\toffset:   {\n\t\t\t\t\t\t\t\tx: offset_x\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}));\n\n\n\t\t\t\t\t\treturn false;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn true;\n\n\t}",
+			"type": "function",
+			"hash": "d89c2c5a",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "id",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "state",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "position",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "delta",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "swipe",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "false",
+					"type": "Boolean",
+					"value": false
+				},
+				{
+					"chunk": "true",
+					"type": "Boolean",
+					"value": true
+				}
+			]
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.type = Composite.TYPE.grid;\n\n\n\t\tthis.__fade   = false;\n\t\tthis.__focus  = {\n\t\t\telement: null,\n\t\t\tentity:  null\n\t\t};\n\t\tthis.__scroll = {\n\t\t\tstart: 0,\n\t\t\tdelta: 0,\n\t\t\tmax_x: 0,\n\t\t\tmin_y: 0\n\t\t};\n\n\n\t\tthis.setType(states.type);\n\n\t\tdelete states.type;\n\n\n\t\tstates.relayout = false;\n\n\n\t\t_Layer.call(this, states);\n\n\t\tstates = null;\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tthis.unbind('scroll');\n\t\tthis.unbind('touch');\n\n\t\tthis.bind('relayout', _on_relayout, this);\n\t\tthis.bind('reshape',  _on_relayout, this);\n\t\tthis.bind('touch',    _on_touch,    this);\n\t\tthis.bind('swipe',    _on_swipe,    this);\n\n\t\tthis.bind('key', function(key, name, delta) {\n\n\t\t\tlet focus = this.__focus;\n\n\n\t\t\tif (key === 'tab') {\n\n\t\t\t\t_on_tab.call(this, name);\n\n\n\t\t\t\treturn true;\n\n\t\t\t} else if (key === 'page-up') {\n\n\t\t\t\t_on_swipe.call(this, null, 'start');\n\t\t\t\t_on_swipe.call(this, null, 'move', null, null, {\n\t\t\t\t\ty: 128\n\t\t\t\t});\n\n\n\t\t\t\treturn true;\n\n\t\t\t} else if (key === 'page-down') {\n\n\t\t\t\t_on_swipe.call(this, null, 'start');\n\t\t\t\t_on_swipe.call(this, null, 'move', null, null, {\n\t\t\t\t\ty: -128\n\t\t\t\t});\n\n\n\t\t\t\treturn true;\n\n\t\t\t} else if (focus.element !== null) {\n\n\t\t\t\tlet entity = focus.entity;\n\t\t\t\tif (entity !== null) {\n\t\t\t\t\tentity.trigger('key', [ key, name, delta ]);\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}, this);\n\n\t\tthis.bind('scroll', function(id, direction, position, delta) {\n\n\t\t\tif (direction === 'up') {\n\n\t\t\t\t_on_swipe.call(this, null, 'start');\n\t\t\t\t_on_swipe.call(this, null, 'move', null, null, {\n\t\t\t\t\ty: 128\n\t\t\t\t});\n\n\n\t\t\t\treturn true;\n\n\t\t\t} else if (direction === 'down') {\n\n\t\t\t\t_on_swipe.call(this, null, 'start');\n\t\t\t\t_on_swipe.call(this, null, 'move', null, null, {\n\t\t\t\t\ty: -128\n\t\t\t\t});\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}, this);\n\n\t}",
+			"type": "function",
+			"hash": "2c33e324",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"type": "setType"
+		},
+		"properties": {
+			"type": {
+				"chunk": "this.type = Composite.TYPE.grid;",
+				"type": "Enum",
+				"hash": "c0dec0ef",
+				"value": {
+					"chunk": "Composite.TYPE.grid",
+					"type": "Enum",
+					"hash": "c171f214",
+					"value": "Composite.TYPE.grid"
+				}
+			},
+			"__fade": {
+				"chunk": "this.__fade   = false;",
+				"type": "Boolean",
+				"hash": "1b82c173",
+				"value": {
+					"chunk": "false",
+					"type": "Boolean",
+					"hash": "d5619e17",
+					"value": false
+				}
+			},
+			"__focus": {
+				"chunk": "this.__focus  = {\n\t\t\telement: null,\n\t\t\tentity:  null\n\t\t};",
+				"type": "Object",
+				"hash": "6e1dcc78",
+				"value": {
+					"chunk": "{\n\t\t\telement: null,\n\t\t\tentity:  null\n\t\t}",
+					"type": "Object",
+					"hash": "495e5066",
+					"value": {
+						"element": null,
+						"entity": null
+					}
+				}
+			},
+			"__scroll": {
+				"chunk": "this.__scroll = {\n\t\t\tstart: 0,\n\t\t\tdelta: 0,\n\t\t\tmax_x: 0,\n\t\t\tmin_y: 0\n\t\t};",
+				"type": "Object",
+				"hash": "ac526508",
+				"value": {
+					"chunk": "{\n\t\t\tstart: 0,\n\t\t\tdelta: 0,\n\t\t\tmax_x: 0,\n\t\t\tmin_y: 0\n\t\t}",
+					"type": "Object",
+					"hash": "81bb2f09",
+					"value": {
+						"start": 0,
+						"delta": 0,
+						"max_x": 0,
+						"min_y": 0
+					}
+				}
+			}
+		},
+		"enums": {
+			"TYPE": {
+				"values": [
+					{
+						"name": "grid",
+						"value": {
+							"chunk": "0",
+							"type": "Number",
+							"hash": "d271c07f",
+							"value": 0
+						}
+					},
+					{
+						"name": "view",
+						"value": {
+							"chunk": "1",
+							"type": "Number",
+							"hash": "9416ac93",
+							"value": 1
+						}
+					},
+					{
+						"name": "full",
+						"value": {
+							"chunk": "2",
+							"type": "Number",
+							"hash": "0129e217",
+							"value": 2
+						}
+					},
+					{
+						"name": "auto",
+						"value": {
+							"chunk": "3",
+							"type": "Number",
+							"hash": "0fc7a1b4",
+							"value": 3
+						}
+					}
+				]
+			}
+		},
+		"events": {
+			"relayout": {
+				"name": "relayout",
+				"methods": [
+					"addEntity",
+					"setType",
+					"setVisible"
+				],
+				"parameters": []
+			}
+		},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Layer.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.Blueprint';\n\n\t\t\tlet states = data['arguments'][0];\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.type !== Composite.TYPE.grid) states.type = this.type;\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "563b2e71",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"addEntity": {
+				"chunk": "function(entity) {\n\n\t\t\tentity = _validate_entity(entity) === true ? entity : null;\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tlet index = this.entities.indexOf(entity);\n\t\t\t\tif (index === -1) {\n\n\t\t\t\t\tthis.entities.push(entity);\n\t\t\t\t\tthis.trigger('relayout');\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "9147abbf",
+				"parameters": [
+					{
+						"chunk": "_validate_entity(entity) === true ? entity : null",
+						"name": "entity",
+						"type": "lychee.app.Entity",
+						"value": {
+							"constructor": "lychee.app.Entity",
+							"arguments": []
+						}
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setType": {
+				"chunk": "function(type) {\n\n\t\t\ttype = lychee.enumof(Composite.TYPE, type) ? type : null;\n\n\n\t\t\tif (type !== null) {\n\n\t\t\t\tthis.type = type;\n\t\t\t\tthis.trigger('relayout');\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "60c7264a",
+				"parameters": [
+					{
+						"chunk": "lychee.enumof(Composite.TYPE, type) ? type : null",
+						"name": "type",
+						"type": "Enum",
+						"value": "Composite.TYPE"
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setVisible": {
+				"chunk": "function(visible) {\n\n\t\t\tvisible = typeof visible === 'boolean' ? visible : null;\n\n\n\t\t\tif (visible !== null) {\n\n\t\t\t\tlet fade = false;\n\t\t\t\tif (this.visible === false && visible === true) {\n\t\t\t\t\tfade = true;\n\t\t\t\t}\n\n\n\t\t\t\tthis.visible = visible;\n\n\n\t\t\t\tif (fade === true) {\n\t\t\t\t\tthis.__fade = true;\n\t\t\t\t\tthis.trigger('relayout');\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "c680fa33",
+				"parameters": [
+					{
+						"chunk": "typeof visible === 'boolean' ? visible : null",
+						"name": "visible",
+						"type": "Boolean",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

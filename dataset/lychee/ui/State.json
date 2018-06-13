@@ -1,0 +1,279 @@
+{
+	"header": {
+		"identifier": "lychee.ui.State",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"lychee.effect.Position",
+			"lychee.effect.Visible",
+			"lychee.ui.Blueprint",
+			"lychee.ui.Element",
+			"lychee.ui.Layer",
+			"lychee.ui.Menu",
+			"lychee.ui.Notice",
+			"lychee.ui.element.Input",
+			"lychee.ui.element.Jukebox",
+			"lychee.ui.element.Network",
+			"lychee.ui.element.Stash",
+			"lychee.ui.element.Storage",
+			"lychee.ui.element.Viewport",
+			"lychee.ui.sprite.Background",
+			"lychee.ui.sprite.Emblem"
+		],
+		"includes": [
+			"lychee.app.State"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Blueprint": {
+			"chunk": "lychee.import('lychee.ui.Blueprint')",
+			"type": "lychee.Definition",
+			"hash": "660fd688",
+			"value": {
+				"reference": "lychee.ui.Blueprint",
+				"arguments": []
+			}
+		},
+		"_Layer": {
+			"chunk": "lychee.import('lychee.ui.Layer')",
+			"type": "lychee.Definition",
+			"hash": "e94dc51f",
+			"value": {
+				"reference": "lychee.ui.Layer",
+				"arguments": []
+			}
+		},
+		"_Position": {
+			"chunk": "lychee.import('lychee.effect.Position')",
+			"type": "lychee.Definition",
+			"hash": "46e05d0c",
+			"value": {
+				"reference": "lychee.effect.Position",
+				"arguments": []
+			}
+		},
+		"_State": {
+			"chunk": "lychee.import('lychee.app.State')",
+			"type": "lychee.Definition",
+			"hash": "71022239",
+			"value": {
+				"reference": "lychee.app.State",
+				"arguments": []
+			}
+		},
+		"_Visible": {
+			"chunk": "lychee.import('lychee.effect.Visible')",
+			"type": "lychee.Definition",
+			"hash": "69292fec",
+			"value": {
+				"reference": "lychee.effect.Visible",
+				"arguments": []
+			}
+		},
+		"_BLOB": {
+			"chunk": "attachments[\"json\"].buffer",
+			"type": "undefined",
+			"hash": "b8ed9603"
+		},
+		"_BG": {
+			"chunk": "null",
+			"type": "null",
+			"hash": "66f07992",
+			"value": null
+		},
+		"_INSTANCES": {
+			"chunk": "[]",
+			"type": "Array",
+			"hash": "30f4c306",
+			"value": []
+		},
+		"_MENU": {
+			"chunk": "null",
+			"type": "null",
+			"hash": "66f07992",
+			"value": null
+		},
+		"_NOTICE": {
+			"chunk": "null",
+			"type": "null",
+			"hash": "66f07992",
+			"value": null
+		},
+		"_on_escape": {
+			"chunk": "function() {\n\n\t\tlet menu = this.query('ui > menu');\n\t\tif (menu !== null) {\n\n\t\t\tif (menu.state === 'active') {\n\n\t\t\t\tif (this.__focus !== null) {\n\t\t\t\t\tthis.__focus.trigger('blur');\n\t\t\t\t}\n\n\t\t\t\tthis.__focus = this.query('ui > ' + menu.value.toLowerCase());\n\t\t\t\tthis.__focus.trigger('focus');\n\n\t\t\t} else {\n\n\t\t\t\tif (this.__focus !== null) {\n\t\t\t\t\tthis.__focus.trigger('blur');\n\t\t\t\t}\n\n\t\t\t\tthis.__focus = menu;\n\t\t\t\tthis.__focus.trigger('focus');\n\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "c99e0733",
+			"parameters": [],
+			"values": []
+		},
+		"_on_fade": {
+			"chunk": "function(id) {\n\n\t\tlet fade_offset = -3 / 2 * this.getLayer('ui').height;\n\t\tlet entity      = this.query('ui > ' + id);\n\t\tlet layers      = this.getLayer('ui').entities.filter(function(layer) {\n\t\t\treturn layer !== _MENU && layer !== _NOTICE;\n\t\t});\n\n\n\t\tif (entity !== null && entity.visible === false) {\n\n\t\t\tlayers.forEach(function(layer) {\n\n\t\t\t\tif (entity === layer) {\n\n\t\t\t\t\tlayer.setVisible(true);\n\t\t\t\t\tlayer.setPosition({\n\t\t\t\t\t\ty: fade_offset\n\t\t\t\t\t});\n\n\t\t\t\t\tlayer.addEffect(new _Position({\n\t\t\t\t\t\ttype:     _Position.TYPE.easeout,\n\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\tposition: {\n\t\t\t\t\t\t\ty: 0\n\t\t\t\t\t\t}\n\t\t\t\t\t}));\n\n\t\t\t\t} else {\n\n\t\t\t\t\tlayer.setPosition({\n\t\t\t\t\t\ty: 0\n\t\t\t\t\t});\n\n\t\t\t\t\tlayer.addEffect(new _Position({\n\t\t\t\t\t\ttype:     _Position.TYPE.easeout,\n\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\tposition: {\n\t\t\t\t\t\t\ty: fade_offset\n\t\t\t\t\t\t}\n\t\t\t\t\t}));\n\n\t\t\t\t\tlayer.addEffect(new _Visible({\n\t\t\t\t\t\tdelay:   300,\n\t\t\t\t\t\tvisible: false\n\t\t\t\t\t}));\n\n\t\t\t\t}\n\n\t\t\t});\n\n\t\t} else if (entity === null) {\n\n\t\t\tlayers.forEach(function(layer) {\n\n\t\t\t\tlayer.setPosition({\n\t\t\t\t\ty: 0\n\t\t\t\t});\n\n\t\t\t\tlayer.addEffect(new _Position({\n\t\t\t\t\ttype:     _Position.TYPE.easeout,\n\t\t\t\t\tduration: 300,\n\t\t\t\t\tposition: {\n\t\t\t\t\t\ty: fade_offset\n\t\t\t\t\t}\n\t\t\t\t}));\n\n\t\t\t\tlayer.addEffect(new _Visible({\n\t\t\t\t\tdelay:   300,\n\t\t\t\t\tvisible: false\n\t\t\t\t}));\n\n\t\t\t});\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "a5b69996",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "id",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_on_relayout": {
+			"chunk": "function() {\n\n\t\tlet renderer = this.renderer;\n\t\tif (renderer !== null) {\n\n\t\t\tlet entity = null;\n\t\t\tlet width  = renderer.width;\n\t\t\tlet height = renderer.height;\n\n\n\t\t\tlet menu   = this.query('ui > menu');\n\t\t\tlet notice = this.query('ui > notice');\n\n\t\t\tif (menu !== null && notice !== null) {\n\n\t\t\t\tentity = this.getLayer('ui');\n\t\t\t\tentity.width  = width;\n\t\t\t\tentity.height = height;\n\n\n\t\t\t\tfor (let e = 0, el = entity.entities.length; e < el; e++) {\n\n\t\t\t\t\tlet blueprint = entity.entities[e];\n\t\t\t\t\tif (blueprint !== menu && blueprint !== notice) {\n\n\t\t\t\t\t\tblueprint.width      = width - menu.width;\n\t\t\t\t\t\tblueprint.height     = height;\n\t\t\t\t\t\tblueprint.position.x = menu.width / 2;\n\t\t\t\t\t\tblueprint.trigger('relayout');\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tnotice.position.x = menu.width / 2;\n\t\t\t\tnotice.trigger('relayout');\n\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "cea0212b",
+			"parameters": [],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(main) {\n\n\t\tthis.__layers = {\n\t\t\tui: new _Layer()\n\t\t};\n\n\t\tthis.__layers_map = [];\n\n\n\t\t_State.call(this, main);\n\n\n\t\t// XXX: Make sure layers map contains \"ui\"\n\t\tlet ids = Object.keys(this.__layers).sort();\n\t\tif (ids.length > 0) {\n\t\t\tthis.__layers_map = ids;\n\t\t}\n\n\n\t\t_INSTANCES.push(this);\n\n\t}",
+			"type": "function",
+			"hash": "014ffc15",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "main",
+					"type": "undefined"
+				}
+			]
+		},
+		"states": {},
+		"properties": {
+			"__layers": {
+				"chunk": "this.__layers = {\n\t\t\tui: new _Layer()\n\t\t};",
+				"type": "Object",
+				"hash": "0ede48ea",
+				"value": {
+					"chunk": "{\n\t\t\tui: new _Layer()\n\t\t}",
+					"type": "Object",
+					"hash": "be10a385",
+					"value": {}
+				}
+			},
+			"__layers_map": {
+				"chunk": "this.__layers_map = [];",
+				"type": "Array",
+				"hash": "f50db781",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _State.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.State';\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "f96400ee",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.app.State',\n\t\t\t\t'arguments':   [ main ],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"deserialize": {
+				"chunk": "function(blob) {\n\n\t\t\tif (_INSTANCES[0] === this) {\n\n\t\t\t\t_State.prototype.deserialize.call(this, _BLOB);\n\t\t\t\t_State.prototype.deserialize.call(this, blob);\n\n\n\t\t\t\tlet main   = this.main;\n\t\t\t\tlet bg     = this.getLayer('bg');\n\t\t\t\tlet menu   = this.query('ui > menu');\n\t\t\t\tlet notice = this.query('ui > notice');\n\n\n\t\t\t\tif (main !== null && bg !== null) {\n\t\t\t\t\t_BG = bg;\n\t\t\t\t}\n\n\n\t\t\t\tif (main !== null && menu !== null) {\n\n\t\t\t\t\t_MENU = menu;\n\n\t\t\t\t\t_MENU.bind('change', function(value) {\n\n\t\t\t\t\t\tlet val = value.toLowerCase();\n\n\t\t\t\t\t\tfor (let sid in this.__states) {\n\n\t\t\t\t\t\t\tlet state = this.__states[sid];\n\t\t\t\t\t\t\tlet layer = state.query('ui > ' + val);\n\n\t\t\t\t\t\t\tif (layer !== null) {\n\n\t\t\t\t\t\t\t\tthis.changeState(sid, val);\n\n\t\t\t\t\t\t\t} else if (sid === val) {\n\n\t\t\t\t\t\t\t\tthis.changeState(sid);\n\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}, this.main);\n\n\n\t\t\t\t\tlet viewport = this.viewport;\n\t\t\t\t\tif (viewport !== null) {\n\n\t\t\t\t\t\tviewport.bind('reshape', function(orientation, rotation, width, height) {\n\n\t\t\t\t\t\t\tlet renderer = this.renderer;\n\t\t\t\t\t\t\tif (renderer !== null) {\n\n\t\t\t\t\t\t\t\tlet args = [\n\t\t\t\t\t\t\t\t\torientation,\n\t\t\t\t\t\t\t\t\trotation,\n\t\t\t\t\t\t\t\t\trenderer.width,\n\t\t\t\t\t\t\t\t\trenderer.height\n\t\t\t\t\t\t\t\t];\n\n\t\t\t\t\t\t\t\tlet entities = [\n\t\t\t\t\t\t\t\t\tthis.query('bg > background'),\n\t\t\t\t\t\t\t\t\tthis.query('bg > emblem'),\n\t\t\t\t\t\t\t\t\tthis.query('ui > menu'),\n\t\t\t\t\t\t\t\t\tthis.query('ui > notice'),\n\t\t\t\t\t\t\t\t\tthis.query('ui > settings')\n\t\t\t\t\t\t\t\t].filter(function(entity) {\n\t\t\t\t\t\t\t\t\treturn entity !== null;\n\t\t\t\t\t\t\t\t});\n\n\n\t\t\t\t\t\t\t\tfor (let e = 0, el = entities.length; e < el; e++) {\n\t\t\t\t\t\t\t\t\tentities[e].trigger('reshape', args);\n\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}, this);\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tif (main !== null && notice !== null) {\n\t\t\t\t\t_NOTICE = notice;\n\t\t\t\t}\n\n\n\t\t\t} else {\n\n\t\t\t\t_State.prototype.deserialize.call(this, blob);\n\n\n\t\t\t\tlet main   = this.main;\n\t\t\t\tlet bg     = this.getLayer('bg');\n\t\t\t\tlet menu   = this.query('ui > menu');\n\t\t\t\tlet notice = this.query('ui > notice');\n\n\n\t\t\t\tif (bg !== null && bg !== _BG) {\n\n\t\t\t\t\t// Allow custom bg for each state\n\n\t\t\t\t} else if (bg === null) {\n\n\t\t\t\t\tthis.setLayer('bg', _BG);\n\t\t\t\t\tbg = _BG;\n\n\t\t\t\t}\n\n\n\t\t\t\tif (menu !== null && menu !== _MENU) {\n\n\t\t\t\t\tthis.getLayer('ui').removeEntity(menu);\n\t\t\t\t\tthis.getLayer('ui').setEntity('menu', _MENU);\n\t\t\t\t\tmenu = _MENU;\n\n\t\t\t\t} else if (menu === null) {\n\n\t\t\t\t\tthis.getLayer('ui').setEntity('menu', _MENU);\n\t\t\t\t\tmenu = _MENU;\n\n\t\t\t\t}\n\n\n\t\t\t\tif (notice !== null && notice !== _NOTICE) {\n\n\t\t\t\t\tthis.getLayer('ui').removeEntity(notice);\n\t\t\t\t\tthis.getLayer('ui').setEntity('notice', _NOTICE);\n\t\t\t\t\tnotice = _NOTICE;\n\n\t\t\t\t} else if (notice === null) {\n\n\t\t\t\t\tthis.getLayer('ui').setEntity('notice', _NOTICE);\n\t\t\t\t\tnotice = _NOTICE;\n\n\t\t\t\t}\n\n\n\t\t\t\tif (main !== null && menu !== null) {\n\n\t\t\t\t\tlet options = [];\n\t\t\t\t\tlet ui      = null;\n\t\t\t\t\tlet bid     = null;\n\t\t\t\t\tlet entity  = null;\n\n\n\t\t\t\t\tfor (let sid in main.__states) {\n\n\t\t\t\t\t\tlet state = main.__states[sid];\n\n\t\t\t\t\t\tif (_INSTANCES.indexOf(state) !== -1) {\n\n\t\t\t\t\t\t\tui = state.getLayer('ui');\n\n\t\t\t\t\t\t\tif (ui !== null) {\n\n\t\t\t\t\t\t\t\tfor (bid in ui.__map) {\n\n\t\t\t\t\t\t\t\t\tentity = ui.__map[bid];\n\n\t\t\t\t\t\t\t\t\tif (entity instanceof _Blueprint) {\n\t\t\t\t\t\t\t\t\t\toptions.push(bid.charAt(0).toUpperCase() + bid.substr(1));\n\t\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t} else {\n\n\t\t\t\t\t\t\toptions.push(sid.charAt(0).toUpperCase() + sid.substr(1));\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\tui = this.getLayer('ui');\n\n\t\t\t\t\tif (ui !== null) {\n\n\t\t\t\t\t\tfor (bid in ui.__map) {\n\n\t\t\t\t\t\t\tentity = ui.__map[bid];\n\n\t\t\t\t\t\t\tif (entity instanceof _Blueprint) {\n\t\t\t\t\t\t\t\toptions.push(bid.charAt(0).toUpperCase() + bid.substr(1));\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\tlet index = options.indexOf('Settings');\n\t\t\t\t\tif (index !== -1) {\n\t\t\t\t\t\toptions.splice(index, 1);\n\t\t\t\t\t\toptions.push('Settings');\n\t\t\t\t\t}\n\n\n\t\t\t\t\tmenu.setOptions(options);\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tif (_MENU !== null) {\n\n\t\t\t\t_MENU.bind('relayout', function() {\n\t\t\t\t\t_on_relayout.call(this);\n\t\t\t\t}, this);\n\n\t\t\t}\n\n\n\t\t\tlet viewport = this.viewport;\n\t\t\tif (viewport !== null) {\n\n\t\t\t\tviewport.bind('reshape', function(orientation, rotation, width, height) {\n\t\t\t\t\t_on_relayout.call(this);\n\t\t\t\t}, this);\n\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "52153012",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "blob",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"enter": {
+				"chunk": "function(oncomplete, data) {\n\n\t\t\toncomplete = oncomplete instanceof Function ? oncomplete : null;\n\t\t\tdata       = typeof data === 'string'       ? data       : 'settings';\n\n\n\t\t\tlet id_layer = data.toLowerCase();\n\t\t\tif (id_layer.length > 0) {\n\n\t\t\t\t_on_fade.call(this, id_layer);\n\n\n\t\t\t\tlet focus = this.query('ui > ' + id_layer);\n\t\t\t\tif (focus !== null && focus !== _MENU) {\n\t\t\t\t\tfocus.trigger('focus');\n\t\t\t\t\tthis.__focus = focus;\n\t\t\t\t}\n\n\n\t\t\t\tif (_MENU !== null) {\n\n\t\t\t\t\tlet id_menu = data.charAt(0).toUpperCase() + data.substr(1);\n\t\t\t\t\tif (id_menu !== _MENU.value) {\n\t\t\t\t\t\t_MENU.setValue(id_menu);\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tlet input = this.input;\n\t\t\tif (input !== null) {\n\t\t\t\tinput.bind('escape', _on_escape, this);\n\t\t\t}\n\n\n\t\t\tthis.loop.setTimeout(400, function() {\n\t\t\t\t_State.prototype.enter.call(this, oncomplete);\n\t\t\t}, this);\n\n\n\t\t\treturn true;\n\n\t\t}",
+				"type": "function",
+				"hash": "6838d6c2",
+				"parameters": [
+					{
+						"chunk": "oncomplete instanceof Function ? oncomplete : null",
+						"name": "oncomplete",
+						"type": "Function",
+						"value": null
+					},
+					{
+						"chunk": "typeof data === 'string'       ? data       : 'settings'",
+						"name": "data",
+						"type": "String",
+						"value": "settings"
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"leave": {
+				"chunk": "function(oncomplete) {\n\n\t\t\toncomplete = oncomplete instanceof Function ? oncomplete : null;\n\n\n\t\t\t_on_fade.call(this, null);\n\n\n\t\t\tlet input = this.input;\n\t\t\tif (input !== null) {\n\t\t\t\tinput.unbind('escape', _on_escape, this);\n\t\t\t}\n\n\n\t\t\tlet focus = this.__focus;\n\t\t\tif (focus !== null && focus !== _MENU) {\n\t\t\t\tfocus.trigger('blur');\n\t\t\t\tthis.__focus = null;\n\t\t\t}\n\n\n\t\t\tthis.loop.setTimeout(400, function() {\n\t\t\t\t_State.prototype.leave.call(this, oncomplete);\n\t\t\t}, this);\n\n\n\t\t\treturn true;\n\n\t\t}",
+				"type": "function",
+				"hash": "efd75c0a",
+				"parameters": [
+					{
+						"chunk": "oncomplete instanceof Function ? oncomplete : null",
+						"name": "oncomplete",
+						"type": "Function",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"render": {
+				"chunk": "function(clock, delta, custom) {\n\n\t\t\tlet renderer = this.renderer;\n\t\t\tif (renderer !== null) {\n\n\t\t\t\tlet menu   = _MENU;\n\t\t\t\tlet notice = _NOTICE;\n\t\t\t\tlet layer  = this.__layers.ui;\n\n\t\t\t\tif (menu !== null) {\n\t\t\t\t\tmenu.visible = false;\n\t\t\t\t}\n\n\t\t\t\tif (notice !== null) {\n\t\t\t\t\tnotice.visible = false;\n\t\t\t\t}\n\n\n\t\t\t\trenderer.clear();\n\n\t\t\t\t_State.prototype.render.call(this, clock, delta, true);\n\n\t\t\t\tif (menu !== null) {\n\n\t\t\t\t\tmenu.visible = true;\n\t\t\t\t\tmenu.render(\n\t\t\t\t\t\trenderer,\n\t\t\t\t\t\tlayer.position.x + layer.offset.x,\n\t\t\t\t\t\tlayer.position.y + layer.offset.y\n\t\t\t\t\t);\n\n\t\t\t\t}\n\n\t\t\t\tif (notice !== null) {\n\n\t\t\t\t\tnotice.visible = true;\n\t\t\t\t\tnotice.render(\n\t\t\t\t\t\trenderer,\n\t\t\t\t\t\tlayer.position.x + layer.offset.x,\n\t\t\t\t\t\tlayer.position.y + layer.offset.y\n\t\t\t\t\t);\n\n\t\t\t\t}\n\n\t\t\t\trenderer.flush();\n\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "72b64928",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "clock",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "delta",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "custom",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			}
+		}
+	}
+}

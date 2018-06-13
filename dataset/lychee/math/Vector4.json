@@ -1,0 +1,584 @@
+{
+	"header": {
+		"identifier": null,
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\t\tthis.x = typeof states.x === 'number' ? (states.x | 0) : 0;\n\t\tthis.y = typeof states.y === 'number' ? (states.y | 0) : 0;\n\t\tthis.z = typeof states.z === 'number' ? (states.z | 0) : 0;\n\t\tthis.w = typeof states.w === 'number' ? (states.w | 0) : 0;\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "7e6f9e3b",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {},
+		"properties": {
+			"x": {
+				"chunk": "this.x = typeof states.x === 'number' ? (states.x | 0) : 0;",
+				"type": "Number",
+				"hash": "fab64dd0",
+				"value": {
+					"chunk": "typeof states.x === 'number' ? (states.x | 0) : 0",
+					"type": "Number",
+					"hash": "2b9f0e07",
+					"value": 0
+				}
+			},
+			"y": {
+				"chunk": "this.y = typeof states.y === 'number' ? (states.y | 0) : 0;",
+				"type": "Number",
+				"hash": "e557dbf5",
+				"value": {
+					"chunk": "typeof states.y === 'number' ? (states.y | 0) : 0",
+					"type": "Number",
+					"hash": "c7733bd9",
+					"value": 0
+				}
+			},
+			"z": {
+				"chunk": "this.z = typeof states.z === 'number' ? (states.z | 0) : 0;",
+				"type": "Number",
+				"hash": "1d0fdc6f",
+				"value": {
+					"chunk": "typeof states.z === 'number' ? (states.z | 0) : 0",
+					"type": "Number",
+					"hash": "feafd21f",
+					"value": 0
+				}
+			},
+			"w": {
+				"chunk": "this.w = typeof states.w === 'number' ? (states.w | 0) : 0;",
+				"type": "Number",
+				"hash": "efdd409d",
+				"value": {
+					"chunk": "typeof states.w === 'number' ? (states.w | 0) : 0",
+					"type": "Number",
+					"hash": "fa667098",
+					"value": 0
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.x !== 0) states.x = this.x;\n\t\t\tif (this.y !== 0) states.y = this.y;\n\t\t\tif (this.z !== 0) states.z = this.z;\n\t\t\tif (this.w !== 0) states.w = this.w;\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.math.Vector4',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        null\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "4ec183ad",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.math.Vector4',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"clone": {
+				"chunk": "function() {\n\n\t\t\treturn new Composite({\n\t\t\t\tx: this.x,\n\t\t\t\ty: this.y,\n\t\t\t\tz: this.z,\n\t\t\t\tw: this.w\n\t\t\t});\n\n\t\t}",
+				"type": "function",
+				"hash": "d64f6d28",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "new Composite({ x: this.x,\n\t\t\t\ty: this.y,\n\t\t\t\tz: this.z,\n\t\t\t\tw: this.w\n\t\t\t})",
+						"type": "Composite",
+						"value": "new Composite({ x: this.x,\n\t\t\t\ty: this.y,\n\t\t\t\tz: this.z,\n\t\t\t\tw: this.w\n\t\t\t})"
+					}
+				]
+			},
+			"copy": {
+				"chunk": "function(vector) {\n\n\t\t\tvector = vector instanceof Composite ? vector : null;\n\n\n\t\t\tif (vector !== null) {\n\n\t\t\t\tvector.set(this.x, this.y, this.z, this.w);\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "e0edd966",
+				"parameters": [
+					{
+						"chunk": "vector instanceof Composite ? vector : null",
+						"name": "vector",
+						"type": "Composite",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"set": {
+				"chunk": "function(x, y, z, w) {\n\n\t\t\tx = typeof x === 'number' ? x : 0;\n\t\t\ty = typeof y === 'number' ? y : 0;\n\t\t\tz = typeof z === 'number' ? z : 0;\n\t\t\tw = typeof w === 'number' ? w : 0;\n\n\n\t\t\tthis.x = x;\n\t\t\tthis.y = y;\n\t\t\tthis.z = z;\n\t\t\tthis.w = w;\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "bb75c20e",
+				"parameters": [
+					{
+						"chunk": "typeof x === 'number' ? x : 0",
+						"name": "x",
+						"type": "Number",
+						"value": 0
+					},
+					{
+						"chunk": "typeof y === 'number' ? y : 0",
+						"name": "y",
+						"type": "Number",
+						"value": 0
+					},
+					{
+						"chunk": "typeof z === 'number' ? z : 0",
+						"name": "z",
+						"type": "Number",
+						"value": 0
+					},
+					{
+						"chunk": "typeof w === 'number' ? w : 0",
+						"name": "w",
+						"type": "Number",
+						"value": 0
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"add": {
+				"chunk": "function(vector) {\n\n\t\t\tvector = vector instanceof Composite ? vector : null;\n\n\n\t\t\tif (vector !== null) {\n\n\t\t\t\tthis.x += vector.x;\n\t\t\t\tthis.y += vector.y;\n\t\t\t\tthis.z += vector.z;\n\t\t\t\tthis.w += vector.w;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "2df57421",
+				"parameters": [
+					{
+						"chunk": "vector instanceof Composite ? vector : null",
+						"name": "vector",
+						"type": "Composite",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"sub": {
+				"chunk": "function(vector) {\n\n\t\t\tvector = vector instanceof Composite ? vector : null;\n\n\n\t\t\tif (vector !== null) {\n\n\t\t\t\tthis.x -= vector.x;\n\t\t\t\tthis.y -= vector.y;\n\t\t\t\tthis.z -= vector.z;\n\t\t\t\tthis.w -= vector.w;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "d3404142",
+				"parameters": [
+					{
+						"chunk": "vector instanceof Composite ? vector : null",
+						"name": "vector",
+						"type": "Composite",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"multiply": {
+				"chunk": "function(vector) {\n\n\t\t\tvector = vector instanceof Composite ? vector : null;\n\n\n\t\t\tif (vector !== null) {\n\n\t\t\t\tthis.x *= vector.x;\n\t\t\t\tthis.y *= vector.y;\n\t\t\t\tthis.z *= vector.z;\n\t\t\t\tthis.w *= vector.w;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "a3ce8a91",
+				"parameters": [
+					{
+						"chunk": "vector instanceof Composite ? vector : null",
+						"name": "vector",
+						"type": "Composite",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"divide": {
+				"chunk": "function(vector) {\n\n\t\t\tvector = vector instanceof Composite ? vector : null;\n\n\n\t\t\tif (vector !== null) {\n\n\t\t\t\tthis.x /= vector.x;\n\t\t\t\tthis.y /= vector.y;\n\t\t\t\tthis.z /= vector.z;\n\t\t\t\tthis.w /= vector.w;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "4e796491",
+				"parameters": [
+					{
+						"chunk": "vector instanceof Composite ? vector : null",
+						"name": "vector",
+						"type": "Composite",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"min": {
+				"chunk": "function(vector) {\n\n\t\t\tvector = vector instanceof Composite ? vector : null;\n\n\n\t\t\tif (vector !== null) {\n\n\t\t\t\tthis.x = Math.min(this.x, vector.x);\n\t\t\t\tthis.y = Math.min(this.y, vector.y);\n\t\t\t\tthis.z = Math.min(this.z, vector.z);\n\t\t\t\tthis.w = Math.min(this.w, vector.w);\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "599324a0",
+				"parameters": [
+					{
+						"chunk": "vector instanceof Composite ? vector : null",
+						"name": "vector",
+						"type": "Composite",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"max": {
+				"chunk": "function(vector) {\n\n\t\t\tvector = vector instanceof Composite ? vector : null;\n\n\n\t\t\tif (vector !== null) {\n\n\t\t\t\tthis.x = Math.max(this.x, vector.x);\n\t\t\t\tthis.y = Math.max(this.y, vector.y);\n\t\t\t\tthis.z = Math.max(this.z, vector.z);\n\t\t\t\tthis.w = Math.max(this.w, vector.w);\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "3ef1b701",
+				"parameters": [
+					{
+						"chunk": "vector instanceof Composite ? vector : null",
+						"name": "vector",
+						"type": "Composite",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"scale": {
+				"chunk": "function(scale) {\n\n\t\t\tscale = typeof scale === 'number' ? scale : null;\n\n\n\t\t\tif (scale !== null) {\n\n\t\t\t\tthis.x *= scale;\n\t\t\t\tthis.y *= scale;\n\t\t\t\tthis.z *= scale;\n\t\t\t\tthis.w *= scale;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "59233f60",
+				"parameters": [
+					{
+						"chunk": "typeof scale === 'number' ? scale : null",
+						"name": "scale",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"distance": {
+				"chunk": "function(vector) {\n\n\t\t\tvector = vector instanceof Composite ? vector : null;\n\n\n\t\t\tif (vector !== null) {\n\n\t\t\t\tlet x = vector.x - this.x;\n\t\t\t\tlet y = vector.y - this.y;\n\t\t\t\tlet z = vector.z - this.z;\n\t\t\t\tlet w = vector.w - this.w;\n\n\n\t\t\t\treturn Math.sqrt(x * x + y * y + z * z + w * w);\n\n\t\t\t}\n\n\n\t\t\treturn 0;\n\n\t\t}",
+				"type": "function",
+				"hash": "e97e1767",
+				"parameters": [
+					{
+						"chunk": "vector instanceof Composite ? vector : null",
+						"name": "vector",
+						"type": "Composite",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "Math.sqrt(x * x + y * y + z * z + w * w)",
+						"type": "Number",
+						"value": 1337
+					},
+					{
+						"chunk": "0",
+						"type": "Number",
+						"value": 0
+					}
+				]
+			},
+			"squaredDistance": {
+				"chunk": "function(vector) {\n\n\t\t\tvector = vector instanceof Composite ? vector : null;\n\n\n\t\t\tif (vector !== null) {\n\n\t\t\t\tlet x = vector.x - this.x;\n\t\t\t\tlet y = vector.y - this.y;\n\t\t\t\tlet z = vector.z - this.z;\n\t\t\t\tlet w = vector.w - this.w;\n\n\n\t\t\t\treturn (x * x + y * y + z * z + w * w);\n\n\t\t\t}\n\n\n\t\t\treturn 0;\n\n\t\t}",
+				"type": "function",
+				"hash": "1e09ec5b",
+				"parameters": [
+					{
+						"chunk": "vector instanceof Composite ? vector : null",
+						"name": "vector",
+						"type": "Composite",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "(x * x + y * y + z * z + w * w)",
+						"type": "Number",
+						"value": 1337
+					},
+					{
+						"chunk": "0",
+						"type": "Number",
+						"value": 0
+					}
+				]
+			},
+			"length": {
+				"chunk": "function() {\n\n\t\t\tlet x = this.x;\n\t\t\tlet y = this.y;\n\t\t\tlet z = this.z;\n\t\t\tlet w = this.w;\n\n\n\t\t\treturn Math.sqrt(x * x + y * y + z * z + w * w);\n\n\t\t}",
+				"type": "function",
+				"hash": "69271828",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "Math.sqrt(x * x + y * y + z * z + w * w)",
+						"type": "Number",
+						"value": 1337
+					}
+				]
+			},
+			"squaredLength": {
+				"chunk": "function() {\n\n\t\t\tlet x = this.x;\n\t\t\tlet y = this.y;\n\t\t\tlet z = this.z;\n\t\t\tlet w = this.w;\n\n\n\t\t\treturn (x * x + y * y + z * z + w * w);\n\n\t\t}",
+				"type": "function",
+				"hash": "761dd013",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "(x * x + y * y + z * z + w * w)",
+						"type": "Number",
+						"value": 1337
+					}
+				]
+			},
+			"invert": {
+				"chunk": "function() {\n\n\t\t\tthis.x *= -1;\n\t\t\tthis.y *= -1;\n\t\t\tthis.z *= -1;\n\t\t\tthis.w *= -1;\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "6ce694e3",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"normalize": {
+				"chunk": "function() {\n\n\t\t\tlet x = this.x;\n\t\t\tlet y = this.y;\n\t\t\tlet z = this.z;\n\t\t\tlet w = this.w;\n\n\n\t\t\tlet length = (x * x + y * y + z * z + w * w);\n\t\t\tif (length > 0) {\n\n\t\t\t\tlength = 1 / Math.sqrt(length);\n\n\t\t\t\tthis.x *= length;\n\t\t\t\tthis.y *= length;\n\t\t\t\tthis.z *= length;\n\t\t\t\tthis.w *= length;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "cbab5456",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"scalar": {
+				"chunk": "function(vector) {\n\n\t\t\tvector = vector instanceof Composite ? vector : null;\n\n\n\t\t\tif (vector !== null) {\n\t\t\t\treturn (this.x * vector.x + this.y * vector.y + this.z * vector.z + this.w * vector.w);\n\t\t\t}\n\n\n\t\t\treturn 0;\n\n\t\t}",
+				"type": "function",
+				"hash": "65ef685a",
+				"parameters": [
+					{
+						"chunk": "vector instanceof Composite ? vector : null",
+						"name": "vector",
+						"type": "Composite",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "(this.x * vector.x + this.y * vector.y + this.z * vector.z + this.w * vector.w)",
+						"type": "Number",
+						"value": 1337
+					},
+					{
+						"chunk": "0",
+						"type": "Number",
+						"value": 0
+					}
+				]
+			},
+			"cross": {
+				"chunk": "function(vector) {\n\n\t\t\tvector = vector instanceof Composite ? vector : null;\n\n\n\t\t\tif (vector !== null) {\n\n\t\t\t\tlet ax = this.x;\n\t\t\t\tlet ay = this.y;\n\t\t\t\tlet az = this.z;\n\n\t\t\t\tlet bx = this.x;\n\t\t\t\tlet by = this.y;\n\t\t\t\tlet bz = this.z;\n\n\n\t\t\t\tthis.x = ay * bz - az * by;\n\t\t\t\tthis.y = az * bx - ax * bz;\n\t\t\t\tthis.z = ax * by - ay * bx;\n\t\t\t\tthis.w = 0;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "0580e496",
+				"parameters": [
+					{
+						"chunk": "vector instanceof Composite ? vector : null",
+						"name": "vector",
+						"type": "Composite",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"interpolate": {
+				"chunk": "function(vector, t) {\n\n\t\t\tvector = vector instanceof Composite ? vector : null;\n\t\t\tt      = typeof t === 'number'       ? t      : null;\n\n\n\t\t\tif (vector !== null && t !== null) {\n\n\t\t\t\tthis.x += t * (vector.x - this.x);\n\t\t\t\tthis.y += t * (vector.y - this.y);\n\t\t\t\tthis.z += t * (vector.z - this.z);\n\t\t\t\tthis.w += t * (vector.w - this.w);\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "b6a0b75f",
+				"parameters": [
+					{
+						"chunk": "vector instanceof Composite ? vector : null",
+						"name": "vector",
+						"type": "Composite",
+						"value": null
+					},
+					{
+						"chunk": "typeof t === 'number'       ? t      : null",
+						"name": "t",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"interpolateAdd": {
+				"chunk": "function(vector, t) {\n\n\t\t\tvector = vector instanceof Composite ? vector : null;\n\t\t\tt      = typeof t === 'number'       ? t      : null;\n\n\n\t\t\tif (vector !== null && t !== null) {\n\n\t\t\t\tthis.x += t * vector.x;\n\t\t\t\tthis.y += t * vector.y;\n\t\t\t\tthis.z += t * vector.z;\n\t\t\t\tthis.w += t * vector.w;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "72914e17",
+				"parameters": [
+					{
+						"chunk": "vector instanceof Composite ? vector : null",
+						"name": "vector",
+						"type": "Composite",
+						"value": null
+					},
+					{
+						"chunk": "typeof t === 'number'       ? t      : null",
+						"name": "t",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"interpolateSet": {
+				"chunk": "function(vector, t) {\n\n\t\t\tvector = vector instanceof Composite ? vector : null;\n\t\t\tt      = typeof t === 'number'       ? t      : null;\n\n\n\t\t\tif (vector !== null && t !== null) {\n\n\t\t\t\tthis.x = t * vector.x;\n\t\t\t\tthis.y = t * vector.y;\n\t\t\t\tthis.z = t * vector.z;\n\t\t\t\tthis.w = t * vector.w;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "320d45a6",
+				"parameters": [
+					{
+						"chunk": "vector instanceof Composite ? vector : null",
+						"name": "vector",
+						"type": "Composite",
+						"value": null
+					},
+					{
+						"chunk": "typeof t === 'number'       ? t      : null",
+						"name": "t",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"applyMatrix": {
+				"chunk": "function(matrix) {\n\n\t\t\tmatrix = matrix instanceof lychee.math.Matrix ? matrix : null;\n\n\n\t\t\tif (matrix !== null) {\n\n\t\t\t\tlet x = this.x;\n\t\t\t\tlet y = this.y;\n\t\t\t\tlet z = this.z;\n\t\t\t\tlet w = this.w;\n\t\t\t\tlet m = matrix.data;\n\n\n\t\t\t\tthis.x = m[0] * x + m[4] * y + m[8]  * z + m[12] * w;\n\t\t\t\tthis.y = m[1] * x + m[5] * y + m[9]  * z + m[13] * w;\n\t\t\t\tthis.z = m[2] * x + m[6] * y + m[10] * z + m[14] * w;\n\t\t\t\tthis.w = m[3] * x + m[7] * y + m[11] * z + m[15] * w;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "6f548775",
+				"parameters": [
+					{
+						"chunk": "matrix instanceof lychee.math.Matrix ? matrix : null",
+						"name": "matrix",
+						"type": "lychee.math.Matrix",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"applyQuaternion": {
+				"chunk": "function(quaternion) {\n\n\t\t\tquaternion = quaternion instanceof lychee.math.Quaternion ? quaternion : null;\n\n\n\t\t\tif (quaternion !== null) {\n\n\t\t\t\tlet vx = this.x;\n\t\t\t\tlet vy = this.y;\n\t\t\t\tlet vz = this.z;\n\n\t\t\t\tlet q  = quaternion.data;\n\t\t\t\tlet qx = q[0];\n\t\t\t\tlet qy = q[1];\n\t\t\t\tlet qz = q[2];\n\t\t\t\tlet qw = q[3];\n\n\t\t\t\tlet ix =  qw * vx + qy * vz - qz * vy;\n\t\t\t\tlet iy =  qw * vy + qz * vx - qx * vz;\n\t\t\t\tlet iz =  qw * vz + qx * vy - qy * vx;\n\t\t\t\tlet iw = -qx * vx - qy * vy - qz * vz;\n\n\n\t\t\t\tthis.x = ix * qw + iw * -qx + iy * -qz - iz * -qy;\n\t\t\t\tthis.y = iy * qw + iw * -qy + iz * -qx - ix * -qz;\n\t\t\t\tthis.z = iz * qw + iw * -qz + ix * -qy - iy * -qx;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "84a60b8b",
+				"parameters": [
+					{
+						"chunk": "quaternion instanceof lychee.math.Quaternion ? quaternion : null",
+						"name": "quaternion",
+						"type": "lychee.math.Quaternion",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			}
+		}
+	}
+}

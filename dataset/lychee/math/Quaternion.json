@@ -1,0 +1,567 @@
+{
+	"header": {
+		"identifier": "lychee.math.Quaternion",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"lychee.math.Vector4"
+		],
+		"includes": [],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Vector4": {
+			"chunk": "lychee.import('lychee.math.Vector4')",
+			"type": "lychee.Definition",
+			"hash": "d5d688bf",
+			"value": {
+				"reference": "lychee.math.Vector4",
+				"arguments": []
+			}
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.data = new Float32Array(4);\n\t\tthis.set.call(this, Composite.IDENTITY);\n\n\n\t\tthis.setData(states.data);\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "894df7f6",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"data": "setData"
+		},
+		"properties": {
+			"data": {
+				"chunk": "this.data = new Float32Array(4);",
+				"type": "Float32Array",
+				"hash": "935fbe4f",
+				"value": {
+					"chunk": "new Float32Array(4)",
+					"type": "Float32Array",
+					"hash": "fa2397cc",
+					"value": 4
+				}
+			}
+		},
+		"enums": {
+			"IDENTITY": {
+				"value": {
+					"chunk": "new Float32Array([ \t\t0, 0, 0, 1 \t])",
+					"type": "Float32Array",
+					"hash": "8422102b"
+				}
+			}
+		},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.data !== null) states.data = this.data.slice(0);\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.math.Quaternion',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        null\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "5c7219bd",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.math.Quaternion',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"clone": {
+				"chunk": "function() {\n\n\t\t\treturn new Composite(this.data.slice(0));\n\n\t\t}",
+				"type": "function",
+				"hash": "6a8e93d5",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "new Composite(this.data.slice(0))",
+						"type": "Composite",
+						"value": "new Composite(this.data.slice(0))"
+					}
+				]
+			},
+			"copy": {
+				"chunk": "function(quaternion) {\n\n\t\t\tquaternion = quaternion instanceof Composite ? quaternion : null;\n\n\n\t\t\tif (quaternion !== null) {\n\n\t\t\t\tlet d = this.data;\n\t\t\t\tlet q = quaternion.data;\n\n\n\t\t\t\tq[0] = d[0];\n\t\t\t\tq[1] = d[1];\n\t\t\t\tq[2] = d[2];\n\t\t\t\tq[3] = d[3];\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "9c7b7c5a",
+				"parameters": [
+					{
+						"chunk": "quaternion instanceof Composite ? quaternion : null",
+						"name": "quaternion",
+						"type": "Composite",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"set": {
+				"chunk": "function(x, y, z, w) {\n\n\t\t\tx = typeof x === 'number' ? x : 0;\n\t\t\ty = typeof y === 'number' ? y : 0;\n\t\t\tz = typeof z === 'number' ? z : 0;\n\t\t\tw = typeof w === 'number' ? w : 0;\n\n\n\t\t\tlet d = this.data;\n\n\n\t\t\td[0] = x;\n\t\t\td[1] = y;\n\t\t\td[2] = z;\n\t\t\td[3] = w;\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "5a1ddf0d",
+				"parameters": [
+					{
+						"chunk": "typeof x === 'number' ? x : 0",
+						"name": "x",
+						"type": "Number",
+						"value": 0
+					},
+					{
+						"chunk": "typeof y === 'number' ? y : 0",
+						"name": "y",
+						"type": "Number",
+						"value": 0
+					},
+					{
+						"chunk": "typeof z === 'number' ? z : 0",
+						"name": "z",
+						"type": "Number",
+						"value": 0
+					},
+					{
+						"chunk": "typeof w === 'number' ? w : 0",
+						"name": "w",
+						"type": "Number",
+						"value": 0
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"add": {
+				"chunk": "function(quaternion) {\n\n\t\t\tquaternion = quaternion instanceof Composite ? quaternion : null;\n\n\n\t\t\tif (quaternion !== null) {\n\n\t\t\t\tlet d = this.data;\n\t\t\t\tlet q = quaternion.data;\n\n\n\t\t\t\td[0] += q[0];\n\t\t\t\td[1] += q[1];\n\t\t\t\td[2] += q[2];\n\t\t\t\td[3] += q[3];\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "49c0df6b",
+				"parameters": [
+					{
+						"chunk": "quaternion instanceof Composite ? quaternion : null",
+						"name": "quaternion",
+						"type": "Composite",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"subtract": {
+				"chunk": "function(quaternion) {\n\n\t\t\tquaternion = quaternion instanceof Composite ? quaternion : null;\n\n\n\t\t\tif (quaternion !== null) {\n\n\t\t\t\tlet d = this.data;\n\t\t\t\tlet q = quaternion.data;\n\n\n\t\t\t\td[0] -= q[0];\n\t\t\t\td[1] -= q[1];\n\t\t\t\td[2] -= q[2];\n\t\t\t\td[3] -= q[3];\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "b2a82816",
+				"parameters": [
+					{
+						"chunk": "quaternion instanceof Composite ? quaternion : null",
+						"name": "quaternion",
+						"type": "Composite",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"multiply": {
+				"chunk": "function(quaternion) {\n\n\t\t\tquaternion = quaternion instanceof Composite ? quaternion : null;\n\n\n\t\t\tif (quaternion !== null) {\n\n\t\t\t\tlet d = this.data;\n\t\t\t\tlet q = quaternion.data;\n\n\t\t\t\tlet ax = d[0], ay = d[1], az = d[2], aw = d[3];\n\t\t\t\tlet bx = q[0], by = q[1], bz = q[2], bw = q[3];\n\n\n\t\t\t\td[0] = ax * bw + aw * bx + ay * bz - az * by;\n\t\t\t\td[1] = ay * bw + aw * by + az * bx - ax * bz;\n\t\t\t\td[2] = az * bw + aw * bz + ax * by - ay * bx;\n\t\t\t\td[3] = aw * bw - ax * bx - ay * by - az * bz;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "44766b0a",
+				"parameters": [
+					{
+						"chunk": "quaternion instanceof Composite ? quaternion : null",
+						"name": "quaternion",
+						"type": "Composite",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"min": {
+				"chunk": "function(quaternion) {\n\n\t\t\tquaternion = quaternion instanceof Composite ? quaternion : null;\n\n\n\t\t\tif (quaternion !== null) {\n\n\t\t\t\tlet d = this.data;\n\t\t\t\tlet q = quaternion.data;\n\n\n\t\t\t\td[0] = Math.min(d[0], q[0]);\n\t\t\t\td[1] = Math.min(d[1], q[1]);\n\t\t\t\td[2] = Math.min(d[2], q[2]);\n\t\t\t\td[3] = Math.min(d[3], q[3]);\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "1f70e5be",
+				"parameters": [
+					{
+						"chunk": "quaternion instanceof Composite ? quaternion : null",
+						"name": "quaternion",
+						"type": "Composite",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"max": {
+				"chunk": "function(quaternion) {\n\n\t\t\tquaternion = quaternion instanceof Composite ? quaternion : null;\n\n\n\t\t\tif (quaternion !== null) {\n\n\t\t\t\tlet d = this.data;\n\t\t\t\tlet q = quaternion.data;\n\n\n\t\t\t\td[0] = Math.max(d[0], q[0]);\n\t\t\t\td[1] = Math.max(d[1], q[1]);\n\t\t\t\td[2] = Math.max(d[2], q[2]);\n\t\t\t\td[3] = Math.max(d[3], q[3]);\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "3f1cadaa",
+				"parameters": [
+					{
+						"chunk": "quaternion instanceof Composite ? quaternion : null",
+						"name": "quaternion",
+						"type": "Composite",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"scale": {
+				"chunk": "function(scale) {\n\n\t\t\tscale = typeof scale === 'number' ? scale : null;\n\n\n\t\t\tif (scale !== null) {\n\n\t\t\t\tlet d = this.data;\n\n\n\t\t\t\td[0] *= scale;\n\t\t\t\td[1] *= scale;\n\t\t\t\td[2] *= scale;\n\t\t\t\td[3] *= scale;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "39335640",
+				"parameters": [
+					{
+						"chunk": "typeof scale === 'number' ? scale : null",
+						"name": "scale",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"length": {
+				"chunk": "function() {\n\n\t\t\tlet d = this.data;\n\t\t\tlet x = d[0];\n\t\t\tlet y = d[1];\n\t\t\tlet z = d[2];\n\t\t\tlet w = d[3];\n\n\n\t\t\treturn Math.sqrt(x * x + y * y + z * z + w * w);\n\n\t\t}",
+				"type": "function",
+				"hash": "d85a06c4",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "Math.sqrt(x * x + y * y + z * z + w * w)",
+						"type": "Number",
+						"value": 1337
+					}
+				]
+			},
+			"squaredLength": {
+				"chunk": "function() {\n\n\t\t\tlet d = this.data;\n\t\t\tlet x = d[0];\n\t\t\tlet y = d[1];\n\t\t\tlet z = d[2];\n\t\t\tlet w = d[3];\n\n\n\t\t\treturn (x * x + y * y + z * z + w * w);\n\n\t\t}",
+				"type": "function",
+				"hash": "6148da72",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "(x * x + y * y + z * z + w * w)",
+						"type": "Number",
+						"value": 1337
+					}
+				]
+			},
+			"invert": {
+				"chunk": "function() {\n\n\t\t\tlet d = 0;\n\t\t\tlet x = d[0];\n\t\t\tlet y = d[1];\n\t\t\tlet z = d[2];\n\t\t\tlet w = d[3];\n\n\n\t\t\tlet dot = (x * x + y * y + z * z + w * w);\n\t\t\tif (dot > 0) {\n\n\t\t\t\tlet inv_dot = 1.0 / dot;\n\n\t\t\t\td[0] = -x * inv_dot;\n\t\t\t\td[1] = -y * inv_dot;\n\t\t\t\td[2] = -z * inv_dot;\n\t\t\t\td[3] =  w * inv_dot;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "daa5b4b8",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"normalize": {
+				"chunk": "function() {\n\n\t\t\tlet d = this.data;\n\t\t\tlet x = d[0];\n\t\t\tlet y = d[1];\n\t\t\tlet z = d[2];\n\t\t\tlet w = d[3];\n\n\n\t\t\tlet length = (x * x + y * y + z * z + w * w);\n\t\t\tif (length > 0) {\n\n\t\t\t\tlength = 1 / Math.sqrt(length);\n\n\t\t\t\td[0] *= length;\n\t\t\t\td[1] *= length;\n\t\t\t\td[2] *= length;\n\t\t\t\td[3] *= length;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "346c6776",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"scalar": {
+				"chunk": "function(quaternion) {\n\n\t\t\tquaternion = quaternion instanceof Composite ? quaternion : null;\n\n\n\t\t\tif (quaternion !== null) {\n\n\t\t\t\tlet d = this.data;\n\t\t\t\tlet q = quaternion.data;\n\n\n\t\t\t\treturn (d[0] * q[0] + d[1] * q[1] + d[2] * q[2] + d[3] * q[3]);\n\n\t\t\t}\n\n\n\t\t\treturn 0;\n\n\t\t}",
+				"type": "function",
+				"hash": "c1c9b6a6",
+				"parameters": [
+					{
+						"chunk": "quaternion instanceof Composite ? quaternion : null",
+						"name": "quaternion",
+						"type": "Composite",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "(d[0] * q[0] + d[1] * q[1] + d[2] * q[2] + d[3] * q[3])",
+						"type": "Number",
+						"value": 1337
+					},
+					{
+						"chunk": "0",
+						"type": "Number",
+						"value": 0
+					}
+				]
+			},
+			"interpolate": {
+				"chunk": "function(vector, t) {\n\n\t\t\tvector = vector instanceof _Vector4 ? vector : null;\n\t\t\tt      = typeof t === 'number'      ? t      : null;\n\n\n\t\t\tif (vector !== null && t !== null) {\n\n\t\t\t\tlet d = this.data;\n\n\n\t\t\t\td[0] += t * (vector.x - d[0]);\n\t\t\t\td[1] += t * (vector.y - d[1]);\n\t\t\t\td[2] += t * (vector.z - d[2]);\n\t\t\t\td[3] += t * (vector.w - d[3]);\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "2a2b1d81",
+				"parameters": [
+					{
+						"chunk": "vector instanceof _Vector4 ? vector : null",
+						"name": "vector",
+						"type": "_Vector4",
+						"value": null
+					},
+					{
+						"chunk": "typeof t === 'number'      ? t      : null",
+						"name": "t",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"interpolateAdd": {
+				"chunk": "function(vector, t) {\n\n\t\t\tvector = vector instanceof _Vector4 ? vector : null;\n\t\t\tt      = typeof t === 'number'      ? t      : null;\n\n\n\t\t\tif (vector !== null && t !== null) {\n\n\t\t\t\tlet d = this.data;\n\n\n\t\t\t\td[0] += t * vector.x;\n\t\t\t\td[1] += t * vector.y;\n\t\t\t\td[2] += t * vector.z;\n\t\t\t\td[3] += t * vector.w;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "212fe03e",
+				"parameters": [
+					{
+						"chunk": "vector instanceof _Vector4 ? vector : null",
+						"name": "vector",
+						"type": "_Vector4",
+						"value": null
+					},
+					{
+						"chunk": "typeof t === 'number'      ? t      : null",
+						"name": "t",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"interpolateSet": {
+				"chunk": "function(vector, t) {\n\n\t\t\tvector = vector instanceof _Vector4 ? vector : null;\n\t\t\tt      = typeof t === 'number'      ? t      : null;\n\n\n\t\t\tif (vector !== null && t !== null) {\n\n\t\t\t\tlet d = this.data;\n\n\n\t\t\t\td[0] = t * vector.x;\n\t\t\t\td[1] = t * vector.y;\n\t\t\t\td[2] = t * vector.z;\n\t\t\t\td[3] = t * vector.w;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "47b83694",
+				"parameters": [
+					{
+						"chunk": "vector instanceof _Vector4 ? vector : null",
+						"name": "vector",
+						"type": "_Vector4",
+						"value": null
+					},
+					{
+						"chunk": "typeof t === 'number'      ? t      : null",
+						"name": "t",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"rotateX": {
+				"chunk": "function(radian) {\n\n\t\t\tradian = typeof radian === 'number' ? radian : null;\n\n\n\t\t\tif (radian !== null) {\n\n\t\t\t\tlet sin = Math.sin(radian * 0.5);\n\t\t\t\tlet cos = Math.cos(radian * 0.5);\n\n\t\t\t\tlet d = this.data;\n\t\t\t\tlet x = d[0];\n\t\t\t\tlet y = d[1];\n\t\t\t\tlet z = d[2];\n\t\t\t\tlet w = d[3];\n\n\n\t\t\t\td[0] = x * cos + w * sin;\n\t\t\t\td[1] = y * cos + z * sin;\n\t\t\t\td[2] = z * cos - y * sin;\n\t\t\t\td[3] = w * cos - x * sin;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "6afedf8f",
+				"parameters": [
+					{
+						"chunk": "typeof radian === 'number' ? radian : null",
+						"name": "radian",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"rotateY": {
+				"chunk": "function(radian) {\n\n\t\t\tradian = typeof radian === 'number' ? radian : null;\n\n\n\t\t\tif (radian !== null) {\n\n\t\t\t\tlet sin = Math.sin(radian * 0.5);\n\t\t\t\tlet cos = Math.cos(radian * 0.5);\n\n\t\t\t\tlet d = this.data;\n\t\t\t\tlet x = d[0];\n\t\t\t\tlet y = d[1];\n\t\t\t\tlet z = d[2];\n\t\t\t\tlet w = d[3];\n\n\n\t\t\t\td[0] = x * cos - z * sin;\n\t\t\t\td[1] = y * cos + w * sin;\n\t\t\t\td[2] = z * cos + x * sin;\n\t\t\t\td[3] = w * cos - y * sin;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "4beaabd8",
+				"parameters": [
+					{
+						"chunk": "typeof radian === 'number' ? radian : null",
+						"name": "radian",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"rotateZ": {
+				"chunk": "function(radian) {\n\n\t\t\tradian = typeof radian === 'number' ? radian : null;\n\n\n\t\t\tif (radian !== null) {\n\n\t\t\t\tlet sin = Math.sin(radian * 0.5);\n\t\t\t\tlet cos = Math.cos(radian * 0.5);\n\n\t\t\t\tlet d = this.data;\n\t\t\t\tlet x = d[0];\n\t\t\t\tlet y = d[1];\n\t\t\t\tlet z = d[2];\n\t\t\t\tlet w = d[3];\n\n\n\t\t\t\td[0] = x * cos + y * sin;\n\t\t\t\td[1] = y * cos - x * sin;\n\t\t\t\td[2] = z * cos + w * sin;\n\t\t\t\td[3] = w * cos - z * sin;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "97b70f33",
+				"parameters": [
+					{
+						"chunk": "typeof radian === 'number' ? radian : null",
+						"name": "radian",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"rotateAxis": {
+				"chunk": "function(vector, radian) {\n\n\t\t\tvector = vector instanceof _Vector4 ? vector : null;\n\t\t\tradian = typeof radian === 'number' ? radian : null;\n\n\n\t\t\tif (vector !== null && radian !== null) {\n\n\t\t\t\tlet sin = Math.sin(radian * 0.5);\n\t\t\t\tlet cos = Math.cos(radian * 0.5);\n\n\t\t\t\tlet d = this.data;\n\n\n\t\t\t\td[0] = sin * vector.x;\n\t\t\t\td[1] = sin * vector.y;\n\t\t\t\td[2] = sin * vector.z;\n\t\t\t\td[3] = cos;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "63425e3b",
+				"parameters": [
+					{
+						"chunk": "vector instanceof _Vector4 ? vector : null",
+						"name": "vector",
+						"type": "_Vector4",
+						"value": null
+					},
+					{
+						"chunk": "typeof radian === 'number' ? radian : null",
+						"name": "radian",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"calculateW": {
+				"chunk": "function() {\n\n\t\t\tlet d = this.data;\n\t\t\tlet x = d[0];\n\t\t\tlet y = d[1];\n\t\t\tlet z = d[2];\n\n\n\t\t\td[3] = -Math.sqrt(Math.abs(1.0 - x * x - y * y - z * z));\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "e4060bde",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"setData": {
+				"chunk": "function(data) {\n\n\t\t\tdata = data instanceof Array ? data : null;\n\n\n\t\t\tif (data !== null) {\n\n\t\t\t\tthis.set.call(this, data);\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "d727eb1c",
+				"parameters": [
+					{
+						"chunk": "data instanceof Array ? data : null",
+						"name": "data",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

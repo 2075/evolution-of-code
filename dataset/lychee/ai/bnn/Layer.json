@@ -1,0 +1,86 @@
+{
+	"header": {
+		"identifier": "lychee.ai.bnn.Layer",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"lychee.ai.bnn.Agent"
+		],
+		"includes": [
+			"lychee.ai.Layer"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Agent": {
+			"chunk": "lychee.import('lychee.ai.bnn.Agent')",
+			"type": "lychee.Definition",
+			"hash": "ebc9bc6b",
+			"value": {
+				"reference": "lychee.ai.bnn.Agent",
+				"arguments": []
+			}
+		},
+		"_Layer": {
+			"chunk": "lychee.import('lychee.ai.Layer')",
+			"type": "lychee.Definition",
+			"hash": "ef42cf78",
+			"value": {
+				"reference": "lychee.ai.Layer",
+				"arguments": []
+			}
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\t_Layer.call(this, states);\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "11843827",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {},
+		"properties": {},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Layer.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ai.bnn.Layer';\n\n\t\t\tlet states = {};\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tdata['arguments'][0] = states;\n\t\t\tdata['blob']         = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "73417039",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			}
+		}
+	}
+}

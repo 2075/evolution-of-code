@@ -1,0 +1,389 @@
+{
+	"header": {
+		"identifier": "lychee.net.protocol.WS",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"lychee.codec.JSON"
+		],
+		"includes": [],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_JSON": {
+			"chunk": "lychee.import('lychee.codec.JSON')",
+			"type": "lychee.Definition",
+			"hash": "46c1c4bd",
+			"value": {
+				"reference": "lychee.codec.JSON",
+				"arguments": []
+			}
+		},
+		"_on_ping_frame": {
+			"chunk": "function() {\n\n\t\tlet type = this.type;\n\t\tif (type === Composite.TYPE.remote) {\n\n\t\t\tlet buffer = new Buffer(2);\n\n\t\t\t// FIN, Pong\n\t\t\t// Unmasked, 0 payload\n\n\t\t\tbuffer[0] = 128 + 0x0a;\n\t\t\tbuffer[1] =   0 + 0x00;\n\n\n\t\t\treturn buffer;\n\n\t\t}\n\n\n\t\treturn null;\n\n\t}",
+			"type": "function",
+			"hash": "31dfcda4",
+			"parameters": [],
+			"values": [
+				{
+					"chunk": "new Buffer(2)",
+					"type": "Buffer",
+					"value": 2
+				},
+				{
+					"chunk": "null",
+					"type": "null",
+					"value": null
+				}
+			]
+		},
+		"_on_pong_frame": {
+			"chunk": "function() {\n\n\t\tlet type = this.type;\n\t\tif (type === Composite.TYPE.client) {\n\n\t\t\tlet buffer = new Buffer(6);\n\n\t\t\t// FIN, Ping\n\t\t\t// Masked, 0 payload\n\n\t\t\tbuffer[0] = 128 + 0x09;\n\t\t\tbuffer[1] = 128 + 0x00;\n\n\t\t\tbuffer[2] = (Math.random() * 0xff) | 0;\n\t\t\tbuffer[3] = (Math.random() * 0xff) | 0;\n\t\t\tbuffer[4] = (Math.random() * 0xff) | 0;\n\t\t\tbuffer[5] = (Math.random() * 0xff) | 0;\n\n\n\t\t\treturn buffer;\n\n\t\t}\n\n\n\t\treturn null;\n\n\t}",
+			"type": "function",
+			"hash": "7d749f00",
+			"parameters": [],
+			"values": [
+				{
+					"chunk": "new Buffer(6)",
+					"type": "Buffer",
+					"value": 6
+				},
+				{
+					"chunk": "null",
+					"type": "null",
+					"value": null
+				}
+			]
+		},
+		"_encode_buffer": {
+			"chunk": "function(payload, headers, binary) {\n\n\t\tlet buffer         = null;\n\t\tlet data           = _JSON.encode({\n\t\t\theaders: headers,\n\t\t\tpayload: payload\n\t\t});\n\t\tlet mask           = false;\n\t\tlet mask_data      = null;\n\t\tlet payload_data   = null;\n\t\tlet payload_length = data.length;\n\t\tlet type           = this.type;\n\n\n\t\tif (type === Composite.TYPE.client) {\n\n\t\t\tmask      = true;\n\t\t\tmask_data = new Buffer(4);\n\n\t\t\tmask_data[0] = (Math.random() * 0xff) | 0;\n\t\t\tmask_data[1] = (Math.random() * 0xff) | 0;\n\t\t\tmask_data[2] = (Math.random() * 0xff) | 0;\n\t\t\tmask_data[3] = (Math.random() * 0xff) | 0;\n\n\t\t\tpayload_data = data.map(function(value, index) {\n\t\t\t\treturn value ^ mask_data[index % 4];\n\t\t\t});\n\n\t\t} else {\n\n\t\t\tmask         = false;\n\t\t\tmask_data    = new Buffer(4);\n\t\t\tpayload_data = data.map(function(value) {\n\t\t\t\treturn value;\n\t\t\t});\n\n\t\t}\n\n\n\t\t// 64 Bit Extended Payload Length\n\t\tif (payload_length > 0xffff) {\n\n\t\t\tlet lo = payload_length | 0;\n\t\t\tlet hi = (payload_length - lo) / 4294967296;\n\n\t\t\tbuffer = new Buffer((mask === true ? 14 : 10) + payload_length);\n\n\t\t\tbuffer[0] = 128 + (binary === true ? 0x02 : 0x01);\n\t\t\tbuffer[1] = (mask === true ? 128 : 0) + 127;\n\n\t\t\tbuffer[2] = (hi >> 24) & 0xff;\n\t\t\tbuffer[3] = (hi >> 16) & 0xff;\n\t\t\tbuffer[4] = (hi >>  8) & 0xff;\n\t\t\tbuffer[5] = (hi >>  0) & 0xff;\n\n\t\t\tbuffer[6] = (lo >> 24) & 0xff;\n\t\t\tbuffer[7] = (lo >> 16) & 0xff;\n\t\t\tbuffer[8] = (lo >>  8) & 0xff;\n\t\t\tbuffer[9] = (lo >>  0) & 0xff;\n\n\n\t\t\tif (mask === true) {\n\n\t\t\t\tmask_data.copy(buffer, 10);\n\t\t\t\tpayload_data.copy(buffer, 14);\n\n\t\t\t} else {\n\n\t\t\t\tpayload_data.copy(buffer, 10);\n\n\t\t\t}\n\n\n\t\t// 16 Bit Extended Payload Length\n\t\t} else if (payload_length > 125) {\n\n\t\t\tbuffer = new Buffer((mask === true ? 8 : 4) + payload_length);\n\n\t\t\tbuffer[0] = 128 + (binary === true ? 0x02 : 0x01);\n\t\t\tbuffer[1] = (mask === true ? 128 : 0) + 126;\n\n\t\t\tbuffer[2] = (payload_length >> 8) & 0xff;\n\t\t\tbuffer[3] = (payload_length >> 0) & 0xff;\n\n\n\t\t\tif (mask === true) {\n\n\t\t\t\tmask_data.copy(buffer, 4);\n\t\t\t\tpayload_data.copy(buffer, 8);\n\n\t\t\t} else {\n\n\t\t\t\tpayload_data.copy(buffer, 4);\n\n\t\t\t}\n\n\n\t\t// 7 Bit Payload Length\n\t\t} else {\n\n\t\t\tbuffer = new Buffer((mask === true ? 6 : 2) + payload_length);\n\n\t\t\tbuffer[0] = 128 + (binary === true ? 0x02 : 0x01);\n\t\t\tbuffer[1] = (mask === true ? 128 : 0) + payload_length;\n\n\n\t\t\tif (mask === true) {\n\n\t\t\t\tmask_data.copy(buffer, 2);\n\t\t\t\tpayload_data.copy(buffer, 6);\n\n\t\t\t} else {\n\n\t\t\t\tpayload_data.copy(buffer, 2);\n\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn buffer;\n\n\t}",
+			"type": "function",
+			"hash": "5e52e31a",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "payload",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "headers",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "binary",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "null",
+					"type": "null",
+					"value": null
+				},
+				{
+					"chunk": "new Buffer((mask === true ? 14 : 10) + payload_length)",
+					"type": "Buffer"
+				}
+			]
+		},
+		"_decode_buffer": {
+			"chunk": "function(buffer) {\n\n\t\tlet fragment = this.__fragment;\n\t\tlet chunk    = {\n\t\t\tbytes:   -1,\n\t\t\theaders: {},\n\t\t\tpayload: null\n\t\t};\n\n\n\t\tif (buffer.length <= 2) {\n\t\t\treturn chunk;\n\t\t}\n\n\n\t\tlet fin            = (buffer[0] & 128) === 128;\n\t\t// let rsv1        = (buffer[0] & 64) === 64;\n\t\t// let rsv2        = (buffer[0] & 32) === 32;\n\t\t// let rsv3        = (buffer[0] & 16) === 16;\n\t\tlet operator       = buffer[0] & 15;\n\t\tlet mask           = (buffer[1] & 128) === 128;\n\t\tlet mask_data      = new Buffer(4);\n\t\tlet payload_length = buffer[1] & 127;\n\t\tlet payload_data   = null;\n\n\t\tif (payload_length <= 125) {\n\n\t\t\tif (mask === true) {\n\t\t\t\tmask_data    = buffer.slice(2, 6);\n\t\t\t\tpayload_data = buffer.slice(6, 6 + payload_length);\n\t\t\t\tchunk.bytes  = 6 + payload_length;\n\t\t\t} else {\n\t\t\t\tmask_data    = null;\n\t\t\t\tpayload_data = buffer.slice(2, 2 + payload_length);\n\t\t\t\tchunk.bytes  = 2 + payload_length;\n\t\t\t}\n\n\t\t} else if (payload_length === 126) {\n\n\t\t\tpayload_length = (buffer[2] << 8) + buffer[3];\n\n\n\t\t\tif (payload_length > buffer.length) {\n\t\t\t\treturn chunk;\n\t\t\t}\n\n\n\t\t\tif (mask === true) {\n\t\t\t\tmask_data    = buffer.slice(4, 8);\n\t\t\t\tpayload_data = buffer.slice(8, 8 + payload_length);\n\t\t\t\tchunk.bytes  = 8 + payload_length;\n\t\t\t} else {\n\t\t\t\tmask_data    = null;\n\t\t\t\tpayload_data = buffer.slice(4, 4 + payload_length);\n\t\t\t\tchunk.bytes  = 4 + payload_length;\n\t\t\t}\n\n\t\t} else if (payload_length === 127) {\n\n\t\t\tlet hi = (buffer[2] * 0x1000000) + ((buffer[3] << 16) | (buffer[4] << 8) | buffer[5]);\n\t\t\tlet lo = (buffer[6] * 0x1000000) + ((buffer[7] << 16) | (buffer[8] << 8) | buffer[9]);\n\n\n\t\t\tpayload_length = (hi * 4294967296) + lo;\n\n\n\t\t\tif (payload_length > buffer.length) {\n\t\t\t\treturn chunk;\n\t\t\t}\n\n\n\t\t\tif (mask === true) {\n\t\t\t\tmask_data    = buffer.slice(10, 14);\n\t\t\t\tpayload_data = buffer.slice(14, 14 + payload_length);\n\t\t\t\tchunk.bytes  = 14 + payload_length;\n\t\t\t} else {\n\t\t\t\tmask_data    = null;\n\t\t\t\tpayload_data = buffer.slice(10, 10 + payload_length);\n\t\t\t\tchunk.bytes  = 10 + payload_length;\n\t\t\t}\n\n\t\t}\n\n\n\t\tif (mask_data !== null) {\n\n\t\t\tpayload_data = payload_data.map(function(value, index) {\n\t\t\t\treturn value ^ mask_data[index % 4];\n\t\t\t});\n\n\t\t}\n\n\n\t\t// 0: Continuation Frame (Fragmentation)\n\t\tif (operator === 0x00) {\n\n\t\t\tif (payload_data !== null) {\n\n\t\t\t\tlet payload = new Buffer(fragment.payload.length + payload_length);\n\n\t\t\t\tfragment.payload.copy(payload, 0);\n\t\t\t\tpayload_data.copy(payload, fragment.payload.length);\n\n\t\t\t\tfragment.payload = payload;\n\n\t\t\t}\n\n\n\t\t\tif (fin === true) {\n\n\t\t\t\tlet tmp0 = _JSON.decode(fragment.payload);\n\t\t\t\tif (tmp0 !== null) {\n\t\t\t\t\tchunk.headers = tmp0.headers || {};\n\t\t\t\t\tchunk.payload = tmp0.payload || null;\n\t\t\t\t}\n\n\t\t\t\tfragment.operator = 0x00;\n\t\t\t\tfragment.payload  = new Buffer(0);\n\n\t\t\t}\n\n\n\t\t// 1: Text Frame\n\t\t} else if (operator === 0x01) {\n\n\t\t\tif (fin === true) {\n\n\t\t\t\tlet tmp1 = _JSON.decode(payload_data);\n\t\t\t\tif (tmp1 !== null) {\n\t\t\t\t\tchunk.headers = tmp1.headers || {};\n\t\t\t\t\tchunk.payload = tmp1.payload || null;\n\t\t\t\t}\n\n\t\t\t} else if (payload_data !== null) {\n\n\t\t\t\tlet payload = new Buffer(fragment.payload.length + payload_length);\n\n\t\t\t\tfragment.payload.copy(payload, 0);\n\t\t\t\tpayload_data.copy(payload, fragment.payload.length);\n\n\t\t\t\tfragment.payload  = payload;\n\t\t\t\tfragment.operator = operator;\n\n\t\t\t}\n\n\n\t\t// 2: Binary Frame\n\t\t} else if (operator === 0x02) {\n\n\t\t\tif (fin === true) {\n\n\t\t\t\tlet tmp2 = _JSON.decode(payload_data);\n\t\t\t\tif (tmp2 !== null) {\n\t\t\t\t\tchunk.headers = tmp2.headers || {};\n\t\t\t\t\tchunk.payload = tmp2.payload || null;\n\t\t\t\t}\n\n\t\t\t} else if (payload_data !== null) {\n\n\t\t\t\tlet payload = new Buffer(fragment.payload.length + payload_length);\n\n\t\t\t\tfragment.payload.copy(payload, 0);\n\t\t\t\tpayload_data.copy(payload, fragment.payload.length);\n\n\t\t\t\tfragment.payload  = payload;\n\t\t\t\tfragment.operator = operator;\n\n\t\t\t}\n\n\n\t\t// 8: Connection Close\n\t\t} else if (operator === 0x08) {\n\n\t\t\tchunk.payload = this.close(Composite.STATUS.normal_closure);\n\n\n\t\t// 9: Ping Frame\n\t\t} else if (operator === 0x09) {\n\n\t\t\tchunk.payload = _on_ping_frame.call(this);\n\n\n\t\t// 10: Pong Frame\n\t\t} else if (operator === 0x0a) {\n\n\t\t\tchunk.payload = _on_pong_frame.call(this);\n\n\n\t\t// 3-7: Reserved Non-Control Frames, 11-15: Reserved Control Frames\n\t\t} else {\n\n\t\t\tchunk.payload = this.close(Composite.STATUS.protocol_error);\n\n\t\t}\n\n\n\t\treturn chunk;\n\n\t}",
+			"type": "function",
+			"hash": "ecfb61d0",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "buffer",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "{bytes:   -1,\n\t\t\theaders: {},\n\t\t\tpayload: null\n\t\t}",
+					"type": "Object",
+					"value": {
+						"bytes": -1,
+						"headers": {},
+						"payload": null
+					}
+				}
+			]
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.type = lychee.enumof(Composite.TYPE, states.type) ? states.type : null;\n\n\t\tthis.__buffer   = new Buffer(0);\n\t\tthis.__fragment = { operator: 0x00, payload: new Buffer(0) };\n\t\tthis.__isClosed = false;\n\n\n\t\tif (lychee.debug === true) {\n\n\t\t\tif (this.type === null) {\n\t\t\t\tconsole.error('lychee.net.protocol.WS: Invalid (lychee.net.protocol.WS.TYPE) type.');\n\t\t\t}\n\n\t\t}\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "982216c3",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {},
+		"properties": {
+			"type": {
+				"chunk": "this.type = lychee.enumof(Composite.TYPE, states.type) ? states.type : null;",
+				"type": "Enum",
+				"hash": "84882521",
+				"value": {
+					"chunk": "lychee.enumof(Composite.TYPE, states.type) ? states.type : null",
+					"type": "Enum",
+					"hash": "dc636ca5",
+					"value": "Composite.TYPE"
+				}
+			},
+			"__buffer": {
+				"chunk": "this.__buffer   = new Buffer(0);",
+				"type": "Buffer",
+				"hash": "ef0367b0",
+				"value": {
+					"chunk": "new Buffer(0)",
+					"type": "Buffer",
+					"hash": "504f95d6",
+					"value": 0
+				}
+			},
+			"__fragment": {
+				"chunk": "this.__fragment = { operator: 0x00, payload: new Buffer(0) };",
+				"type": "Object",
+				"hash": "460c9044",
+				"value": {
+					"chunk": "{ operator: 0x00, payload: new Buffer(0) }",
+					"type": "Object",
+					"hash": "5c93bdd6",
+					"value": {
+						"operator": 0,
+						"payload": {
+							"type": "Buffer",
+							"data": []
+						}
+					}
+				}
+			},
+			"__isClosed": {
+				"chunk": "this.__isClosed = false;",
+				"type": "Boolean",
+				"hash": "619fdae7",
+				"value": {
+					"chunk": "false",
+					"type": "Boolean",
+					"hash": "d5619e17",
+					"value": false
+				}
+			}
+		},
+		"enums": {
+			"FRAMESIZE": {
+				"value": {
+					"chunk": "0x800000",
+					"type": "Number",
+					"hash": "3245a812",
+					"value": 8388608
+				}
+			},
+			"STATUS": {
+				"values": [
+					{
+						"name": "normal_closure",
+						"value": {
+							"chunk": "1000",
+							"type": "Number",
+							"hash": "c7f2b564",
+							"value": 1000
+						}
+					},
+					{
+						"name": "protocol_error",
+						"value": {
+							"chunk": "1002",
+							"type": "Number",
+							"hash": "d6873d46",
+							"value": 1002
+						}
+					},
+					{
+						"name": "message_too_big",
+						"value": {
+							"chunk": "1009",
+							"type": "Number",
+							"hash": "5b50492e",
+							"value": 1009
+						}
+					}
+				]
+			},
+			"TYPE": {
+				"values": [
+					{
+						"name": "client",
+						"value": {
+							"chunk": "1",
+							"type": "Number",
+							"hash": "9416ac93",
+							"value": 1
+						}
+					},
+					{
+						"name": "remote",
+						"value": {
+							"chunk": "2",
+							"type": "Number",
+							"hash": "0129e217",
+							"value": 2
+						}
+					}
+				]
+			}
+		},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.type !== null) states.type = this.type;\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.net.protocol.WS',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        null\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "df8f3a83",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.net.protocol.WS',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"send": {
+				"chunk": "function(payload, headers, binary) {\n\n\t\t\tpayload = payload instanceof Buffer ? payload : null;\n\t\t\theaders = headers instanceof Object ? headers : null;\n\t\t\tbinary  = binary === true;\n\n\n\t\t\tif (payload !== null) {\n\n\t\t\t\tif (this.__isClosed === false) {\n\t\t\t\t\treturn _encode_buffer.call(this, payload, headers, binary);\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
+				"type": "function",
+				"hash": "cc10e060",
+				"parameters": [
+					{
+						"chunk": "payload instanceof Buffer ? payload : null",
+						"name": "payload",
+						"type": "Buffer",
+						"value": null
+					},
+					{
+						"chunk": "headers instanceof Object ? headers : null",
+						"name": "headers",
+						"type": "Object",
+						"value": null
+					},
+					{
+						"chunk": "binary === true",
+						"name": "binary",
+						"type": "Boolean",
+						"value": true
+					}
+				],
+				"values": [
+					{
+						"chunk": "null",
+						"type": "null",
+						"value": null
+					},
+					{
+						"chunk": "null",
+						"type": "null",
+						"value": null
+					},
+					{
+						"chunk": "new Buffer((mask === true ? 14 : 10) + payload_length)",
+						"type": "Buffer"
+					}
+				]
+			},
+			"receive": {
+				"chunk": "function(blob) {\n\n\t\t\tblob = blob instanceof Buffer ? blob : null;\n\n\n\t\t\tlet chunks = [];\n\n\n\t\t\tif (blob !== null) {\n\n\t\t\t\tif (blob.length > Composite.FRAMESIZE) {\n\n\t\t\t\t\tchunks.push({\n\t\t\t\t\t\tpayload: this.close(Composite.STATUS.message_too_big)\n\t\t\t\t\t});\n\n\t\t\t\t} else if (this.__isClosed === false) {\n\n\t\t\t\t\tlet buf = this.__buffer;\n\t\t\t\t\tlet tmp = new Buffer(buf.length + blob.length);\n\n\n\t\t\t\t\tbuf.copy(tmp);\n\t\t\t\t\tblob.copy(tmp, buf.length);\n\t\t\t\t\tbuf = tmp;\n\n\n\t\t\t\t\tlet chunk = _decode_buffer.call(this, buf);\n\n\t\t\t\t\twhile (chunk.bytes !== -1) {\n\n\t\t\t\t\t\tif (chunk.payload !== null) {\n\t\t\t\t\t\t\tchunks.push(chunk);\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\tif (buf.length - chunk.bytes > 0) {\n\n\t\t\t\t\t\t\ttmp = new Buffer(buf.length - chunk.bytes);\n\t\t\t\t\t\t\tbuf.copy(tmp, 0, chunk.bytes);\n\t\t\t\t\t\t\tbuf = tmp;\n\n\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\tbuf = new Buffer(0);\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\tchunk = null;\n\t\t\t\t\t\tchunk = _decode_buffer.call(this, buf);\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\tthis.__buffer = buf;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn chunks;\n\n\t\t}",
+				"type": "function",
+				"hash": "3ea9151c",
+				"parameters": [
+					{
+						"chunk": "blob instanceof Buffer ? blob : null",
+						"name": "blob",
+						"type": "Buffer",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "[]",
+						"type": "Array",
+						"value": []
+					}
+				]
+			},
+			"close": {
+				"chunk": "function(status) {\n\n\t\t\tstatus = typeof status === 'number' ? status : Composite.STATUS.normal_closure;\n\n\n\t\t\tif (this.__isClosed === false) {\n\n\t\t\t\tlet buffer = new Buffer(4);\n\n\t\t\t\tbuffer[0]  = 128 + 0x08;\n\t\t\t\tbuffer[1]  =   0 + 0x02;\n\n\t\t\t\tbuffer.write(String.fromCharCode((status >> 8) & 0xff) + String.fromCharCode((status >> 0) & 0xff), 2, 'binary');\n\n\t\t\t\tthis.__isClosed = true;\n\n\n\t\t\t\treturn buffer;\n\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
+				"type": "function",
+				"hash": "520656a7",
+				"parameters": [
+					{
+						"chunk": "typeof status === 'number' ? status : Composite.STATUS.normal_closure",
+						"name": "status",
+						"type": "Number",
+						"value": "Composite.STATUS.normal_closure"
+					}
+				],
+				"values": [
+					{
+						"chunk": "new Buffer(4)",
+						"type": "Buffer",
+						"value": 4
+					},
+					{
+						"chunk": "null",
+						"type": "null",
+						"value": null
+					}
+				]
+			},
+			"ping": {
+				"chunk": "function() {\n\n\t\t\tlet buffer = _on_pong_frame.call(this);\n\t\t\tif (buffer !== null) {\n\t\t\t\treturn buffer;\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
+				"type": "function",
+				"hash": "6ed03247",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "null",
+						"type": "null",
+						"value": null
+					},
+					{
+						"chunk": "new Buffer(6)",
+						"type": "Buffer",
+						"value": 6
+					},
+					{
+						"chunk": "null",
+						"type": "null",
+						"value": null
+					}
+				]
+			}
+		}
+	}
+}

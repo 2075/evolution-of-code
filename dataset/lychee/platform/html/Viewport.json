@@ -1,0 +1,330 @@
+{
+	"header": {
+		"identifier": "lychee.Viewport",
+		"attaches": {},
+		"tags": {
+			"platform": "html"
+		},
+		"requires": [],
+		"includes": [
+			"lychee.event.Emitter"
+		],
+		"supports": {
+			"body": "function(lychee, global) {\n\n\tif (\n\t\ttypeof global.addEventListener === 'function'\n\t\t&& typeof global.innerWidth === 'number'\n\t\t&& typeof global.innerHeight === 'number'\n\t\t&& typeof global.document !== 'undefined'\n\t\t&& typeof global.document.querySelectorAll === 'function'\n\t) {\n\n\t\treturn true;\n\n\t}\n\n\n\treturn false;\n\n}",
+			"hash": "5fa277f4",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "lychee",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "global",
+					"type": "undefined"
+				}
+			]
+		},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Emitter": {
+			"chunk": "lychee.import('lychee.event.Emitter')",
+			"type": "lychee.Definition",
+			"hash": "b60271ea",
+			"value": {
+				"reference": "lychee.event.Emitter",
+				"arguments": []
+			}
+		},
+		"_CLOCK": {
+			"chunk": "{\n\t\torientationchange: null,\n\t\tresize:            0\n\t}",
+			"type": "Object",
+			"hash": "54d56d38",
+			"value": {
+				"orientationchange": null,
+				"resize": 0
+			}
+		},
+		"_INSTANCES": {
+			"chunk": "[]",
+			"type": "Array",
+			"hash": "30f4c306",
+			"value": []
+		},
+		"_focusactive": {
+			"chunk": "true",
+			"type": "Boolean",
+			"hash": "34edcf72",
+			"value": true
+		},
+		"_reshapeactive": {
+			"chunk": "false",
+			"type": "Boolean",
+			"hash": "d5619e17",
+			"value": false
+		},
+		"_reshapewidth": {
+			"chunk": "global.innerWidth  | 0",
+			"type": "Number",
+			"hash": "c833de90",
+			"value": 1337
+		},
+		"_reshapeheight": {
+			"chunk": "global.innerHeight | 0",
+			"type": "Number",
+			"hash": "0793b3e8",
+			"value": 1337
+		},
+		"_reshape_viewport": {
+			"chunk": "function() {\n\n\t\tif (_reshapeactive === true || (_reshapewidth === global.innerWidth && _reshapeheight === global.innerHeight)) {\n\t\t\treturn false;\n\t\t}\n\n\n\t\t_reshapeactive = true;\n\n\n\n\t\t/*\n\t\t * ISSUE in Mobile WebKit:\n\t\t *\n\t\t * An issue occurs if width of viewport is higher than\n\t\t * the width of the viewport of future rotation state.\n\t\t *\n\t\t * This bugfix prevents the viewport to scale higher\n\t\t * than 1.0, even if the meta tag is correctly setup.\n\t\t */\n\n\t\tlet elements = global.document.querySelectorAll('.lychee-Renderer');\n\t\tfor (let e = 0, el = elements.length; e < el; e++) {\n\n\t\t\tlet element = elements[e];\n\n\t\t\telement.style.width  = '1px';\n\t\t\telement.style.height = '1px';\n\n\t\t}\n\n\n\n\t\t/*\n\t\t * ISSUE in Mobile Firefox and Mobile WebKit\n\t\t *\n\t\t * The reflow is too slow for an update, so we have\n\t\t * to lock the heuristic to only be executed once,\n\t\t * waiting for 500ms to let the reflow finish.\n\t\t */\n\n\t\tsetTimeout(function() {\n\n\t\t\tfor (let i = 0, l = _INSTANCES.length; i < l; i++) {\n\t\t\t\t_process_reshape.call(_INSTANCES[i], global.innerWidth, global.innerHeight);\n\t\t\t}\n\n\t\t\t_reshapewidth  = global.innerWidth  | 0;\n\t\t\t_reshapeheight = global.innerHeight | 0;\n\t\t\t_reshapeactive = false;\n\n\t\t}, 500);\n\n\t}",
+			"type": "function",
+			"hash": "f5aa02e5",
+			"parameters": [],
+			"values": [
+				{
+					"chunk": "false",
+					"type": "Boolean",
+					"value": false
+				}
+			]
+		},
+		"_listeners": {
+			"chunk": "{\n\n\t\torientationchange: function() {\n\n\t\t\tfor (let i = 0, l = _INSTANCES.length; i < l; i++) {\n\t\t\t\t_process_orientation.call(_INSTANCES[i], global.orientation);\n\t\t\t}\n\n\t\t\t_CLOCK.orientationchange = Date.now();\n\t\t\t_reshape_viewport();\n\n\t\t},\n\n\t\tresize: function() {\n\n\t\t\tif (_CLOCK.orientationchange === null || (_CLOCK.orientationchange !== null && _CLOCK.orientationchange > _CLOCK.resize)) {\n\n\t\t\t\t_CLOCK.resize = Date.now();\n\t\t\t\t_reshape_viewport();\n\n\t\t\t}\n\n\t\t},\n\n\t\tfocus: function() {\n\n\t\t\tif (_focusactive === false) {\n\n\t\t\t\tfor (let i = 0, l = _INSTANCES.length; i < l; i++) {\n\t\t\t\t\t_process_show.call(_INSTANCES[i]);\n\t\t\t\t}\n\n\t\t\t\t_focusactive = true;\n\n\t\t\t}\n\n\t\t},\n\n\t\tblur: function() {\n\n\t\t\tif (_focusactive === true) {\n\n\t\t\t\tfor (let i = 0, l = _INSTANCES.length; i < l; i++) {\n\t\t\t\t\t_process_hide.call(_INSTANCES[i]);\n\t\t\t\t}\n\n\t\t\t\t_focusactive = false;\n\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "Boolean",
+			"hash": "74f05415",
+			"value": true
+		},
+		"_enterFullscreen": {
+			"chunk": "null",
+			"type": "null",
+			"hash": "66f07992",
+			"value": null
+		},
+		"_leaveFullscreen": {
+			"chunk": "null",
+			"type": "null",
+			"hash": "66f07992",
+			"value": null
+		},
+		"_process_show": {
+			"chunk": "function() {\n\n\t\treturn this.trigger('show');\n\n\t}",
+			"type": "function",
+			"hash": "e1fe8bc5",
+			"parameters": [],
+			"values": [
+				{
+					"chunk": "this.trigger('show')",
+					"type": "undefined",
+					"value": {
+						"reference": "this.trigger('show')",
+						"arguments": []
+					}
+				}
+			]
+		},
+		"_process_hide": {
+			"chunk": "function() {\n\n\t\treturn this.trigger('hide');\n\n\t}",
+			"type": "function",
+			"hash": "9488e2b6",
+			"parameters": [],
+			"values": [
+				{
+					"chunk": "this.trigger('hide')",
+					"type": "undefined",
+					"value": {
+						"reference": "this.trigger('hide')",
+						"arguments": []
+					}
+				}
+			]
+		},
+		"_process_orientation": {
+			"chunk": "function(orientation) {\n\n\t\torientation = typeof orientation === 'number' ? orientation : null;\n\n\t\tif (orientation !== null) {\n\t\t\tthis.__orientation = orientation;\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "4826ca7e",
+			"parameters": [
+				{
+					"chunk": "typeof orientation === 'number' ? orientation : null",
+					"name": "orientation",
+					"type": "Number",
+					"value": null
+				}
+			],
+			"values": []
+		},
+		"_process_reshape": {
+			"chunk": "function(width, height) {\n\n\t\tif (width === this.width && height === this.height) {\n\t\t\treturn false;\n\t\t}\n\n\n\t\tthis.width  = width;\n\t\tthis.height = height;\n\n\n\t\tlet orientation = null;\n\t\tlet rotation    = null;\n\n\n\n\t\t/*\n\t\t *    TOP\n\t\t *  _______\n\t\t * |       |\n\t\t * |       |\n\t\t * |       |\n\t\t * |       |\n\t\t * |       |\n\t\t * [X][X][X]\n\t\t *\n\t\t *  BOTTOM\n\t\t */\n\n\t\tif (this.__orientation === 0) {\n\n\t\t\tif (width > height) {\n\n\t\t\t\torientation = 'landscape';\n\t\t\t\trotation    = 'landscape';\n\n\t\t\t} else {\n\n\t\t\t\torientation = 'portrait';\n\t\t\t\trotation    = 'portrait';\n\n\t\t\t}\n\n\n\n\t\t/*\n\t\t *  BOTTOM\n\t\t *\n\t\t * [X][X][X]\n\t\t * |       |\n\t\t * |       |\n\t\t * |       |\n\t\t * |       |\n\t\t * |_______|\n\t\t *\n\t\t *    TOP\n\t\t */\n\n\t\t} else if (this.__orientation === 180) {\n\n\t\t\tif (width > height) {\n\n\t\t\t\torientation = 'landscape';\n\t\t\t\trotation    = 'landscape';\n\n\t\t\t} else {\n\n\t\t\t\torientation = 'portrait';\n\t\t\t\trotation    = 'portrait';\n\n\t\t\t}\n\n\n\n\t\t/*\n\t\t *    ____________    B\n\t\t * T |            [x] O\n\t\t * O |            [x] T\n\t\t * P |____________[x] T\n\t\t *                    O\n\t\t *                    M\n\t\t */\n\n\t\t} else if (this.__orientation === 90) {\n\n\t\t\tif (width > height) {\n\n\t\t\t\torientation = 'portrait';\n\t\t\t\trotation    = 'landscape';\n\n\t\t\t} else {\n\n\t\t\t\torientation = 'landscape';\n\t\t\t\trotation    = 'portrait';\n\n\t\t\t}\n\n\n\n\t\t/*\n\t\t * B    ____________\n\t\t * O [x]            | T\n\t\t * T [x]            | O\n\t\t * T [x]____________| P\n\t\t * O\n\t\t * M\n\t\t */\n\n\t\t} else if (this.__orientation === -90) {\n\n\t\t\tif (width > height) {\n\n\t\t\t\torientation = 'portrait';\n\t\t\t\trotation    = 'landscape';\n\n\t\t\t} else {\n\n\t\t\t\torientation = 'landscape';\n\t\t\t\trotation    = 'portrait';\n\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn this.trigger('reshape', [ orientation, rotation, width, height ]);\n\n\t}",
+			"type": "function",
+			"hash": "55dc354a",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "width",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "height",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "false",
+					"type": "Boolean",
+					"value": false
+				},
+				{
+					"chunk": "this.trigger('reshape', [ orientation, rotation, width, height ])",
+					"type": "undefined",
+					"value": {
+						"reference": "this.trigger('reshape', [ orientation, rotation, width, height ])",
+						"arguments": []
+					}
+				}
+			]
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.fullscreen = false;\n\t\tthis.width      = global.innerWidth  | 0;\n\t\tthis.height     = global.innerHeight | 0;\n\n\t\tthis.__orientation = typeof global.orientation === 'number' ? global.orientation : 0;\n\n\n\t\t_Emitter.call(this);\n\n\t\t_INSTANCES.push(this);\n\n\n\t\tthis.setFullscreen(states.fullscreen);\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tsetTimeout(function() {\n\n\t\t\tthis.width  = 0;\n\t\t\tthis.height = 0;\n\n\t\t\t_process_reshape.call(this, global.innerWidth | 0, global.innerHeight | 0);\n\n\t\t}.bind(this), 100);\n\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "ef317caa",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"fullscreen": "setFullscreen"
+		},
+		"properties": {
+			"fullscreen": {
+				"chunk": "this.fullscreen = false;",
+				"type": "Boolean",
+				"hash": "8cec35c8",
+				"value": {
+					"chunk": "false",
+					"type": "Boolean",
+					"hash": "d5619e17",
+					"value": false
+				}
+			},
+			"width": {
+				"chunk": "this.width      = global.innerWidth  | 0;",
+				"type": "Number",
+				"hash": "d51f652f",
+				"value": {
+					"chunk": "global.innerWidth  | 0",
+					"type": "Number",
+					"hash": "c833de90",
+					"value": 1337
+				}
+			},
+			"height": {
+				"chunk": "this.height     = global.innerHeight | 0;",
+				"type": "Number",
+				"hash": "43e0521f",
+				"value": {
+					"chunk": "global.innerHeight | 0",
+					"type": "Number",
+					"hash": "0793b3e8",
+					"value": 1337
+				}
+			},
+			"__orientation": {
+				"chunk": "this.__orientation = typeof global.orientation === 'number' ? global.orientation : 0;",
+				"type": "Number",
+				"hash": "76428745",
+				"value": {
+					"chunk": "typeof global.orientation === 'number' ? global.orientation : 0",
+					"type": "Number",
+					"hash": "d41700b9",
+					"value": 0
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"destroy": {
+				"chunk": "function() {\n\n\t\t\tlet found = false;\n\n\t\t\tfor (let i = 0, il = _INSTANCES.length; i < il; i++) {\n\n\t\t\t\tif (_INSTANCES[i] === this) {\n\t\t\t\t\t_INSTANCES.splice(i, 1);\n\t\t\t\t\tfound = true;\n\t\t\t\t\til--;\n\t\t\t\t\ti--;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\tthis.unbind();\n\n\n\t\t\treturn found;\n\n\t\t}",
+				"type": "function",
+				"hash": "a596dbf3",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					},
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.Viewport';\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.fullscreen !== false) states.fullscreen = this.fullscreen;\n\n\n\t\t\tdata['arguments'][0] = states;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "cf868d0c",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"setFullscreen": {
+				"chunk": "function(fullscreen) {\n\n\t\t\tfullscreen = typeof fullscreen === 'boolean' ? fullscreen : null;\n\n\n\t\t\tif (fullscreen !== null) {\n\n\t\t\t\tif (fullscreen === true && this.fullscreen === false) {\n\n\t\t\t\t\tif (_enterFullscreen !== null) {\n\n\t\t\t\t\t\t_enterFullscreen();\n\t\t\t\t\t\tthis.fullscreen = true;\n\n\t\t\t\t\t\treturn true;\n\n\t\t\t\t\t}\n\n\t\t\t\t} else if (fullscreen === false && this.fullscreen === true) {\n\n\t\t\t\t\tif (_leaveFullscreen !== null) {\n\n\t\t\t\t\t\t_leaveFullscreen();\n\t\t\t\t\t\tthis.fullscreen = false;\n\n\t\t\t\t\t\treturn true;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "b6c4ea4a",
+				"parameters": [
+					{
+						"chunk": "typeof fullscreen === 'boolean' ? fullscreen : null",
+						"name": "fullscreen",
+						"type": "Boolean",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

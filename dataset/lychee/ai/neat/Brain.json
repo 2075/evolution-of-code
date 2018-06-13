@@ -1,0 +1,399 @@
+{
+	"header": {
+		"identifier": "lychee.ai.neat.Brain",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_MAX_NODES": {
+			"chunk": "8192",
+			"type": "Number",
+			"hash": "d34b5f19",
+			"value": 8192
+		},
+		"_validate_gene": {
+			"chunk": "function(gene) {\n\n\t\tif (gene instanceof Object) {\n\n\t\t\tif (\n\t\t\t\ttypeof gene['in'] === 'number'\n\t\t\t\t&& typeof gene['out'] === 'number'\n\t\t\t\t&& typeof gene.enabled === 'boolean'\n\t\t\t\t&& typeof gene.innovation === 'number'\n\t\t\t) {\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\t\t}\n\n\t\treturn false;\n\n\t}",
+			"type": "function",
+			"hash": "d51c26e7",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "gene",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "true",
+					"type": "Boolean",
+					"value": true
+				},
+				{
+					"chunk": "false",
+					"type": "Boolean",
+					"value": false
+				}
+			]
+		},
+		"_random": {
+			"chunk": "function() {\n\t\treturn (Math.random() * 2) - 1;\n\t}",
+			"type": "function",
+			"hash": "adacb574",
+			"parameters": [],
+			"values": [
+				{
+					"chunk": "(Math.random() * 2) - 1",
+					"type": "Number",
+					"value": 1337
+				}
+			]
+		},
+		"_sigmoid": {
+			"chunk": "function(value) {\n\t\treturn (1 / (1 + Math.exp((-1 * value) / 1)));\n\t}",
+			"type": "function",
+			"hash": "6482ea77",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "value",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "(1 / (1 + Math.exp((-1 * value) / 1)))",
+					"type": "Number",
+					"value": 1337
+				}
+			]
+		},
+		"_init_network": {
+			"chunk": "function() {\n\n\t\tlet input_size = this.__sensors_map.reduce(function(a, b) {\n\t\t\treturn a + b;\n\t\t}, 0);\n\n\t\tlet output_size = this.__controls_map.reduce(function(a, b) {\n\t\t\treturn a + b;\n\t\t}, 0);\n\n\n\t\tif (input_size === 0 || output_size === 0) {\n\t\t\treturn;\n\t\t}\n\n\n\t\tlet genes       = this.genes;\n\t\tlet neurons     = {};\n\t\tlet neuron_size = 0;\n\n\t\tfor (let i = 0; i < input_size; i++) {\n\n\t\t\tneurons[i] = {\n\t\t\t\tincoming: [],\n\t\t\t\tvalue:    0.0\n\t\t\t};\n\n\t\t\tneuron_size++;\n\n\t\t}\n\n\n\t\tfor (let o = 0; o < output_size; o++) {\n\n\t\t\tneurons[_MAX_NODES + o] = {\n\t\t\t\tincoming: [],\n\t\t\t\tvalue:    0.0\n\t\t\t};\n\n\t\t\tneuron_size++;\n\n\t\t}\n\n\n\t\tgenes.sort(function(a, b) {\n\t\t\tif (a.out < b.out) return -1;\n\t\t\tif (a.out > b.out) return  1;\n\t\t\treturn 0;\n\t\t});\n\n\n\t\tfor (let g = 0, gl = genes.length; g < gl; g++) {\n\n\t\t\tlet gene = genes[g];\n\t\t\tif (gene.enabled === true) {\n\n\t\t\t\tlet neuron1 = neurons[gene['out']] || null;\n\t\t\t\tif (neuron1 === null) {\n\n\t\t\t\t\tneuron1 = neurons[gene['out']] = {\n\t\t\t\t\t\tincoming: [],\n\t\t\t\t\t\tvalue:    0.0\n\t\t\t\t\t};\n\n\t\t\t\t\tneuron_size++;\n\n\t\t\t\t}\n\n\t\t\t\tlet neuron2 = neurons[gene['in']] || null;\n\t\t\t\tif (neuron2 === null) {\n\n\t\t\t\t\tneuron1.incoming.push(gene);\n\t\t\t\t\tneuron2 = neurons[gene['in']] = {\n\t\t\t\t\t\tincoming: [],\n\t\t\t\t\t\tvalue:    0.0\n\t\t\t\t\t};\n\n\t\t\t\t\tneuron_size++;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\n\t\tthis.__neurons     = neurons;\n\t\tthis.__size.neuron = neuron_size;\n\t\tthis.__size.input  = input_size;\n\t\tthis.__size.output = output_size;\n\n\n\t\tthis._inputs  = null;\n\t\tthis._outputs = null;\n\n\t\tthis._inputs  = new Array(input_size);\n\t\tthis._outputs = new Array(output_size);\n\n\t}",
+			"type": "function",
+			"hash": "37620dff",
+			"parameters": [],
+			"values": []
+		},
+		"_update_network": {
+			"chunk": "function(inputs, outputs) {\n\n\t\tlet neurons = this.__neurons;\n\n\n\t\tfor (let i = 0, il = inputs.length; i < il; i++) {\n\t\t\tneurons[i].value = inputs[i];\n\t\t}\n\n\n\t\tlet neuron_ids = Object.keys(this.__neurons).sort();\n\t\tif (neuron_ids.length > 0) {\n\n\t\t\tfor (let n = 0, nl = neuron_ids.length; n < nl; n++) {\n\n\t\t\t\tlet neuron = neurons[neuron_ids[n]];\n\t\t\t\tif (neuron.incoming.length > 0) {\n\n\t\t\t\t\tlet value = 0;\n\n\t\t\t\t\tfor (let i = 0, il = neuron.incoming.length; i < il; i++) {\n\n\t\t\t\t\t\tlet gene  = neuron.incoming[i];\n\t\t\t\t\t\tlet other = neurons[gene['in']];\n\n\t\t\t\t\t\tvalue += gene.weight * other.value;\n\n\t\t\t\t\t}\n\n\t\t\t\t\tneuron.value = _sigmoid(value);\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\n\t\tfor (let o = 0, ol = outputs.length; o <= ol; o++) {\n\n\t\t\tlet neuron = neurons[_MAX_NODES + o] || null;\n\t\t\tif (neuron !== null) {\n\t\t\t\toutputs[o] = neuron.value;\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "e5e804a3",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "inputs",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "outputs",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.controls = [];\n\t\tthis.sensors  = [];\n\t\tthis.genes    = [];\n\n\t\tthis.__controls_map = [];\n\t\tthis.__neurons      = {};\n\t\tthis.__sensors_map  = [];\n\n\t\t// cache structures\n\t\tthis._inputs  = [];\n\t\tthis._outputs = [];\n\t\tthis.__size   = {\n\t\t\tinput:  0,\n\t\t\toutput: 0,\n\t\t\tneuron: 0\n\t\t};\n\n\n\t\tthis.setSensors(states.sensors);\n\t\tthis.setControls(states.controls);\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "382165e2",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"sensors": "setSensors",
+			"controls": "setControls"
+		},
+		"properties": {
+			"controls": {
+				"chunk": "this.controls = [];",
+				"type": "Array",
+				"hash": "a1bcd35e",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"sensors": {
+				"chunk": "this.sensors  = [];",
+				"type": "Array",
+				"hash": "ec27897f",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"genes": {
+				"chunk": "this.genes    = [];",
+				"type": "Array",
+				"hash": "a3687423",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"__controls_map": {
+				"chunk": "this.__controls_map = [];",
+				"type": "Array",
+				"hash": "dd6fb927",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"__neurons": {
+				"chunk": "this.__neurons      = {};",
+				"type": "Object",
+				"hash": "45d94776",
+				"value": {
+					"chunk": "{}",
+					"type": "Object",
+					"hash": "30f4c306",
+					"value": {}
+				}
+			},
+			"__sensors_map": {
+				"chunk": "this.__sensors_map  = [];",
+				"type": "Array",
+				"hash": "f499803a",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"_inputs": {
+				"chunk": "this._inputs  = [];",
+				"type": "Array",
+				"hash": "4594b432",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"_outputs": {
+				"chunk": "this._outputs = [];",
+				"type": "Array",
+				"hash": "23989997",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"__size": {
+				"chunk": "this.__size   = {\n\t\t\tinput:  0,\n\t\t\toutput: 0,\n\t\t\tneuron: 0\n\t\t};",
+				"type": "Object",
+				"hash": "ca9432fe",
+				"value": {
+					"chunk": "{\n\t\t\tinput:  0,\n\t\t\toutput: 0,\n\t\t\tneuron: 0\n\t\t}",
+					"type": "Object",
+					"hash": "c98cdb98",
+					"value": {
+						"input": 0,
+						"output": 0,
+						"neuron": 0
+					}
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {\n\n\t\t\tif (blob.neurons instanceof Object) {\n\t\t\t\tthis.__neurons = lychee.deserialize(blob.neurons);\n\t\t\t}\n\n\t\t\tif (blob.size instanceof Object) {\n\t\t\t\tthis.__size = lychee.deserialize(blob.size);\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "a963f42b",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "blob",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet states = {};\n\t\t\tlet blob   = {};\n\n\n\t\t\tif (this.controls.length > 0) states.controls = lychee.serialize(this.controls);\n\t\t\tif (this.sensors.length > 0)  states.sensors  = lychee.serialize(this.sensors);\n\n\n\t\t\tif (Object.keys(this.__neurons).length > 0) {\n\t\t\t\tblob.neurons = lychee.serialize(this.__neurons);\n\t\t\t}\n\n\t\t\tif (this.__size.input !== 0 || this.__size.output !== 0) {\n\t\t\t\tblob.size = lychee.serialize(this.__size);\n\t\t\t}\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.ai.neat.Brain',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "a8df2ffe",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.ai.neat.Brain',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"update": {
+				"chunk": "function(clock, delta) {\n\n\t\t\tlet controls     = this.controls;\n\t\t\tlet controls_map = this.__controls_map;\n\t\t\tlet sensors      = this.sensors;\n\t\t\tlet inputs       = this._inputs;\n\t\t\tlet outputs      = this._outputs;\n\n\n\t\t\t// 1. Transform Policies to Inputs\n\t\t\tfor (let i = 0, s = 0, sl = sensors.length; s < sl; s++) {\n\n\t\t\t\tlet sensor = sensors[s];\n\t\t\t\tlet values = sensor.sensor();\n\n\t\t\t\tfor (let v = 0, vl = values.length; v < vl; v++) {\n\t\t\t\t\tinputs[i++] = values[v];\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\t// 2. Update Network\n\t\t\t_update_network.call(this, inputs, outputs);\n\n\n\t\t\t// 3. Transform Outputs to Policies\n\t\t\tlet offset = 0;\n\n\t\t\tfor (let c = 0, cl = controls_map.length; c < cl; c++) {\n\n\t\t\t\tlet control = controls[c];\n\t\t\t\tlet length  = controls_map[c];\n\t\t\t\tlet values  = outputs.slice(offset, length);\n\n\t\t\t\tif (values.length > 0) {\n\t\t\t\t\tcontrol.control(values);\n\t\t\t\t}\n\n\t\t\t\toffset += length;\n\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "e6ff1b00",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "clock",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "delta",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"learn": {
+				"chunk": "function(inputs, outputs) {\n\n\t\t\tinputs  = inputs instanceof Array  ? inputs  : null;\n\t\t\toutputs = outputs instanceof Array ? outputs : null;\n\n\n\t\t\tif (inputs !== null && outputs !== null) {\n\n\t\t\t\t// TODO: Backpropagation\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "4cbe12ac",
+				"parameters": [
+					{
+						"chunk": "inputs instanceof Array  ? inputs  : null",
+						"name": "inputs",
+						"type": "Array",
+						"value": null
+					},
+					{
+						"chunk": "outputs instanceof Array ? outputs : null",
+						"name": "outputs",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setControls": {
+				"chunk": "function(controls) {\n\n\t\t\tcontrols = controls instanceof Array ? controls : null;\n\n\n\t\t\tif (controls !== null) {\n\n\t\t\t\tthis.controls = controls;\n\n\t\t\t\tthis.__controls_map = controls.map(function(control) {\n\t\t\t\t\treturn (control.sensor() || [ 1 ]).length;\n\t\t\t\t});\n\n\n\t\t\t\tlet size = this.__controls_map.reduce(function(a, b) {\n\t\t\t\t\treturn a + b;\n\t\t\t\t}, 0);\n\n\t\t\t\tif (size !== this.__size.output) {\n\t\t\t\t\t_init_network.call(this);\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "ee50795d",
+				"parameters": [
+					{
+						"chunk": "controls instanceof Array ? controls : null",
+						"name": "controls",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setSensors": {
+				"chunk": "function(sensors) {\n\n\t\t\tsensors = sensors instanceof Array ? sensors : null;\n\n\n\t\t\tif (sensors !== null) {\n\n\t\t\t\tthis.sensors = sensors;\n\n\t\t\t\tthis.__sensors_map = sensors.map(function(sensor) {\n\t\t\t\t\treturn (sensor.sensor() || [ 1 ]).length;\n\t\t\t\t});\n\n\n\t\t\t\tlet size = this.__sensors_map.reduce(function(a, b) {\n\t\t\t\t\treturn a + b;\n\t\t\t\t}, 0);\n\n\t\t\t\tif (size !== this.__size.input) {\n\t\t\t\t\t_init_network.call(this);\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "8e8025c6",
+				"parameters": [
+					{
+						"chunk": "sensors instanceof Array ? sensors : null",
+						"name": "sensors",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"getGenes": {
+				"chunk": "function() {\n\n\t\t\tlet genes = [];\n\n\t\t\tfor (let g = 0, gl = this.genes.length; g < gl; g++) {\n\t\t\t\tgenes.push(this.genes[g]);\n\t\t\t}\n\n\t\t\treturn genes;\n\n\t\t}",
+				"type": "function",
+				"hash": "7c939add",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "[]",
+						"type": "Array",
+						"value": []
+					}
+				]
+			},
+			"setGenes": {
+				"chunk": "function(genes) {\n\n\t\t\tgenes = genes instanceof Array ? genes : null;\n\n\n\t\t\tif (genes !== null) {\n\n\t\t\t\tthis.genes = genes.filter(function(gene) {\n\t\t\t\t\treturn _validate_gene(gene);\n\t\t\t\t});\n\n\t\t\t\t_init_network.call(this);\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "5ac49a96",
+				"parameters": [
+					{
+						"chunk": "genes instanceof Array ? genes : null",
+						"name": "genes",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

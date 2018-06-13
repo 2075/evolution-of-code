@@ -1,0 +1,370 @@
+{
+	"header": {
+		"identifier": "lychee.Definition",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.id  = '';\n\t\tthis.url = lychee.FILENAME || null;\n\n\t\tthis._attaches = {\n\t\t\t'json':  _fuzz_asset.call(this, 'json'),\n\t\t\t'fnt':   _fuzz_asset.call(this, 'fnt'),\n\t\t\t'msc':   _fuzz_asset.call(this, 'msc'),\n\t\t\t'pkg':   _fuzz_asset.call(this, 'pkg'),\n\t\t\t'png':   _fuzz_asset.call(this, 'png'),\n\t\t\t'snd':   _fuzz_asset.call(this, 'snd'),\n\t\t\t'store': _fuzz_asset.call(this, 'store')\n\t\t};\n\t\tthis._tags     = {};\n\t\tthis._requires = [];\n\t\tthis._includes = [];\n\t\tthis._exports  = null;\n\t\tthis._supports = null;\n\n\n\t\t// XXX: url has to be set first for fuzzing\n\t\tthis.setUrl(states.url);\n\t\tthis.setId(states.id);\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "3212c88f",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"url": "setUrl",
+			"id": "setId"
+		},
+		"properties": {
+			"id": {
+				"chunk": "this.id  = '';",
+				"type": "String",
+				"hash": "43b8fe35",
+				"value": {
+					"chunk": "''",
+					"type": "String",
+					"hash": "30f4c306",
+					"value": ""
+				}
+			},
+			"url": {
+				"chunk": "this.url = lychee.FILENAME || null;",
+				"type": "Object",
+				"hash": "9b3d7438",
+				"value": {
+					"chunk": "lychee.FILENAME || null",
+					"type": "Object",
+					"hash": "05933af9",
+					"value": {}
+				}
+			},
+			"_attaches": {
+				"chunk": "this._attaches = {\n\t\t\t'json':  _fuzz_asset.call(this, 'json'),\n\t\t\t'fnt':   _fuzz_asset.call(this, 'fnt'),\n\t\t\t'msc':   _fuzz_asset.call(this, 'msc'),\n\t\t\t'pkg':   _fuzz_asset.call(this, 'pkg'),\n\t\t\t'png':   _fuzz_asset.call(this, 'png'),\n\t\t\t'snd':   _fuzz_asset.call(this, 'snd'),\n\t\t\t'store': _fuzz_asset.call(this, 'store')\n\t\t};",
+				"type": "Object",
+				"hash": "70b26b20",
+				"value": {
+					"chunk": "{\n\t\t\t'json':  _fuzz_asset.call(this, 'json'),\n\t\t\t'fnt':   _fuzz_asset.call(this, 'fnt'),\n\t\t\t'msc':   _fuzz_asset.call(this, 'msc'),\n\t\t\t'pkg':   _fuzz_asset.call(this, 'pkg'),\n\t\t\t'png':   _fuzz_asset.call(this, 'png'),\n\t\t\t'snd':   _fuzz_asset.call(this, 'snd'),\n\t\t\t'store': _fuzz_asset.call(this, 'store')\n\t\t}",
+					"type": "Object",
+					"hash": "6358b56a",
+					"value": {}
+				}
+			},
+			"_tags": {
+				"chunk": "this._tags     = {};",
+				"type": "Object",
+				"hash": "97cee892",
+				"value": {
+					"chunk": "{}",
+					"type": "Object",
+					"hash": "30f4c306",
+					"value": {}
+				}
+			},
+			"_requires": {
+				"chunk": "this._requires = [];",
+				"type": "Array",
+				"hash": "fe3b1941",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"_includes": {
+				"chunk": "this._includes = [];",
+				"type": "Array",
+				"hash": "4ea29c",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"_exports": {
+				"chunk": "this._exports  = null;",
+				"type": "null",
+				"hash": "2a177e6b",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"_supports": {
+				"chunk": "this._supports = null;",
+				"type": "null",
+				"hash": "190c6d36",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {\n\n\t\t\tif (blob.attaches instanceof Object) {\n\n\t\t\t\tlet attachesmap = {};\n\n\t\t\t\tfor (let aid in blob.attaches) {\n\t\t\t\t\tattachesmap[aid] = lychee.deserialize(blob.attaches[aid]);\n\t\t\t\t}\n\n\t\t\t\tthis.attaches(attachesmap);\n\n\t\t\t}\n\n\t\t\tif (blob.tags instanceof Object) {\n\t\t\t\tthis.tags(blob.tags);\n\t\t\t}\n\n\t\t\tif (blob.requires instanceof Array) {\n\t\t\t\tthis.requires(blob.requires);\n\t\t\t}\n\n\t\t\tif (blob.includes instanceof Array) {\n\t\t\t\tthis.includes(blob.includes);\n\t\t\t}\n\n\n\t\t\tif (typeof blob.supports === 'string') {\n\n\t\t\t\t// Function head\n\t\t\t\tlet tmp = blob.exports.split('{')[0].trim();\n\t\t\t\tif (tmp.startsWith('function')) {\n\t\t\t\t\ttmp = tmp.substr('function'.length).trim();\n\t\t\t\t}\n\n\t\t\t\tif (tmp.startsWith('anonymous')) tmp = tmp.substr('anonymous'.length).trim();\n\t\t\t\tif (tmp.startsWith('('))         tmp = tmp.substr(1).trim();\n\t\t\t\tif (tmp.endsWith(')'))           tmp = tmp.substr(0, tmp.length - 1).trim();\n\n\t\t\t\tlet bindargs = tmp.split(',').map(function(name) {\n\t\t\t\t\treturn name.trim();\n\t\t\t\t});\n\n\t\t\t\tlet check = bindargs[bindargs.length - 1];\n\t\t\t\tif (check.includes('\\n')) {\n\t\t\t\t\tbindargs[bindargs.length - 1] = check.split('\\n')[0];\n\t\t\t\t}\n\n\n\t\t\t\t// Function body\n\t\t\t\tlet i1 = blob.supports.indexOf('{') + 1;\n\t\t\t\tlet i2 = blob.supports.lastIndexOf('}') - 1;\n\t\t\t\tbindargs.push(blob.supports.substr(i1, i2 - i1));\n\n\t\t\t\tthis.supports(Function.apply(Function, bindargs));\n\n\t\t\t}\n\n\t\t\tif (typeof blob.exports === 'string') {\n\n\t\t\t\t// Function head\n\t\t\t\tlet tmp = blob.exports.split('{')[0].trim();\n\t\t\t\tif (tmp.startsWith('function')) {\n\t\t\t\t\ttmp = tmp.substr('function'.length).trim();\n\t\t\t\t}\n\n\t\t\t\tif (tmp.startsWith('anonymous')) tmp = tmp.substr('anonymous'.length).trim();\n\t\t\t\tif (tmp.startsWith('('))         tmp = tmp.substr(1).trim();\n\t\t\t\tif (tmp.endsWith(')'))           tmp = tmp.substr(0, tmp.length - 1).trim();\n\n\t\t\t\tlet bindargs = tmp.split(',').map(function(name) {\n\t\t\t\t\treturn name.trim();\n\t\t\t\t});\n\n\t\t\t\tlet check = bindargs[bindargs.length - 1];\n\t\t\t\tif (check.includes('\\n')) {\n\t\t\t\t\tbindargs[bindargs.length - 1] = check.split('\\n')[0];\n\t\t\t\t}\n\n\n\t\t\t\t// Function body\n\t\t\t\tlet i1 = blob.exports.indexOf('{') + 1;\n\t\t\t\tlet i2 = blob.exports.lastIndexOf('}') - 1;\n\t\t\t\tbindargs.push(blob.exports.substr(i1, i2 - i1));\n\n\t\t\t\tthis.exports(Function.apply(Function, bindargs));\n\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "58cb8e5b",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "blob",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet states = {};\n\t\t\tlet blob   = {};\n\n\n\t\t\tif (this.id !== '')  states.id  = this.id;\n\t\t\tif (this.url !== '') states.url = this.url;\n\n\n\t\t\tif (Object.keys(this._attaches).length > 0) {\n\n\t\t\t\tblob.attaches = {};\n\n\t\t\t\tfor (let aid in this._attaches) {\n\n\t\t\t\t\tlet asset = this._attaches[aid];\n\t\t\t\t\tif (asset.url.startsWith('/tmp/Dummy') === false) {\n\n\t\t\t\t\t\tlet data = lychee.serialize(asset);\n\t\t\t\t\t\tif (data !== null) {\n\t\t\t\t\t\t\tblob.attaches[aid] = data;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\tif (Object.keys(this._tags).length > 0) {\n\n\t\t\t\tblob.tags = {};\n\n\t\t\t\tfor (let tid in this._tags) {\n\t\t\t\t\tblob.tags[tid] = this._tags[tid];\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\tif (this._requires.length > 0)          blob.requires = this._requires.slice(0);\n\t\t\tif (this._includes.length > 0)          blob.includes = this._includes.slice(0);\n\t\t\tif (this._supports instanceof Function) blob.supports = this._supports.toString();\n\t\t\tif (this._exports instanceof Function)  blob.exports  = this._exports.toString();\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.Definition',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "c2e1954c",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.Definition',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"setId": {
+				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null) {\n\n\t\t\t\tif (id.includes('.') && /^([A-Za-z0-9-.]+)$/g.test(id)) {\n\n\t\t\t\t\tthis.id = id;\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t} else {\n\n\t\t\t\t\tlet fuzzed = _fuzz_id.call(this);\n\t\t\t\t\tif (fuzzed !== null) {\n\n\t\t\t\t\t\tthis.id = fuzzed;\n\n\t\t\t\t\t\tconsole.warn('lychee.Definition: Injecting Identifier \"' + fuzzed + '\" (' + this.url + ')');\n\n\t\t\t\t\t\treturn true;\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tconsole.error('lychee.Definition: Invalid Identifier \"' + id + '\" (' + this.url + ')');\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "437235e8",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'string' ? id : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setUrl": {
+				"chunk": "function(url) {\n\n\t\t\turl = typeof url === 'string' ? url : null;\n\n\n\t\t\tif (url !== null) {\n\n\t\t\t\tthis.url = url;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "135134e1",
+				"parameters": [
+					{
+						"chunk": "typeof url === 'string' ? url : null",
+						"name": "url",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"attaches": {
+				"chunk": "function(map) {\n\n\t\t\tmap = map instanceof Object ? map : null;\n\n\n\t\t\tif (map !== null) {\n\n\t\t\t\tfor (let id in map) {\n\n\t\t\t\t\tlet value = map[id];\n\t\t\t\t\tif (value !== undefined) {\n\t\t\t\t\t\tthis._attaches[id] = map[id];\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "da2ff9ad",
+				"parameters": [
+					{
+						"chunk": "map instanceof Object ? map : null",
+						"name": "map",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"check": {
+				"chunk": "function(target) {\n\n\t\t\ttarget = target instanceof Object ? target : {};\n\n\n\t\t\tlet features  = null;\n\t\t\tlet supported = true;\n\t\t\tlet tagged    = true;\n\n\n\t\t\tfor (let key in this._tags) {\n\n\t\t\t\tlet tag = this._tags[key];\n\t\t\t\tlet val = target[key] || null;\n\t\t\t\tif (val instanceof Array) {\n\n\t\t\t\t\tif (val.includes(tag) === false) {\n\t\t\t\t\t\ttagged = false;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t} else if (typeof val === 'string') {\n\n\t\t\t\t\tif (val !== tag) {\n\t\t\t\t\t\ttagged = false;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tif (this._supports !== null) {\n\n\t\t\t\tsupported = false;\n\n\n\t\t\t\tlet platform = this._tags.platform || null;\n\t\t\t\tif (platform !== null) {\n\n\t\t\t\t\tlet detector = _create_detector(platform);\n\t\t\t\t\tif (detector !== null) {\n\t\t\t\t\t\tsupported = this._supports.call(detector, lychee, detector);\n\t\t\t\t\t\tfeatures  = JSON.parse(JSON.stringify(detector));\n\t\t\t\t\t\tdetector  = null;\n\t\t\t\t\t} else {\n\t\t\t\t\t\tsupported = this._supports.call(global, lychee, global);\n\t\t\t\t\t}\n\n\t\t\t\t} else {\n\n\t\t\t\t\tsupported = this._supports.call(global, lychee, global);\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn {\n\t\t\t\tfeatures:  features,\n\t\t\t\tsupported: supported,\n\t\t\t\ttagged:    tagged\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "6e357d33",
+				"parameters": [
+					{
+						"chunk": "target instanceof Object ? target : {}",
+						"name": "target",
+						"type": "Object",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"chunk": "{ features:  features,\n\t\t\t\tsupported: supported,\n\t\t\t\ttagged:    tagged\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"export": {
+				"chunk": "function(sandbox) {\n\n\t\t\tsandbox = sandbox !== undefined ? sandbox : global;\n\n\n\t\t\tlet check = _resolve.call(sandbox, this.id);\n\t\t\tif (check === null) {\n\n\t\t\t\tlet console   = sandbox.console || global.console;\n\t\t\t\tlet id        = this.id;\n\t\t\t\tlet namespace = _resolve.call(sandbox, id.split('.').slice(0, -1).join('.'));\n\t\t\t\tlet name      = id.split('.').pop();\n\n\t\t\t\tif (this._exports !== null) {\n\n\t\t\t\t\tlet includes = this._includes.map(function(id) {\n\t\t\t\t\t\treturn _resolve.call(sandbox, id);\n\t\t\t\t\t});\n\n\t\t\t\t\tlet requires = this._requires.map(function(id) {\n\t\t\t\t\t\treturn _resolve.call(sandbox, id);\n\t\t\t\t\t});\n\n\n\t\t\t\t\tif (includes.includes(null) === false && requires.includes(null) === false) {\n\n\t\t\t\t\t\tlet template = null;\n\n\t\t\t\t\t\ttry {\n\n\t\t\t\t\t\t\ttemplate = this._exports.call(\n\t\t\t\t\t\t\t\tthis._exports,\n\t\t\t\t\t\t\t\tsandbox.lychee,\n\t\t\t\t\t\t\t\tsandbox,\n\t\t\t\t\t\t\t\tthis._attaches\n\t\t\t\t\t\t\t) || null;\n\n\t\t\t\t\t\t} catch (err) {\n\t\t\t\t\t\t\tlychee.Debugger.report(lychee.environment, err, this);\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\tif (template !== null) {\n\n\t\t\t\t\t\t\tif (includes.length > 0) {\n\n\t\t\t\t\t\t\t\tlet own_enums   = null;\n\t\t\t\t\t\t\t\tlet own_methods = null;\n\t\t\t\t\t\t\t\tlet own_keys    = Object.keys(template);\n\t\t\t\t\t\t\t\tlet own_proto   = template.prototype;\n\n\n\t\t\t\t\t\t\t\tif (own_keys.length > 0) {\n\n\t\t\t\t\t\t\t\t\town_enums = {};\n\n\t\t\t\t\t\t\t\t\tfor (let ok = 0, okl = own_keys.length; ok < okl; ok++) {\n\n\t\t\t\t\t\t\t\t\t\tlet own_key = own_keys[ok];\n\t\t\t\t\t\t\t\t\t\tif (own_key === own_key.toUpperCase()) {\n\t\t\t\t\t\t\t\t\t\t\town_enums[own_key] = template[own_key];\n\t\t\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\t\tif (Object.keys(own_enums).length === 0) {\n\t\t\t\t\t\t\t\t\t\town_enums = null;\n\t\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\t\t\tif (own_proto instanceof Object) {\n\n\t\t\t\t\t\t\t\t\town_methods = {};\n\n\t\t\t\t\t\t\t\t\tfor (let own_method in own_proto) {\n\t\t\t\t\t\t\t\t\t\town_methods[own_method] = own_proto[own_method];\n\t\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\t\tif (Object.keys(own_methods).length === 0) {\n\t\t\t\t\t\t\t\t\t\town_methods = null;\n\t\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\t\t\tObject.defineProperty(namespace, name, {\n\t\t\t\t\t\t\t\t\tvalue:        template,\n\t\t\t\t\t\t\t\t\twritable:     false,\n\t\t\t\t\t\t\t\t\tenumerable:   true,\n\t\t\t\t\t\t\t\t\tconfigurable: false\n\t\t\t\t\t\t\t\t});\n\n\t\t\t\t\t\t\t\tnamespace[name].displayName = id;\n\t\t\t\t\t\t\t\tnamespace[name].prototype   = {};\n\n\n\t\t\t\t\t\t\t\tlet tpl_enums   = {};\n\t\t\t\t\t\t\t\tlet tpl_methods = [ namespace[name].prototype ];\n\n\n\t\t\t\t\t\t\t\tfor (let i = 0, il = includes.length; i < il; i++) {\n\n\t\t\t\t\t\t\t\t\tlet include  = includes[i];\n\t\t\t\t\t\t\t\t\tlet inc_keys = Object.keys(include);\n\t\t\t\t\t\t\t\t\tif (inc_keys.length > 0) {\n\n\t\t\t\t\t\t\t\t\t\tfor (let ik = 0, ikl = inc_keys.length; ik < ikl; ik++) {\n\n\t\t\t\t\t\t\t\t\t\t\tlet inc_key = inc_keys[ik];\n\t\t\t\t\t\t\t\t\t\t\tif (inc_key === inc_key.toUpperCase()) {\n\t\t\t\t\t\t\t\t\t\t\t\ttpl_enums[inc_key] = include[inc_key];\n\t\t\t\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\t\ttpl_methods.push(include.prototype);\n\n\t\t\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\t\t\tif (own_enums !== null) {\n\n\t\t\t\t\t\t\t\t\tfor (let e in own_enums) {\n\t\t\t\t\t\t\t\t\t\ttpl_enums[e] = own_enums[e];\n\t\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\tif (own_methods !== null) {\n\t\t\t\t\t\t\t\t\ttpl_methods.push(own_methods);\n\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\tfor (let e in tpl_enums) {\n\t\t\t\t\t\t\t\t\tnamespace[name][e] = tpl_enums[e];\n\t\t\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\t\t\tObject.assign.apply(lychee, tpl_methods);\n\t\t\t\t\t\t\t\tnamespace[name].prototype.displayName = id;\n\n\t\t\t\t\t\t\t\tObject.freeze(namespace[name].prototype);\n\n\n\t\t\t\t\t\t\t\treturn true;\n\n\t\t\t\t\t\t\t} else {\n\n\t\t\t\t\t\t\t\tnamespace[name]             = template;\n\t\t\t\t\t\t\t\tnamespace[name].displayName = id;\n\n\n\t\t\t\t\t\t\t\tif (template instanceof Object) {\n\t\t\t\t\t\t\t\t\tObject.freeze(namespace[name]);\n\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\tif (namespace[name].prototype instanceof Object) {\n\t\t\t\t\t\t\t\t\tnamespace[name].prototype.displayName = id;\n\t\t\t\t\t\t\t\t\tObject.freeze(namespace[name].prototype);\n\t\t\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\t\t\treturn true;\n\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t} else {\n\n\t\t\t\t\t\t\tnamespace[name]                       = function() {\n\t\t\t\t\t\t\t\tconsole.warn('Dummy Composite: Replace me with a real Definition!');\n\t\t\t\t\t\t\t};\n\t\t\t\t\t\t\tnamespace[name].displayName           = id;\n\t\t\t\t\t\t\tnamespace[name].prototype             = {};\n\t\t\t\t\t\t\tnamespace[name].prototype.displayName = id;\n\n\t\t\t\t\t\t\tObject.freeze(namespace[name].prototype);\n\n\t\t\t\t\t\t\tconsole.error('lychee.Definition (\"' + id + '\"): Invalid Definition, replaced with Dummy Composite.');\n\n\n\t\t\t\t\t\t\treturn true;\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tlet invalid_includes = this._includes.filter(function(id, i) {\n\t\t\t\t\t\t\treturn includes[i] === null;\n\t\t\t\t\t\t});\n\n\t\t\t\t\t\tif (invalid_includes.length > 0) {\n\n\t\t\t\t\t\t\tfor (let i = 0, il = invalid_includes.length; i < il; i++) {\n\t\t\t\t\t\t\t\tlet tmp = invalid_includes[i];\n\t\t\t\t\t\t\t\tconsole.error('lychee.Definition (\"' + id + '\"): Invalid Inclusion of \"' + tmp + '\".');\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\tlet invalid_requires = this._requires.filter(function(id, r) {\n\t\t\t\t\t\t\treturn requires[r] === null;\n\t\t\t\t\t\t});\n\n\t\t\t\t\t\tif (invalid_requires.length > 0) {\n\n\t\t\t\t\t\t\tfor (let i = 0, il = invalid_requires.length; i < il; i++) {\n\t\t\t\t\t\t\t\tlet tmp = invalid_requires[i];\n\t\t\t\t\t\t\t\tconsole.error('lychee.Definition (\"' + id + '\"): Invalid Requirement of \"' + tmp + '\".');\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\treturn false;\n\n\t\t\t}\n\n\n\t\t\treturn true;\n\n\t\t}",
+				"type": "function",
+				"hash": "f5436f9b",
+				"parameters": [
+					{
+						"chunk": "sandbox !== undefined ? sandbox : global",
+						"name": "sandbox",
+						"type": "Object",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"exports": {
+				"chunk": "function(callback) {\n\n\t\t\tcallback = callback instanceof Function ? callback : null;\n\n\n\t\t\tif (callback !== null) {\n\t\t\t\tthis._exports = callback;\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "ef750818",
+				"parameters": [
+					{
+						"chunk": "callback instanceof Function ? callback : null",
+						"name": "callback",
+						"type": "Function",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"includes": {
+				"chunk": "function(definitions) {\n\n\t\t\tdefinitions = definitions instanceof Array ? definitions : null;\n\n\n\t\t\tif (definitions !== null) {\n\n\t\t\t\tfor (let d = 0, dl = definitions.length; d < dl; d++) {\n\n\t\t\t\t\tlet definition = definitions[d];\n\t\t\t\t\tif (typeof definition === 'string') {\n\n\t\t\t\t\t\tlet is_definition = definition.includes('.');\n\t\t\t\t\t\tif (is_definition === true) {\n\n\t\t\t\t\t\t\tif (this._includes.includes(definition) === false) {\n\t\t\t\t\t\t\t\tthis._includes.push(definition);\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t} else {\n\t\t\t\t\t\tconsole.warn('lychee.Definition (\"' + this.id + '\"): Invalid Inclusion #' + d + '.');\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "745e8419",
+				"parameters": [
+					{
+						"chunk": "definitions instanceof Array ? definitions : null",
+						"name": "definitions",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"requires": {
+				"chunk": "function(definitions) {\n\n\t\t\tdefinitions = definitions instanceof Array ? definitions : null;\n\n\n\t\t\tif (definitions !== null) {\n\n\t\t\t\tfor (let d = 0, dl = definitions.length; d < dl; d++) {\n\n\t\t\t\t\tlet definition = definitions[d];\n\t\t\t\t\tif (typeof definition === 'string') {\n\n\t\t\t\t\t\tlet is_definition = definition.includes('.');\n\t\t\t\t\t\tif (is_definition === true) {\n\n\t\t\t\t\t\t\tif (this._requires.includes(definition) === false) {\n\t\t\t\t\t\t\t\tthis._requires.push(definition);\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t} else {\n\t\t\t\t\t\tconsole.warn('lychee.Definition (\"' + this.id + '\"): Invalid Requirement #' + d + '.');\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "6e8b91b5",
+				"parameters": [
+					{
+						"chunk": "definitions instanceof Array ? definitions : null",
+						"name": "definitions",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"supports": {
+				"chunk": "function(callback) {\n\n\t\t\tcallback = callback instanceof Function ? callback : null;\n\n\n\t\t\tif (callback !== null) {\n\t\t\t\tthis._supports = callback;\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "93e42014",
+				"parameters": [
+					{
+						"chunk": "callback instanceof Function ? callback : null",
+						"name": "callback",
+						"type": "Function",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"tags": {
+				"chunk": "function(map) {\n\n\t\t\tmap = map instanceof Object ? map : null;\n\n\n\t\t\tif (map !== null) {\n\n\t\t\t\tfor (let tag in map) {\n\n\t\t\t\t\tlet val = map[tag];\n\t\t\t\t\tif (typeof val === 'string') {\n\t\t\t\t\t\tthis._tags[tag] = val;\n\t\t\t\t\t} else {\n\t\t\t\t\t\tconsole.warn('lychee.Definition (\"' + this.id + '\"): Invalid Tag \"' + tag + '\".');\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "5d446f94",
+				"parameters": [
+					{
+						"chunk": "map instanceof Object ? map : null",
+						"name": "map",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			}
+		}
+	}
+}

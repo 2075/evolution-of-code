@@ -1,0 +1,430 @@
+{
+	"header": {
+		"identifier": "lychee.net.Server",
+		"attaches": {},
+		"tags": {
+			"platform": "html"
+		},
+		"requires": [
+			"lychee.Storage",
+			"lychee.codec.JSON",
+			"lychee.net.Remote"
+		],
+		"includes": [
+			"lychee.event.Emitter"
+		],
+		"supports": {
+			"body": "function(lychee, global) {\n\n\t// TODO: Feature Detection of Raw TCP Socket API\n\n\treturn true;\n\n}",
+			"hash": "883227d5",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "lychee",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "global",
+					"type": "undefined"
+				}
+			]
+		},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Emitter": {
+			"chunk": "lychee.import('lychee.event.Emitter')",
+			"type": "lychee.Definition",
+			"hash": "b60271ea",
+			"value": {
+				"reference": "lychee.event.Emitter",
+				"arguments": []
+			}
+		},
+		"_JSON": {
+			"chunk": "lychee.import('lychee.codec.JSON')",
+			"type": "lychee.Definition",
+			"hash": "46c1c4bd",
+			"value": {
+				"reference": "lychee.codec.JSON",
+				"arguments": []
+			}
+		},
+		"_Remote": {
+			"chunk": "lychee.import('lychee.net.Remote')",
+			"type": "lychee.Definition",
+			"hash": "a3b620c7",
+			"value": {
+				"reference": "lychee.net.Remote",
+				"arguments": []
+			}
+		},
+		"_Storage": {
+			"chunk": "lychee.import('lychee.Storage')",
+			"type": "lychee.Definition",
+			"hash": "43a5e8ad",
+			"value": {
+				"reference": "lychee.Storage",
+				"arguments": []
+			}
+		},
+		"_storage": {
+			"chunk": "undefined",
+			"type": "undefined",
+			"hash": "3fb211a9"
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.codec  = _JSON;\n\t\tthis.host   = null;\n\t\tthis.port   = 1337;\n\t\tthis.remote = _Remote;\n\t\tthis.type   = Composite.TYPE.WS;\n\n\n\t\tthis.__isConnected = false;\n\t\tthis.__server      = null;\n\n\n\t\tthis.setCodec(states.codec);\n\t\tthis.setHost(states.host);\n\t\tthis.setPort(states.port);\n\t\tthis.setType(states.type);\n\n\n\t\t_Emitter.call(this);\n\n\t\tstates = null;\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tthis.bind('connect', function(remote) {\n\n\t\t\tlet id  = (/:/g.test(remote.host) ? '[' + remote.host + ']' : remote.host) + ':' + remote.port;\n\t\t\tlet obj = _storage.create();\n\t\t\tif (obj !== null) {\n\n\t\t\t\tobj.id   = id;\n\t\t\t\tobj.type = 'client';\n\t\t\t\tobj.host = remote.host;\n\t\t\t\tobj.port = remote.port;\n\n\t\t\t\t_storage.write(id, obj);\n\n\t\t\t}\n\n\t\t}, this);\n\n\t\tthis.bind('disconnect', function(remote) {\n\n\t\t\tlet id  = (/:/g.test(remote.host) ? '[' + remote.host + ']' : remote.host) + ':' + remote.port;\n\t\t\tlet obj = _storage.read(id);\n\t\t\tif (obj !== null) {\n\t\t\t\t_storage.remove(id);\n\t\t\t}\n\n\t\t}, this);\n\n\t}",
+			"type": "function",
+			"hash": "62a95f24",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"codec": "setCodec",
+			"host": "setHost",
+			"port": "setPort",
+			"type": "setType"
+		},
+		"properties": {
+			"codec": {
+				"chunk": "this.codec  = _JSON;",
+				"type": "lychee.codec.JSON",
+				"hash": "3f42ac86",
+				"value": {
+					"chunk": "_JSON",
+					"type": "lychee.codec.JSON",
+					"hash": "9adab4db",
+					"value": {
+						"reference": "lychee.codec.JSON",
+						"arguments": []
+					}
+				}
+			},
+			"host": {
+				"chunk": "this.host   = null;",
+				"type": "null",
+				"hash": "a9297085",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"port": {
+				"chunk": "this.port   = 1337;",
+				"type": "Number",
+				"hash": "66f042d2",
+				"value": {
+					"chunk": "1337",
+					"type": "Number",
+					"hash": "6614a56b",
+					"value": 1337
+				}
+			},
+			"remote": {
+				"chunk": "this.remote = _Remote;",
+				"type": "undefined",
+				"hash": "95339ac9",
+				"value": {
+					"chunk": "_Remote",
+					"type": "_Remote",
+					"hash": "80d71e74"
+				}
+			},
+			"type": {
+				"chunk": "this.type   = Composite.TYPE.WS;",
+				"type": "Enum",
+				"hash": "967bcf62",
+				"value": {
+					"chunk": "Composite.TYPE.WS",
+					"type": "Enum",
+					"hash": "4ae68a81",
+					"value": "Composite.TYPE.WS"
+				}
+			},
+			"__isConnected": {
+				"chunk": "this.__isConnected = false;",
+				"type": "Boolean",
+				"hash": "ef7157d4",
+				"value": {
+					"chunk": "false",
+					"type": "Boolean",
+					"hash": "d5619e17",
+					"value": false
+				}
+			},
+			"__server": {
+				"chunk": "this.__server      = null;",
+				"type": "null",
+				"hash": "b9079a85",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			}
+		},
+		"enums": {
+			"TYPE": {
+				"values": [
+					{
+						"name": "WS",
+						"value": {
+							"chunk": "0",
+							"type": "Number",
+							"hash": "d271c07f",
+							"value": 0
+						}
+					},
+					{
+						"name": "HTTP",
+						"value": {
+							"chunk": "1",
+							"type": "Number",
+							"hash": "9416ac93",
+							"value": 1
+						}
+					},
+					{
+						"name": "TCP",
+						"value": {
+							"chunk": "2",
+							"type": "Number",
+							"hash": "0129e217",
+							"value": 2
+						}
+					}
+				]
+			}
+		},
+		"events": {
+			"connect": {
+				"name": "connect",
+				"methods": [
+					"connect"
+				],
+				"parameters": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"hash": "0142984e",
+						"value": "this"
+					}
+				]
+			},
+			"disconnect": {
+				"name": "disconnect",
+				"methods": [
+					"connect"
+				],
+				"parameters": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"hash": "0142984e",
+						"value": "this"
+					}
+				]
+			}
+		},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.net.Server';\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.codec !== _JSON)            states.codec  = lychee.serialize(this.codec);\n\t\t\tif (this.host !== 'localhost')       states.host   = this.host;\n\t\t\tif (this.port !== 1337)              states.port   = this.port;\n\t\t\tif (this.remote !== _Remote)         states.remote = lychee.serialize(this.remote);\n\t\t\tif (this.type !== Composite.TYPE.WS) states.type   = this.type;\n\n\n\t\t\tdata['arguments'][0] = states;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "a6a93edc",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"connect": {
+				"chunk": "function() {\n\n\t\t\tif (this.__isConnected === false) {\n\n\t\t\t\tif (lychee.debug === true) {\n\t\t\t\t\tconsole.log('lychee.net.Server: Connected to ' + this.host + ':' + this.port);\n\t\t\t\t}\n\n\n\t\t\t\t// TODO: Setup HTTP Server\n\n\t\t\t\t// let that      = this;\n\t\t\t\t// let server = new _net.Server();\n\n\n\t\t\t\t// server.on('connection', function(socket) {\n\n\t\t\t\t// \tlet host   = socket.remoteAddress || socket.server._connectionKey.split(':')[1];\n\t\t\t\t// \tlet port   = socket.remotePort    || socket.server._connectionKey.split(':')[2];\n\t\t\t\t// \tlet remote = new that.remote({\n\t\t\t\t// \t\tcodec: that.codec,\n\t\t\t\t// \t\thost:  host,\n\t\t\t\t// \t\tport:  port,\n\t\t\t\t// \t\ttype:  that.type\n\t\t\t\t// \t});\n\n\n\t\t\t\t// \tremote.bind('connect', function() {\n\t\t\t\t// \t\tthat.trigger('connect', [ this ]);\n\t\t\t\t// \t});\n\n\t\t\t\t// \tremote.bind('disconnect', function() {\n\t\t\t\t// \t\tthat.trigger('disconnect', [ this ]);\n\t\t\t\t// \t});\n\n\n\t\t\t\t// \tremote.connect(socket);\n\n\t\t\t\t// });\n\n\t\t\t\t// server.on('error', function() {\n\t\t\t\t// \tthis.close();\n\t\t\t\t// });\n\n\t\t\t\t// server.on('close', function() {\n\t\t\t\t// \tthat.__isConnected = false;\n\t\t\t\t// \tthat.__server      = null;\n\t\t\t\t// });\n\n\t\t\t\t// server.listen(this.port, this.host);\n\n\n\t\t\t\t// this.__server      = server;\n\t\t\t\t// this.__isConnected = true;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "c3d80644",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"disconnect": {
+				"chunk": "function() {\n\n\t\t\tlet server = this.__server;\n\t\t\tif (server !== null) {\n\t\t\t\tserver.close();\n\t\t\t}\n\n\n\t\t\treturn true;\n\n\t\t}",
+				"type": "function",
+				"hash": "e90bbd6b",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"setCodec": {
+				"chunk": "function(codec) {\n\n\t\t\tcodec = lychee.interfaceof(_JSON, codec) ? codec : null;\n\n\n\t\t\tif (codec !== null) {\n\n\t\t\t\tlet oldcodec = this.codec;\n\t\t\t\tif (oldcodec !== codec) {\n\n\t\t\t\t\tthis.codec = codec;\n\n\n\t\t\t\t\tif (this.__isConnected === true) {\n\t\t\t\t\t\tthis.disconnect();\n\t\t\t\t\t\tthis.connect();\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "0f5e5467",
+				"parameters": [
+					{
+						"chunk": "lychee.interfaceof(_JSON, codec) ? codec : null",
+						"name": "codec",
+						"type": "_JSON",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setHost": {
+				"chunk": "function(host) {\n\n\t\t\thost = typeof host === 'string' ? host : null;\n\n\n\t\t\tif (host !== null) {\n\n\t\t\t\tthis.host = host;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "171af1b6",
+				"parameters": [
+					{
+						"chunk": "typeof host === 'string' ? host : null",
+						"name": "host",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setPort": {
+				"chunk": "function(port) {\n\n\t\t\tport = typeof port === 'number' ? (port | 0) : null;\n\n\n\t\t\tif (port !== null) {\n\n\t\t\t\tthis.port = port;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "d096abd9",
+				"parameters": [
+					{
+						"chunk": "typeof port === 'number' ? (port | 0) : null",
+						"name": "port",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setRemote": {
+				"chunk": "function(remote) {\n\n\t\t\tremote = lychee.interfaceof(_Remote, remote) ? remote : null;\n\n\n\t\t\tif (remote !== null) {\n\n\t\t\t\tlet oldremote = this.remote;\n\t\t\t\tif (oldremote !== remote) {\n\n\t\t\t\t\tthis.remote = remote;\n\n\n\t\t\t\t\tif (this.__isConnected === true) {\n\t\t\t\t\t\tthis.disconnect();\n\t\t\t\t\t\tthis.connect();\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "1efcdf9b",
+				"parameters": [
+					{
+						"chunk": "lychee.interfaceof(_Remote, remote) ? remote : null",
+						"name": "remote",
+						"type": "_Remote",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setType": {
+				"chunk": "function(type) {\n\n\t\t\ttype = lychee.enumof(Composite.TYPE, type) ? type : null;\n\n\n\t\t\tif (type !== null) {\n\n\t\t\t\tlet oldtype = this.type;\n\t\t\t\tif (oldtype !== type) {\n\n\t\t\t\t\tthis.type = type;\n\n\n\t\t\t\t\tif (this.__isConnected === true) {\n\t\t\t\t\t\tthis.disconnect();\n\t\t\t\t\t\tthis.connect();\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "ac4b62a7",
+				"parameters": [
+					{
+						"chunk": "lychee.enumof(Composite.TYPE, type) ? type : null",
+						"name": "type",
+						"type": "Enum",
+						"value": "Composite.TYPE"
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

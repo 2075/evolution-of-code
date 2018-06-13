@@ -1,0 +1,615 @@
+{
+	"header": {
+		"identifier": "lychee.math.Matrix",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"lychee.math.Vector3"
+		],
+		"includes": [],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Vector3": {
+			"chunk": "lychee.import('lychee.math.Vector3')",
+			"type": "lychee.Definition",
+			"hash": "0ab205ed",
+			"value": {
+				"reference": "lychee.math.Vector3",
+				"arguments": []
+			}
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.data = new Float32Array(16);\n\t\tthis.set.call(this, Composite.IDENTITY);\n\n\n\t\tthis.setData(states.data);\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "6a14c08a",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"data": "setData"
+		},
+		"properties": {
+			"data": {
+				"chunk": "this.data = new Float32Array(16);",
+				"type": "Float32Array",
+				"hash": "85adb52f",
+				"value": {
+					"chunk": "new Float32Array(16)",
+					"type": "Float32Array",
+					"hash": "cd452fc0",
+					"value": 16
+				}
+			}
+		},
+		"enums": {
+			"IDENTITY": {
+				"value": {
+					"chunk": "new Float32Array([ \t\t1, 0, 0, 0, \t\t0, 1, 0, 0, \t\t0, 0, 1, 0, \t\t0, 0, 0, 1 \t])",
+					"type": "Float32Array",
+					"hash": "e9895dcd"
+				}
+			},
+			"Composite.PRECISION": {
+				"value": {
+					"chunk": "0.000001",
+					"type": "Number",
+					"hash": "1a105313",
+					"value": 0.000001
+				}
+			}
+		},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.data !== null) states.data = this.data.slice(0);\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.math.Matrix',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        null\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "78dab8",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.math.Matrix',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"clone": {
+				"chunk": "function() {\n\n\t\t\treturn new Composite(this.data.slice(0));\n\n\t\t}",
+				"type": "function",
+				"hash": "6a8e93d5",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "new Composite(this.data.slice(0))",
+						"type": "Composite",
+						"value": "new Composite(this.data.slice(0))"
+					}
+				]
+			},
+			"copy": {
+				"chunk": "function(matrix) {\n\n\t\t\tmatrix = matrix instanceof Composite ? matrix : null;\n\n\n\t\t\tif (matrix !== null) {\n\n\t\t\t\tlet d = this.data;\n\n\t\t\t\tmatrix.set(\n\t\t\t\t    d[0],  d[1],  d[2],  d[3],\n\t\t\t\t    d[4],  d[5],  d[6],  d[7],\n\t\t\t\t    d[8],  d[9],  d[10], d[11],\n\t\t\t\t\td[12], d[13], d[14], d[15]\n\t\t\t\t);\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "334ee53d",
+				"parameters": [
+					{
+						"chunk": "matrix instanceof Composite ? matrix : null",
+						"name": "matrix",
+						"type": "Composite",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"set": {
+				"chunk": "function(a0, a1, a2, a3, b0, b1, b2, b3, c0, c1, c2, c3, d0, d1, d2, d3) {\n\n\t\t\ta0 = typeof a0 === 'number' ? a0 : 0;\n\t\t\ta1 = typeof a1 === 'number' ? a1 : 0;\n\t\t\ta2 = typeof a2 === 'number' ? a2 : 0;\n\t\t\ta3 = typeof a3 === 'number' ? a3 : 0;\n\t\t\tb0 = typeof b0 === 'number' ? b0 : 0;\n\t\t\tb1 = typeof b1 === 'number' ? b1 : 0;\n\t\t\tb2 = typeof b2 === 'number' ? b2 : 0;\n\t\t\tb3 = typeof b3 === 'number' ? b3 : 0;\n\t\t\tc0 = typeof c0 === 'number' ? c0 : 0;\n\t\t\tc1 = typeof c1 === 'number' ? c1 : 0;\n\t\t\tc2 = typeof c2 === 'number' ? c2 : 0;\n\t\t\tc3 = typeof c3 === 'number' ? c3 : 0;\n\t\t\td0 = typeof d0 === 'number' ? d0 : 0;\n\t\t\td1 = typeof d1 === 'number' ? d1 : 0;\n\t\t\td2 = typeof d2 === 'number' ? d2 : 0;\n\t\t\td3 = typeof d3 === 'number' ? d3 : 0;\n\n\n\t\t\tlet d = this.data;\n\n\n\t\t\td[0]  = a0;\n\t\t\td[1]  = a1;\n\t\t\td[2]  = a2;\n\t\t\td[3]  = a3;\n\t\t\td[4]  = b0;\n\t\t\td[5]  = b1;\n\t\t\td[6]  = b2;\n\t\t\td[7]  = b3;\n\t\t\td[8]  = c0;\n\t\t\td[9]  = c1;\n\t\t\td[10] = c2;\n\t\t\td[11] = c3;\n\t\t\td[12] = d0;\n\t\t\td[13] = d1;\n\t\t\td[14] = d2;\n\t\t\td[15] = d3;\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "225f7ee0",
+				"parameters": [
+					{
+						"chunk": "typeof a0 === 'number' ? a0 : 0",
+						"name": "a0",
+						"type": "Number",
+						"value": 0
+					},
+					{
+						"chunk": "typeof a1 === 'number' ? a1 : 0",
+						"name": "a1",
+						"type": "Number",
+						"value": 0
+					},
+					{
+						"chunk": "typeof a2 === 'number' ? a2 : 0",
+						"name": "a2",
+						"type": "Number",
+						"value": 0
+					},
+					{
+						"chunk": "typeof a3 === 'number' ? a3 : 0",
+						"name": "a3",
+						"type": "Number",
+						"value": 0
+					},
+					{
+						"chunk": "typeof b0 === 'number' ? b0 : 0",
+						"name": "b0",
+						"type": "Number",
+						"value": 0
+					},
+					{
+						"chunk": "typeof b1 === 'number' ? b1 : 0",
+						"name": "b1",
+						"type": "Number",
+						"value": 0
+					},
+					{
+						"chunk": "typeof b2 === 'number' ? b2 : 0",
+						"name": "b2",
+						"type": "Number",
+						"value": 0
+					},
+					{
+						"chunk": "typeof b3 === 'number' ? b3 : 0",
+						"name": "b3",
+						"type": "Number",
+						"value": 0
+					},
+					{
+						"chunk": "typeof c0 === 'number' ? c0 : 0",
+						"name": "c0",
+						"type": "Number",
+						"value": 0
+					},
+					{
+						"chunk": "typeof c1 === 'number' ? c1 : 0",
+						"name": "c1",
+						"type": "Number",
+						"value": 0
+					},
+					{
+						"chunk": "typeof c2 === 'number' ? c2 : 0",
+						"name": "c2",
+						"type": "Number",
+						"value": 0
+					},
+					{
+						"chunk": "typeof c3 === 'number' ? c3 : 0",
+						"name": "c3",
+						"type": "Number",
+						"value": 0
+					},
+					{
+						"chunk": "typeof d0 === 'number' ? d0 : 0",
+						"name": "d0",
+						"type": "Number",
+						"value": 0
+					},
+					{
+						"chunk": "typeof d1 === 'number' ? d1 : 0",
+						"name": "d1",
+						"type": "Number",
+						"value": 0
+					},
+					{
+						"chunk": "typeof d2 === 'number' ? d2 : 0",
+						"name": "d2",
+						"type": "Number",
+						"value": 0
+					},
+					{
+						"chunk": "typeof d3 === 'number' ? d3 : 0",
+						"name": "d3",
+						"type": "Number",
+						"value": 0
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"transpose": {
+				"chunk": "function() {\n\n\t\t\tlet tmp;\n\t\t\tlet d = this.data;\n\n\n\t\t\ttmp =  d[1];  d[1] =  d[4];  d[4] = tmp;\n\t\t\ttmp =  d[2];  d[2] =  d[8];  d[8] = tmp;\n\t\t\ttmp =  d[6];  d[6] =  d[9];  d[9] = tmp;\n\t\t\ttmp =  d[3];  d[3] = d[12]; d[12] = tmp;\n\t\t\ttmp =  d[7];  d[7] = d[13]; d[13] = tmp;\n\t\t\ttmp = d[11]; d[11] = d[14]; d[14] = tmp;\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "9b9ad585",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"invert": {
+				"chunk": "function(matrix) {\n\n\t\t\tmatrix = matrix instanceof Composite ? matrix : null;\n\n\n\t\t\tlet d;\n\n\t\t\tif (matrix !== null) {\n\t\t\t\td = matrix.data;\n\t\t\t} else {\n\t\t\t\td = this.data;\n\t\t\t}\n\n\n\t\t\tlet m00 =  d[0], m01 =  d[1], m02 =  d[2], m03 =  d[3];\n\t\t\tlet m10 =  d[4], m11 =  d[5], m12 =  d[6], m13 =  d[7];\n\t\t\tlet m20 =  d[8], m21 =  d[9], m22 = d[10], m23 = d[11];\n\t\t\tlet m30 = d[12], m31 = d[13], m32 = d[14], m33 = d[15];\n\n\t\t\tlet b00 = m00 * m11 - m01 * m10;\n\t\t\tlet b01 = m00 * m12 - m02 * m10;\n\t\t\tlet b02 = m00 * m13 - m03 * m10;\n\t\t\tlet b03 = m01 * m12 - m02 * m11;\n\t\t\tlet b04 = m01 * m13 - m03 * m11;\n\t\t\tlet b05 = m02 * m13 - m03 * m12;\n\t\t\tlet b06 = m20 * m31 - m21 * m30;\n\t\t\tlet b07 = m20 * m32 - m22 * m30;\n\t\t\tlet b08 = m20 * m33 - m23 * m30;\n\t\t\tlet b09 = m21 * m32 - m22 * m31;\n\t\t\tlet b10 = m21 * m33 - m23 * m31;\n\t\t\tlet b11 = m22 * m33 - m23 * m32;\n\n\n\t\t\tlet det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;\n\t\t\tif (det !== 0) {\n\n\t\t\t\tlet out = this.data;\n\n\t\t\t\tdet = 1.0 / det;\n\n\n\t\t\t\tout[0]  = (m11 * b11 - m12 * b10 + m13 * b09) * det;\n\t\t\t\tout[1]  = (m02 * b10 - m01 * b11 - m03 * b09) * det;\n\t\t\t\tout[2]  = (m31 * b05 - m32 * b04 + m33 * b03) * det;\n\t\t\t\tout[3]  = (m22 * b04 - m21 * b05 - m23 * b03) * det;\n\t\t\t\tout[4]  = (m12 * b08 - m10 * b11 - m13 * b07) * det;\n\t\t\t\tout[5]  = (m00 * b11 - m02 * b08 + m03 * b07) * det;\n\t\t\t\tout[6]  = (m32 * b02 - m30 * b05 - m33 * b01) * det;\n\t\t\t\tout[7]  = (m20 * b05 - m22 * b02 + m23 * b01) * det;\n\t\t\t\tout[8]  = (m10 * b10 - m11 * b08 + m13 * b06) * det;\n\t\t\t\tout[9]  = (m01 * b08 - m00 * b10 - m03 * b06) * det;\n\t\t\t\tout[10] = (m30 * b04 - m31 * b02 + m33 * b00) * det;\n\t\t\t\tout[11] = (m21 * b02 - m20 * b04 - m23 * b00) * det;\n\t\t\t\tout[12] = (m11 * b07 - m10 * b09 - m12 * b06) * det;\n\t\t\t\tout[13] = (m00 * b09 - m01 * b07 + m02 * b06) * det;\n\t\t\t\tout[14] = (m31 * b01 - m30 * b03 - m32 * b00) * det;\n\t\t\t\tout[15] = (m20 * b03 - m21 * b01 + m22 * b00) * det;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "1b69c7d7",
+				"parameters": [
+					{
+						"chunk": "matrix instanceof Composite ? matrix : null",
+						"name": "matrix",
+						"type": "Composite",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"determinant": {
+				"chunk": "function() {\n\n\t\t\tlet a00 = this.data[0],  a01 = this.data[1],  a02 = this.data[2],  a03 = this.data[3];\n\t\t\tlet a10 = this.data[4],  a11 = this.data[5],  a12 = this.data[6],  a13 = this.data[7];\n\t\t\tlet a20 = this.data[8],  a21 = this.data[9],  a22 = this.data[10], a23 = this.data[11];\n\t\t\tlet a30 = this.data[12], a31 = this.data[13], a32 = this.data[14], a33 = this.data[15];\n\n\t\t\tlet b00 = a00 * a11 - a01 * a10;\n\t\t\tlet b01 = a00 * a12 - a02 * a10;\n\t\t\tlet b02 = a00 * a13 - a03 * a10;\n\t\t\tlet b03 = a01 * a12 - a02 * a11;\n\t\t\tlet b04 = a01 * a13 - a03 * a11;\n\t\t\tlet b05 = a02 * a13 - a03 * a12;\n\t\t\tlet b06 = a20 * a31 - a21 * a30;\n\t\t\tlet b07 = a20 * a32 - a22 * a30;\n\t\t\tlet b08 = a20 * a33 - a23 * a30;\n\t\t\tlet b09 = a21 * a32 - a22 * a31;\n\t\t\tlet b10 = a21 * a33 - a23 * a31;\n\t\t\tlet b11 = a22 * a33 - a23 * a32;\n\n\n\t\t\treturn (b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06);\n\n\t\t}",
+				"type": "function",
+				"hash": "e2feeb14",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "(b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06)",
+						"type": "Number",
+						"value": 1337
+					}
+				]
+			},
+			"translate": {
+				"chunk": "function(vector) {\n\n\t\t\tvector = vector instanceof _Vector3 ? vector : null;\n\n\n\t\t\tif (vector !== null) {\n\n\t\t\t\tlet x = vector.x;\n\t\t\t\tlet y = vector.y;\n\t\t\t\tlet z = vector.z;\n\t\t\t\tlet d = this.data;\n\n\n\t\t\t\td[12] =  d[0] * x +  d[4] * y +  d[8] * z + d[12];\n\t\t\t\td[13] =  d[1] * x +  d[5] * y +  d[9] * z + d[13];\n\t\t\t\td[14] =  d[2] * x +  d[6] * y + d[10] * z + d[14];\n\t\t\t\td[15] =  d[3] * x +  d[7] * y + d[11] * z + d[15];\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "cfc1069a",
+				"parameters": [
+					{
+						"chunk": "vector instanceof _Vector3 ? vector : null",
+						"name": "vector",
+						"type": "_Vector3",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"rotateX": {
+				"chunk": "function(radian) {\n\n\t\t\tradian = typeof radian === 'number' ? radian : null;\n\n\n\t\t\tif (radian !== null) {\n\n\t\t\t\tlet d   = this.data;\n\t\t\t\tlet sin = Math.sin(radian);\n\t\t\t\tlet cos = Math.cos(radian);\n\n\t\t\t\tlet a10 =  d[4];\n\t\t\t\tlet a11 =  d[5];\n\t\t\t\tlet a12 =  d[6];\n\t\t\t\tlet a13 =  d[7];\n\t\t\t\tlet a20 =  d[8];\n\t\t\t\tlet a21 =  d[9];\n\t\t\t\tlet a22 = d[10];\n\t\t\t\tlet a23 = d[11];\n\n\n\t\t\t\td[4]  = a10 * cos + a20 * sin;\n\t\t\t\td[5]  = a11 * cos + a21 * sin;\n\t\t\t\td[6]  = a12 * cos + a22 * sin;\n\t\t\t\td[7]  = a13 * cos + a23 * sin;\n\t\t\t\td[8]  = a20 * cos - a10 * sin;\n\t\t\t\td[9]  = a21 * cos - a11 * sin;\n\t\t\t\td[10] = a22 * cos - a12 * sin;\n\t\t\t\td[11] = a23 * cos - a13 * sin;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "3d0898a2",
+				"parameters": [
+					{
+						"chunk": "typeof radian === 'number' ? radian : null",
+						"name": "radian",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"rotateY": {
+				"chunk": "function(radian) {\n\n\t\t\tradian = typeof radian === 'number' ? radian : null;\n\n\n\t\t\tif (radian !== null) {\n\n\t\t\t\tlet d   = this.data;\n\t\t\t\tlet sin = Math.sin(radian);\n\t\t\t\tlet cos = Math.cos(radian);\n\n\t\t\t\tlet a00 =  d[0];\n\t\t\t\tlet a01 =  d[1];\n\t\t\t\tlet a02 =  d[2];\n\t\t\t\tlet a03 =  d[3];\n\t\t\t\tlet a20 =  d[8];\n\t\t\t\tlet a21 =  d[9];\n\t\t\t\tlet a22 = d[10];\n\t\t\t\tlet a23 = d[11];\n\n\n\t\t\t\td[0]  = a00 * cos - a20 * sin;\n\t\t\t\td[1]  = a01 * cos - a21 * sin;\n\t\t\t\td[2]  = a02 * cos - a22 * sin;\n\t\t\t\td[3]  = a03 * cos - a23 * sin;\n\t\t\t\td[8]  = a00 * sin + a20 * cos;\n\t\t\t\td[9]  = a01 * sin + a21 * cos;\n\t\t\t\td[10] = a02 * sin + a22 * cos;\n\t\t\t\td[11] = a03 * sin + a23 * cos;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "3394b9f9",
+				"parameters": [
+					{
+						"chunk": "typeof radian === 'number' ? radian : null",
+						"name": "radian",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"rotateZ": {
+				"chunk": "function(radian) {\n\n\t\t\tradian = typeof radian === 'number' ? radian : null;\n\n\n\t\t\tif (radian !== null) {\n\n\t\t\t\tlet d   = this.data;\n\t\t\t\tlet sin = Math.sin(radian);\n\t\t\t\tlet cos = Math.cos(radian);\n\n\t\t\t\tlet a00 = d[0];\n\t\t\t\tlet a01 = d[1];\n\t\t\t\tlet a02 = d[2];\n\t\t\t\tlet a03 = d[3];\n\t\t\t\tlet a10 = d[4];\n\t\t\t\tlet a11 = d[5];\n\t\t\t\tlet a12 = d[6];\n\t\t\t\tlet a13 = d[7];\n\n\n\t\t\t\td[0] = a00 * cos + a10 * sin;\n\t\t\t\td[1] = a01 * cos + a11 * sin;\n\t\t\t\td[2] = a02 * cos + a12 * sin;\n\t\t\t\td[3] = a03 * cos + a13 * sin;\n\t\t\t\td[4] = a10 * cos - a00 * sin;\n\t\t\t\td[5] = a11 * cos - a01 * sin;\n\t\t\t\td[6] = a12 * cos - a02 * sin;\n\t\t\t\td[7] = a13 * cos - a03 * sin;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "26b81095",
+				"parameters": [
+					{
+						"chunk": "typeof radian === 'number' ? radian : null",
+						"name": "radian",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"rotateAxis": {
+				"chunk": "function(vector, radian) {\n\n\t\t\tvector = vector instanceof _Vector3 ? vector : null;\n\t\t\tradian = typeof radian === 'number' ? radian : null;\n\n\n\t\t\tif (vector !== null && radian !== null) {\n\n\t\t\t\tlet x = vector.x;\n\t\t\t\tlet y = vector.y;\n\t\t\t\tlet z = vector.z;\n\n\t\t\t\tif (x === 1 && y === 0 && z === 0) {\n\n\t\t\t\t\tthis.rotateX(radian);\n\n\t\t\t\t\treturn this;\n\n\t\t\t\t} else if (x === 0 && y === 1 && z === 0) {\n\n\t\t\t\t\tthis.rotateY(radian);\n\n\t\t\t\t\treturn this;\n\n\t\t\t\t} else if (x === 0 && y === 0 && z === 1) {\n\n\t\t\t\t\tthis.rotateZ(radian);\n\n\t\t\t\t\treturn this;\n\n\t\t\t\t}\n\n\n\t\t\t\tlet length = Math.sqrt(x * x + y * y + z * z);\n\t\t\t\tif (Math.abs(length) < Composite.PRECISION) {\n\t\t\t\t\treturn this;\n\t\t\t\t}\n\n\n\t\t\t\tlet sin = Math.sin(radian);\n\t\t\t\tlet cos = Math.cos(radian);\n\t\t\t\tlet t   = 1 - cos;\n\n\n\t\t\t\tx *= (1 / length);\n\t\t\t\ty *= (1 / length);\n\t\t\t\tz *= (1 / length);\n\n\n\t\t\t\tlet d = this.data;\n\n\t\t\t\tlet a00 = d[0], a01 = d[1], a02 =  d[2], a03 =  d[3];\n\t\t\t\tlet a10 = d[4], a11 = d[5], a12 =  d[6], a13 =  d[7];\n\t\t\t\tlet a20 = d[8], a21 = d[9], a22 = d[10], a23 = d[11];\n\n\n\t\t\t\t// Rotation Matrix\n\t\t\t\tlet r00 = x * x * t + cos;\n\t\t\t\tlet r01 = y * x * t + z * sin;\n\t\t\t\tlet r02 = z * x * t - y * sin;\n\n\t\t\t\tlet r10 = x * y * t - z * sin;\n\t\t\t\tlet r11 = y * y * t + cos;\n\t\t\t\tlet r12 = z * y * t + x * sin;\n\n\t\t\t\tlet r20 = x * z * t + y * sin;\n\t\t\t\tlet r21 = y * z * t - x * sin;\n\t\t\t\tlet r22 = z * z * t + cos;\n\n\n\t\t\t\td[0]  = a00 * r00 + a10 * r01 + a20 * r02;\n\t\t\t\td[1]  = a01 * r00 + a11 * r01 + a21 * r02;\n\t\t\t\td[2]  = a02 * r00 + a12 * r01 + a22 * r02;\n\t\t\t\td[3]  = a03 * r00 + a13 * r01 + a23 * r02;\n\t\t\t\td[4]  = a00 * r10 + a10 * r11 + a20 * r12;\n\t\t\t\td[5]  = a01 * r10 + a11 * r11 + a21 * r12;\n\t\t\t\td[6]  = a02 * r10 + a12 * r11 + a22 * r12;\n\t\t\t\td[7]  = a03 * r10 + a13 * r11 + a23 * r12;\n\t\t\t\td[8]  = a00 * r20 + a10 * r21 + a20 * r22;\n\t\t\t\td[9]  = a01 * r20 + a11 * r21 + a21 * r22;\n\t\t\t\td[10] = a02 * r20 + a12 * r21 + a22 * r22;\n\t\t\t\td[11] = a03 * r20 + a13 * r21 + a23 * r22;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "54e11dff",
+				"parameters": [
+					{
+						"chunk": "vector instanceof _Vector3 ? vector : null",
+						"name": "vector",
+						"type": "_Vector3",
+						"value": null
+					},
+					{
+						"chunk": "typeof radian === 'number' ? radian : null",
+						"name": "radian",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"scale": {
+				"chunk": "function(vector) {\n\n\t\t\tvector = vector instanceof _Vector3 ? vector : null;\n\n\n\t\t\tif (vector !== null) {\n\n\t\t\t\tlet d = this.data;\n\t\t\t\tlet x = vector.x;\n\t\t\t\tlet y = vector.y;\n\t\t\t\tlet z = vector.z;\n\n\n\t\t\t\td[0] *= x; d[4] *= y;  d[8] *= z;\n\t\t\t\td[1] *= x; d[5] *= y;  d[9] *= z;\n\t\t\t\td[2] *= x; d[6] *= y; d[10] *= z;\n\t\t\t\td[3] *= x; d[7] *= y; d[11] *= z;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "1e4daefa",
+				"parameters": [
+					{
+						"chunk": "vector instanceof _Vector3 ? vector : null",
+						"name": "vector",
+						"type": "_Vector3",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"frustum": {
+				"chunk": "function(left, right, bottom, top, near, far) {\n\n\t\t\tleft   = typeof left === 'number'   ? left   : null;\n\t\t\tright  = typeof right === 'number'  ? right  : null;\n\t\t\tbottom = typeof bottom === 'number' ? bottom : null;\n\t\t\ttop    = typeof top === 'number'    ? top    : null;\n\t\t\tnear   = typeof near === 'number'   ? near   : null;\n\t\t\tfar    = typeof far === 'number'    ? far    : null;\n\n\n\t\t\tif (\n\t\t\t\tleft !== null\n\t\t\t\t&& right !== null\n\t\t\t\t&& bottom !== null\n\t\t\t\t&& top !== null\n\t\t\t\t&& near !== null\n\t\t\t\t&& far !== null\n\t\t\t) {\n\n\t\t\t\tlet d  = this.data;\n\t\t\t\tlet rl = 1 / (right - left);\n\t\t\t\tlet tb = 1 / (top - bottom);\n\t\t\t\tlet nf = 1 / (near - far);\n\n\n\t\t\t\td[0]  = (near * 2) * rl;\n\t\t\t\td[1]  = 0;\n\t\t\t\td[2]  = 0;\n\t\t\t\td[3]  = 0;\n\t\t\t\td[4]  = 0;\n\t\t\t\td[5]  = (near * 2) * tb;\n\t\t\t\td[6]  = 0;\n\t\t\t\td[7]  = 0;\n\t\t\t\td[8]  = (right + left) * rl;\n\t\t\t\td[9]  = (top + bottom) * tb;\n\t\t\t\td[10] = (far + near) * nf;\n\t\t\t\td[11] = -1;\n\t\t\t\td[12] = 0;\n\t\t\t\td[13] = 0;\n\t\t\t\td[14] = (far * near * 2) * nf;\n\t\t\t\td[15] = 0;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "563dadf5",
+				"parameters": [
+					{
+						"chunk": "typeof left === 'number'   ? left   : null",
+						"name": "left",
+						"type": "Number",
+						"value": null
+					},
+					{
+						"chunk": "typeof right === 'number'  ? right  : null",
+						"name": "right",
+						"type": "Number",
+						"value": null
+					},
+					{
+						"chunk": "typeof bottom === 'number' ? bottom : null",
+						"name": "bottom",
+						"type": "Number",
+						"value": null
+					},
+					{
+						"chunk": "typeof top === 'number'    ? top    : null",
+						"name": "top",
+						"type": "Number",
+						"value": null
+					},
+					{
+						"chunk": "typeof near === 'number'   ? near   : null",
+						"name": "near",
+						"type": "Number",
+						"value": null
+					},
+					{
+						"chunk": "typeof far === 'number'    ? far    : null",
+						"name": "far",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"perspective": {
+				"chunk": "function(fovy, aspect, near, far) {\n\n\t\t\tfovy   = typeof fovy === 'number'   ? fovy   : null;\n\t\t\taspect = typeof aspect === 'number' ? aspect : null;\n\t\t\tnear   = typeof near === 'number'   ? near   : null;\n\t\t\tfar    = typeof far === 'number'    ? far    : null;\n\n\n\t\t\tif (\n\t\t\t\tfovy !== null\n\t\t\t\t&& aspect !== null\n\t\t\t\t&& near !== null\n\t\t\t\t&& far !== null\n\t\t\t) {\n\n\t\t\t\tlet d  = this.data;\n\t\t\t\tlet f  = 1.0 / Math.tan(fovy / 2);\n\t\t\t\tlet nf = 1 / (near - far);\n\n\n\t\t\t\td[0]  = f / aspect;\n\t\t\t\td[1]  = 0;\n\t\t\t\td[2]  = 0;\n\t\t\t\td[3]  = 0;\n\t\t\t\td[4]  = 0;\n\t\t\t\td[5]  = f;\n\t\t\t\td[6]  = 0;\n\t\t\t\td[7]  = 0;\n\t\t\t\td[8]  = 0;\n\t\t\t\td[9]  = 0;\n\t\t\t\td[10] = (far + near) * nf;\n\t\t\t\td[11] = -1;\n\t\t\t\td[12] = 0;\n\t\t\t\td[13] = 0;\n\t\t\t\td[14] = (2 * far * near) * nf;\n\t\t\t\td[15] = 0;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "a8493c98",
+				"parameters": [
+					{
+						"chunk": "typeof fovy === 'number'   ? fovy   : null",
+						"name": "fovy",
+						"type": "Number",
+						"value": null
+					},
+					{
+						"chunk": "typeof aspect === 'number' ? aspect : null",
+						"name": "aspect",
+						"type": "Number",
+						"value": null
+					},
+					{
+						"chunk": "typeof near === 'number'   ? near   : null",
+						"name": "near",
+						"type": "Number",
+						"value": null
+					},
+					{
+						"chunk": "typeof far === 'number'    ? far    : null",
+						"name": "far",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"ortho": {
+				"chunk": "function(left, right, bottom, top, near, far) {\n\n\t\t\tleft   = typeof left === 'number'   ? left   : null;\n\t\t\tright  = typeof right === 'number'  ? right  : null;\n\t\t\tbottom = typeof bottom === 'number' ? bottom : null;\n\t\t\ttop    = typeof top === 'number'    ? top    : null;\n\t\t\tnear   = typeof near === 'number'   ? near   : null;\n\t\t\tfar    = typeof far === 'number'    ? far    : null;\n\n\n\t\t\tif (\n\t\t\t\tleft !== null\n\t\t\t\t&& right !== null\n\t\t\t\t&& bottom !== null\n\t\t\t\t&& top !== null\n\t\t\t\t&& near !== null\n\t\t\t\t&& far !== null\n\t\t\t) {\n\n\t\t\t\tlet d  = this.data;\n\t\t\t\tlet lr = 1 / (left - right);\n\t\t\t\tlet bt = 1 / (bottom - top);\n\t\t\t\tlet nf = 1 / (near - far);\n\n\n\t\t\t\td[0]  = -2 * lr;\n\t\t\t\td[1]  = 0;\n\t\t\t\td[2]  = 0;\n\t\t\t\td[3]  = 0;\n\t\t\t\td[4]  = 0;\n\t\t\t\td[5]  = -2 * bt;\n\t\t\t\td[6]  = 0;\n\t\t\t\td[7]  = 0;\n\t\t\t\td[8]  = 0;\n\t\t\t\td[9]  = 0;\n\t\t\t\td[10] = 2 * nf;\n\t\t\t\td[11] = 0;\n\t\t\t\td[12] = (left + right) * lr;\n\t\t\t\td[13] = (top + bottom) * bt;\n\t\t\t\td[14] = (far + near) * nf;\n\t\t\t\td[15] = 1;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "e2e47aec",
+				"parameters": [
+					{
+						"chunk": "typeof left === 'number'   ? left   : null",
+						"name": "left",
+						"type": "Number",
+						"value": null
+					},
+					{
+						"chunk": "typeof right === 'number'  ? right  : null",
+						"name": "right",
+						"type": "Number",
+						"value": null
+					},
+					{
+						"chunk": "typeof bottom === 'number' ? bottom : null",
+						"name": "bottom",
+						"type": "Number",
+						"value": null
+					},
+					{
+						"chunk": "typeof top === 'number'    ? top    : null",
+						"name": "top",
+						"type": "Number",
+						"value": null
+					},
+					{
+						"chunk": "typeof near === 'number'   ? near   : null",
+						"name": "near",
+						"type": "Number",
+						"value": null
+					},
+					{
+						"chunk": "typeof far === 'number'    ? far    : null",
+						"name": "far",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"lookAt": {
+				"chunk": "function(eye, center, up) {\n\n\t\t\teye    = eye instanceof _Vector3    ? eye    : null;\n\t\t\tcenter = center instanceof _Vector3 ? center : null;\n\t\t\tup     = up instanceof _Vector3     ? up     : null;\n\n\n\t\t\tif (eye !== null && center !== null && up !== null) {\n\n\t\t\t\tlet len;\n\n\n\t\t\t\tlet z0 = eye.x - center.x;\n\t\t\t\tlet z1 = eye.y - center.y;\n\t\t\t\tlet z2 = eye.z - center.z;\n\n\t\t\t\tif (Math.abs(z0) < Composite.PRECISION && Math.abs(z1) < Composite.PRECISION && Math.abs(z2) < Composite.PRECISION) {\n\t\t\t\t\treturn this;\n\t\t\t\t}\n\n\n\t\t\t\tlen = 1 / Math.sqrt(z0 * z0 + z1 * z1 + z2 * z2);\n\t\t\t\tz0 *= len;\n\t\t\t\tz1 *= len;\n\t\t\t\tz2 *= len;\n\n\n\t\t\t\tlet x0 = up.y * z2 - up.z * z1;\n\t\t\t\tlet x1 = up.z * z0 - up.x * z2;\n\t\t\t\tlet x2 = up.x * z1 - up.y * z0;\n\n\t\t\t\tlen = Math.sqrt(x0 * x0 + x1 * x1 + x2 * x2);\n\t\t\t\tif (len === 0) {\n\n\t\t\t\t\tx0 = 0;\n\t\t\t\t\tx1 = 0;\n\t\t\t\t\tx2 = 0;\n\n\t\t\t\t} else {\n\n\t\t\t\t\tlen = 1 / len;\n\t\t\t\t\tx0 *= len;\n\t\t\t\t\tx1 *= len;\n\t\t\t\t\tx2 *= len;\n\n\t\t\t\t}\n\n\n\t\t\t\tlet y0 = z1 * x2 - z2 * x1;\n\t\t\t\tlet y1 = z2 * x0 - z0 * x2;\n\t\t\t\tlet y2 = z0 * x1 - z1 * x0;\n\n\t\t\t\tlen = Math.sqrt(y0 * y0 + y1 * y1 + y2 * y2);\n\t\t\t\tif (len === 0) {\n\n\t\t\t\t\ty0 = 0;\n\t\t\t\t\ty1 = 0;\n\t\t\t\t\ty2 = 0;\n\n\t\t\t\t} else {\n\n\t\t\t\t\tlen = 1 / len;\n\t\t\t\t\ty0 *= len;\n\t\t\t\t\ty1 *= len;\n\t\t\t\t\ty2 *= len;\n\n\t\t\t\t}\n\n\n\t\t\t\tlet d = this.data;\n\n\t\t\t\td[0]  = x0;\n\t\t\t\td[1]  = y0;\n\t\t\t\td[2]  = z0;\n\t\t\t\td[3]  = 0;\n\t\t\t\td[4]  = x1;\n\t\t\t\td[5]  = y1;\n\t\t\t\td[6]  = z1;\n\t\t\t\td[7]  = 0;\n\t\t\t\td[8]  = x2;\n\t\t\t\td[9]  = y2;\n\t\t\t\td[10] = z2;\n\t\t\t\td[11] = 0;\n\t\t\t\td[12] = -(x0 * eye.x + x1 * eye.y + x2 * eye.z);\n\t\t\t\td[13] = -(y0 * eye.x + y1 * eye.y + y2 * eye.z);\n\t\t\t\td[14] = -(z0 * eye.x + z1 * eye.y + z2 * eye.z);\n\t\t\t\td[15] = 1;\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
+				"type": "function",
+				"hash": "fe87f954",
+				"parameters": [
+					{
+						"chunk": "eye instanceof _Vector3    ? eye    : null",
+						"name": "eye",
+						"type": "_Vector3",
+						"value": null
+					},
+					{
+						"chunk": "center instanceof _Vector3 ? center : null",
+						"name": "center",
+						"type": "_Vector3",
+						"value": null
+					},
+					{
+						"chunk": "up instanceof _Vector3     ? up     : null",
+						"name": "up",
+						"type": "_Vector3",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this",
+						"type": "Object",
+						"value": "this"
+					}
+				]
+			},
+			"setData": {
+				"chunk": "function(data) {\n\n\t\t\tdata = data instanceof Array ? data : null;\n\n\n\t\t\tif (data !== null) {\n\n\t\t\t\tthis.set.call(this, data);\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "d727eb1c",
+				"parameters": [
+					{
+						"chunk": "data instanceof Array ? data : null",
+						"name": "data",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

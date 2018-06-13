@@ -1,0 +1,45 @@
+{
+	"header": {
+		"identifier": "lychee.Asset",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [],
+		"supports": {},
+		"type": "Callback"
+	},
+	"memory": {},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(url, type, ignore) {\n\n\t\turl    = typeof url === 'string'  ? url  : null;\n\t\ttype   = typeof type === 'string' ? type : null;\n\t\tignore = ignore === true;\n\n\n\t\tlet asset = null;\n\n\t\tif (url !== null) {\n\n\t\t\tif (type === null) {\n\n\t\t\t\tif (url.startsWith('data:')) {\n\t\t\t\t\ttype = url.split(';')[0].split('/').pop();\n\t\t\t\t} else {\n\t\t\t\t\ttype = url.split('/').pop().split('.').pop();\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tlet construct = _resolve_constructor(type);\n\t\t\tif (construct !== null) {\n\n\t\t\t\tif (url.startsWith('data:')) {\n\n\t\t\t\t\tasset = new construct('/tmp/Asset.' + type, ignore);\n\t\t\t\t\tasset.deserialize({\n\t\t\t\t\t\tbuffer: url\n\t\t\t\t\t});\n\n\t\t\t\t} else {\n\n\t\t\t\t\tasset = new construct(url, ignore);\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn asset;\n\n\t}",
+			"type": "function",
+			"hash": "0f8aa7a2",
+			"parameters": [
+				{
+					"chunk": "typeof url === 'string'  ? url  : null",
+					"name": "url",
+					"type": "String",
+					"value": null
+				},
+				{
+					"chunk": "typeof type === 'string' ? type : null",
+					"name": "type",
+					"type": "String",
+					"value": null
+				},
+				{
+					"chunk": "ignore === true",
+					"name": "ignore",
+					"type": "Boolean",
+					"value": true
+				}
+			]
+		},
+		"states": {},
+		"properties": {},
+		"enums": {},
+		"events": {},
+		"methods": {}
+	}
+}

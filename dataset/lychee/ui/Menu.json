@@ -1,0 +1,537 @@
+{
+	"header": {
+		"identifier": "lychee.ui.Menu",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"lychee.effect.Alpha",
+			"lychee.effect.Event",
+			"lychee.effect.Position",
+			"lychee.effect.Visible",
+			"lychee.effect.Width",
+			"lychee.ui.entity.Helper",
+			"lychee.ui.entity.Label",
+			"lychee.ui.entity.Select"
+		],
+		"includes": [
+			"lychee.ui.Layer"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Alpha": {
+			"chunk": "lychee.import('lychee.effect.Alpha')",
+			"type": "lychee.Definition",
+			"hash": "bece9a80",
+			"value": {
+				"reference": "lychee.effect.Alpha",
+				"arguments": []
+			}
+		},
+		"_Event": {
+			"chunk": "lychee.import('lychee.effect.Event')",
+			"type": "lychee.Definition",
+			"hash": "02460ae4",
+			"value": {
+				"reference": "lychee.effect.Event",
+				"arguments": []
+			}
+		},
+		"_Helper": {
+			"chunk": "lychee.import('lychee.ui.entity.Helper')",
+			"type": "lychee.Definition",
+			"hash": "a4bce7af",
+			"value": {
+				"reference": "lychee.ui.entity.Helper",
+				"arguments": []
+			}
+		},
+		"_Label": {
+			"chunk": "lychee.import('lychee.ui.entity.Label')",
+			"type": "lychee.Definition",
+			"hash": "4c341244",
+			"value": {
+				"reference": "lychee.ui.entity.Label",
+				"arguments": []
+			}
+		},
+		"_Layer": {
+			"chunk": "lychee.import('lychee.ui.Layer')",
+			"type": "lychee.Definition",
+			"hash": "e94dc51f",
+			"value": {
+				"reference": "lychee.ui.Layer",
+				"arguments": []
+			}
+		},
+		"_Position": {
+			"chunk": "lychee.import('lychee.effect.Position')",
+			"type": "lychee.Definition",
+			"hash": "46e05d0c",
+			"value": {
+				"reference": "lychee.effect.Position",
+				"arguments": []
+			}
+		},
+		"_Select": {
+			"chunk": "lychee.import('lychee.ui.entity.Select')",
+			"type": "lychee.Definition",
+			"hash": "ebc6bc7f",
+			"value": {
+				"reference": "lychee.ui.entity.Select",
+				"arguments": []
+			}
+		},
+		"_Visible": {
+			"chunk": "lychee.import('lychee.effect.Visible')",
+			"type": "lychee.Definition",
+			"hash": "69292fec",
+			"value": {
+				"reference": "lychee.effect.Visible",
+				"arguments": []
+			}
+		},
+		"_Width": {
+			"chunk": "lychee.import('lychee.effect.Width')",
+			"type": "lychee.Definition",
+			"hash": "89513767",
+			"value": {
+				"reference": "lychee.effect.Width",
+				"arguments": []
+			}
+		},
+		"_FONT": {
+			"chunk": "attachments[\"fnt\"]",
+			"type": "Font",
+			"hash": "3076ee3c",
+			"value": {
+				"constructor": "Font",
+				"arguments": []
+			}
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.font    = _FONT;\n\t\tthis.label   = 'MENU';\n\t\tthis.options = [ 'Settings' ];\n\t\tthis.helpers = [];\n\t\tthis.state   = 'default';\n\t\tthis.states  = { 'default': null, 'active': null };\n\t\tthis.value   = 'Settings';\n\n\t\tthis.__boundary = 0;\n\t\tthis.__focus    = null;\n\t\tthis.__helpers  = [];\n\n\n\t\tthis.setState(states.state);\n\t\tthis.setValue(states.value);\n\n\t\tdelete states.state;\n\t\tdelete states.value;\n\n\n\t\tstates.width    = 144;\n\t\tstates.height   = 144;\n\t\tstates.alpha    = 0.0;\n\t\tstates.relayout = false;\n\n\n\t\t_Layer.call(this, states);\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tthis.bind('touch', function(id, position, delta) {\n\n\t\t\tlet min_y = -1 / 2 * this.height + 64;\n\t\t\tif (min_y > position.y) {\n\n\t\t\t\tif (this.state === 'active') {\n\t\t\t\t\tthis.trigger('blur');\n\t\t\t\t} else {\n\t\t\t\t\tthis.trigger('focus');\n\t\t\t\t}\n\n\t\t\t} else {\n\n\t\t\t\tlet found = null;\n\t\t\t\tlet args  = [ id, {\n\t\t\t\t\tx: 0,\n\t\t\t\t\ty: 0\n\t\t\t\t}, delta ];\n\n\n\t\t\t\tfor (let h = 0, hl = this.__helpers.length; h < hl; h++) {\n\n\t\t\t\t\tlet helper = this.__helpers[h];\n\t\t\t\t\tif (helper.visible === false) continue;\n\n\t\t\t\t\tif (helper.isAtPosition(position) === true) {\n\n\t\t\t\t\t\targs[1].x = position.x - helper.position.x;\n\t\t\t\t\t\targs[1].y = position.y - helper.position.y;\n\n\t\t\t\t\t\thelper.trigger('touch', args);\n\t\t\t\t\t\tfound = helper;\n\n\t\t\t\t\t\tbreak;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\treturn found;\n\n\t\t\t}\n\n\t\t}, this);\n\n\t\tthis.bind('key', function(key, name, delta) {\n\n\t\t\tif (this.state === 'active') {\n\n\t\t\t\tlet entities = [ this.getEntity('@select') ].concat(this.__helpers);\n\t\t\t\tlet focus    = this.__focus;\n\t\t\t\tlet index    = entities.indexOf(focus);\n\n\n\t\t\t\tif (name === 'tab') {\n\n\t\t\t\t\tif (focus !== null) {\n\t\t\t\t\t\tfocus.trigger('blur');\n\t\t\t\t\t}\n\n\t\t\t\t\tindex += 1;\n\t\t\t\t\tindex %= entities.length;\n\t\t\t\t\tfocus  = entities[index];\n\t\t\t\t\tfocus.trigger('focus');\n\n\t\t\t\t\tthis.__focus = focus;\n\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t} else if (name === 'shift-tab') {\n\n\t\t\t\t\tif (focus !== null) {\n\t\t\t\t\t\tfocus.trigger('blur');\n\t\t\t\t\t}\n\n\t\t\t\t\tindex -= 1;\n\t\t\t\t\tindex  = index < 0 ? 0 : index;\n\t\t\t\t\tfocus  = entities[index];\n\t\t\t\t\tfocus.trigger('focus');\n\n\t\t\t\t\tthis.__focus = focus;\n\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t} else if (focus !== null) {\n\n\t\t\t\t\tfocus.trigger('key', [ key, name, delta ]);\n\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}, this);\n\n\t\tthis.bind('focus', function() {\n\t\t\tthis.setState('active');\n\t\t}, this);\n\n\t\tthis.bind('blur', function() {\n\n\t\t\tthis.setState('default');\n\n\t\t\tlet focus = this.__focus;\n\t\t\tif (focus !== null) {\n\t\t\t\tfocus.trigger('blur');\n\t\t\t\tthis.__focus = null;\n\t\t\t}\n\n\t\t}, this);\n\n\t\tthis.bind('reshape', function(orientation, rotation, width, height) {\n\n\t\t\tif (typeof width === 'number' && typeof height === 'number') {\n\n\t\t\t\tif (this.state === 'active') {\n\t\t\t\t\tthis.width  = 144;\n\t\t\t\t\tthis.height = height;\n\t\t\t\t} else {\n\t\t\t\t\tthis.width  = 64;\n\t\t\t\t\tthis.height = height;\n\t\t\t\t}\n\n\n\t\t\t\tthis.__boundary = -1 / 2 * width;\n\t\t\t\tthis.position.x = -1 / 2 * width + this.width / 2;\n\n\n\t\t\t\tlet entity = null;\n\t\t\t\tlet y1     = -1 / 2 * this.height;\n\t\t\t\tlet y2     =  1 / 2 * this.height;\n\n\n\t\t\t\tentity = this.getEntity('@label');\n\t\t\t\tentity.position.x = -52 + entity.width / 2;\n\t\t\t\tentity.position.y =  y1 + 21 + entity.height / 2;\n\n\t\t\t\tentity = this.getEntity('@select');\n\t\t\t\tentity.height     = 32 * entity.options.length;\n\t\t\t\tentity.position.x = 8;\n\t\t\t\tentity.position.y = y1 + 64 + entity.height / 2;\n\n\n\t\t\t\tfor (let h = 0, hl = this.__helpers.length; h < hl; h++) {\n\n\t\t\t\t\tentity = this.__helpers[h];\n\t\t\t\t\tentity.position.x = 0;\n\t\t\t\t\tentity.position.y = y2 - 16 - 32 * hl + 32 * h + 16 * h;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}, this);\n\n\n\t\tthis.setEntity('@label', new _Label({\n\t\t\tfont:  this.font,\n\t\t\tvalue: this.label\n\t\t}));\n\n\t\tthis.setEntity('@select', new _Select({\n\t\t\toptions: this.options,\n\t\t\tvalue:   this.value\n\t\t}));\n\n\t\tthis.getEntity('@select').bind('change', function(value) {\n\n\t\t\tlet oldvalue = this.value;\n\t\t\tif (oldvalue !== value) {\n\n\t\t\t\tlet result = this.setValue(value);\n\t\t\t\tif (result === true) {\n\t\t\t\t\tthis.trigger('change', [ value ]);\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}, this);\n\n\n\t\tthis.setFont(states.font);\n\t\tthis.setHelpers(states.helpers);\n\t\tthis.setLabel(states.label);\n\t\tthis.setOptions(states.options);\n\n\t\tdelete states.font;\n\t\tdelete states.helpers;\n\t\tdelete states.label;\n\t\tdelete states.options;\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "f4d388",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"state": "setState",
+			"value": "setValue",
+			"font": "setFont",
+			"helpers": "setHelpers",
+			"label": "setLabel",
+			"options": "setOptions"
+		},
+		"properties": {
+			"font": {
+				"chunk": "this.font    = _FONT;",
+				"type": "Font",
+				"hash": "e56dda85",
+				"value": {
+					"chunk": "_FONT",
+					"type": "Font",
+					"hash": "b185383f",
+					"value": {
+						"constructor": "Font",
+						"arguments": [
+							"/tmp/Font.fnt"
+						]
+					}
+				}
+			},
+			"label": {
+				"chunk": "this.label   = 'MENU';",
+				"type": "String",
+				"hash": "861d0822",
+				"value": {
+					"chunk": "'MENU'",
+					"type": "String",
+					"hash": "2f01cbb1",
+					"value": "MENU"
+				}
+			},
+			"options": {
+				"chunk": "this.options = [ 'Settings' ];",
+				"type": "Array",
+				"hash": "ef8fe467",
+				"value": {
+					"chunk": "[ 'Settings' ]",
+					"type": "Array",
+					"hash": "bcecea4f",
+					"value": [
+						"Settings"
+					]
+				}
+			},
+			"helpers": {
+				"chunk": "this.helpers = [];",
+				"type": "Array",
+				"hash": "f728ce8a",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"state": {
+				"chunk": "this.state   = 'default';",
+				"type": "String",
+				"hash": "58c2bf0b",
+				"value": {
+					"chunk": "'default'",
+					"type": "String",
+					"hash": "ec9649c0",
+					"value": "default"
+				}
+			},
+			"states": {
+				"chunk": "this.states  = { 'default': null, 'active': null };",
+				"type": "Object",
+				"hash": "ab918371",
+				"value": {
+					"chunk": "{ 'default': null, 'active': null }",
+					"type": "Object",
+					"hash": "5e99f4bd",
+					"value": {
+						"default": null,
+						"active": null
+					}
+				}
+			},
+			"value": {
+				"chunk": "this.value   = 'Settings';",
+				"type": "String",
+				"hash": "2bf07ffa",
+				"value": {
+					"chunk": "'Settings'",
+					"type": "String",
+					"hash": "38a965b1",
+					"value": "Settings"
+				}
+			},
+			"__boundary": {
+				"chunk": "this.__boundary = 0;",
+				"type": "Number",
+				"hash": "2eaf604d",
+				"value": {
+					"chunk": "0",
+					"type": "Number",
+					"hash": "d271c07f",
+					"value": 0
+				}
+			},
+			"__focus": {
+				"chunk": "this.__focus = null;",
+				"type": "null",
+				"hash": "06d66311",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"__helpers": {
+				"chunk": "this.__helpers  = [];",
+				"type": "Array",
+				"hash": "19af01ab",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"width": {
+				"chunk": "this.width  = 144;",
+				"type": "Number",
+				"hash": "14f61781",
+				"value": {
+					"chunk": "144",
+					"type": "Number",
+					"hash": "85f0b427",
+					"value": 144
+				}
+			},
+			"height": {
+				"chunk": "this.height = height;",
+				"type": "Number",
+				"hash": "9ae94ce1",
+				"value": {
+					"chunk": "height",
+					"type": "Number",
+					"hash": "435dfa42",
+					"value": 1337
+				}
+			}
+		},
+		"enums": {},
+		"events": {
+			"blur": {
+				"name": "blur",
+				"methods": [],
+				"parameters": []
+			},
+			"focus": {
+				"name": "focus",
+				"methods": [],
+				"parameters": []
+			},
+			"change": {
+				"name": "change",
+				"methods": [],
+				"parameters": [
+					{
+						"chunk": "value",
+						"type": "String",
+						"hash": "d9093f6e",
+						"value": "Settings"
+					}
+				]
+			}
+		},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {\n\n\t\t\tlet font = lychee.deserialize(blob.font);\n\t\t\tif (font !== null) {\n\t\t\t\tthis.setFont(font);\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "814dbb80",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "blob",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Layer.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.Menu';\n\n\t\t\tlet states = data['arguments'][0];\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.label !== 'MENU')                 states.label   = this.label;\n\t\t\tif (this.helpers.length !== 0)             states.helpers = this.helpers.slice(0, this.helpers.length);\n\t\t\tif (this.state !== 'default')              states.state   = this.state;\n\t\t\tif (this.value !== 'Settings')             states.value   = this.value;\n\t\t\tif (this.options.join(',') !== 'Settings') states.options = this.options.slice(0, this.options.length);\n\n\n\t\t\tif (this.font !== null) blob.font = lychee.serialize(this.font);\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "2c657ad9",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"update": {
+				"chunk": "function(clock, delta) {\n\n\t\t\tlet helpers = this.__helpers;\n\t\t\tfor (let h = 0, hl = helpers.length; h < hl; h++) {\n\t\t\t\thelpers[h].update(clock, delta);\n\t\t\t}\n\n\n\t\t\t_Layer.prototype.update.call(this, clock, delta);\n\n\t\t}",
+				"type": "function",
+				"hash": "02e59d22",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "clock",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "delta",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"render": {
+				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tif (this.visible === false) return;\n\n\n\t\t\tlet alpha    = this.alpha;\n\t\t\tlet helpers  = this.__helpers;\n\t\t\tlet position = this.position;\n\n\n\t\t\tlet x  = position.x + offsetX;\n\t\t\tlet y  = position.y + offsetY;\n\t\t\tlet x1 = x - this.width  / 2;\n\t\t\tlet y1 = y - this.height / 2;\n\t\t\tlet x2 = x + this.width  / 2;\n\t\t\tlet y2 = y + this.height / 2;\n\n\n\t\t\trenderer.drawBox(\n\t\t\t\tx1,\n\t\t\t\ty1,\n\t\t\t\tx2,\n\t\t\t\ty2,\n\t\t\t\t'#363f3e',\n\t\t\t\ttrue\n\t\t\t);\n\n\t\t\trenderer.drawBox(\n\t\t\t\tx2 - 48,\n\t\t\t\ty1 + 20,\n\t\t\t\tx2 - 16,\n\t\t\t\ty1 + 22,\n\t\t\t\t'#ffffff',\n\t\t\t\ttrue\n\t\t\t);\n\n\t\t\trenderer.drawBox(\n\t\t\t\tx2 - 48,\n\t\t\t\ty1 + 31,\n\t\t\t\tx2 - 16,\n\t\t\t\ty1 + 33,\n\t\t\t\t'#ffffff',\n\t\t\t\ttrue\n\t\t\t);\n\n\t\t\trenderer.drawBox(\n\t\t\t\tx2 - 48,\n\t\t\t\ty1 + 42,\n\t\t\t\tx2 - 16,\n\t\t\t\ty1 + 44,\n\t\t\t\t'#ffffff',\n\t\t\t\ttrue\n\t\t\t);\n\n\n\t\t\tfor (let h = 0, hl = helpers.length; h < hl; h++) {\n\n\t\t\t\thelpers[h].render(\n\t\t\t\t\trenderer,\n\t\t\t\t\tx,\n\t\t\t\t\ty\n\t\t\t\t);\n\n\t\t\t}\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(alpha);\n\t\t\t}\n\n\n\t\t\tif (alpha !== 0) {\n\t\t\t\t_Layer.prototype.render.call(this, renderer, offsetX, offsetY);\n\t\t\t}\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(1.0);\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "7e32aa88",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "renderer",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetX",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetY",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"setFont": {
+				"chunk": "function(font) {\n\n\t\t\tfont = font instanceof Font ? font : null;\n\n\n\t\t\tif (font !== null) {\n\n\t\t\t\tthis.getEntity('@label').setFont(font);\n\t\t\t\tthis.font = font;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "b5ff0b4e",
+				"parameters": [
+					{
+						"chunk": "font instanceof Font ? font : null",
+						"name": "font",
+						"type": "Font",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setHelpers": {
+				"chunk": "function(helpers) {\n\n\t\t\thelpers = helpers instanceof Array ? helpers : null;\n\n\n\t\t\tif (helpers !== null) {\n\n\t\t\t\tthis.helpers = helpers.map(function(helper) {\n\t\t\t\t\treturn '' + helper;\n\t\t\t\t});\n\n\n\t\t\t\tthis.__helpers = [];\n\n\t\t\t\tfor (let h = 0, hl = this.helpers.length; h < hl; h++) {\n\n\t\t\t\t\tthis.__helpers.push(new _Helper({\n\t\t\t\t\t\twidth:  32,\n\t\t\t\t\t\theight: 32,\n\t\t\t\t\t\tlabel:  null,\n\t\t\t\t\t\tvalue:  this.helpers[h],\n\t\t\t\t\t\tposition: {\n\t\t\t\t\t\t\tx: 0,\n\t\t\t\t\t\t\ty: (this.height / 2) - 16 - 32 * hl + 32 * h + 16 * h\n\t\t\t\t\t\t}\n\t\t\t\t\t}));\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "99ec5012",
+				"parameters": [
+					{
+						"chunk": "helpers instanceof Array ? helpers : null",
+						"name": "helpers",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setLabel": {
+				"chunk": "function(label) {\n\n\t\t\tlabel = typeof label === 'string' ? label : null;\n\n\n\t\t\tif (label !== null) {\n\n\t\t\t\tthis.getEntity('@label').setValue(label);\n\t\t\t\tthis.label = label;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "4c7b0e33",
+				"parameters": [
+					{
+						"chunk": "typeof label === 'string' ? label : null",
+						"name": "label",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setOptions": {
+				"chunk": "function(options) {\n\n\t\t\toptions = options instanceof Array ? options : null;\n\n\n\t\t\tif (options !== null) {\n\n\t\t\t\tthis.options = options.map(function(option) {\n\t\t\t\t\treturn '' + option;\n\t\t\t\t});\n\n\t\t\t\tthis.getEntity('@select').setOptions(this.options);\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "a2baf79c",
+				"parameters": [
+					{
+						"chunk": "options instanceof Array ? options : null",
+						"name": "options",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setState": {
+				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null && id !== this.state && this.states[id] !== undefined) {\n\n\t\t\t\tif (id === 'active') {\n\n\t\t\t\t\tthis.removeEffects();\n\n\t\t\t\t\tthis.addEffect(new _Alpha({\n\t\t\t\t\t\ttype:     _Alpha.TYPE.easeout,\n\t\t\t\t\t\tdelay:    300,\n\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\talpha:    1.0\n\t\t\t\t\t}));\n\n\t\t\t\t\tthis.addEffect(new _Position({\n\t\t\t\t\t\ttype:     _Position.TYPE.easeout,\n\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\tposition: {\n\t\t\t\t\t\t\tx: this.__boundary + 70\n\t\t\t\t\t\t}\n\t\t\t\t\t}));\n\n\t\t\t\t\tthis.addEffect(new _Width({\n\t\t\t\t\t\ttype:     _Width.TYPE.easeout,\n\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\twidth:    144\n\t\t\t\t\t}));\n\n\t\t\t\t\tthis.getEntity('@label').addEffect(new _Visible({\n\t\t\t\t\t\tdelay:   300,\n\t\t\t\t\t\tvisible: true\n\t\t\t\t\t}));\n\n\t\t\t\t\tthis.getEntity('@select').addEffect(new _Visible({\n\t\t\t\t\t\tdelay:   300,\n\t\t\t\t\t\tvisible: true\n\t\t\t\t\t}));\n\n\t\t\t\t} else {\n\n\t\t\t\t\tthis.removeEffects();\n\n\t\t\t\t\tthis.addEffect(new _Alpha({\n\t\t\t\t\t\ttype:     _Alpha.TYPE.easeout,\n\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\talpha:    0.0\n\t\t\t\t\t}));\n\n\t\t\t\t\tthis.addEffect(new _Position({\n\t\t\t\t\t\ttype:     _Position.TYPE.easeout,\n\t\t\t\t\t\tdelay:    300,\n\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\tposition: {\n\t\t\t\t\t\t\tx: this.__boundary + 30\n\t\t\t\t\t\t}\n\t\t\t\t\t}));\n\n\t\t\t\t\tthis.addEffect(new _Width({\n\t\t\t\t\t\ttype:     _Width.TYPE.easeout,\n\t\t\t\t\t\tdelay:    300,\n\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\twidth:     64\n\t\t\t\t\t}));\n\n\t\t\t\t\tthis.getEntity('@label').addEffect(new _Visible({\n\t\t\t\t\t\tdelay:   300,\n\t\t\t\t\t\tvisible: false\n\t\t\t\t\t}));\n\n\t\t\t\t\tthis.getEntity('@select').addEffect(new _Visible({\n\t\t\t\t\t\tdelay:   300,\n\t\t\t\t\t\tvisible: false\n\t\t\t\t\t}));\n\n\t\t\t\t}\n\n\n\t\t\t\tthis.addEffect(new _Event({\n\t\t\t\t\tdelay: 600,\n\t\t\t\t\tevent: 'relayout'\n\t\t\t\t}));\n\n\n\t\t\t\tthis.state = id;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "581bde92",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'string' ? id : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setValue": {
+				"chunk": "function(value) {\n\n\t\t\tvalue = typeof value === 'string' ? value : null;\n\n\n\t\t\tif (value !== null) {\n\n\t\t\t\tlet oldvalue = this.value;\n\t\t\t\tif (oldvalue !== value) {\n\n\t\t\t\t\tthis.value = value;\n\n\t\t\t\t\tlet select = this.getEntity('@select');\n\t\t\t\t\tif (select.value !== value) {\n\t\t\t\t\t\tselect.setValue(value);\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "14922e05",
+				"parameters": [
+					{
+						"chunk": "typeof value === 'string' ? value : null",
+						"name": "value",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

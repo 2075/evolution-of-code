@@ -1,0 +1,244 @@
+{
+	"header": {
+		"identifier": "lychee.ui.sprite.Background",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [
+			"lychee.ui.Sprite"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Sprite": {
+			"chunk": "lychee.import('lychee.ui.Sprite')",
+			"type": "lychee.Definition",
+			"hash": "fedd3361",
+			"value": {
+				"reference": "lychee.ui.Sprite",
+				"arguments": []
+			}
+		},
+		"_render_buffer": {
+			"chunk": "function(renderer) {\n\n\t\tif (this.__buffer !== null) {\n\t\t\tthis.__buffer.resize(this.width, this.height);\n\t\t} else {\n\t\t\tthis.__buffer = renderer.createBuffer(this.width, this.height);\n\t\t}\n\n\n\t\trenderer.clear(this.__buffer);\n\t\trenderer.setBuffer(this.__buffer);\n\t\trenderer.setAlpha(1.0);\n\n\n\t\tlet color = this.color;\n\t\tif (color !== null) {\n\n\t\t\trenderer.drawBox(\n\t\t\t\t0,\n\t\t\t\t0,\n\t\t\t\tthis.width,\n\t\t\t\tthis.height,\n\t\t\t\tcolor,\n\t\t\t\ttrue\n\t\t\t);\n\n\t\t}\n\n\n\t\tlet texture = this.texture;\n\t\tlet map     = this.__map[this.state][this.frame] || null;\n\t\tif (texture !== null && map !== null) {\n\n\t\t\tif (map.w !== 0 && map.h !== 0 && (map.w <= this.width || map.h <= this.height)) {\n\n\t\t\t\tlet px = this.origin.x - map.w;\n\t\t\t\tlet py = this.origin.y - map.h;\n\n\n\t\t\t\twhile (px < this.width) {\n\n\t\t\t\t\tpy = this.origin.y - map.h;\n\n\t\t\t\t\twhile (py < this.height) {\n\n\t\t\t\t\t\trenderer.drawSprite(\n\t\t\t\t\t\t\tpx,\n\t\t\t\t\t\t\tpy,\n\t\t\t\t\t\t\ttexture,\n\t\t\t\t\t\t\tmap\n\t\t\t\t\t\t);\n\n\t\t\t\t\t\tpy += map.h;\n\n\t\t\t\t\t}\n\n\t\t\t\t\tpx += map.w;\n\n\t\t\t\t}\n\n\t\t\t} else {\n\n\t\t\t\trenderer.drawSprite(\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\ttexture,\n\t\t\t\t\tmap\n\t\t\t\t);\n\n\t\t\t}\n\n\t\t}\n\n\n\t\trenderer.setBuffer(null);\n\t\tthis.__isDirty = false;\n\n\t}",
+			"type": "function",
+			"hash": "dc9f7eae",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "renderer",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.color  = null;\n\t\tthis.origin = { x: 0, y: 0 };\n\n\t\tthis.__buffer  = null;\n\t\tthis.__isDirty = true;\n\n\n\t\tthis.setColor(states.color);\n\n\n\t\tdelete states.color;\n\n\n\t\tstates.width  = typeof states.width === 'number'  ? states.width  : 512;\n\t\tstates.height = typeof states.height === 'number' ? states.height : 512;\n\t\tstates.shape  = lychee.ui.Entity.SHAPE.rectangle;\n\n\n\t\t_Sprite.call(this, states);\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tthis.bind('reshape', function(orientation, rotation, width, height) {\n\n\t\t\tif (typeof width === 'number' && typeof height === 'number') {\n\n\t\t\t\tthis.width     = width;\n\t\t\t\tthis.height    = height;\n\t\t\t\tthis.__isDirty = true;\n\n\t\t\t}\n\n\t\t}, this);\n\n\n\t\tthis.setOrigin(states.origin);\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "3157269f",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"color": "setColor",
+			"origin": "setOrigin"
+		},
+		"properties": {
+			"color": {
+				"chunk": "this.color  = null;",
+				"type": "null",
+				"hash": "38452283",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"origin": {
+				"chunk": "this.origin = { x: 0, y: 0 };",
+				"type": "Object",
+				"hash": "a4893ec4",
+				"value": {
+					"chunk": "{ x: 0, y: 0 }",
+					"type": "Object",
+					"hash": "8278b3e8",
+					"value": {
+						"x": 0,
+						"y": 0
+					}
+				}
+			},
+			"__buffer": {
+				"chunk": "this.__buffer  = null;",
+				"type": "null",
+				"hash": "c172b0c3",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"__isDirty": {
+				"chunk": "this.__isDirty = true;",
+				"type": "Boolean",
+				"hash": "0ce9596a",
+				"value": {
+					"chunk": "true",
+					"type": "Boolean",
+					"hash": "34edcf72",
+					"value": true
+				}
+			},
+			"width": {
+				"chunk": "this.width     = width;",
+				"type": "Number",
+				"hash": "38d1e9a2",
+				"value": {
+					"chunk": "width",
+					"type": "Number",
+					"hash": "d44bb4d1",
+					"value": 1337
+				}
+			},
+			"height": {
+				"chunk": "this.height    = height;",
+				"type": "Number",
+				"hash": "f780f4a7",
+				"value": {
+					"chunk": "height",
+					"type": "Number",
+					"hash": "435dfa42",
+					"value": 1337
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Sprite.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.sprite.Background';\n\n\t\t\tlet states = data['arguments'][0];\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.color !== null) states.color = this.color;\n\n\n\t\t\tif (this.origin.x !== 0 || this.origin.y !== 0) {\n\n\t\t\t\tstates.origin = {};\n\n\t\t\t\tif (this.origin.x !== 0) states.origin.x = this.origin.x;\n\t\t\t\tif (this.origin.y !== 0) states.origin.y = this.origin.y;\n\n\t\t\t}\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "2e42dba4",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"render": {
+				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tif (this.visible === false) return;\n\n\n\t\t\tlet alpha    = this.alpha;\n\t\t\tlet position = this.position;\n\t\t\tlet x        = position.x + offsetX;\n\t\t\tlet y        = position.y + offsetY;\n\t\t\tlet hwidth   = this.width  / 2;\n\t\t\tlet hheight  = this.height / 2;\n\n\n\t\t\tif (this.__isDirty === true) {\n\t\t\t\t_render_buffer.call(this, renderer);\n\t\t\t}\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(alpha);\n\t\t\t}\n\n\t\t\tif (this.__buffer !== null) {\n\n\t\t\t\trenderer.drawBuffer(\n\t\t\t\t\tx - hwidth,\n\t\t\t\t\ty - hheight,\n\t\t\t\t\tthis.__buffer\n\t\t\t\t);\n\n\t\t\t}\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(1.0);\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "d2659f04",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "renderer",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetX",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetY",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"setColor": {
+				"chunk": "function(color) {\n\n\t\t\tcolor = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : null;\n\n\n\t\t\tif (color !== null) {\n\n\t\t\t\tthis.color     = color;\n\t\t\t\tthis.__isDirty = true;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "cf101eca",
+				"parameters": [
+					{
+						"chunk": "/(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : null",
+						"name": "color",
+						"type": "RegExp",
+						"value": {
+							"constructor": "RegExp",
+							"arguments": [
+								"(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : null",
+								"g.test(color) ? color : null"
+							]
+						}
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setOrigin": {
+				"chunk": "function(origin) {\n\n\t\t\torigin = origin instanceof Object ? origin : null;\n\n\n\t\t\tif (origin !== null) {\n\n\t\t\t\tthis.origin.x = typeof origin.x === 'number' ? origin.x : this.origin.x;\n\t\t\t\tthis.origin.y = typeof origin.y === 'number' ? origin.y : this.origin.y;\n\n\n\t\t\t\tlet map = this.__map[this.state][this.frame] || null;\n\t\t\t\tif (map !== null) {\n\t\t\t\t\tthis.origin.x %= map.w;\n\t\t\t\t\tthis.origin.y %= map.h;\n\t\t\t\t}\n\n\t\t\t\tthis.__isDirty = true;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "010cdf6a",
+				"parameters": [
+					{
+						"chunk": "origin instanceof Object ? origin : null",
+						"name": "origin",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

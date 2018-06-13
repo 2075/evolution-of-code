@@ -1,0 +1,163 @@
+{
+	"header": {
+		"identifier": "lychee.event.Queue",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [
+			"lychee.event.Emitter"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Emitter": {
+			"chunk": "lychee.import('lychee.event.Emitter')",
+			"type": "lychee.Definition",
+			"hash": "b60271ea",
+			"value": {
+				"reference": "lychee.event.Emitter",
+				"arguments": []
+			}
+		},
+		"_process_recursive": {
+			"chunk": "function(result) {\n\n\t\tif (result instanceof Object) {\n\t\t\t_process_stack.call(this);\n\t\t} else if (result === true) {\n\t\t\t_process_stack.call(this);\n\t\t} else {\n\t\t\tthis.trigger('error');\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "a53aa0e9",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "result",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_process_stack": {
+			"chunk": "function() {\n\n\t\tlet data = this.___stack.shift() || null;\n\t\tif (data !== null) {\n\n\t\t\tthis.trigger('update', [ data, _process_recursive.bind(this) ]);\n\n\t\t} else {\n\n\t\t\tthis.trigger('complete');\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "79728313",
+			"parameters": [],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function() {\n\n\t\tthis.___init  = false;\n\t\tthis.___stack = [];\n\n\t\t_Emitter.call(this);\n\n\t}",
+			"type": "function",
+			"hash": "f3f7f255",
+			"parameters": []
+		},
+		"states": {},
+		"properties": {
+			"___init": {
+				"chunk": "this.___init  = false;",
+				"type": "Boolean",
+				"hash": "bbcfdb55",
+				"value": {
+					"chunk": "false",
+					"type": "Boolean",
+					"hash": "d5619e17",
+					"value": false
+				}
+			},
+			"___stack": {
+				"chunk": "this.___stack = [];",
+				"type": "Array",
+				"hash": "1a3bb522",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			}
+		},
+		"enums": {},
+		"events": {
+			"error": {
+				"name": "error",
+				"methods": [
+					"init"
+				],
+				"parameters": []
+			}
+		},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.event.Queue';\n\n\t\t\tlet blob = (data['blob'] || {});\n\n\n\t\t\tif (this.___stack.length > 0) {\n\n\t\t\t\tblob.stack = [];\n\n\t\t\t\tfor (let s = 0, sl = this.___stack.length; s < sl; s++) {\n\t\t\t\t\tblob.stack.push(lychee.serialize(this.___stack[s]));\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "28161952",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"then": {
+				"chunk": "function(data) {\n\n\t\t\tdata = data instanceof Object ? data : null;\n\n\n\t\t\tif (data !== null) {\n\n\t\t\t\tthis.___stack.push(data);\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "c0dd0731",
+				"parameters": [
+					{
+						"chunk": "data instanceof Object ? data : null",
+						"name": "data",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"init": {
+				"chunk": "function() {\n\n\t\t\tif (this.___init === false) {\n\n\t\t\t\tthis.___init = true;\n\n\n\t\t\t\tif (this.___stack.length > 0) {\n\n\t\t\t\t\t_process_stack.call(this);\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t} else {\n\n\t\t\t\t\tthis.trigger('error');\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "0f8879b9",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

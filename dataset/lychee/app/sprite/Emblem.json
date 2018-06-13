@@ -1,0 +1,93 @@
+{
+	"header": {
+		"identifier": "lychee.app.sprite.Emblem",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [
+			"lychee.app.Sprite"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Sprite": {
+			"chunk": "lychee.import('lychee.app.Sprite')",
+			"type": "lychee.Definition",
+			"hash": "5cfa310f",
+			"value": {
+				"reference": "lychee.app.Sprite",
+				"arguments": []
+			}
+		},
+		"_TEXTURE": {
+			"chunk": "attachments[\"png\"]",
+			"type": "Texture",
+			"hash": "44097138",
+			"value": {
+				"constructor": "Texture",
+				"arguments": []
+			}
+		},
+		"_CONFIG": {
+			"chunk": "{\n\t\twidth:  256,\n\t\theight: 64\n\t}",
+			"type": "Object",
+			"hash": "994e5500",
+			"value": {
+				"width": 256,
+				"height": 64
+			}
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tstates.texture = _TEXTURE;\n\t\tstates.width   = _CONFIG.width;\n\t\tstates.height  = _CONFIG.height;\n\n\n\t\t_Sprite.call(this, states);\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "7518d7f5",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {},
+		"properties": {},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Sprite.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.app.sprite.Emblem';\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "8488b724",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.app.Entity',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			}
+		}
+	}
+}

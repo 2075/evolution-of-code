@@ -1,0 +1,295 @@
+{
+	"header": {
+		"identifier": "lychee.ui.entity.Texture",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"lychee.ui.entity.Upload",
+			"lychee.ui.Sprite"
+		],
+		"includes": [
+			"lychee.ui.Entity"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Entity": {
+			"chunk": "lychee.import('lychee.ui.Entity')",
+			"type": "lychee.Definition",
+			"hash": "adc9fb14",
+			"value": {
+				"reference": "lychee.ui.Entity",
+				"arguments": []
+			}
+		},
+		"_Upload": {
+			"chunk": "lychee.import('lychee.ui.entity.Upload')",
+			"type": "lychee.Definition",
+			"hash": "b2b3605a",
+			"value": {
+				"reference": "lychee.ui.entity.Upload",
+				"arguments": []
+			}
+		},
+		"_Sprite": {
+			"chunk": "lychee.import('lychee.ui.Sprite')",
+			"type": "lychee.Definition",
+			"hash": "fedd3361",
+			"value": {
+				"reference": "lychee.ui.Sprite",
+				"arguments": []
+			}
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.font  = null;\n\t\tthis.label = 'UPLOAD';\n\t\tthis.value = null;\n\n\t\tthis.__sprite = new _Sprite({});\n\t\tthis.__upload = new _Upload({\n\t\t\ttype: _Upload.TYPE.texture\n\t\t});\n\n\n\t\tthis.setFont(states.font);\n\t\tthis.setLabel(states.label);\n\t\tthis.setValue(states.value);\n\n\t\tdelete states.font;\n\t\tdelete states.label;\n\t\tdelete states.value;\n\n\n\t\t_Entity.call(this, states);\n\n\t\tstates = null;\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tthis.__upload.bind('change', function(assets) {\n\n\t\t\tif (assets !== null && assets.length === 1) {\n\n\t\t\t\tlet texture = assets[0];\n\t\t\t\tif (texture.width <= this.width && texture.height <= this.height) {\n\n\t\t\t\t\tlet result = this.setValue(texture);\n\t\t\t\t\tif (result === true) {\n\t\t\t\t\t\tthis.trigger('change', [ texture ]);\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}, this);\n\n\t\tthis.bind('touch', function(id, position, delta) {\n\t\t\treturn this.__upload.trigger('touch', [ id, position, delta ]);\n\t\t}, this);\n\n\t\tthis.bind('key', function(key, name, delta) {\n\t\t\treturn this.__upload.trigger('key', [ key, name, delta ]);\n\t\t}, this);\n\n\t\tthis.bind('relayout', function() {\n\n\t\t\tlet sprite = this.__sprite;\n\t\t\tlet upload = this.__upload;\n\t\t\tlet value  = this.value;\n\n\t\t\tif (value !== null) {\n\t\t\t\tsprite.width  = value.width;\n\t\t\t\tsprite.height = value.height;\n\t\t\t}\n\n\t\t\tupload.position.x =  0;\n\t\t\tupload.position.y =  1 / 2 * this.height - 1 / 2 * upload.height;\n\n\t\t\tsprite.position.x =  0;\n\t\t\tsprite.position.y = -1 / 2 * this.height + 1 / 2 * sprite.height;\n\t\t\tsprite.trigger('relayout');\n\n\t\t}, this);\n\n\t}",
+			"type": "function",
+			"hash": "0f3e0df7",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"font": "setFont",
+			"label": "setLabel",
+			"value": "setValue"
+		},
+		"properties": {
+			"font": {
+				"chunk": "this.font  = null;",
+				"type": "null",
+				"hash": "ce7e744f",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"label": {
+				"chunk": "this.label = 'UPLOAD';",
+				"type": "String",
+				"hash": "66c51575",
+				"value": {
+					"chunk": "'UPLOAD'",
+					"type": "String",
+					"hash": "ccee92b7",
+					"value": "UPLOAD"
+				}
+			},
+			"value": {
+				"chunk": "this.value = null;",
+				"type": "null",
+				"hash": "a16bd19d",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"__sprite": {
+				"chunk": "this.__sprite = new _Sprite({});",
+				"type": "_Sprite",
+				"hash": "3839f408",
+				"value": {
+					"chunk": "new _Sprite({})",
+					"type": "_Sprite",
+					"hash": "50252479",
+					"value": {}
+				}
+			},
+			"__upload": {
+				"chunk": "this.__upload = new _Upload({\n\t\t\ttype: _Upload.TYPE.texture\n\t\t});",
+				"type": "_Upload",
+				"hash": "9fee2240",
+				"value": {
+					"chunk": "new _Upload({\n\t\t\ttype: _Upload.TYPE.texture\n\t\t})",
+					"type": "_Upload",
+					"hash": "0532806e"
+				}
+			}
+		},
+		"enums": {},
+		"events": {
+			"change": {
+				"name": "change",
+				"methods": [],
+				"parameters": [
+					{
+						"chunk": "texture",
+						"type": "lychee.Asset",
+						"hash": "883a4db5",
+						"value": {
+							"constructor": "lychee.Asset",
+							"arguments": []
+						}
+					}
+				]
+			}
+		},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {\n\n\t\t\tlet font = lychee.deserialize(blob.font);\n\t\t\tif (font !== null) {\n\t\t\t\tthis.setFont(font);\n\t\t\t}\n\n\t\t\tlet value = lychee.deserialize(blob.value);\n\t\t\tif (value !== null) {\n\t\t\t\tthis.setValue(value);\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "380d43db",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "blob",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Entity.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.entity.Button';\n\n\t\t\tlet states = data['arguments'][0];\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.label !== null) states.label = this.label;\n\n\n\t\t\tif (this.font !== null)  blob.font  = lychee.serialize(this.font);\n\t\t\tif (this.value !== null) blob.value = lychee.serialize(this.value);\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "378cbd3f",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"update": {
+				"chunk": "function(clock, delta) {\n\n\t\t\t_Entity.prototype.render.call(this, clock, delta);\n\n\t\t\tthis.__sprite.update(clock, delta);\n\t\t\tthis.__upload.update(clock, delta);\n\n\t\t}",
+				"type": "function",
+				"hash": "5ddaf9a0",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "clock",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "delta",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"render": {
+				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tif (this.visible === false) return;\n\n\n\t\t\tlet position = this.position;\n\t\t\tlet x        = position.x + offsetX;\n\t\t\tlet y        = position.y + offsetY;\n\n\n\t\t\t_Entity.prototype.render.call(this, renderer, offsetX, offsetY);\n\n\t\t\tthis.__sprite.render(renderer, x, y);\n\t\t\tthis.__upload.render(renderer, x, y);\n\n\t\t}",
+				"type": "function",
+				"hash": "01ab0996",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "renderer",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetX",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetY",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"setFont": {
+				"chunk": "function(font) {\n\n\t\t\tfont = font instanceof Font ? font : null;\n\n\n\t\t\tif (font !== null) {\n\n\t\t\t\tthis.__upload.setFont(font);\n\t\t\t\tthis.font = font;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "50f1736f",
+				"parameters": [
+					{
+						"chunk": "font instanceof Font ? font : null",
+						"name": "font",
+						"type": "Font",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setLabel": {
+				"chunk": "function(label) {\n\n\t\t\tlabel = typeof label === 'string' ? label : null;\n\n\n\t\t\tif (label !== null) {\n\n\t\t\t\tthis.__upload.setLabel(label);\n\t\t\t\tthis.label = label;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "d5ea0c2b",
+				"parameters": [
+					{
+						"chunk": "typeof label === 'string' ? label : null",
+						"name": "label",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setValue": {
+				"chunk": "function(value) {\n\n\t\t\tvalue = value instanceof Texture ? value : null;\n\n\n\t\t\tif (value !== null) {\n\n\t\t\t\tthis.__sprite.setTexture(value);\n\t\t\t\tthis.value = value;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "be949f68",
+				"parameters": [
+					{
+						"chunk": "value instanceof Texture ? value : null",
+						"name": "value",
+						"type": "Texture",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

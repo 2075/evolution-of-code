@@ -1,0 +1,124 @@
+{
+	"header": {
+		"identifier": "lychee.Debugger",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [],
+		"supports": {},
+		"type": "Module"
+	},
+	"memory": {},
+	"errors": [
+		{
+			"url": "/libraries/lychee/source/core/Debugger.js",
+			"rule": "unguessable-return-value",
+			"reference": "expose",
+			"message": "Unguessable return value \"_diff_environment(environment)\" for method \"expose()\".",
+			"line": 0,
+			"column": 0
+		}
+	],
+	"result": {
+		"constructor": {},
+		"states": {},
+		"properties": {},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\treturn {\n\t\t\t\t'reference': 'lychee.Debugger',\n\t\t\t\t'blob':      null\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "c202ff1a",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'reference': 'lychee.Debugger',\n\t\t\t\t'blob':      null\n\t\t\t}",
+						"type": "Object",
+						"value": {
+							"reference": "lychee.Debugger",
+							"blob": null
+						}
+					}
+				]
+			},
+			"expose": {
+				"chunk": "function(environment) {\n\n\t\t\tenvironment = environment instanceof lychee.Environment ? environment : lychee.environment;\n\n\n\t\t\t_bootstrap_environment();\n\n\n\t\t\tif (environment !== null && environment !== _environment) {\n\n\t\t\t\tlet project = environment.id;\n\t\t\t\tif (project !== null) {\n\n\t\t\t\t\tif (lychee.diff(environment.global, _environment.global) === true) {\n\n\t\t\t\t\t\tlet diff = _diff_environment(environment);\n\t\t\t\t\t\tif (diff !== null) {\n\t\t\t\t\t\t\treturn diff;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
+				"type": "function",
+				"hash": "417cf651",
+				"parameters": [
+					{
+						"chunk": "environment instanceof lychee.Environment ? environment : lychee.environment",
+						"name": "environment",
+						"type": "lychee.Environment"
+					}
+				],
+				"values": [
+					{
+						"chunk": "_diff_environment(environment)",
+						"type": "undefined"
+					},
+					{
+						"chunk": "null",
+						"type": "null",
+						"value": null
+					}
+				]
+			},
+			"report": {
+				"chunk": "function(environment, error, referer) {\n\n\t\t\t_bootstrap_environment();\n\n\n\t\t\tenvironment = environment instanceof lychee.Environment ? environment : null;\n\t\t\terror       = error instanceof Error                    ? error       : null;\n\t\t\treferer     = referer instanceof Object                 ? referer     : null;\n\n\n\t\t\tif (environment !== null && error !== null) {\n\n\t\t\t\tlet definition = null;\n\n\t\t\t\tif (referer !== null) {\n\n\t\t\t\t\tif (referer instanceof Stuff) {\n\t\t\t\t\t\tdefinition = referer.url;\n\t\t\t\t\t} else if (referer instanceof lychee.Definition) {\n\t\t\t\t\t\tdefinition = referer.id;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tlet data = {\n\t\t\t\t\tproject:     environment.id,\n\t\t\t\t\tdefinition:  definition,\n\t\t\t\t\tenvironment: environment.serialize(),\n\t\t\t\t\tfile:        null,\n\t\t\t\t\tline:        null,\n\t\t\t\t\tmethod:      null,\n\t\t\t\t\ttype:        null,\n\t\t\t\t\tmessage:     error.message || '',\n\t\t\t\t\tstacktrace:  []\n\t\t\t\t};\n\n\n\t\t\t\tif (typeof error.stack === 'string') {\n\n\t\t\t\t\tlet header = error.stack.trim().split('\\n')[0].trim();\n\t\t\t\t\tlet check1 = header.split(':')[0].trim();\n\t\t\t\t\tlet check2 = header.split(':').slice(1).join(':').trim();\n\n\t\t\t\t\tif (/^(ReferenceError|SyntaxError)$/g.test(check1)) {\n\t\t\t\t\t\tdata.type    = check1;\n\t\t\t\t\t\tdata.message = check2;\n\t\t\t\t\t}\n\n\n\t\t\t\t\tlet stacktrace = error.stack.trim().split('\\n').map(function(raw) {\n\n\t\t\t\t\t\tlet file   = null;\n\t\t\t\t\t\tlet line   = null;\n\t\t\t\t\t\tlet method = null;\n\n\t\t\t\t\t\tlet chunk = raw.trim();\n\t\t\t\t\t\tif (chunk.startsWith('at')) {\n\n\t\t\t\t\t\t\tlet tmp1 = chunk.substr(2).trim().split(' ');\n\t\t\t\t\t\t\tif (tmp1.length === 2) {\n\n\t\t\t\t\t\t\t\tmethod = tmp1[0].trim();\n\n\t\t\t\t\t\t\t\tif (tmp1[1].startsWith('(')) tmp1[1] = tmp1[1].substr(1).trim();\n\t\t\t\t\t\t\t\tif (tmp1[1].endsWith(')'))   tmp1[1] = tmp1[1].substr(0, tmp1[1].length - 1).trim();\n\n\t\t\t\t\t\t\t\tlet check = tmp1[1];\n\t\t\t\t\t\t\t\tif (check.startsWith('http://') || check.startsWith('https://')) {\n\t\t\t\t\t\t\t\t\ttmp1[1] = '/' + check.split('/').slice(3).join('/');\n\t\t\t\t\t\t\t\t} else if (check.startsWith('file://')) {\n\t\t\t\t\t\t\t\t\ttmp1[1] = tmp1[1].substr(7);\n\t\t\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\t\t\tlet tmp2 = tmp1[1].split(':');\n\t\t\t\t\t\t\t\tif (tmp2.length === 3) {\n\t\t\t\t\t\t\t\t\tfile = tmp2[0];\n\t\t\t\t\t\t\t\t\tline = tmp2[1];\n\t\t\t\t\t\t\t\t} else if (tmp2.length === 2) {\n\t\t\t\t\t\t\t\t\tfile = tmp2[0];\n\t\t\t\t\t\t\t\t\tline = tmp2[1];\n\t\t\t\t\t\t\t\t} else if (tmp2.length === 1) {\n\t\t\t\t\t\t\t\t\tfile = tmp2[0];\n\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t} else if (chunk.includes('@')) {\n\n\t\t\t\t\t\t\tlet tmp1 = chunk.split('@');\n\t\t\t\t\t\t\tif (tmp1.length === 2) {\n\n\t\t\t\t\t\t\t\tif (tmp1[0] !== '') {\n\t\t\t\t\t\t\t\t\tmethod = tmp1[0];\n\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\tlet check = tmp1[1];\n\t\t\t\t\t\t\t\tif (check.startsWith('http://') || check.startsWith('https://')) {\n\t\t\t\t\t\t\t\t\ttmp1[1] = '/' + check.split('/').slice(3).join('/');\n\t\t\t\t\t\t\t\t} else if (check.startsWith('file://')) {\n\t\t\t\t\t\t\t\t\ttmp1[1] = tmp1[1].substr(7);\n\t\t\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\t\t\tlet tmp2 = tmp1[1].split(':');\n\t\t\t\t\t\t\t\tif (tmp2.length === 3) {\n\t\t\t\t\t\t\t\t\tfile = tmp2[0];\n\t\t\t\t\t\t\t\t\tline = tmp2[1];\n\t\t\t\t\t\t\t\t} else if (tmp2.length === 2) {\n\t\t\t\t\t\t\t\t\tfile = tmp2[0];\n\t\t\t\t\t\t\t\t\tline = tmp2[1];\n\t\t\t\t\t\t\t\t} else if (tmp2.length === 1) {\n\t\t\t\t\t\t\t\t\tfile = tmp2[0];\n\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\tif (file !== null) {\n\n\t\t\t\t\t\t\tif (file.startsWith('/opt/lycheejs')) {\n\t\t\t\t\t\t\t\tfile = file.substr(13);\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\tif (line !== null) {\n\n\t\t\t\t\t\t\tlet num = parseInt(line, 10);\n\t\t\t\t\t\t\tif (!isNaN(num)) {\n\t\t\t\t\t\t\t\tline = num;\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\treturn {\n\t\t\t\t\t\t\tmethod: method,\n\t\t\t\t\t\t\tfile:   file,\n\t\t\t\t\t\t\tline:   line\n\t\t\t\t\t\t};\n\n\t\t\t\t\t}).filter(function(callsite) {\n\n\t\t\t\t\t\tif (\n\t\t\t\t\t\t\tcallsite.method === null\n\t\t\t\t\t\t\t&& callsite.file === null\n\t\t\t\t\t\t\t&& callsite.line === null\n\t\t\t\t\t\t) {\n\t\t\t\t\t\t\treturn false;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\treturn true;\n\n\t\t\t\t\t});\n\n\n\t\t\t\t\tif (stacktrace.length > 0) {\n\n\t\t\t\t\t\tlet callsite = stacktrace[0];\n\n\t\t\t\t\t\tdata.method     = callsite.method;\n\t\t\t\t\t\tdata.file       = callsite.file;\n\t\t\t\t\t\tdata.line       = callsite.line;\n\t\t\t\t\t\tdata.stacktrace = stacktrace;\n\n\t\t\t\t\t}\n\n\t\t\t\t} else if (typeof Error.captureStackTrace === 'function') {\n\n\t\t\t\t\tError.prepareStackTrace = function(err, stack) {\n\t\t\t\t\t\treturn stack;\n\t\t\t\t\t};\n\t\t\t\t\tError.captureStackTrace(error);\n\t\t\t\t\tError.prepareStackTrace = _error_trace;\n\n\n\t\t\t\t\tlet stacktrace = Array.from(error.stack).map(function(frame) {\n\n\t\t\t\t\t\tlet file   = frame.getFileName()     || null;\n\t\t\t\t\t\tlet line   = frame.getLineNumber()   || null;\n\t\t\t\t\t\tlet method = frame.getFunctionName() || frame.getMethodName() || null;\n\n\n\t\t\t\t\t\tif (method !== null) {\n\n\t\t\t\t\t\t\tlet type = frame.getTypeName() || null;\n\t\t\t\t\t\t\tif (type !== null) {\n\t\t\t\t\t\t\t\tmethod = type + '.' + method;\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\tif (file !== null && file.startsWith('/opt/lycheejs')) {\n\t\t\t\t\t\t\tfile = file.substr(13);\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\treturn {\n\t\t\t\t\t\t\tfile:   file,\n\t\t\t\t\t\t\tline:   line,\n\t\t\t\t\t\t\tmethod: method\n\t\t\t\t\t\t};\n\n\t\t\t\t\t}).filter(function(callsite) {\n\n\t\t\t\t\t\tif (\n\t\t\t\t\t\t\tcallsite.method === null\n\t\t\t\t\t\t\t&& callsite.file === null\n\t\t\t\t\t\t\t&& callsite.line === null\n\t\t\t\t\t\t) {\n\t\t\t\t\t\t\treturn false;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\treturn true;\n\n\t\t\t\t\t});\n\n\n\t\t\t\t\tif (stacktrace.length > 0) {\n\n\t\t\t\t\t\tlet callsite = stacktrace[0];\n\n\t\t\t\t\t\tdata.file       = callsite.file;\n\t\t\t\t\t\tdata.line       = callsite.line;\n\t\t\t\t\t\tdata.method     = callsite.method;\n\t\t\t\t\t\tdata.stacktrace = stacktrace;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\t_report_error(environment, data);\n\n\n\t\t\t\treturn true;\n\n\t\t\t} else if (error !== null) {\n\n\t\t\t\tconsole.error(error);\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "6e28c5de",
+				"parameters": [
+					{
+						"chunk": "environment instanceof lychee.Environment ? environment : null",
+						"name": "environment",
+						"type": "lychee.Environment",
+						"value": null
+					},
+					{
+						"chunk": "error instanceof Error                    ? error       : null",
+						"name": "error",
+						"type": "Error",
+						"value": null
+					},
+					{
+						"chunk": "referer instanceof Object                 ? referer     : null",
+						"name": "referer",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

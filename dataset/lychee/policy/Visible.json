@@ -1,0 +1,114 @@
+{
+	"header": {
+		"identifier": "lychee.policy.Visible",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(states) {\n\n\t\tthis.entity = states.entity instanceof Object ? states.entity : null;\n\n\t}",
+			"type": "function",
+			"hash": "7e9d3f57",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "states",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {},
+		"properties": {
+			"entity": {
+				"chunk": "this.entity = states.entity instanceof Object ? states.entity : null;",
+				"type": "Object",
+				"hash": "2efd4e0b",
+				"value": {
+					"chunk": "states.entity instanceof Object ? states.entity : null",
+					"type": "Object",
+					"hash": "234e56d0",
+					"value": null
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet states = {\n\t\t\t\tentity: null\n\t\t\t};\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.policy.Visible',\n\t\t\t\t'arguments':   [ states ]\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "424a2ab0",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.policy.Visible',\n\t\t\t\t'arguments':   [ states ]\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"sensor": {
+				"chunk": "function() {\n\n\t\t\tlet entity = this.entity;\n\t\t\tlet values = [ 0.5 ];\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tlet visible = entity.visible;\n\t\t\t\tif (visible === true) {\n\t\t\t\t\tvalues[0] = 1;\n\t\t\t\t} else if (visible === false) {\n\t\t\t\t\tvalues[0] = 0;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn values;\n\n\t\t}",
+				"type": "function",
+				"hash": "07a113a4",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "[ 0.5 ]",
+						"type": "Array",
+						"value": [
+							0.5
+						]
+					}
+				]
+			},
+			"control": {
+				"chunk": "function(values) {\n\n\t\t\tlet entity = this.entity;\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tif (values[0] > 0.5) {\n\t\t\t\t\tentity.visible = true;\n\t\t\t\t} else if (values[0] < 0.5) {\n\t\t\t\t\tentity.visible = false;\n\t\t\t\t}\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "de4b4847",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "values",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

@@ -1,0 +1,93 @@
+{
+	"header": {
+		"identifier": "lychee.ui.sprite.Emblem",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [
+			"lychee.ui.Sprite"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Sprite": {
+			"chunk": "lychee.import('lychee.ui.Sprite')",
+			"type": "lychee.Definition",
+			"hash": "fedd3361",
+			"value": {
+				"reference": "lychee.ui.Sprite",
+				"arguments": []
+			}
+		},
+		"_TEXTURE": {
+			"chunk": "attachments[\"png\"]",
+			"type": "Texture",
+			"hash": "44097138",
+			"value": {
+				"constructor": "Texture",
+				"arguments": []
+			}
+		},
+		"_CONFIG": {
+			"chunk": "{\n\t\twidth:  256,\n\t\theight: 64\n\t}",
+			"type": "Object",
+			"hash": "994e5500",
+			"value": {
+				"width": 256,
+				"height": 64
+			}
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tstates.texture = _TEXTURE;\n\t\tstates.width   = _CONFIG.width;\n\t\tstates.height  = _CONFIG.height;\n\n\n\t\t_Sprite.call(this, states);\n\n\t\tstates = null;\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tthis.bind('reshape', function(orientation, rotation, width, height) {\n\t\t\tthis.position.y = 1 / 2 * height - _CONFIG.height / 2;\n\t\t}, this);\n\n\t}",
+			"type": "function",
+			"hash": "7b79ddb1",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {},
+		"properties": {},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Sprite.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.sprite.Emblem';\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "7cfc210d",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			}
+		}
+	}
+}

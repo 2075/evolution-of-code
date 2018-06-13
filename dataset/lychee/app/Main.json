@@ -1,0 +1,641 @@
+{
+	"header": {
+		"identifier": "lychee.app.Main",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"lychee.Input",
+			"lychee.Renderer",
+			"lychee.Stash",
+			"lychee.Storage",
+			"lychee.Viewport",
+			"lychee.event.Flow",
+			"lychee.app.Jukebox",
+			"lychee.app.Loop",
+			"lychee.app.State",
+			"lychee.net.Client",
+			"lychee.net.Server"
+		],
+		"includes": [
+			"lychee.event.Emitter"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Client": {
+			"chunk": "lychee.import('lychee.net.Client')",
+			"type": "lychee.Definition",
+			"hash": "493f2733",
+			"value": {
+				"reference": "lychee.net.Client",
+				"arguments": []
+			}
+		},
+		"_Emitter": {
+			"chunk": "lychee.import('lychee.event.Emitter')",
+			"type": "lychee.Definition",
+			"hash": "b60271ea",
+			"value": {
+				"reference": "lychee.event.Emitter",
+				"arguments": []
+			}
+		},
+		"_Flow": {
+			"chunk": "lychee.import('lychee.event.Flow')",
+			"type": "lychee.Definition",
+			"hash": "8a1479d3",
+			"value": {
+				"reference": "lychee.event.Flow",
+				"arguments": []
+			}
+		},
+		"_Input": {
+			"chunk": "lychee.import('lychee.Input')",
+			"type": "lychee.Definition",
+			"hash": "64f092fd",
+			"value": {
+				"reference": "lychee.Input",
+				"arguments": []
+			}
+		},
+		"_Jukebox": {
+			"chunk": "lychee.import('lychee.app.Jukebox')",
+			"type": "lychee.Definition",
+			"hash": "a0ac59ba",
+			"value": {
+				"reference": "lychee.app.Jukebox",
+				"arguments": []
+			}
+		},
+		"_Loop": {
+			"chunk": "lychee.import('lychee.app.Loop')",
+			"type": "lychee.Definition",
+			"hash": "89059630",
+			"value": {
+				"reference": "lychee.app.Loop",
+				"arguments": []
+			}
+		},
+		"_Renderer": {
+			"chunk": "lychee.import('lychee.Renderer')",
+			"type": "lychee.Definition",
+			"hash": "9f635ef4",
+			"value": {
+				"reference": "lychee.Renderer",
+				"arguments": []
+			}
+		},
+		"_Server": {
+			"chunk": "lychee.import('lychee.net.Server')",
+			"type": "lychee.Definition",
+			"hash": "5d46383a",
+			"value": {
+				"reference": "lychee.net.Server",
+				"arguments": []
+			}
+		},
+		"_Stash": {
+			"chunk": "lychee.import('lychee.Stash')",
+			"type": "lychee.Definition",
+			"hash": "4ce35011",
+			"value": {
+				"reference": "lychee.Stash",
+				"arguments": []
+			}
+		},
+		"_State": {
+			"chunk": "lychee.import('lychee.app.State')",
+			"type": "lychee.Definition",
+			"hash": "71022239",
+			"value": {
+				"reference": "lychee.app.State",
+				"arguments": []
+			}
+		},
+		"_Storage": {
+			"chunk": "lychee.import('lychee.Storage')",
+			"type": "lychee.Definition",
+			"hash": "43a5e8ad",
+			"value": {
+				"reference": "lychee.Storage",
+				"arguments": []
+			}
+		},
+		"_Viewport": {
+			"chunk": "lychee.import('lychee.Viewport')",
+			"type": "lychee.Definition",
+			"hash": "d773d2cb",
+			"value": {
+				"reference": "lychee.Viewport",
+				"arguments": []
+			}
+		},
+		"_API_ORIGIN": {
+			"chunk": "(function(location) {\n\n\t\tlet hostname = location.hostname || '';\n\t\tlet origin   = location.origin   || '';\n\t\tlet proto    = origin.split(':')[0];\n\n\t\tif (/app|file|chrome-extension/g.test(proto)) {\n\n\t\t\treturn 'http://harvester.artificial.engineering:4848';\n\n\t\t} else if (hostname === 'localhost') {\n\n\t\t\treturn 'http://localhost:4848';\n\n\t\t} else if (/http|https/g.test(proto)) {\n\n\t\t\treturn 'http://' + hostname + ':4848';\n\n\t\t} else {\n\n\t\t\treturn '';\n\n\t\t}\n\n\t})(global.location || {})",
+			"type": "function",
+			"hash": "5aa19b9d",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "location",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "'http://harvester.artificial.engineering:4848'",
+					"type": "String",
+					"value": "http://harvester.artificial.engineering:4848"
+				},
+				{
+					"chunk": "'http://localhost:4848'",
+					"type": "String",
+					"value": "http://localhost:4848"
+				},
+				{
+					"chunk": "'http://' + hostname + ':4848'",
+					"type": "String",
+					"value": "http://' + hostname + ':4848"
+				},
+				{
+					"chunk": "''",
+					"type": "String",
+					"value": ""
+				}
+			]
+		},
+		"_load_api": {
+			"chunk": "function(url, callback, scope) {\n\n\t\turl = typeof url === 'string' ? url : '/api/server/connect?identifier=boilerplate';\n\n\n\t\tif (/^(http|https):\\/\\//g.test(url) === false) {\n\t\t\turl = _API_ORIGIN + url;\n\t\t}\n\n\n\t\tlet config = new Config(url);\n\n\t\tconfig.onload = function(result) {\n\t\t\tcallback.call(scope, result === true ? this.buffer : null);\n\t\t};\n\n\t\tconfig.load();\n\n\t}",
+			"type": "function",
+			"hash": "1c03497c",
+			"parameters": [
+				{
+					"chunk": "typeof url === 'string' ? url : '/api/server/connect?identifier=boilerplate'",
+					"name": "url",
+					"type": "String",
+					"value": "/api/server/connect?identifier=boilerplate"
+				},
+				{
+					"chunk": null,
+					"name": "callback",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "scope",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_initialize": {
+			"chunk": "function() {\n\n\t\tlet settings = this.settings;\n\n\t\tif (settings.client !== null) {\n\t\t\tthis.client = new _Client(settings.client);\n\t\t\tthis.client.connect();\n\t\t}\n\n\t\tif (settings.server !== null) {\n\t\t\tthis.server = new _Server(settings.server);\n\t\t\tthis.server.connect();\n\t\t}\n\n\t\tif (settings.input !== null) {\n\t\t\tthis.input = new _Input(settings.input);\n\t\t}\n\n\t\tif (settings.jukebox !== null) {\n\t\t\tthis.jukebox = new _Jukebox(settings.jukebox);\n\t\t}\n\n\t\tif (settings.loop !== null) {\n\n\t\t\tthis.loop = new _Loop(settings.loop);\n\t\t\tthis.loop.bind('render', _on_render, this);\n\t\t\tthis.loop.bind('update', _on_update, this);\n\n\t\t}\n\n\t\tif (settings.renderer !== null) {\n\t\t\tthis.renderer = new _Renderer(settings.renderer);\n\t\t}\n\n\t\tif (settings.stash !== null) {\n\n\t\t\tthis.stash = new _Stash(settings.stash);\n\n\n\t\t\t// Give custom clients 1000ms to connect\n\t\t\tsetTimeout(function() {\n\n\t\t\t\tlet client = this.client;\n\t\t\t\tif (client !== null) {\n\n\t\t\t\t\tlet service = client.getService('stash');\n\t\t\t\t\tif (service !== null) {\n\n\t\t\t\t\t\tservice.bind('sync', function(data) {\n\n\t\t\t\t\t\t\tthis.stash.deserialize({\n\t\t\t\t\t\t\t\tassets: data.assets\n\t\t\t\t\t\t\t});\n\n\t\t\t\t\t\t\tthis.stash.sync(true);\n\n\t\t\t\t\t\t}, this);\n\n\t\t\t\t\t\tthis.stash.bind('sync', function(assets) {\n\t\t\t\t\t\t\tservice.sync(assets);\n\t\t\t\t\t\t}, this);\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}.bind(this), 1000);\n\n\t\t}\n\n\t\tif (settings.storage !== null) {\n\n\t\t\tthis.storage = new _Storage(settings.storage);\n\n\n\t\t\t// Give custom clients 1000ms to connect\n\t\t\tsetTimeout(function() {\n\n\t\t\t\tlet client = this.client;\n\t\t\t\tif (client !== null) {\n\n\t\t\t\t\tlet service = client.getService('storage');\n\t\t\t\t\tif (service !== null) {\n\n\t\t\t\t\t\tservice.bind('sync', function(data) {\n\n\t\t\t\t\t\t\tthis.storage.deserialize({\n\t\t\t\t\t\t\t\tobjects: data.objects\n\t\t\t\t\t\t\t});\n\n\t\t\t\t\t\t\tthis.storage.sync(true);\n\n\t\t\t\t\t\t}, this);\n\n\t\t\t\t\t\tthis.storage.bind('sync', function(objects) {\n\t\t\t\t\t\t\tservice.sync(objects);\n\t\t\t\t\t\t}, this);\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}.bind(this), 1000);\n\n\t\t}\n\n\t\tif (settings.viewport !== null) {\n\n\t\t\tthis.viewport = new _Viewport();\n\t\t\tthis.viewport.bind('reshape', _on_reshape, this);\n\t\t\tthis.viewport.bind('hide',    _on_hide,    this);\n\t\t\tthis.viewport.bind('show',    _on_show,    this);\n\n\t\t\tthis.viewport.setFullscreen(settings.viewport.fullscreen);\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "56ea0254",
+			"parameters": [],
+			"values": []
+		},
+		"_on_hide": {
+			"chunk": "function() {\n\n\t\tlet loop = this.loop;\n\t\tif (loop !== null) {\n\t\t\tloop.pause();\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "587310c1",
+			"parameters": [],
+			"values": []
+		},
+		"_on_render": {
+			"chunk": "function(clock, delta) {\n\n\t\tif (this.state !== null) {\n\t\t\tthis.state.render(clock, delta);\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "64427395",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "clock",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "delta",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_on_reshape": {
+			"chunk": "function(orientation, rotation, width, height) {\n\n\t\tlet renderer = this.renderer;\n\t\tif (renderer !== null) {\n\n\t\t\tlet settings = this.settings;\n\t\t\tif (settings.renderer !== null) {\n\t\t\t\trenderer.setWidth(settings.renderer.width);\n\t\t\t\trenderer.setHeight(settings.renderer.height);\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "35755e48",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "orientation",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "rotation",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "width",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "height",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_on_show": {
+			"chunk": "function() {\n\n\t\tlet loop = this.loop;\n\t\tif (loop !== null) {\n\t\t\tloop.resume();\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "632adefe",
+			"parameters": [],
+			"values": []
+		},
+		"_on_update": {
+			"chunk": "function(clock, delta) {\n\n\t\tif (this.state !== null) {\n\t\t\tthis.state.update(clock, delta);\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "ba72aaf1",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "clock",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "delta",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_DEFAULTS": {
+			"chunk": "{\n\n\t\tclient: null,\n\t\tserver: null,\n\n\t\tinput: {\n\t\t\tdelay:       0,\n\t\t\tkey:         true,\n\t\t\tkeymodifier: false,\n\t\t\tscroll:      true,\n\t\t\tswipe:       true,\n\t\t\ttouch:       true\n\t\t},\n\n\t\tjukebox: {\n\t\t\tchannels: 8,\n\t\t\tmusic:    true,\n\t\t\tsound:    true\n\t\t},\n\n\t\tloop: {\n\t\t\trender: 60,\n\t\t\tupdate: 60\n\t\t},\n\n\t\trenderer: {\n\t\t\twidth:      null,\n\t\t\theight:     null,\n\t\t\tid:         'app',\n\t\t\tbackground: '#405050'\n\t\t},\n\n\t\tstash: {\n\t\t\tid:   'app',\n\t\t\ttype: _Stash.TYPE.persistent\n\t\t},\n\n\t\tstorage: {\n\t\t\tid:    'app',\n\t\t\tmodel: {},\n\t\t\ttype:  _Storage.TYPE.persistent\n\t\t},\n\n\t\tviewport: {\n\t\t\tfullscreen: false\n\t\t}\n\n\t}",
+			"type": "Object",
+			"hash": "d3317357",
+			"value": {}
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(states) {\n\n\t\tthis.settings = lychee.assignunlink({}, _DEFAULTS, states);\n\t\tthis.defaults = lychee.assignunlink({}, this.settings);\n\n\t\tthis.client   = null;\n\t\tthis.server   = null;\n\n\t\tthis.input    = null;\n\t\tthis.jukebox  = null;\n\t\tthis.loop     = null;\n\t\tthis.renderer = null;\n\t\tthis.stash    = null;\n\t\tthis.storage  = null;\n\t\tthis.viewport = null;\n\n\t\tthis.state    = null;\n\t\tthis.__states = {};\n\n\n\t\t_Emitter.call(this);\n\n\t}",
+			"type": "function",
+			"hash": "b0539152",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "states",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {},
+		"properties": {
+			"settings": {
+				"chunk": "this.settings = lychee.assignunlink({}, _DEFAULTS, states);",
+				"type": "Object",
+				"hash": "d24356d1",
+				"value": {
+					"chunk": "lychee.assignunlink({}, _DEFAULTS, states)",
+					"type": "Object",
+					"hash": "375a7d95",
+					"value": {}
+				}
+			},
+			"defaults": {
+				"chunk": "this.defaults = lychee.assignunlink({}, this.settings);",
+				"type": "Object",
+				"hash": "f51d6e",
+				"value": {
+					"chunk": "lychee.assignunlink({}, this.settings)",
+					"type": "Object",
+					"hash": "cd64dc8f",
+					"value": {}
+				}
+			},
+			"client": {
+				"chunk": "this.client   = null;",
+				"type": "null",
+				"hash": "0e5cf8a7",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"server": {
+				"chunk": "this.server   = null;",
+				"type": "null",
+				"hash": "9f6a29a1",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"input": {
+				"chunk": "this.input    = null;",
+				"type": "null",
+				"hash": "811a0a7e",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"jukebox": {
+				"chunk": "this.jukebox  = null;",
+				"type": "null",
+				"hash": "3bdbfe93",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"loop": {
+				"chunk": "this.loop     = null;",
+				"type": "null",
+				"hash": "21e2473b",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"renderer": {
+				"chunk": "this.renderer = null;",
+				"type": "null",
+				"hash": "41c3e322",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"stash": {
+				"chunk": "this.stash    = null;",
+				"type": "null",
+				"hash": "e54e98dc",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"storage": {
+				"chunk": "this.storage  = null;",
+				"type": "null",
+				"hash": "d639b9c3",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"viewport": {
+				"chunk": "this.viewport = null;",
+				"type": "null",
+				"hash": "9d49084d",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"state": {
+				"chunk": "this.state    = null;",
+				"type": "null",
+				"hash": "d860e7f4",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"__states": {
+				"chunk": "this.__states = {};",
+				"type": "Object",
+				"hash": "457cc8ca",
+				"value": {
+					"chunk": "{}",
+					"type": "Object",
+					"hash": "30f4c306",
+					"value": {}
+				}
+			}
+		},
+		"enums": {},
+		"events": {
+			"load": {
+				"name": "load",
+				"methods": [
+					"init"
+				],
+				"parameters": [
+					{
+						"chunk": "oncomplete",
+						"type": "undefined",
+						"hash": "58b02b15"
+					}
+				]
+			},
+			"init": {
+				"name": "init",
+				"methods": [
+					"init"
+				],
+				"parameters": []
+			}
+		},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {\n\n\t\t\tif (blob.client instanceof Object)   this.client   = lychee.deserialize(blob.client);\n\t\t\tif (blob.server instanceof Object)   this.server   = lychee.deserialize(blob.server);\n\n\t\t\tif (blob.input instanceof Object)    this.input    = lychee.deserialize(blob.input);\n\t\t\tif (blob.jukebox instanceof Object)  this.jukebox  = lychee.deserialize(blob.jukebox);\n\t\t\tif (blob.loop instanceof Object)     this.loop     = lychee.deserialize(blob.loop);\n\t\t\tif (blob.renderer instanceof Object) this.renderer = lychee.deserialize(blob.renderer);\n\t\t\tif (blob.stash instanceof Object)    this.stash    = lychee.deserialize(blob.stash);\n\t\t\tif (blob.storage instanceof Object)  this.storage  = lychee.deserialize(blob.storage);\n\t\t\tif (blob.viewport instanceof Object) this.viewport = lychee.deserialize(blob.viewport);\n\n\n\t\t\tif (blob.states instanceof Object) {\n\n\t\t\t\tfor (let id in blob.states) {\n\n\t\t\t\t\tlet stateblob = blob.states[id];\n\n\t\t\t\t\tfor (let a = 0, al = stateblob.arguments.length; a < al; a++) {\n\t\t\t\t\t\tif (stateblob.arguments[a] === '#MAIN') {\n\t\t\t\t\t\t\tstateblob.arguments[a] = this;\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\n\t\t\t\t\tthis.setState(id, lychee.deserialize(stateblob));\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "b776db13",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "blob",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.app.Main';\n\n\t\t\tlet states = lychee.assignunlink({}, this.settings);\n\t\t\tlet blob   = data['blob'] || {};\n\n\n\t\t\tif (this.client !== null)   blob.client   = lychee.serialize(this.client);\n\t\t\tif (this.server !== null)   blob.server   = lychee.serialize(this.server);\n\n\t\t\tif (this.input !== null)    blob.input    = lychee.serialize(this.input);\n\t\t\tif (this.jukebox !== null)  blob.jukebox  = lychee.serialize(this.jukebox);\n\t\t\tif (this.loop !== null)     blob.loop     = lychee.serialize(this.loop);\n\t\t\tif (this.renderer !== null) blob.renderer = lychee.serialize(this.renderer);\n\t\t\tif (this.stash !== null)    blob.stash    = lychee.serialize(this.stash);\n\t\t\tif (this.storage !== null)  blob.storage  = lychee.serialize(this.storage);\n\t\t\tif (this.viewport !== null) blob.viewport = lychee.serialize(this.viewport);\n\n\n\t\t\tif (Object.keys(this.__states).length > 0) {\n\n\t\t\t\tblob.states = {};\n\n\t\t\t\tfor (let id in this.__states) {\n\t\t\t\t\tblob.states[id] = lychee.serialize(this.__states[id]);\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tdata['arguments'][0] = states;\n\t\t\tdata['blob']         = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "017cfb73",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"init": {
+				"chunk": "function() {\n\n\t\t\tlet flow       = new _Flow();\n\t\t\tlet client_api = this.settings.client;\n\t\t\tlet server_api = this.settings.server;\n\n\n\t\t\tflow.then('load-api');\n\t\t\tflow.then('load');\n\t\t\tflow.then('init');\n\n\n\t\t\tflow.bind('load-api', function(oncomplete) {\n\n\t\t\t\tlet c = typeof client_api === 'string';\n\t\t\t\tlet s = typeof server_api === 'string';\n\n\n\t\t\t\tif (c === true && s === true) {\n\n\t\t\t\t\t_load_api(client_api, function(settings) {\n\n\t\t\t\t\t\tthis.settings.client = Object.assign({}, settings);\n\n\t\t\t\t\t\t_load_api(server_api, function(settings) {\n\t\t\t\t\t\t\tthis.settings.server = Object.assign({}, settings);\n\t\t\t\t\t\t\toncomplete(true);\n\t\t\t\t\t\t}, this);\n\n\t\t\t\t\t}, this);\n\n\t\t\t\t} else if (c === true) {\n\n\t\t\t\t\t_load_api(client_api, function(settings) {\n\t\t\t\t\t\tthis.settings.client = Object.assign({}, settings);\n\t\t\t\t\t\toncomplete(true);\n\t\t\t\t\t}, this);\n\n\t\t\t\t} else if (s === true) {\n\n\t\t\t\t\t_load_api(server_api, function(settings) {\n\t\t\t\t\t\tthis.settings.server = Object.assign({}, settings);\n\t\t\t\t\t\toncomplete(true);\n\t\t\t\t\t}, this);\n\n\t\t\t\t} else {\n\n\t\t\t\t\toncomplete(true);\n\n\t\t\t\t}\n\n\t\t\t}, this);\n\n\t\t\tflow.bind('load', function(oncomplete) {\n\n\t\t\t\tlet result = this.trigger('load', [ oncomplete ]);\n\t\t\t\tif (result === false) {\n\t\t\t\t\toncomplete(true);\n\t\t\t\t}\n\n\t\t\t}, this);\n\n\t\t\tflow.bind('init', function(oncomplete) {\n\n\t\t\t\t_initialize.call(this);\n\t\t\t\toncomplete(true);\n\n\t\t\t}, this);\n\n\t\t\tflow.bind('complete', function() {\n\t\t\t\tthis.trigger('init');\n\t\t\t}, this);\n\n\t\t\tflow.bind('error', function() {\n\t\t\t\t_initialize.call(this);\n\t\t\t}, this);\n\n\t\t\tflow.init();\n\n\n\t\t\treturn true;\n\n\t\t}",
+				"type": "function",
+				"hash": "1b0d481a",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"destroy": {
+				"chunk": "function() {\n\n\t\t\tif (this.client !== null) {\n\t\t\t\tthis.client.disconnect();\n\t\t\t\tthis.client = null;\n\t\t\t}\n\n\t\t\tif (this.server !== null) {\n\t\t\t\tthis.server.disconnect();\n\t\t\t\tthis.server = null;\n\t\t\t}\n\n\t\t\tif (this.input !== null) {\n\t\t\t\tthis.input.destroy();\n\t\t\t\tthis.input = null;\n\t\t\t}\n\n\t\t\tif (this.jukebox !== null) {\n\t\t\t\tthis.jukebox = null;\n\t\t\t}\n\n\t\t\tif (this.loop !== null) {\n\t\t\t\tthis.loop.destroy();\n\t\t\t\tthis.loop = null;\n\t\t\t}\n\n\t\t\tif (this.renderer !== null) {\n\t\t\t\tthis.renderer.destroy();\n\t\t\t\tthis.renderer = null;\n\t\t\t}\n\n\t\t\tif (this.stash !== null) {\n\t\t\t\tthis.stash = null;\n\t\t\t}\n\n\t\t\tif (this.storage !== null) {\n\t\t\t\tthis.storage = null;\n\t\t\t}\n\n\t\t\tif (this.viewport !== null) {\n\t\t\t\tthis.viewport.destroy();\n\t\t\t\tthis.viewport = null;\n\t\t\t}\n\n\n\t\t\treturn true;\n\n\t\t}",
+				"type": "function",
+				"hash": "2ad84c79",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"setState": {
+				"chunk": "function(id, state) {\n\n\t\t\tid    = typeof id === 'string'            ? id    : null;\n\t\t\tstate = lychee.interfaceof(_State, state) ? state : null;\n\n\n\t\t\tif (id !== null && state !== null) {\n\n\t\t\t\tthis.__states[id] = state;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "e82ed486",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'string'            ? id    : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					},
+					{
+						"chunk": "lychee.interfaceof(_State, state) ? state : null",
+						"name": "state",
+						"type": "_State",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"getState": {
+				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null && this.__states[id] !== undefined) {\n\t\t\t\treturn this.__states[id];\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
+				"type": "function",
+				"hash": "105806f1",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'string' ? id : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "this.__states[id]",
+						"type": "undefined",
+						"value": {
+							"reference": "this.__states[id]",
+							"arguments": []
+						}
+					},
+					{
+						"chunk": "null",
+						"type": "null",
+						"value": null
+					}
+				]
+			},
+			"removeState": {
+				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null && this.__states[id] !== undefined) {\n\n\t\t\t\tif (this.state === this.__states[id]) {\n\t\t\t\t\tthis.changeState(null);\n\t\t\t\t}\n\n\t\t\t\tdelete this.__states[id];\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "a8937ca9",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'string' ? id : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"changeState": {
+				"chunk": "function(id, data) {\n\n\t\t\tid   = typeof id === 'string' ? id   : null;\n\t\t\tdata = data !== undefined     ? data : null;\n\n\n\t\t\tlet that     = this;\n\t\t\tlet oldstate = this.state;\n\t\t\tlet newstate = this.__states[id] || null;\n\n\n\t\t\tif (newstate !== null) {\n\n\t\t\t\tif (oldstate !== null) {\n\n\t\t\t\t\toldstate.leave(function(result) {\n\t\t\t\t\t\tnewstate.enter(function(result) {\n\t\t\t\t\t\t\tthat.state = newstate;\n\t\t\t\t\t\t}, data);\n\t\t\t\t\t});\n\n\t\t\t\t} else {\n\n\t\t\t\t\tnewstate.enter(function(result) {\n\t\t\t\t\t\tthat.state = newstate;\n\t\t\t\t\t}, data);\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t} else {\n\n\t\t\t\tif (oldstate !== null) {\n\n\t\t\t\t\toldstate.leave(function(result) {\n\t\t\t\t\t\tthat.state = null;\n\t\t\t\t\t});\n\n\t\t\t\t}\n\n\n\t\t\t\tif (id === null) {\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "1ccbfdd6",
+				"parameters": [
+					{
+						"chunk": "typeof id === 'string' ? id   : null",
+						"name": "id",
+						"type": "String",
+						"value": null
+					},
+					{
+						"chunk": "data !== undefined     ? data : null",
+						"name": "data",
+						"type": "Object",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

@@ -1,0 +1,158 @@
+{
+	"header": {
+		"identifier": "lychee.net.remote.Session",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [
+			"lychee.net.Service"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Service": {
+			"chunk": "lychee.import('lychee.net.Service')",
+			"type": "lychee.Definition",
+			"hash": "1de466ca",
+			"value": {
+				"reference": "lychee.net.Service",
+				"arguments": []
+			}
+		},
+		"_SESSIONS": {
+			"chunk": "{}",
+			"type": "Object",
+			"hash": "30f4c306",
+			"value": {}
+		},
+		"_on_join": {
+			"chunk": "function(data) {\n\n\t\tlet sid = data.sid || null;\n\t\tif (sid !== null) {\n\n\t\t\t// 1. Create Session\n\t\t\tlet session = _SESSIONS[sid] || null;\n\t\t\tif (session === null) {\n\n\t\t\t\tlet autolock  = data.autolock === false      ? false    : true;\n\t\t\t\tlet autoadmin = data.autoadmin === true      ? true     : false;\n\t\t\t\tlet autostart = data.autostart === false     ? false    : true;\n\t\t\t\tlet min       = typeof data.min === 'number' ? data.min : 2;\n\t\t\t\tlet max       = typeof data.max === 'number' ? data.max : 4;\n\n\t\t\t\tsession = _SESSIONS[sid] = {\n\t\t\t\t\tautolock:  autolock,\n\t\t\t\t\tautostart: autostart,\n\t\t\t\t\tsid:       sid,\n\t\t\t\t\tmin:       min,\n\t\t\t\t\tmax:       max,\n\t\t\t\t\tadmin:     autoadmin === true ? this.tunnel : null,\n\t\t\t\t\ttunnels:   [],\n\t\t\t\t\tactive:    false\n\t\t\t\t};\n\n\n\t\t\t\tsession.tunnels.push(this.tunnel);\n\t\t\t\tthis.setMulticast(session.tunnels);\n\n\t\t\t\t_sync_session.call(this, session);\n\n\t\t\t// 2. Join Session\n\t\t\t} else {\n\n\t\t\t\tlet index = session.tunnels.indexOf(this.tunnel);\n\t\t\t\tif (index === -1) {\n\n\t\t\t\t\tif (session.active === false && session.tunnels.length < session.max) {\n\n\t\t\t\t\t\tsession.tunnels.push(this.tunnel);\n\t\t\t\t\t\tthis.setMulticast(session.tunnels);\n\n\t\t\t\t\t\t_sync_session.call(this, session);\n\n\t\t\t\t\t} else if (session.active === true && session.autolock === false && session.tunnels.length < session.max) {\n\n\t\t\t\t\t\tsession.tunnels.push(this.tunnel);\n\t\t\t\t\t\tthis.setMulticast(session.tunnels);\n\n\t\t\t\t\t\t_sync_session.call(this, session);\n\n\t\t\t\t\t} else if (session.active === true) {\n\n\t\t\t\t\t\tthis.reject('Session is active', {\n\t\t\t\t\t\t\tsid: sid,\n\t\t\t\t\t\t\tmin: session.min,\n\t\t\t\t\t\t\tmax: session.max\n\t\t\t\t\t\t});\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tthis.reject('Session is full', {\n\t\t\t\t\t\t\tsid: sid,\n\t\t\t\t\t\t\tmin: session.min,\n\t\t\t\t\t\t\tmax: session.max\n\t\t\t\t\t\t});\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "ee0e0731",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_on_leave": {
+			"chunk": "function(data) {\n\n\t\tlet sid = data.sid || null;\n\t\tif (sid !== null) {\n\n\t\t\t// 1. Leave Session\n\t\t\tlet session = _SESSIONS[sid] || null;\n\t\t\tif (session !== null) {\n\n\t\t\t\tlet index = session.tunnels.indexOf(this.tunnel);\n\t\t\t\tif (index !== -1) {\n\n\t\t\t\t\tsession.tunnels.splice(index, 1);\n\n\t\t\t\t\tthis.setMulticast([]);\n\n\t\t\t\t}\n\n\n\t\t\t\tif (session.tunnels.length === 0) {\n\n\t\t\t\t\tdelete _SESSIONS[sid];\n\n\t\t\t\t} else {\n\n\t\t\t\t\t_sync_session.call(this, session);\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "7dff69a9",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_on_start": {
+			"chunk": "function(data) {\n\n\t\tlet sid = data.sid || null;\n\t\tif (sid !== null) {\n\n\t\t\tlet session = _SESSIONS[sid] || null;\n\t\t\tif (session !== null) {\n\n\t\t\t\tif (session.admin === null || session.admin === this.tunnel) {\n\n\t\t\t\t\tif (session.active === false) {\n\n\t\t\t\t\t\tsession.autostart = true;\n\n\t\t\t\t\t\t_sync_session.call(this, session);\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "3b1526c2",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_on_stop": {
+			"chunk": "function(data) {\n\n\t\tlet sid = data.sid || null;\n\t\tif (sid !== null) {\n\n\t\t\tlet session = _SESSIONS[sid] || null;\n\t\t\tif (session !== null) {\n\n\t\t\t\tif (session.active === true) {\n\t\t\t\t\t_sync_session.call(this, session);\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "32511ce0",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_sync_session": {
+			"chunk": "function(session) {\n\n\t\tlet sid = session.sid;\n\t\tif (sid !== null) {\n\n\t\t\tlet min = session.min;\n\t\t\tlet max = session.max;\n\n\t\t\tlet tunnels = [];\n\t\t\tfor (let t = 0, tl = session.tunnels.length; t < tl; t++) {\n\t\t\t\ttunnels.push(session.tunnels[t].host + ':' + session.tunnels[t].port);\n\t\t\t}\n\n\n\t\t\tlet data = {\n\t\t\t\tadmin:   false,\n\t\t\t\ttype:    'update',\n\t\t\t\tsid:     sid,\n\t\t\t\tmin:     min,\n\t\t\t\tmax:     max,\n\t\t\t\ttid:     'localhost:1337',\n\t\t\t\ttunnels: tunnels\n\t\t\t};\n\n\n\t\t\t// 1. Inactive Session\n\t\t\tif (session.active === false) {\n\n\t\t\t\t// 1.1 Session Start\n\t\t\t\tif (session.autostart === true && tunnels.length >= session.min) {\n\n\t\t\t\t\tdata.type      = 'start';\n\t\t\t\t\tsession.active = true;\n\n\t\t\t\t\tif (lychee.debug === true) {\n\t\t\t\t\t\tconsole.log('lychee.net.remote.Session: Starting session \"' + sid + '\"');\n\t\t\t\t\t}\n\n\n\t\t\t\t// 1.2 Session Update\n\t\t\t\t} else {\n\n\t\t\t\t\tdata.type = 'update';\n\n\t\t\t\t\tif (lychee.debug === true) {\n\t\t\t\t\t\tconsole.log('lychee.net.remote.Session: Updating session \"' + sid + '\" (' + session.tunnels.length + ' of ' + session.max + ' tunnels)');\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t// 2. Active Session\n\t\t\t} else {\n\n\t\t\t\t// 2.1 Session Stop\n\t\t\t\tif (tunnels.length < session.min) {\n\n\t\t\t\t\tdata.type      = 'stop';\n\t\t\t\t\tsession.active = false;\n\n\t\t\t\t\tif (lychee.debug === true) {\n\t\t\t\t\t\tconsole.log('lychee.net.remote.Session: Stopping session \"' + sid + '\"');\n\t\t\t\t\t}\n\n\n\t\t\t\t// 2.2 Session Update\n\t\t\t\t} else {\n\n\t\t\t\t\tdata.type = 'update';\n\n\t\t\t\t\tif (lychee.debug === true) {\n\t\t\t\t\t\tconsole.log('lychee.net.remote.Session: Updating session \"' + sid + '\" (' + session.tunnels.length + ' of ' + session.max + ' tunnels)');\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tfor (let st = 0, stl = session.tunnels.length; st < stl; st++) {\n\n\t\t\t\tlet tunnel = session.tunnels[st];\n\t\t\t\tif (tunnel !== null) {\n\n\t\t\t\t\tif (session.admin !== null) {\n\t\t\t\t\t\tdata.admin = session.admin === tunnel;\n\t\t\t\t\t} else {\n\t\t\t\t\t\tdata.admin = true;\n\t\t\t\t\t}\n\n\t\t\t\t\tdata.tid = tunnel.host + ':' + tunnel.port;\n\n\n\t\t\t\t\ttunnel.send(data, {\n\t\t\t\t\t\tid:    this.id,\n\t\t\t\t\t\tevent: 'sync'\n\t\t\t\t\t});\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "b39499d6",
+			"parameters": [
+				{
+					"chunk": "true",
+					"name": "session",
+					"type": "Boolean",
+					"value": true
+				}
+			],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(id, remote, data) {\n\n\t\tid = typeof id === 'string' ? id : 'session';\n\n\n\t\t_Service.call(this, id, remote, _Service.TYPE.remote);\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tthis.bind('join',  _on_join,  this);\n\t\tthis.bind('leave', _on_leave, this);\n\t\tthis.bind('start', _on_start, this);\n\t\tthis.bind('stop',  _on_stop,  this);\n\n\n\t\tthis.bind('unplug', function() {\n\n\t\t\tfor (let sid in _SESSIONS) {\n\n\t\t\t\tlet session = _SESSIONS[sid];\n\t\t\t\tlet index   = session.tunnels.indexOf(this.tunnel);\n\t\t\t\tif (index !== -1) {\n\t\t\t\t\t_on_leave.call(this, session);\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}, this);\n\n\t}",
+			"type": "function",
+			"hash": "c64a070e",
+			"parameters": [
+				{
+					"chunk": "typeof id === 'string' ? id : 'session'",
+					"name": "id",
+					"type": "String",
+					"value": "session"
+				},
+				{
+					"chunk": null,
+					"name": "remote",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "undefined"
+				}
+			]
+		},
+		"states": {},
+		"properties": {},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Service.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.net.remote.Session';\n\t\t\tdata['arguments']   = [ this.id, null, null ];\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "e5dc5f72",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			}
+		}
+	}
+}

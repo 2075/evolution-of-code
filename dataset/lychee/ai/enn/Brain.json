@@ -1,0 +1,359 @@
+{
+	"header": {
+		"identifier": "lychee.ai.enn.Brain",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_random": {
+			"chunk": "function() {\n\t\treturn (Math.random() * 2) - 1;\n\t}",
+			"type": "function",
+			"hash": "adacb574",
+			"parameters": [],
+			"values": [
+				{
+					"chunk": "(Math.random() * 2) - 1",
+					"type": "Number",
+					"value": 1337
+				}
+			]
+		},
+		"_sigmoid": {
+			"chunk": "function(value) {\n\t\treturn (1 / (1 + Math.exp((-1 * value) / 1)));\n\t}",
+			"type": "function",
+			"hash": "6482ea77",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "value",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "(1 / (1 + Math.exp((-1 * value) / 1)))",
+					"type": "Number",
+					"value": 1337
+				}
+			]
+		},
+		"_init_network": {
+			"chunk": "function() {\n\n\t\tlet input_size = this.__sensors_map.reduce(function(a, b) {\n\t\t\treturn a + b;\n\t\t}, 0);\n\n\t\tlet output_size = this.__controls_map.reduce(function(a, b) {\n\t\t\treturn a + b;\n\t\t}, 0);\n\n\n\t\tif (input_size === 0 || output_size === 0) {\n\t\t\treturn;\n\t\t}\n\n\n\t\tlet layers_size = 3;\n\t\tlet hidden_size = 1;\n\t\tlet weight_size = 0;\n\n\t\tif (input_size > output_size) {\n\t\t\thidden_size = input_size;\n\t\t\tlayers_size = Math.max(input_size - output_size, 3);\n\t\t} else {\n\t\t\thidden_size = output_size;\n\t\t\tlayers_size = Math.max(output_size - input_size, 3);\n\t\t}\n\n\n\t\tfor (let l = 0; l < layers_size; l++) {\n\n\t\t\tlet prev = hidden_size;\n\t\t\tlet size = hidden_size;\n\n\t\t\tif (l === 0) {\n\t\t\t\tprev = 0;\n\t\t\t\tsize = input_size;\n\t\t\t} else if (l === 1) {\n\t\t\t\tprev = input_size;\n\t\t\t\tsize = hidden_size;\n\t\t\t} else if (l === layers_size - 1) {\n\t\t\t\tprev = hidden_size;\n\t\t\t\tsize = output_size;\n\t\t\t}\n\n\n\t\t\tlet layer = new Array(size);\n\n\t\t\tfor (let n = 0, nl = layer.length; n < nl; n++) {\n\n\t\t\t\tlet neuron = {\n\t\t\t\t\tvalue:   _random(),\n\t\t\t\t\tweights: []\n\t\t\t\t};\n\n\t\t\t\tfor (let p = 0; p < prev; p++) {\n\t\t\t\t\tneuron.weights.push(_random());\n\t\t\t\t}\n\n\t\t\t\tlayer[n] = neuron;\n\n\t\t\t}\n\n\t\t\tthis.__layers[l]  = layer;\n\t\t\tweight_size      += layer.length;\n\n\t\t}\n\n\n\t\tthis.__size.input  = input_size;\n\t\tthis.__size.hidden = hidden_size;\n\t\tthis.__size.output = output_size;\n\t\tthis.__size.weight = weight_size;\n\n\t\tthis._inputs  = null;\n\t\tthis._outputs = null;\n\n\t\tthis._inputs  = new Array(input_size);\n\t\tthis._outputs = new Array(output_size);\n\n\t}",
+			"type": "function",
+			"hash": "c171c49e",
+			"parameters": [],
+			"values": []
+		},
+		"_update_network": {
+			"chunk": "function(inputs, outputs) {\n\n\t\tlet layers = this.__layers;\n\n\n\t\t// Update Input Layer\n\t\tlet input_layer = layers[0];\n\n\t\tfor (let il = 0, ill = input_layer.length; il < ill; il++) {\n\t\t\tinput_layer[il].value = inputs[il];\n\t\t}\n\n\n\t\t// Update Hidden Layers\n\t\tlet prev_layer = layers[0];\n\n\t\tfor (let l = 1, ll = layers.length; l < ll; l++) {\n\n\t\t\tlet current_layer = layers[l];\n\n\t\t\tfor (let n = 0, nl = current_layer.length; n < nl; n++) {\n\n\t\t\t\tlet neuron = current_layer[n];\n\t\t\t\tlet value  = 0;\n\n\t\t\t\tfor (let p = 0, pl = prev_layer.length; p < pl; p++) {\n\t\t\t\t\tvalue += prev_layer[p].value * neuron.weights[p];\n\t\t\t\t}\n\n\t\t\t\tvalue        += neuron.bias;\n\t\t\t\tneuron.value  = _sigmoid(value);\n\n\t\t\t}\n\n\t\t\tprev_layer = current_layer;\n\n\t\t}\n\n\n\t\t// Update Output Layer\n\t\tlet output_layer = layers[layers.length - 1];\n\n\t\tfor (let o = 0, ol = output_layer.length; o < ol; o++) {\n\t\t\toutputs[o] = output_layer[o].value;\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "62890b52",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "inputs",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "outputs",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.controls = [];\n\t\tthis.sensors  = [];\n\n\t\tthis.__controls_map = [];\n\t\tthis.__layers       = [];\n\t\tthis.__sensors_map  = [];\n\n\t\t// cache structures\n\t\tthis._inputs  = [];\n\t\tthis._outputs = [];\n\t\tthis.__size   = {\n\t\t\tinput:  0,\n\t\t\thidden: 0,\n\t\t\toutput: 0,\n\t\t\tweight: 0\n\t\t};\n\n\n\t\tthis.setSensors(states.sensors);\n\t\tthis.setControls(states.controls);\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "59461820",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"sensors": "setSensors",
+			"controls": "setControls"
+		},
+		"properties": {
+			"controls": {
+				"chunk": "this.controls = [];",
+				"type": "Array",
+				"hash": "a1bcd35e",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"sensors": {
+				"chunk": "this.sensors  = [];",
+				"type": "Array",
+				"hash": "ec27897f",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"__controls_map": {
+				"chunk": "this.__controls_map = [];",
+				"type": "Array",
+				"hash": "dd6fb927",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"__layers": {
+				"chunk": "this.__layers       = [];",
+				"type": "Array",
+				"hash": "71d289d7",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"__sensors_map": {
+				"chunk": "this.__sensors_map  = [];",
+				"type": "Array",
+				"hash": "f499803a",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"_inputs": {
+				"chunk": "this._inputs  = [];",
+				"type": "Array",
+				"hash": "4594b432",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"_outputs": {
+				"chunk": "this._outputs = [];",
+				"type": "Array",
+				"hash": "23989997",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"__size": {
+				"chunk": "this.__size   = {\n\t\t\tinput:  0,\n\t\t\thidden: 0,\n\t\t\toutput: 0,\n\t\t\tweight: 0\n\t\t};",
+				"type": "Object",
+				"hash": "c817bdc9",
+				"value": {
+					"chunk": "{\n\t\t\tinput:  0,\n\t\t\thidden: 0,\n\t\t\toutput: 0,\n\t\t\tweight: 0\n\t\t}",
+					"type": "Object",
+					"hash": "c5168f8d",
+					"value": {
+						"input": 0,
+						"hidden": 0,
+						"output": 0,
+						"weight": 0
+					}
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {\n\n\t\t\tif (blob.layers instanceof Array) {\n\t\t\t\tthis.__layers = lychee.deserialize(blob.layers);\n\t\t\t}\n\n\t\t\tif (blob.size instanceof Object) {\n\t\t\t\tthis.__size = lychee.deserialize(blob.size);\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "3ba71f9b",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "blob",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet states = {};\n\t\t\tlet blob   = {};\n\n\n\t\t\tif (this.controls.length > 0) states.controls = lychee.serialize(this.controls);\n\t\t\tif (this.sensors.length > 0)  states.sensors  = lychee.serialize(this.sensors);\n\n\n\t\t\tif (this.__layers.length > 0) {\n\t\t\t\tblob.layers = lychee.serialize(this.__layers);\n\t\t\t}\n\n\t\t\tif (this.__size.input !== 0 || this.__size.output !== 0) {\n\t\t\t\tblob.size = lychee.serialize(this.__size);\n\t\t\t}\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.ai.enn.Brain',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "4600b66c",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.ai.enn.Brain',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"update": {
+				"chunk": "function(clock, delta) {\n\n\t\t\tlet controls     = this.controls;\n\t\t\tlet controls_map = this.__controls_map;\n\t\t\tlet sensors      = this.sensors;\n\t\t\tlet inputs       = this._inputs;\n\t\t\tlet outputs      = this._outputs;\n\n\n\t\t\t// 1. Transform Policies to Inputs\n\t\t\tfor (let i = 0, s = 0, sl = sensors.length; s < sl; s++) {\n\n\t\t\t\tlet sensor = sensors[s];\n\t\t\t\tlet values = sensor.sensor();\n\n\t\t\t\tfor (let v = 0, vl = values.length; v < vl; v++) {\n\t\t\t\t\tinputs[i++] = values[v];\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\t// 2. Update Network\n\t\t\t_update_network.call(this, inputs, outputs);\n\n\n\t\t\t// 3. Transform Outputs to Policies\n\t\t\tlet offset = 0;\n\n\t\t\tfor (let c = 0, cl = controls_map.length; c < cl; c++) {\n\n\t\t\t\tlet control = controls[c];\n\t\t\t\tlet length  = controls_map[c];\n\t\t\t\tlet values  = outputs.slice(offset, length);\n\n\t\t\t\tif (values.length > 0) {\n\t\t\t\t\tcontrol.control(values);\n\t\t\t\t}\n\n\t\t\t\toffset += length;\n\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "e6ff1b00",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "clock",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "delta",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"learn": {
+				"chunk": "function(inputs, outputs) {\n\n\t\t\tinputs  = inputs instanceof Array  ? inputs  : null;\n\t\t\toutputs = outputs instanceof Array ? outputs : null;\n\n\n\t\t\tif (inputs !== null && outputs !== null) {\n\n\t\t\t\t// XXX: Feed Forward NN cannot learn\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "c48a69b8",
+				"parameters": [
+					{
+						"chunk": "inputs instanceof Array  ? inputs  : null",
+						"name": "inputs",
+						"type": "Array",
+						"value": null
+					},
+					{
+						"chunk": "outputs instanceof Array ? outputs : null",
+						"name": "outputs",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setControls": {
+				"chunk": "function(controls) {\n\n\t\t\tcontrols = controls instanceof Array ? controls : null;\n\n\n\t\t\tif (controls !== null) {\n\n\t\t\t\tthis.controls = controls;\n\n\t\t\t\tthis.__controls_map = controls.map(function(control) {\n\t\t\t\t\treturn (control.sensor() || [ 1 ]).length;\n\t\t\t\t});\n\n\n\t\t\t\tlet size = this.__controls_map.reduce(function(a, b) {\n\t\t\t\t\treturn a + b;\n\t\t\t\t}, 0);\n\n\t\t\t\tif (size !== this.__size.output) {\n\t\t\t\t\t_init_network.call(this);\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "ee50795d",
+				"parameters": [
+					{
+						"chunk": "controls instanceof Array ? controls : null",
+						"name": "controls",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setSensors": {
+				"chunk": "function(sensors) {\n\n\t\t\tsensors = sensors instanceof Array ? sensors : null;\n\n\n\t\t\tif (sensors !== null) {\n\n\t\t\t\tthis.sensors = sensors;\n\n\t\t\t\tthis.__sensors_map = sensors.map(function(sensor) {\n\t\t\t\t\treturn (sensor.sensor() || [ 1 ]).length;\n\t\t\t\t});\n\n\n\t\t\t\tlet size = this.__sensors_map.reduce(function(a, b) {\n\t\t\t\t\treturn a + b;\n\t\t\t\t}, 0);\n\n\t\t\t\tif (size !== this.__size.input) {\n\t\t\t\t\t_init_network.call(this);\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "8e8025c6",
+				"parameters": [
+					{
+						"chunk": "sensors instanceof Array ? sensors : null",
+						"name": "sensors",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"getWeights": {
+				"chunk": "function() {\n\n\t\t\tlet layers  = this.__layers;\n\t\t\tlet weights = [];\n\n\n\t\t\tfor (let l = 0, ll = layers.length; l < ll; l++) {\n\n\t\t\t\tlet layer = layers[l];\n\n\t\t\t\tfor (let n = 0, nl = layer.length; n < nl; n++) {\n\n\t\t\t\t\tlet neuron = layer[n];\n\t\t\t\t\tif (neuron.weights.length !== 0) {\n\n\t\t\t\t\t\tfor (let w = 0, wl = neuron.weights.length; w < wl; w++) {\n\t\t\t\t\t\t\tweights.push(neuron.weights[w]);\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tthis.__size.weight = weights.length;\n\n\n\t\t\treturn weights;\n\n\t\t}",
+				"type": "function",
+				"hash": "6517aa",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "[]",
+						"type": "Array",
+						"value": []
+					}
+				]
+			},
+			"setWeights": {
+				"chunk": "function(weights) {\n\n\t\t\tweights = weights instanceof Array ? weights : null;\n\n\n\t\t\tif (weights !== null) {\n\n\t\t\t\tlet size = this.__size.weight;\n\t\t\t\tif (size === weights.length) {\n\n\t\t\t\t\tlet count  = 0;\n\t\t\t\t\tlet layers = this.__layers;\n\n\t\t\t\t\tfor (let l = 0, ll = layers.length; l < ll; l++) {\n\n\t\t\t\t\t\tlet layer = layers[l];\n\n\t\t\t\t\t\tfor (let n = 0, nl = layer.length; n < nl; n++) {\n\n\t\t\t\t\t\t\tlet neuron = layer[n];\n\t\t\t\t\t\t\tif (neuron.weights.length !== 0) {\n\n\t\t\t\t\t\t\t\tfor (let w = 0, wl = neuron.weights.length; w < wl; w++) {\n\t\t\t\t\t\t\t\t\tneuron.weights[w] = weights[count++];\n\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "0c45a651",
+				"parameters": [
+					{
+						"chunk": "weights instanceof Array ? weights : null",
+						"name": "weights",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

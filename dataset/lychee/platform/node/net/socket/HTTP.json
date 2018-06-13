@@ -1,0 +1,254 @@
+{
+	"header": {
+		"identifier": "lychee.net.socket.HTTP",
+		"attaches": {},
+		"tags": {
+			"platform": "node"
+		},
+		"requires": [
+			"lychee.net.protocol.HTTP"
+		],
+		"includes": [
+			"lychee.event.Emitter"
+		],
+		"supports": {
+			"body": "function(lychee, global) {\n\n\tif (typeof global.require === 'function') {\n\n\t\ttry {\n\n\t\t\tglobal.require('net');\n\n\t\t\treturn true;\n\n\t\t} catch (err) {\n\t\t}\n\n\t}\n\n\n\treturn false;\n\n}",
+			"hash": "761eab73",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "lychee",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "global",
+					"type": "undefined"
+				}
+			]
+		},
+		"type": "Composite"
+	},
+	"memory": {
+		"_net": {
+			"chunk": "{}",
+			"type": "Object",
+			"hash": "783b64e5",
+			"value": {}
+		},
+		"_Emitter": {
+			"chunk": "lychee.import('lychee.event.Emitter')",
+			"type": "lychee.Definition",
+			"hash": "b60271ea",
+			"value": {
+				"reference": "lychee.event.Emitter",
+				"arguments": []
+			}
+		},
+		"_Protocol": {
+			"chunk": "lychee.import('lychee.net.protocol.HTTP')",
+			"type": "lychee.Definition",
+			"hash": "6a5596ae",
+			"value": {
+				"reference": "lychee.net.protocol.HTTP",
+				"arguments": []
+			}
+		},
+		"_connect_socket": {
+			"chunk": "function(socket, protocol) {\n\n\t\tlet that = this;\n\t\tif (that.__connection !== socket) {\n\n\t\t\tsocket.on('data', function(blob) {\n\n\t\t\t\tlet chunks = protocol.receive(blob);\n\t\t\t\tif (chunks.length > 0) {\n\n\t\t\t\t\tfor (let c = 0, cl = chunks.length; c < cl; c++) {\n\t\t\t\t\t\tthat.trigger('receive', [ chunks[c].payload, chunks[c].headers ]);\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t});\n\n\t\t\tsocket.on('error', function(err) {\n\t\t\t\tthat.trigger('error');\n\t\t\t\tthat.disconnect();\n\t\t\t});\n\n\t\t\tsocket.on('timeout', function() {\n\t\t\t\tthat.trigger('error');\n\t\t\t\tthat.disconnect();\n\t\t\t});\n\n\t\t\tsocket.on('close', function() {\n\t\t\t\tthat.disconnect();\n\t\t\t});\n\n\t\t\tsocket.on('end', function() {\n\t\t\t\tthat.disconnect();\n\t\t\t});\n\n\n\t\t\tthat.__connection = socket;\n\t\t\tthat.__protocol   = protocol;\n\n\t\t\tthat.trigger('connect');\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "9ebced86",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "socket",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "protocol",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_disconnect_socket": {
+			"chunk": "function(socket, protocol) {\n\n\t\tlet that = this;\n\t\tif (that.__connection === socket) {\n\n\t\t\tsocket.removeAllListeners('data');\n\t\t\tsocket.removeAllListeners('error');\n\t\t\tsocket.removeAllListeners('timeout');\n\t\t\tsocket.removeAllListeners('close');\n\t\t\tsocket.removeAllListeners('end');\n\n\t\t\tsocket.destroy();\n\t\t\tprotocol.close();\n\n\n\t\t\tthat.__connection = null;\n\t\t\tthat.__protocol   = null;\n\n\t\t\tthat.trigger('disconnect');\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "9c784b90",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "socket",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "protocol",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function() {\n\n\t\tthis.__connection = null;\n\t\tthis.__protocol   = null;\n\n\n\t\t_Emitter.call(this);\n\n\t}",
+			"type": "function",
+			"hash": "bb238e6f",
+			"parameters": []
+		},
+		"states": {},
+		"properties": {
+			"__connection": {
+				"chunk": "this.__connection = null;",
+				"type": "null",
+				"hash": "0a8f44f8",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"__protocol": {
+				"chunk": "this.__protocol   = null;",
+				"type": "null",
+				"hash": "aaf976d2",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.net.socket.HTTP';\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "9391ec9b",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"connect": {
+				"chunk": "function(host, port, connection) {\n\n\t\t\thost       = typeof host === 'string'       ? host       : null;\n\t\t\tport       = typeof port === 'number'       ? (port | 0) : null;\n\t\t\tconnection = typeof connection === 'object' ? connection : null;\n\n\n\t\t\tlet that     = this;\n\t\t\tlet protocol = null;\n\n\n\t\t\tif (host !== null && port !== null) {\n\n\t\t\t\tif (connection !== null) {\n\n\t\t\t\t\tprotocol = new _Protocol({\n\t\t\t\t\t\ttype: _Protocol.TYPE.remote\n\t\t\t\t\t});\n\n\t\t\t\t\tconnection.allowHalfOpen = true;\n\t\t\t\t\tconnection.setTimeout(0);\n\t\t\t\t\tconnection.setNoDelay(true);\n\t\t\t\t\tconnection.setKeepAlive(true, 0);\n\t\t\t\t\tconnection.removeAllListeners('timeout');\n\n\n\t\t\t\t\t_connect_socket.call(that, connection, protocol);\n\n\t\t\t\t\tconnection.resume();\n\n\t\t\t\t} else {\n\n\t\t\t\t\tprotocol   = new _Protocol({\n\t\t\t\t\t\ttype: _Protocol.TYPE.client\n\t\t\t\t\t});\n\t\t\t\t\tconnection = new _net.Socket({\n\t\t\t\t\t\treadable: true,\n\t\t\t\t\t\twritable: true\n\t\t\t\t\t});\n\n\t\t\t\t\tconnection.allowHalfOpen = true;\n\t\t\t\t\tconnection.setTimeout(0);\n\t\t\t\t\tconnection.setNoDelay(true);\n\t\t\t\t\tconnection.setKeepAlive(true, 0);\n\t\t\t\t\tconnection.removeAllListeners('timeout');\n\n\n\t\t\t\t\t_connect_socket.call(that, connection, protocol);\n\n\t\t\t\t\tconnection.connect({\n\t\t\t\t\t\thost: host,\n\t\t\t\t\t\tport: port\n\t\t\t\t\t});\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "ffce15d7",
+				"parameters": [
+					{
+						"chunk": "typeof host === 'string'       ? host       : null",
+						"name": "host",
+						"type": "String",
+						"value": null
+					},
+					{
+						"chunk": "typeof port === 'number'       ? (port | 0) : null",
+						"name": "port",
+						"type": "Number",
+						"value": null
+					},
+					{
+						"chunk": "typeof connection === 'object' ? connection : null",
+						"name": "connection",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"send": {
+				"chunk": "function(payload, headers, binary) {\n\n\t\t\tpayload = payload instanceof Buffer ? payload : null;\n\t\t\theaders = headers instanceof Object ? headers : null;\n\t\t\tbinary  = binary === true;\n\n\n\t\t\tif (payload !== null) {\n\n\t\t\t\tlet connection = this.__connection;\n\t\t\t\tlet protocol   = this.__protocol;\n\n\t\t\t\tif (connection !== null && protocol !== null) {\n\n\t\t\t\t\tlet chunk = protocol.send(payload, headers, binary);\n\t\t\t\t\tlet enc   = binary === true ? 'binary' : 'utf8';\n\n\t\t\t\t\tif (chunk !== null) {\n\n\t\t\t\t\t\tconnection.write(chunk, enc);\n\n\t\t\t\t\t\treturn true;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "ff607b9c",
+				"parameters": [
+					{
+						"chunk": "payload instanceof Buffer ? payload : null",
+						"name": "payload",
+						"type": "Buffer",
+						"value": null
+					},
+					{
+						"chunk": "headers instanceof Object ? headers : null",
+						"name": "headers",
+						"type": "Object",
+						"value": null
+					},
+					{
+						"chunk": "binary === true",
+						"name": "binary",
+						"type": "Boolean",
+						"value": true
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"disconnect": {
+				"chunk": "function() {\n\n\t\t\tlet connection = this.__connection;\n\t\t\tlet protocol   = this.__protocol;\n\n\t\t\tif (connection !== null && protocol !== null) {\n\n\t\t\t\t_disconnect_socket.call(this, connection, protocol);\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "64538337",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

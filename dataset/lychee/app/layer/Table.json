@@ -1,0 +1,395 @@
+{
+	"header": {
+		"identifier": "lychee.app.layer.Table",
+		"attaches": {},
+		"tags": {},
+		"requires": [
+			"lychee.effect.Alpha",
+			"lychee.app.Entity",
+			"lychee.app.entity.Label"
+		],
+		"includes": [
+			"lychee.app.Layer"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Alpha": {
+			"chunk": "lychee.import('lychee.effect.Alpha')",
+			"type": "lychee.Definition",
+			"hash": "bece9a80",
+			"value": {
+				"reference": "lychee.effect.Alpha",
+				"arguments": []
+			}
+		},
+		"_Entity": {
+			"chunk": "lychee.import('lychee.app.Entity')",
+			"type": "lychee.Definition",
+			"hash": "fb88a2da",
+			"value": {
+				"reference": "lychee.app.Entity",
+				"arguments": []
+			}
+		},
+		"_Label": {
+			"chunk": "lychee.import('lychee.app.entity.Label')",
+			"type": "lychee.Definition",
+			"hash": "49596b0c",
+			"value": {
+				"reference": "lychee.app.entity.Label",
+				"arguments": []
+			}
+		},
+		"_Layer": {
+			"chunk": "lychee.import('lychee.app.Layer')",
+			"type": "lychee.Definition",
+			"hash": "6f9d1207",
+			"value": {
+				"reference": "lychee.app.Layer",
+				"arguments": []
+			}
+		},
+		"_FONT": {
+			"chunk": "attachments[\"fnt\"]",
+			"type": "Font",
+			"hash": "3076ee3c",
+			"value": {
+				"constructor": "Font",
+				"arguments": []
+			}
+		},
+		"_on_change": {
+			"chunk": "function(entity) {\n\n\t\tlet index = this.entities.indexOf(entity);\n\t\tif (index !== -1) {\n\n\t\t\tlet label  = Object.keys(this.model);\n\t\t\tlet object = {};\n\n\t\t\tfor (let e = Math.floor(index / label.length) * label.length, el = e + label.length; e < el; e++) {\n\n\t\t\t\tlet property = label[e % label.length];\n\t\t\t\tlet value    = this.entities[e].value;\n\n\t\t\t\tobject[property] = value;\n\n\t\t\t}\n\n\n\t\t\tif (Object.keys(object).length > 0) {\n\t\t\t\tthis.trigger('change', [ entity, object ]);\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "2b03f766",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "entity",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		},
+		"_on_relayout": {
+			"chunk": "function() {\n\n\t\tlet entities = this.entities;\n\t\tlet label    = this.__label;\n\t\tlet type     = this.type;\n\t\tlet value    = this.value;\n\t\tlet x1       = -1 / 2 * this.width;\n\t\tlet y1       = -1 / 2 * this.height;\n\t\tlet dim_x    = 0;\n\t\tlet dim_y    = 0;\n\t\tlet off_x    = 0;\n\t\tlet off_y    = 0;\n\n\n\t\tif (type === Composite.TYPE.horizontal) {\n\n\t\t\toff_x = 0;\n\t\t\toff_y = 64;\n\t\t\tdim_x = this.width / label.length;\n\t\t\tdim_y = 0;\n\n\n\t\t\tfor (let v = 0, vl = value.length; v < vl; v++) {\n\n\t\t\t\tdim_y = 0;\n\n\t\t\t\tfor (let l = 0, ll = label.length; l < ll; l++) {\n\t\t\t\t\tdim_y = Math.max(dim_y, entities[v * ll + l].height + 32);\n\t\t\t\t}\n\n\n\t\t\t\tfor (let l = 0, ll = label.length; l < ll; l++) {\n\n\t\t\t\t\tlet entity = entities[v * ll + l];\n\n\n\t\t\t\t\tentity.alpha = 0.0;\n\t\t\t\t\tentity.addEffect(new lychee.effect.Alpha({\n\t\t\t\t\t\ttype:     lychee.effect.Alpha.TYPE.easeout,\n\t\t\t\t\t\tduration: 300\n\t\t\t\t\t}));\n\n\t\t\t\t\tentity.position.x = x1 + off_x + dim_x / 2;\n\t\t\t\t\tentity.position.y = y1 + off_y + dim_y / 2;\n\n\n\t\t\t\t\toff_x += dim_x;\n\n\t\t\t\t}\n\n\n\t\t\t\toff_x  = 0;\n\t\t\t\toff_y += dim_y;\n\n\t\t\t}\n\n\t\t} else if (type === Composite.TYPE.vertical) {\n\n\t\t\toff_x = 128;\n\t\t\toff_y = 0;\n\t\t\tdim_x = (this.width - 128) / value.length;\n\t\t\tdim_y = 0;\n\n\n\t\t\tfor (let l = 0, ll = label.length; l < ll; l++) {\n\n\t\t\t\tdim_y = 0;\n\n\t\t\t\tfor (let v = 0, vl = value.length; v < vl; v++) {\n\t\t\t\t\tdim_y = Math.max(dim_y, entities[v * ll + l].height + 32);\n\t\t\t\t}\n\n\n\t\t\t\tfor (let v = 0, vl = value.length; v < vl; v++) {\n\n\t\t\t\t\tlet entity = entities[v * ll + l];\n\n\n\t\t\t\t\tentity.alpha = 0.0;\n\t\t\t\t\tentity.addEffect(new lychee.effect.Alpha({\n\t\t\t\t\t\ttype:     lychee.effect.Alpha.TYPE.easeout,\n\t\t\t\t\t\tduration: 300\n\t\t\t\t\t}));\n\n\t\t\t\t\tentity.position.x = x1 + off_x + dim_x / 2;\n\t\t\t\t\tentity.position.y = y1 + off_y + dim_y / 2;\n\n\n\t\t\t\t\toff_x += dim_x;\n\n\t\t\t\t}\n\n\n\t\t\t\toff_x  = 128;\n\t\t\t\toff_y += dim_y;\n\n\t\t\t}\n\n\t\t}\n\n\t}",
+			"type": "function",
+			"hash": "e53e0b5c",
+			"parameters": [],
+			"values": []
+		},
+		"_render_buffer": {
+			"chunk": "function(renderer) {\n\n\t\tif (this.__buffer !== null) {\n\t\t\tthis.__buffer.resize(this.width, this.height);\n\t\t} else {\n\t\t\tthis.__buffer = renderer.createBuffer(this.width, this.height);\n\t\t}\n\n\n\t\trenderer.clear(this.__buffer);\n\t\trenderer.setBuffer(this.__buffer);\n\t\trenderer.setAlpha(1.0);\n\n\n\t\tlet entities = this.entities;\n\t\tlet offset   = this.offset;\n\t\tlet el       = entities.length;\n\t\tif (el > 0) {\n\n\t\t\tlet ox = this.width  / 2 + offset.x;\n\t\t\tlet oy = this.height / 2 + offset.y;\n\n\t\t\tfor (let e = 0; e < el; e++) {\n\n\t\t\t\tentities[e].render(\n\t\t\t\t\trenderer,\n\t\t\t\t\tox,\n\t\t\t\t\toy\n\t\t\t\t);\n\n\t\t\t}\n\n\t\t}\n\n\n\t\trenderer.setBuffer(null);\n\n\t}",
+			"type": "function",
+			"hash": "0c08ed24",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "renderer",
+					"type": "undefined"
+				}
+			],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.font  = _FONT;\n\t\tthis.model = {};\n\t\tthis.type  = Composite.TYPE.horizontal;\n\t\tthis.value = [];\n\n\t\tthis.__cache  = [];\n\t\tthis.__buffer = null;\n\t\tthis.__label  = [];\n\n\n\t\tthis.setFont(states.font);\n\t\tthis.setModel(states.model);\n\t\tthis.setType(states.type);\n\t\tthis.setValue(states.value);\n\n\n\t\tif (this.type === Composite.TYPE.horizontal) {\n\t\t\tstates.width  = typeof states.width === 'number'  ? states.width  : 512;\n\t\t\tstates.height = typeof states.height === 'number' ? states.height : 384;\n\t\t} else if (this.type === Composite.TYPE.vertical) {\n\t\t\tstates.width  = typeof states.width === 'number'  ? states.width  : 384;\n\t\t\tstates.height = typeof states.height === 'number' ? states.height : 512;\n\t\t}\n\n\t\tstates.shape    = _Entity.SHAPE.rectangle;\n\t\tstates.relayout = false;\n\n\n\t\t_Layer.call(this, states);\n\n\t\tstates = null;\n\n\n\n\t\t/*\n\t\t * INITIALIZATION\n\t\t */\n\n\t\tthis.unbind('relayout');\n\t\tthis.bind('relayout', _on_relayout, this);\n\n\t}",
+			"type": "function",
+			"hash": "09474fd0",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"font": "setFont",
+			"model": "setModel",
+			"type": "setType",
+			"value": "setValue"
+		},
+		"properties": {
+			"font": {
+				"chunk": "this.font  = _FONT;",
+				"type": "Font",
+				"hash": "c759f68b",
+				"value": {
+					"chunk": "_FONT",
+					"type": "Font",
+					"hash": "b185383f",
+					"value": {
+						"constructor": "Font",
+						"arguments": [
+							"/tmp/Font.fnt"
+						]
+					}
+				}
+			},
+			"model": {
+				"chunk": "this.model = {};",
+				"type": "Object",
+				"hash": "b1d6e912",
+				"value": {
+					"chunk": "{}",
+					"type": "Object",
+					"hash": "30f4c306",
+					"value": {}
+				}
+			},
+			"type": {
+				"chunk": "this.type  = Composite.TYPE.horizontal;",
+				"type": "Enum",
+				"hash": "1e5981f3",
+				"value": {
+					"chunk": "Composite.TYPE.horizontal",
+					"type": "Enum",
+					"hash": "138aaff7",
+					"value": "Composite.TYPE.horizontal"
+				}
+			},
+			"value": {
+				"chunk": "this.value = [];",
+				"type": "Array",
+				"hash": "a01d146f",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"__cache": {
+				"chunk": "this.__cache  = [];",
+				"type": "Array",
+				"hash": "6be2ca09",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			},
+			"__buffer": {
+				"chunk": "this.__buffer = null;",
+				"type": "null",
+				"hash": "0b5a46fa",
+				"value": {
+					"chunk": "null",
+					"type": "null",
+					"hash": "66f07992",
+					"value": null
+				}
+			},
+			"__label": {
+				"chunk": "this.__label  = [];",
+				"type": "Array",
+				"hash": "fbba3f54",
+				"value": {
+					"chunk": "[]",
+					"type": "Array",
+					"hash": "30f4c306",
+					"value": []
+				}
+			}
+		},
+		"enums": {
+			"TYPE": {
+				"values": [
+					{
+						"name": "horizontal",
+						"value": {
+							"chunk": "0",
+							"type": "Number",
+							"hash": "d271c07f",
+							"value": 0
+						}
+					},
+					{
+						"name": "vertical",
+						"value": {
+							"chunk": "1",
+							"type": "Number",
+							"hash": "9416ac93",
+							"value": 1
+						}
+					}
+				]
+			}
+		},
+		"events": {
+			"relayout": {
+				"name": "relayout",
+				"methods": [
+					"setType",
+					"setValue"
+				],
+				"parameters": []
+			}
+		},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {\n\n\t\t\tlet font = lychee.deserialize(blob.font);\n\t\t\tif (font !== null) {\n\t\t\t\tthis.setFont(font);\n\t\t\t}\n\n\n\t\t\tif (blob.model instanceof Object) {\n\n\t\t\t\tlet model = {};\n\n\t\t\t\tfor (let property in blob.model) {\n\t\t\t\t\tmodel[property] = lychee.deserialize(blob.model[property]);\n\t\t\t\t}\n\n\t\t\t\tthis.setModel(model);\n\n\t\t\t}\n\n\n\t\t\tif (blob.value instanceof Array) {\n\t\t\t\tthis.setValue(blob.value);\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "3afdd524",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "blob",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Layer.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.app.layer.Table';\n\n\t\t\tlet states = data['arguments'][0];\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.type !== Composite.TYPE.horizontal) states.type = this.type;\n\n\n\t\t\tif (this.font !== null) blob.font = lychee.serialize(this.font);\n\n\n\t\t\tif (Object.keys(this.model).length !== 0) {\n\n\t\t\t\tblob.model = {};\n\n\t\t\t\tfor (let property in this.model) {\n\t\t\t\t\tblob.model[property] = this.model[property];\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tif (Object.values(this.value).length !== 0) {\n\n\t\t\t\tblob.value = this.value;\n\n\t\t\t}\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "4c7b01f5",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"render": {
+				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tif (this.visible === false) return;\n\n\n\t\t\tlet alpha    = this.alpha;\n\t\t\tlet entities = this.entities;\n\t\t\tlet font     = this.font;\n\t\t\tlet label    = this.__label;\n\t\t\tlet position = this.position;\n\t\t\tlet type     = this.type;\n\t\t\tlet value    = this.value;\n\n\n\t\t\tlet x1    = position.x + offsetX - this.width  / 2;\n\t\t\tlet y1    = position.y + offsetY - this.height / 2;\n\t\t\tlet x2    = position.x + offsetX + this.width  / 2;\n\t\t\tlet y2    = position.y + offsetY + this.height / 2;\n\t\t\tlet dim_x = 0;\n\t\t\tlet dim_y = 0;\n\t\t\tlet off_x = 0;\n\t\t\tlet off_y = 0;\n\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(alpha);\n\t\t\t}\n\n\n\t\t\tif (type === Composite.TYPE.horizontal) {\n\n\t\t\t\trenderer.drawBox(\n\t\t\t\t\tx1,\n\t\t\t\t\ty1 + 64,\n\t\t\t\t\tx2,\n\t\t\t\t\ty2,\n\t\t\t\t\t'#363f3e',\n\t\t\t\t\ttrue\n\t\t\t\t);\n\n\n\t\t\t\toff_x = 0;\n\t\t\t\toff_y = 0;\n\t\t\t\tdim_x = this.width / label.length;\n\t\t\t\tdim_y = 64;\n\n\t\t\t\tfor (let l = 0, ll = label.length; l < ll; l++) {\n\n\n\t\t\t\t\trenderer.drawBox(\n\t\t\t\t\t\tx1 + off_x + 2,\n\t\t\t\t\t\ty1 + off_y + 2,\n\t\t\t\t\t\tx1 + off_x + dim_x - 2,\n\t\t\t\t\t\ty1 + off_y + dim_y - 2,\n\t\t\t\t\t\t'#2f3736',\n\t\t\t\t\t\ttrue\n\t\t\t\t\t);\n\n\t\t\t\t\trenderer.drawText(\n\t\t\t\t\t\tx1 + off_x + dim_x / 2,\n\t\t\t\t\t\ty1 + off_y + dim_y / 2,\n\t\t\t\t\t\tlabel[l],\n\t\t\t\t\t\tfont,\n\t\t\t\t\t\ttrue\n\t\t\t\t\t);\n\n\t\t\t\t\toff_x += dim_x;\n\n\t\t\t\t}\n\n\t\t\t} else if (type === Composite.TYPE.vertical) {\n\n\t\t\t\trenderer.drawBox(\n\t\t\t\t\tx1 + 128,\n\t\t\t\t\ty1,\n\t\t\t\t\tx2,\n\t\t\t\t\ty2,\n\t\t\t\t\t'#363f3e',\n\t\t\t\t\ttrue\n\t\t\t\t);\n\n\n\t\t\t\toff_x = 0;\n\t\t\t\toff_y = 0;\n\t\t\t\tdim_x = 128;\n\t\t\t\tdim_y = 0;\n\n\t\t\t\tfor (let l = 0, ll = label.length; l < ll; l++) {\n\n\t\t\t\t\tdim_y = 0;\n\n\t\t\t\t\tfor (let v = 0, vl = value.length; v < vl; v++) {\n\t\t\t\t\t\tdim_y = Math.max(dim_y, entities[v * ll + l].height + 32);\n\t\t\t\t\t}\n\n\n\t\t\t\t\trenderer.drawBox(\n\t\t\t\t\t\tx1 + off_x + 2,\n\t\t\t\t\t\ty1 + off_y + 2,\n\t\t\t\t\t\tx1 + off_x + dim_x - 2,\n\t\t\t\t\t\ty1 + off_y + dim_y - 2,\n\t\t\t\t\t\t'#2f3736',\n\t\t\t\t\t\ttrue\n\t\t\t\t\t);\n\n\t\t\t\t\trenderer.drawText(\n\t\t\t\t\t\tx1 + off_x + dim_x / 2,\n\t\t\t\t\t\ty1 + off_y + dim_y / 2,\n\t\t\t\t\t\tlabel[l],\n\t\t\t\t\t\tfont,\n\t\t\t\t\t\ttrue\n\t\t\t\t\t);\n\n\t\t\t\t\toff_y += dim_y;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(1.0);\n\t\t\t}\n\n\n\t\t\t_render_buffer.call(this, renderer);\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(alpha);\n\t\t\t}\n\n\t\t\tif (this.__buffer !== null) {\n\n\t\t\t\trenderer.drawBuffer(\n\t\t\t\t\tx1,\n\t\t\t\t\ty1,\n\t\t\t\t\tthis.__buffer\n\t\t\t\t);\n\n\t\t\t}\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(1.0);\n\t\t\t}\n\n\t\t}",
+				"type": "function",
+				"hash": "328ccf95",
+				"parameters": [
+					{
+						"chunk": null,
+						"name": "renderer",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetX",
+						"type": "undefined"
+					},
+					{
+						"chunk": null,
+						"name": "offsetY",
+						"type": "undefined"
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"setFont": {
+				"chunk": "function(font) {\n\n\t\t\tfont = font instanceof Font ? font : null;\n\n\n\t\t\tif (font !== null) {\n\n\t\t\t\tthis.font = font;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "6e3e7ccb",
+				"parameters": [
+					{
+						"chunk": "font instanceof Font ? font : null",
+						"name": "font",
+						"type": "Font",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setModel": {
+				"chunk": "function(model) {\n\n\t\t\tmodel = model instanceof Object ? model : null;\n\n\n\t\t\tif (model !== null) {\n\n\t\t\t\tthis.model   = {};\n\t\t\t\tthis.__cache = [];\n\n\t\t\t\tfor (let property in model) {\n\n\t\t\t\t\tlet instance = model[property];\n\t\t\t\t\tif (instance !== null && typeof instance.setValue === 'function') {\n\t\t\t\t\t\tthis.model[property] = lychee.serialize(model[property]);\n\t\t\t\t\t} else {\n\t\t\t\t\t\tthis.model[property] = null;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tthis.__label = Object.keys(this.model).map(function(label) {\n\t\t\t\t\treturn label.toUpperCase();\n\t\t\t\t});\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "28335a3d",
+				"parameters": [
+					{
+						"chunk": "model instanceof Object ? model : null",
+						"name": "model",
+						"type": "Object",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setType": {
+				"chunk": "function(type) {\n\n\t\t\ttype = lychee.enumof(Composite.TYPE, type) ? type : null;\n\n\n\t\t\tif (type !== null) {\n\n\t\t\t\tthis.type = type;\n\t\t\t\tthis.trigger('relayout');\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "17d9ba7c",
+				"parameters": [
+					{
+						"chunk": "lychee.enumof(Composite.TYPE, type) ? type : null",
+						"name": "type",
+						"type": "Enum",
+						"value": "Composite.TYPE"
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"setValue": {
+				"chunk": "function(value) {\n\n\t\t\tvalue = value instanceof Array ? value : null;\n\n\n\t\t\tif (value !== null) {\n\n\t\t\t\tlet keys = Object.keys(this.model);\n\t\t\t\tlet val  = value.filter(function(v) {\n\t\t\t\t\treturn keys.join(',') === Object.keys(v).join(',');\n\t\t\t\t});\n\n\n\t\t\t\tif (keys.length * val.length > this.__cache.length) {\n\n\t\t\t\t\tlet cl = (keys.length * val.length - this.__cache.length) / keys.length;\n\t\t\t\t\tfor (let c = 0; c < cl; c++) {\n\n\t\t\t\t\t\tfor (let k = 0, kl = keys.length; k < kl; k++) {\n\n\t\t\t\t\t\t\tlet key    = keys[k];\n\t\t\t\t\t\t\tlet entity = lychee.deserialize(this.model[key]);\n\t\t\t\t\t\t\tif (entity === null) {\n\t\t\t\t\t\t\t\tentity = new lychee.app.entity.Label({\n\t\t\t\t\t\t\t\t\tvalue: '(Invalid APP Entity)'\n\t\t\t\t\t\t\t\t});\n\t\t\t\t\t\t\t} else if (typeof entity.bind === 'function') {\n\t\t\t\t\t\t\t\tentity.bind('#change', _on_change, this);\n\t\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\t\tthis.__cache.push(entity);\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tfor (let v = 0, e = 0, vl = val.length; v < vl; v++) {\n\n\t\t\t\t\tlet object = val[v];\n\n\t\t\t\t\tfor (let property in object) {\n\n\t\t\t\t\t\tlet entity = this.__cache[e];\n\t\t\t\t\t\tlet value  = object[property];\n\n\t\t\t\t\t\tif (typeof value === 'string') {\n\t\t\t\t\t\t\tentity.setValue(value);\n\t\t\t\t\t\t} else if (value instanceof Object) {\n\t\t\t\t\t\t\tentity.setLabel(value.label);\n\t\t\t\t\t\t\tentity.setValue(value.value);\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\te++;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tthis.entities = this.__cache.slice(0, keys.length * val.length);\n\t\t\t\tthis.value    = val;\n\t\t\t\tthis.trigger('relayout');\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "b725a9b1",
+				"parameters": [
+					{
+						"chunk": "value instanceof Array ? value : null",
+						"name": "value",
+						"type": "Array",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

@@ -1,0 +1,243 @@
+{
+	"header": {
+		"identifier": "lychee.event.Router",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [
+			"lychee.event.Emitter"
+		],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_Emitter": {
+			"chunk": "lychee.import('lychee.event.Emitter')",
+			"type": "lychee.Definition",
+			"hash": "b60271ea",
+			"value": {
+				"reference": "lychee.event.Emitter",
+				"arguments": []
+			}
+		},
+		"_get_event": {
+			"chunk": "function(path, data) {\n\n\t\tlet event  = null;\n\t\tlet chunks = path.split('/').map(function(value) {\n\n\t\t\tlet val = value;\n\t\t\tif (val === 'true') {\n\t\t\t\tval = true;\n\t\t\t} else if (val === 'false') {\n\t\t\t\tval = false;\n\t\t\t} else if (/^([0-9]+)\\.([0-9]+)$/g.test(val)) {\n\t\t\t\tval = parseFloat(val);\n\t\t\t} else if (/^([0-9]+)$/g.test(val)) {\n\t\t\t\tval = parseInt(val, 10);\n\t\t\t}\n\n\t\t\treturn val;\n\n\t\t});\n\n\n\t\tfor (let route in this.__routes) {\n\n\t\t\tlet parts = route.split('/');\n\t\t\tif (parts.length === chunks.length) {\n\n\t\t\t\tlet blob  = {};\n\t\t\t\tlet valid = true;\n\n\t\t\t\tfor (let c = 0, cl = chunks.length; c < cl; c++) {\n\n\t\t\t\t\tlet chunk = chunks[c];\n\t\t\t\t\tlet part  = parts[c];\n\n\t\t\t\t\tif (part.charAt(0) === ':') {\n\n\t\t\t\t\t\tblob[part.substr(1)] = chunk;\n\n\t\t\t\t\t} else if (part !== chunk) {\n\n\t\t\t\t\t\tvalid = false;\n\n\t\t\t\t\t\tbreak;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tif (valid === true) {\n\n\t\t\t\t\tevent = route;\n\n\t\t\t\t\tif (data instanceof Array) {\n\t\t\t\t\t\tObject.assign(data[0], blob);\n\t\t\t\t\t} else if (data instanceof Object) {\n\t\t\t\t\t\tObject.assign(data, blob);\n\t\t\t\t\t}\n\n\t\t\t\t\tbreak;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn event;\n\n\t}",
+			"type": "function",
+			"hash": "af0bea6c",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "path",
+					"type": "undefined"
+				},
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "undefined"
+				}
+			],
+			"values": [
+				{
+					"chunk": "null",
+					"type": "null",
+					"value": null
+				}
+			]
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function() {\n\n\t\tthis.__routes = {};\n\n\t\t_Emitter.call(this);\n\n\t}",
+			"type": "function",
+			"hash": "5144538a",
+			"parameters": []
+		},
+		"states": {},
+		"properties": {
+			"__routes": {
+				"chunk": "this.__routes = {};",
+				"type": "Object",
+				"hash": "cc53bf60",
+				"value": {
+					"chunk": "{}",
+					"type": "Object",
+					"hash": "30f4c306",
+					"value": {}
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.event.Router';\n\n\n\t\t\treturn data;\n\n\t\t}",
+				"type": "function",
+				"hash": "10998d78",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.event.Emitter',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"bind": {
+				"chunk": "function(route, callback, scope) {\n\n\t\t\troute    = typeof route === 'string'    ? route    : null;\n\t\t\tcallback = callback instanceof Function ? callback : null;\n\t\t\tscope    = scope !== undefined          ? scope    : this;\n\n\n\t\t\tif (route !== null && route.charAt(0) === '/') {\n\n\t\t\t\tlet result = _Emitter.prototype.bind.call(this, route, callback, scope);\n\t\t\t\tif (result === true) {\n\n\t\t\t\t\tthis.__routes[route] = this.___events[route];\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "a41e392e",
+				"parameters": [
+					{
+						"chunk": "typeof route === 'string'    ? route    : null",
+						"name": "route",
+						"type": "String",
+						"value": null
+					},
+					{
+						"chunk": "callback instanceof Function ? callback : null",
+						"name": "callback",
+						"type": "Function",
+						"value": null
+					},
+					{
+						"chunk": "scope !== undefined          ? scope    : this",
+						"name": "scope",
+						"type": "Object",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"relay": {
+				"chunk": "function(route, instance) {\n\n\t\t\troute    = typeof route === 'string'              ? route    : null;\n\t\t\tinstance = lychee.interfaceof(_Emitter, instance) ? instance : null;\n\n\n\t\t\tlet result = _Emitter.prototype.relay.call(this, route, instance);\n\t\t\tif (result === true) {\n\n\t\t\t\tif (this.__routes[route] === undefined) {\n\t\t\t\t\tthis.__routes[route] = this.___events[route];\n\t\t\t\t}\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "7cbbd9dd",
+				"parameters": [
+					{
+						"chunk": "typeof route === 'string'              ? route    : null",
+						"name": "route",
+						"type": "String",
+						"value": null
+					},
+					{
+						"chunk": "lychee.interfaceof(_Emitter, instance) ? instance : null",
+						"name": "instance",
+						"type": "_Emitter",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			},
+			"trigger": {
+				"chunk": "function(route, data) {\n\n\t\t\troute = typeof route === 'string' ? route : null;\n\t\t\tdata  = data instanceof Array     ? data  : [{}];\n\n\n\t\t\tif (route !== null && route.charAt(0) === '/') {\n\n\t\t\t\tlet event = _get_event.call(this, route, data);\n\t\t\t\tif (event !== null) {\n\t\t\t\t\treturn _Emitter.prototype.trigger.call(this, event, data);\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "f7302280",
+				"parameters": [
+					{
+						"chunk": "typeof route === 'string' ? route : null",
+						"name": "route",
+						"type": "String",
+						"value": null
+					},
+					{
+						"chunk": "data instanceof Array     ? data  : [{}]",
+						"name": "data",
+						"type": "Array",
+						"value": [
+							{}
+						]
+					}
+				],
+				"values": [
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					},
+					{
+						"chunk": "result",
+						"type": "Boolean",
+						"value": true
+					}
+				]
+			},
+			"unbind": {
+				"chunk": "function(route, callback, scope) {\n\n\t\t\troute    = typeof route === 'string'    ? route    : null;\n\t\t\tcallback = callback instanceof Function ? callback : null;\n\t\t\tscope    = scope !== undefined          ? scope    : this;\n\n\n\t\t\tif (route !== null && route.charAt(0) === '/') {\n\n\t\t\t\tlet result = _Emitter.prototype.unbind.call(this, route, callback, scope);\n\t\t\t\tif (result === true) {\n\t\t\t\t\tdelete this.__routes[route];\n\t\t\t\t}\n\n\t\t\t\treturn result;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "490d974f",
+				"parameters": [
+					{
+						"chunk": "typeof route === 'string'    ? route    : null",
+						"name": "route",
+						"type": "String",
+						"value": null
+					},
+					{
+						"chunk": "callback instanceof Function ? callback : null",
+						"name": "callback",
+						"type": "Function",
+						"value": null
+					},
+					{
+						"chunk": "scope !== undefined          ? scope    : this",
+						"name": "scope",
+						"type": "Object",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"chunk": "result",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}

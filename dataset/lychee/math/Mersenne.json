@@ -1,0 +1,190 @@
+{
+	"header": {
+		"identifier": "lychee.math.Mersenne",
+		"attaches": {},
+		"tags": {},
+		"requires": [],
+		"includes": [],
+		"supports": {},
+		"type": "Composite"
+	},
+	"memory": {
+		"_UPPER_MASK": {
+			"chunk": "0x80000000",
+			"type": "Number",
+			"hash": "6caa1e36",
+			"value": 2147483648
+		},
+		"_LOWER_MASK": {
+			"chunk": "0x7fffffff",
+			"type": "Number",
+			"hash": "a58a946f",
+			"value": 2147483647
+		},
+		"_XOR_MATRIX": {
+			"chunk": "new Array(0x0, 0x9908b0df)",
+			"type": "Array",
+			"hash": "a5a335bc"
+		},
+		"_initialize": {
+			"chunk": "function() {\n\n\t\tlet index   = 1;\n\t\tlet N       = this.N;\n\t\tlet seed    = this.seed;\n\t\tlet twister = this.twister;\n\n\n\t\ttwister[0] = seed >>> 0;\n\n\n\t\twhile (index < N) {\n\n\t\t\tlet value = twister[index - 1] ^ (twister[index - 1] >>> 30);\n\n\t\t\ttwister[index] = (((((value & 0xffff0000) >>> 16) * 1812433253) << 16) + (value & 0x0000ffff) * 1812433253) + index;\n\t\t\ttwister[index] >>>= 0;\n\n\t\t\tindex++;\n\n\t\t}\n\n\t\tthis.index = index;\n\n\t}",
+			"type": "function",
+			"hash": "cf122e16",
+			"parameters": [],
+			"values": []
+		},
+		"_random_int32": {
+			"chunk": "function() {\n\n\t\tlet index   = this.index;\n\t\tlet twister = this.twister;\n\t\tlet value   = 0;\n\t\tlet M       = this.M;\n\t\tlet N       = this.N;\n\n\n\t\tif (index >= N) {\n\n\t\t\tlet i = 0;\n\n\t\t\tif (index === N + 1) {\n\t\t\t\t_initialize.call(this, 5489);\n\t\t\t}\n\n\n\t\t\twhile (i < N - M) {\n\n\t\t\t\tvalue      = (twister[i] & _UPPER_MASK) | (twister[i + 1] & _LOWER_MASK);\n\t\t\t\ttwister[i] = twister[i + M] ^ (value >>> 1) ^ _XOR_MATRIX[value & 0x1];\n\n\t\t\t\ti++;\n\n\t\t\t}\n\n\t\t\twhile (i < N - 1) {\n\n\t\t\t\tvalue      = (twister[i] & _UPPER_MASK) | (twister[i + 1] & _LOWER_MASK);\n\t\t\t\ttwister[i] = twister[i + (M - N)] ^ (value >>> 1) ^ _XOR_MATRIX[value & 0x1];\n\n\t\t\t\ti++;\n\n\t\t\t}\n\n\n\t\t\tvalue          = (twister[N - 1] & _UPPER_MASK) | (twister[0] & _LOWER_MASK);\n\t\t\ttwister[N - 1] = twister[M - 1] ^ (value >>> 1) ^ _XOR_MATRIX[value & 0x1];\n\n\t\t\tthis.index = 0;\n\n\t\t}\n\n\n\t\tvalue = twister[this.index++];\n\n\t\tvalue ^= (value >>> 11);\n\t\tvalue ^= (value  <<  7) & 0x9d2c5680;\n\t\tvalue ^= (value  << 15) & 0xefc60000;\n\t\tvalue ^= (value >>> 18);\n\n\n\t\treturn value >>> 0;\n\n\t}",
+			"type": "function",
+			"hash": "41bbbae0",
+			"parameters": [],
+			"values": []
+		}
+	},
+	"errors": [],
+	"result": {
+		"constructor": {
+			"chunk": "function(data) {\n\n\t\tlet states = Object.assign({}, data);\n\n\n\t\tthis.N = 624;\n\t\tthis.M = 397;\n\n\t\tthis.twister = new Array(this.N);\n\t\tthis.index   = this.N + 1;\n\t\tthis.seed    = (Math.random() * Number.MAX_SAFE_INTEGER) | 0;\n\n\n\t\tthis.setSeed(states.seed);\n\n\t\t_initialize.call(this);\n\n\t\tstates = null;\n\n\t}",
+			"type": "function",
+			"hash": "85aef4c4",
+			"parameters": [
+				{
+					"chunk": null,
+					"name": "data",
+					"type": "Object"
+				}
+			]
+		},
+		"states": {
+			"seed": "setSeed"
+		},
+		"properties": {
+			"N": {
+				"chunk": "this.N = 624;",
+				"type": "Number",
+				"hash": "2f645b1c",
+				"value": {
+					"chunk": "624",
+					"type": "Number",
+					"hash": "85f0b427",
+					"value": 624
+				}
+			},
+			"M": {
+				"chunk": "this.M = 397;",
+				"type": "Number",
+				"hash": "b804f29e",
+				"value": {
+					"chunk": "397",
+					"type": "Number",
+					"hash": "85f0b427",
+					"value": 397
+				}
+			},
+			"twister": {
+				"chunk": "this.twister = new Array(this.N);",
+				"type": "Array",
+				"hash": "998ba6d7",
+				"value": {
+					"chunk": "new Array(this.N)",
+					"type": "Array",
+					"hash": "8360f4b2"
+				}
+			},
+			"index": {
+				"chunk": "this.index   = this.N + 1;",
+				"type": "Number",
+				"hash": "b44be2eb",
+				"value": {
+					"chunk": "this.N + 1",
+					"type": "Number",
+					"hash": "7e7a7a40",
+					"value": 1337
+				}
+			},
+			"seed": {
+				"chunk": "this.seed    = (Math.random() * Number.MAX_SAFE_INTEGER) | 0;",
+				"type": "Number",
+				"hash": "eba7257c",
+				"value": {
+					"chunk": "(Math.random() * Number.MAX_SAFE_INTEGER) | 0",
+					"type": "Number",
+					"hash": "c2dc79cf",
+					"value": 1337
+				}
+			}
+		},
+		"enums": {},
+		"events": {},
+		"methods": {
+			"deserialize": {
+				"chunk": "function(blob) {}",
+				"type": "function",
+				"hash": "cf6d9c5f",
+				"parameters": [
+					{
+						"name": "blob",
+						"type": "SerializationBlob",
+						"value": {}
+					}
+				],
+				"values": [
+					{
+						"type": "undefined"
+					}
+				]
+			},
+			"serialize": {
+				"chunk": "function() {\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.seed !== 0) states.seed = this.seed;\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.math.Mersenne',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        null\n\t\t\t};\n\n\t\t}",
+				"type": "function",
+				"hash": "9b38bdfc",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "{ 'constructor': 'lychee.math.Mersenne',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        null\n\t\t\t}",
+						"type": "Object",
+						"value": {}
+					}
+				]
+			},
+			"random": {
+				"chunk": "function() {\n\n\t\t\treturn (_random_int32.call(this) * (1.0 / 4294967296.0));\n\n\t\t}",
+				"type": "function",
+				"hash": "c73a12fc",
+				"parameters": [],
+				"values": [
+					{
+						"chunk": "(_random_int32.call(this) * (1.0 / 4294967296.0))",
+						"type": "Number",
+						"value": 1337
+					}
+				]
+			},
+			"setSeed": {
+				"chunk": "function(seed) {\n\n\t\t\tseed = typeof seed === 'number' ? (seed | 0) : null;\n\n\n\t\t\tif (seed !== null) {\n\n\t\t\t\tthis.seed = seed;\n\t\t\t\t_initialize.call(this);\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
+				"type": "function",
+				"hash": "f6964765",
+				"parameters": [
+					{
+						"chunk": "typeof seed === 'number' ? (seed | 0) : null",
+						"name": "seed",
+						"type": "Number",
+						"value": null
+					}
+				],
+				"values": [
+					{
+						"chunk": "true",
+						"type": "Boolean",
+						"value": true
+					},
+					{
+						"chunk": "false",
+						"type": "Boolean",
+						"value": false
+					}
+				]
+			}
+		}
+	}
+}
