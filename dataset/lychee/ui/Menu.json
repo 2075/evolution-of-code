@@ -280,17 +280,26 @@
 		"enums": {},
 		"events": {
 			"blur": {
+				"chunk": "function() {}",
 				"name": "blur",
+				"type": "event",
+				"hash": "42164547",
 				"methods": [],
 				"parameters": []
 			},
 			"focus": {
+				"chunk": "function() {}",
 				"name": "focus",
+				"type": "event",
+				"hash": "42164547",
 				"methods": [],
 				"parameters": []
 			},
 			"change": {
+				"chunk": "function(value) {}",
 				"name": "change",
+				"type": "event",
+				"hash": "ab6d13dd",
 				"methods": [],
 				"parameters": [
 					{

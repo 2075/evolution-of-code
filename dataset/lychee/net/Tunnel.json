@@ -269,21 +269,30 @@
 		},
 		"events": {
 			"connect": {
+				"chunk": "function() {}",
 				"name": "connect",
+				"type": "event",
+				"hash": "42164547",
 				"methods": [
 					"connect"
 				],
 				"parameters": []
 			},
 			"disconnect": {
+				"chunk": "function() {}",
 				"name": "disconnect",
+				"type": "event",
+				"hash": "42164547",
 				"methods": [
 					"disconnect"
 				],
 				"parameters": []
 			},
 			"send": {
+				"chunk": "function(payload, headers) {}",
 				"name": "send",
+				"type": "event",
+				"hash": "46594a4a",
 				"methods": [
 					"send"
 				],
@@ -303,7 +312,10 @@
 				]
 			},
 			"receive": {
+				"chunk": "function(data, headers) {}",
 				"name": "receive",
+				"type": "event",
+				"hash": "67d868d1",
 				"methods": [
 					"receive"
 				],

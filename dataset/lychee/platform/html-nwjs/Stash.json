@@ -258,7 +258,10 @@
 		},
 		"events": {
 			"batch": {
+				"chunk": "function('read', cache.ready) {}",
 				"name": "batch",
+				"type": "event",
+				"hash": "fac495fe",
 				"methods": [
 					"batch"
 				],

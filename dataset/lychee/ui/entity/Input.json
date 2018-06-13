@@ -232,12 +232,18 @@
 		},
 		"events": {
 			"blur": {
+				"chunk": "function() {}",
 				"name": "blur",
+				"type": "event",
+				"hash": "42164547",
 				"methods": [],
 				"parameters": []
 			},
 			"change": {
+				"chunk": "function(this.value) {}",
 				"name": "change",
+				"type": "event",
+				"hash": "3378e6df",
 				"methods": [],
 				"parameters": [
 					{

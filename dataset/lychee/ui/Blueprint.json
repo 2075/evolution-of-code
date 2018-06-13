@@ -302,7 +302,10 @@
 		},
 		"events": {
 			"relayout": {
+				"chunk": "function() {}",
 				"name": "relayout",
+				"type": "event",
+				"hash": "42164547",
 				"methods": [
 					"addEntity",
 					"setType",

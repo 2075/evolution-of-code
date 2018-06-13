@@ -189,7 +189,10 @@
 		"enums": {},
 		"events": {
 			"change": {
+				"chunk": "function(value) {}",
 				"name": "change",
+				"type": "event",
+				"hash": "ab6d13dd",
 				"methods": [],
 				"parameters": [
 					{
@@ -200,7 +203,10 @@
 				]
 			},
 			"relayout": {
+				"chunk": "function() {}",
 				"name": "relayout",
+				"type": "event",
+				"hash": "42164547",
 				"methods": [
 					"setOptions"
 				],

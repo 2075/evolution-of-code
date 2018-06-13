@@ -121,7 +121,10 @@
 		"enums": {},
 		"events": {
 			"change": {
+				"chunk": "function(this.value) {}",
 				"name": "change",
+				"type": "event",
+				"hash": "3378e6df",
 				"methods": [],
 				"parameters": [
 					{

@@ -44,8 +44,6 @@
 
 			if (type !== null) {
 
-				console.log(type, entry.result[type]);
-
 				Object.entries(entry.result[type] || {}).filter(d => d[0].startsWith(value)).forEach(data => {
 
 					let hash = data[1].hash || null;
@@ -122,15 +120,29 @@
 
 		data_search.on('render', (entry) => {
 
-			let chunk = '';
-			let name  = entry.key || '';
+			let chunk  = '';
+			let name   = entry.key || '';
+			let type   = entry.value.type;
+			let params = entry.value.parameters || null;
 
-			let check = entry.value.parameters || null;
-			if (check !== null) {
-				name += '(';
-				name += entry.value.parameters.map(p => p.name).join(', ');
-				name += ')';
+			if (type === 'event') {
+
+				if (params !== null) {
+					name = '@' + name + '[' + params.map(p => p.name).join(', ') + ']';
+				} else {
+					name = '@' + name;
+				}
+
+			} else if (type === 'function') {
+
+				if (params !== null) {
+					name = name + '(' + params.map(p => p.name).join(', ') + ')';
+				} else {
+					name = name + '()';
+				}
+
 			}
+
 
 			chunk += '<b>' + entry.count + '</b>';
 			chunk += '<abbr title="' + entry.hash + '">' + name + '</abbr>';
@@ -159,15 +171,28 @@
 				code += ' */\n';
 				code += '\n\n';
 
-				code += entry.value.chunk.split('\n').map(line => {
 
-					if (line.startsWith('\t\t')) {
-						line = line.substr(2);
-					}
+				let value = entry.value;
+				if (value.type === 'event') {
 
-					return line;
+					code += 'let instance = new Composite();\n\n';
+					code += 'instance.bind(\'' + value.name + '\', ' + value.chunk + ');';
 
-				}).join('\n');
+				} else if (value.type === 'function') {
+
+					code += 'Composite.prototype.' + entry.key + ' = ';
+					code += value.chunk.split('\n').map(line => {
+
+						if (line.startsWith('\t\t')) {
+							line = line.substr(2);
+						}
+
+						return line;
+
+					}).join('\n').trim() + ';';
+
+				}
+
 
 				let element = _PREVIEW.querySelector('code');
 				if (element !== null) {

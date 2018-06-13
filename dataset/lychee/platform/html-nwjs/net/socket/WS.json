@@ -286,7 +286,10 @@
 		"enums": {},
 		"events": {
 			"error": {
+				"chunk": "function() {}",
 				"name": "error",
+				"type": "event",
+				"hash": "42164547",
 				"methods": [
 					"connect"
 				],

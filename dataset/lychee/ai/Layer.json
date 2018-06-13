@@ -192,7 +192,10 @@
 		"enums": {},
 		"events": {
 			"epoche": {
+				"chunk": "function() {}",
 				"name": "epoche",
+				"type": "event",
+				"hash": "42164547",
 				"methods": [
 					"update"
 				],

@@ -444,7 +444,10 @@
 		"enums": {},
 		"events": {
 			"load": {
+				"chunk": "function(oncomplete) {}",
 				"name": "load",
+				"type": "event",
+				"hash": "319a6507",
 				"methods": [
 					"init"
 				],
@@ -457,7 +460,10 @@
 				]
 			},
 			"init": {
+				"chunk": "function() {}",
 				"name": "init",
+				"type": "event",
+				"hash": "42164547",
 				"methods": [
 					"init"
 				],

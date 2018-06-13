@@ -210,7 +210,10 @@
 		},
 		"events": {
 			"connect": {
+				"chunk": "function(this) {}",
 				"name": "connect",
+				"type": "event",
+				"hash": "e1898222",
 				"methods": [
 					"connect"
 				],
@@ -224,7 +227,10 @@
 				]
 			},
 			"disconnect": {
+				"chunk": "function(this) {}",
 				"name": "disconnect",
+				"type": "event",
+				"hash": "e1898222",
 				"methods": [
 					"connect"
 				],

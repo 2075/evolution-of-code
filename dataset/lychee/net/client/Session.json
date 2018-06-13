@@ -142,7 +142,10 @@
 		"enums": {},
 		"events": {
 			"type": {
+				"chunk": "function(data) {}",
 				"name": "type",
+				"type": "event",
+				"hash": "06bb784a",
 				"methods": [],
 				"parameters": [
 					{

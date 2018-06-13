@@ -183,7 +183,10 @@
 		"enums": {},
 		"events": {
 			"change": {
+				"chunk": "function(option) {}",
 				"name": "change",
+				"type": "event",
+				"hash": "92109be4",
 				"methods": [
 					"setOptions"
 				],
