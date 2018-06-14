@@ -44,6 +44,9 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Agent"
 			]
 		},
 		"states": {},
@@ -55,6 +58,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -72,6 +76,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Agent.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ai.bnn.Agent';\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "1600656e",
+				"memory": [
+					"_Agent"
+				],
 				"parameters": [],
 				"values": [
 					{

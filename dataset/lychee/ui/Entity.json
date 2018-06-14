@@ -24,6 +24,7 @@
 			"chunk": "function(effect) {\n\n\t\tif (effect instanceof Object) {\n\n\t\t\tif (\n\t\t\t\ttypeof effect.update === 'function'\n\t\t\t\t&& typeof effect.render === 'function'\n\t\t\t) {\n\t\t\t\treturn true;\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn false;\n\n\t}",
 			"type": "function",
 			"hash": "a333e882",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -57,6 +58,9 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Emitter"
 			]
 		},
 		"states": {
@@ -305,6 +309,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -322,6 +327,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.Entity';\n\n\t\t\tlet states = {};\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.width  !== 0) states.width  = this.width;\n\t\t\tif (this.height !== 0) states.height = this.height;\n\t\t\tif (this.depth !== 0)  states.depth  = this.depth;\n\t\t\tif (this.radius !== 0) states.radius = this.radius;\n\n\t\t\tif (this.alpha !== 1)                         states.alpha   = this.alpha;\n\t\t\tif (this.shape !== Composite.SHAPE.rectangle) states.shape   = this.shape;\n\t\t\tif (this.state !== 'default')                 states.state   = this.state;\n\t\t\tif (Object.keys(this.states).length > 0)      states.states  = this.states;\n\t\t\tif (this.visible !== true)                    states.visible = this.visible;\n\n\n\t\t\tif (this.position.x !== 0 || this.position.y !== 0) {\n\n\t\t\t\tstates.position = {};\n\n\t\t\t\tif (this.position.x !== 0) states.position.x = this.position.x;\n\t\t\t\tif (this.position.y !== 0) states.position.y = this.position.y;\n\n\t\t\t}\n\n\n\t\t\tdata['arguments'][0] = states;\n\t\t\tdata['blob']         = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "a230d725",
+				"memory": [
+					"_Emitter"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -335,6 +343,7 @@
 				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tlet effects = this.effects;\n\t\t\tfor (let e = 0, el = effects.length; e < el; e++) {\n\t\t\t\teffects[e].render(renderer, offsetX, offsetY);\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "2e563c90",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -362,6 +371,7 @@
 				"chunk": "function(clock, delta) {\n\n\t\t\tlet effects = this.effects;\n\t\t\tfor (let e = 0, el = effects.length; e < el; e++) {\n\n\t\t\t\tlet effect = effects[e];\n\t\t\t\tif (effect.update(this, clock, delta) === false) {\n\t\t\t\t\tthis.removeEffect(effect);\n\t\t\t\t\tel--;\n\t\t\t\t\te--;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "d6e14ede",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -384,6 +394,7 @@
 				"chunk": "function(position) {\n\n\t\t\tposition = position instanceof Object ? position : null;\n\n\n\t\t\tif (position !== null) {\n\n\t\t\t\tif (typeof position.x === 'number' && typeof position.y === 'number') {\n\n\t\t\t\t\tlet ax = position.x;\n\t\t\t\t\tlet ay = position.y;\n\t\t\t\t\tlet bx = this.position.x;\n\t\t\t\t\tlet by = this.position.y;\n\n\n\t\t\t\t\tlet shape = this.shape;\n\t\t\t\t\tif (shape === Composite.SHAPE.circle) {\n\n\t\t\t\t\t\tlet dist = Math.sqrt(Math.pow(ax - bx, 2) + Math.pow(ay - by, 2));\n\t\t\t\t\t\tif (dist < this.radius) {\n\t\t\t\t\t\t\treturn true;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t} else if (shape === Composite.SHAPE.rectangle) {\n\n\t\t\t\t\t\tlet hwidth  = this.width  / 2;\n\t\t\t\t\t\tlet hheight = this.height / 2;\n\t\t\t\t\t\tlet colX    = (ax >= bx - hwidth)  && (ax <= bx + hwidth);\n\t\t\t\t\t\tlet colY    = (ay >= by - hheight) && (ay <= by + hheight);\n\n\n\t\t\t\t\t\treturn colX && colY;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "669e2ed4",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "position instanceof Object ? position : null",
@@ -409,6 +420,7 @@
 				"chunk": "function(entity) {\n\n\t\t\tentity = lychee.interfaceof(lychee.ui.Entity, entity) ? entity : null;\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "bfe228f5",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "lychee.interfaceof(lychee.ui.Entity, entity) ? entity : null",
@@ -429,6 +441,7 @@
 				"chunk": "function(alpha) {\n\n\t\t\talpha = typeof alpha === 'number' ? alpha : null;\n\n\n\t\t\tif (alpha !== null) {\n\n\t\t\t\tthis.alpha = Math.min(Math.max(alpha, 0), 1);\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "8c452654",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof alpha === 'number' ? alpha : null",
@@ -454,6 +467,9 @@
 				"chunk": "function(effect) {\n\n\t\t\teffect = _validate_effect(effect) ? effect : null;\n\n\n\t\t\tif (effect !== null) {\n\n\t\t\t\tlet index = this.effects.indexOf(effect);\n\t\t\t\tif (index === -1) {\n\n\t\t\t\t\tthis.effects.push(effect);\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "09f5f6a1",
+				"memory": [
+					"_validate_effect"
+				],
 				"parameters": [
 					{
 						"chunk": "_validate_effect(effect) ? effect : null",
@@ -482,6 +498,9 @@
 				"chunk": "function(effect) {\n\n\t\t\teffect = _validate_effect(effect) ? effect : null;\n\n\n\t\t\tif (effect !== null) {\n\n\t\t\t\tlet index = this.effects.indexOf(effect);\n\t\t\t\tif (index !== -1) {\n\n\t\t\t\t\tthis.effects.splice(index, 1);\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "6b39208a",
+				"memory": [
+					"_validate_effect"
+				],
 				"parameters": [
 					{
 						"chunk": "_validate_effect(effect) ? effect : null",
@@ -510,6 +529,7 @@
 				"chunk": "function() {\n\n\t\t\tlet effects = this.effects;\n\n\t\t\tfor (let e = 0, el = effects.length; e < el; e++) {\n\n\t\t\t\teffects[e].update(this, Infinity, 0);\n\t\t\t\tthis.removeEffect(effects[e]);\n\n\t\t\t\tel--;\n\t\t\t\te--;\n\n\t\t\t}\n\n\n\t\t\treturn true;\n\n\t\t}",
 				"type": "function",
 				"hash": "1cbe2218",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -523,6 +543,7 @@
 				"chunk": "function(position) {\n\n\t\t\tposition = position instanceof Object ? position : null;\n\n\n\t\t\tif (position !== null) {\n\n\t\t\t\tthis.position.x = typeof position.x === 'number' ? position.x : this.position.x;\n\t\t\t\tthis.position.y = typeof position.y === 'number' ? position.y : this.position.y;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "bf8c732b",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "position instanceof Object ? position : null",
@@ -548,6 +569,7 @@
 				"chunk": "function(shape) {\n\n\t\t\tshape = lychee.enumof(Composite.SHAPE, shape) ? shape : null;\n\n\n\t\t\tif (shape !== null) {\n\n\t\t\t\tthis.shape = shape;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "8ab7a9ce",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "lychee.enumof(Composite.SHAPE, shape) ? shape : null",
@@ -573,6 +595,7 @@
 				"chunk": "function(states) {\n\n\t\t\tstates = states instanceof Object ? states : null;\n\n\n\t\t\tif (states !== null) {\n\n\t\t\t\tthis.states = {\n\t\t\t\t\t'default': null,\n\t\t\t\t\t'active':  null\n\t\t\t\t};\n\n\t\t\t\tfor (let id in states) {\n\n\t\t\t\t\tif (states.hasOwnProperty(id)) {\n\n\t\t\t\t\t\tlet state = states[id];\n\t\t\t\t\t\tif (state instanceof Object) {\n\t\t\t\t\t\t\tthis.states[id] = states[id];\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "619045c1",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "states instanceof Object ? states : null",
@@ -598,6 +621,7 @@
 				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null && this.states[id] !== undefined) {\n\n\t\t\t\tthis.state = id;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "570fc1f1",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof id === 'string' ? id : null",
@@ -623,6 +647,7 @@
 				"chunk": "function(visible) {\n\n\t\t\tvisible = typeof visible === 'boolean' ? visible : null;\n\n\n\t\t\tif (visible !== null) {\n\n\t\t\t\tthis.visible = visible;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "ec37f945",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof visible === 'boolean' ? visible : null",

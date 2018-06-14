@@ -35,6 +35,7 @@
 			"chunk": "function() {\n\n\t\tlet agents  = this.agents;\n\t\tlet fitness = this.__fitness;\n\n\n\t\tfitness.total   = 0;\n\t\tfitness.average = 0;\n\t\tfitness.best    = -Infinity;\n\t\tfitness.worst   = Infinity;\n\n\t\tfor (let a = 0, al = agents.length; a < al; a++) {\n\n\t\t\tlet agent = agents[a];\n\n\t\t\tfitness.total += agent.fitness;\n\t\t\tfitness.best   = Math.max(fitness.best,  agent.fitness);\n\t\t\tfitness.worst  = Math.min(fitness.worst, agent.fitness);\n\n\t\t}\n\n\n\t\t// Worst Case: All Agents are retards\n\t\tif (fitness.total !== 0) {\n\t\t\tfitness.average = fitness.total / agents.length;\n\t\t} else {\n\t\t\treturn;\n\t\t}\n\n\n\t\tlet old_a      = 0;\n\t\tlet new_agents = [];\n\t\tlet old_agents = agents.slice(0).sort(function(a, b) {\n\t\t\tif (a.fitness > b.fitness) return -1;\n\t\t\tif (a.fitness < b.fitness) return  1;\n\t\t\treturn 0;\n\t\t});\n\n\n\t\tif (old_agents.length > 8) {\n\n\t\t\tlet partition = Math.round(0.2 * old_agents.length);\n\t\t\tif (partition % 2 === 1) {\n\t\t\t\tpartition++;\n\t\t\t}\n\n\n\t\t\t// Survivor Population\n\t\t\tfor (let p = 0; p < partition; p++) {\n\t\t\t\tnew_agents.push(old_agents[p]);\n\t\t\t\told_a++;\n\t\t\t}\n\n\n\t\t\t// Mutant Population\n\t\t\tfor (let p = 0; p < partition; p++) {\n\n\t\t\t\tlet agent = new _Agent();\n\n\t\t\t\tagent.brain.setSensors(old_agents[old_a].brain.sensors);\n\t\t\t\tagent.brain.setControls(old_agents[old_a].brain.controls);\n\n\t\t\t\tnew_agents.push(agent);\n\t\t\t\told_a++;\n\n\t\t\t}\n\n\n\t\t\t// Breed Population\n\t\t\tlet b       = 0;\n\t\t\tlet b_tries = 0;\n\n\t\t\twhile (new_agents.length < old_agents.length) {\n\n\t\t\t\tlet agent_mum = old_agents[b];\n\t\t\t\tlet agent_dad = old_agents[b + 1];\n\t\t\t\tlet children  = agent_mum.crossover(agent_dad);\n\n\t\t\t\tif (children !== null) {\n\n\t\t\t\t\tlet agent_sis = children[0];\n\t\t\t\t\tlet agent_bro = children[1];\n\n\t\t\t\t\tif (new_agents.indexOf(agent_sis) === -1) {\n\n\t\t\t\t\t\tagent_sis.brain.setSensors(old_agents[old_a].brain.sensors);\n\t\t\t\t\t\tagent_sis.brain.setControls(old_agents[old_a].brain.controls);\n\n\t\t\t\t\t\tnew_agents.push(agent_sis);\n\t\t\t\t\t\told_a++;\n\n\t\t\t\t\t}\n\n\t\t\t\t\tif (new_agents.indexOf(agent_bro) === -1) {\n\n\t\t\t\t\t\tagent_bro.brain.setSensors(old_agents[old_a].brain.sensors);\n\t\t\t\t\t\tagent_bro.brain.setControls(old_agents[old_a].brain.controls);\n\n\t\t\t\t\t\tnew_agents.push(agent_bro);\n\t\t\t\t\t\told_a++;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tb += 1;\n\t\t\t\tb %= partition;\n\n\t\t\t\tb_tries++;\n\n\n\t\t\t\t// XXX: Not enough Agents for healthy Evolution\n\t\t\t\tif (b_tries > old_agents.length) {\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\n\t\tif (new_agents.length < old_agents.length) {\n\n\t\t\tif (lychee.debug === true) {\n\t\t\t\tconsole.warn('lychee.ai.Layer: Not enough Agents for healthy Evolution');\n\t\t\t}\n\n\t\t\tlet diff = old_agents.length - new_agents.length;\n\n\t\t\tfor (let o = 0; o < old_agents.length; o++) {\n\n\t\t\t\tlet old_agent = old_agents[o];\n\t\t\t\tif (new_agents.indexOf(old_agent) === -1) {\n\n\t\t\t\t\tlet other = old_agents[old_a];\n\t\t\t\t\tif (other !== old_agent) {\n\t\t\t\t\t\told_agent.brain.setSensors(other.brain.sensors);\n\t\t\t\t\t\told_agent.brain.setControls(other.brain.controls);\n\t\t\t\t\t}\n\n\t\t\t\t\told_agent.fitness = 0;\n\n\t\t\t\t\tnew_agents.push(old_agent);\n\t\t\t\t\told_a++;\n\t\t\t\t\tdiff--;\n\n\t\t\t\t}\n\n\n\t\t\t\tif (diff === 0) {\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\n\t\t// XXX: Don't break references\n\t\tfor (let n = 0, nl = new_agents.length; n < nl; n++) {\n\t\t\tthis.agents[n] = new_agents[n];\n\t\t\tthis.agents[n].alive = true;\n\t\t}\n\n\n\t\tnew_agents = null;\n\t\told_agents = null;\n\n\t}",
 			"type": "function",
 			"hash": "3a788436",
+			"memory": [],
 			"parameters": [],
 			"values": []
 		}
@@ -51,6 +52,10 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Layer",
+				"_on_epoche"
 			]
 		},
 		"states": {},
@@ -79,6 +84,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -96,6 +102,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Layer.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ai.enn.Layer';\n\n\t\t\tlet states = {};\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tdata['arguments'][0] = states;\n\t\t\tdata['blob']         = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "916ed23c",
+				"memory": [
+					"_Layer"
+				],
 				"parameters": [],
 				"values": [
 					{

@@ -21,7 +21,8 @@
 					"name": "states",
 					"type": "Object"
 				}
-			]
+			],
+			"memory": []
 		},
 		"states": {},
 		"properties": {
@@ -149,6 +150,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -166,6 +168,7 @@
 				"chunk": "function() {\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.type !== Composite.TYPE.easeout) states.type     = this.type;\n\t\t\tif (this.delay !== 0)                     states.delay    = this.delay;\n\t\t\tif (this.duration !== 250)                states.duration = this.duration;\n\t\t\tif (this.height !== 0)                    states.height   = this.height;\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.effect.Height',\n\t\t\t\t'arguments':   [ states ]\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "31c983bc",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -179,6 +182,7 @@
 				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t}",
 				"type": "function",
 				"hash": "04f47507",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -206,6 +210,7 @@
 				"chunk": "function(entity, clock, delta) {\n\n\t\t\tif (this.__start === null) {\n\t\t\t\tthis.__start = clock + this.delay;\n\t\t\t}\n\n\n\t\t\tlet t = (clock - this.__start) / this.duration;\n\t\t\tif (t < 0) {\n\t\t\t\treturn true;\n\t\t\t} else if (this.__origin === null) {\n\t\t\t\tthis.__origin = entity.height || 0;\n\t\t\t}\n\n\n\t\t\tlet origin = this.__origin;\n\t\t\tlet height = this.height;\n\n\t\t\tlet h      = origin;\n\n\t\t\tif (t <= 1) {\n\n\t\t\t\tlet f  = 0;\n\t\t\t\tlet dh = height - origin;\n\n\n\t\t\t\tlet type = this.type;\n\t\t\t\tif (type === Composite.TYPE.linear) {\n\n\t\t\t\t\th += t * dh;\n\n\t\t\t\t} else if (type === Composite.TYPE.easein) {\n\n\t\t\t\t\tf = 1 * Math.pow(t, 3);\n\n\t\t\t\t\th += f * dh;\n\n\t\t\t\t} else if (type === Composite.TYPE.easeout) {\n\n\t\t\t\t\tf = Math.pow(t - 1, 3) + 1;\n\n\t\t\t\t\th += f * dh;\n\n\t\t\t\t} else if (type === Composite.TYPE.bounceeasein) {\n\n\t\t\t\t\tlet k = 1 - t;\n\n\t\t\t\t\tif ((k /= 1) < (1 / 2.75)) {\n\t\t\t\t\t\tf = 1 * (7.5625 * Math.pow(k, 2));\n\t\t\t\t\t} else if (k < (2 / 2.75)) {\n\t\t\t\t\t\tf = 7.5625 * (k -= (1.5 / 2.75)) * k + 0.75;\n\t\t\t\t\t} else if (k < (2.5 / 2.75)) {\n\t\t\t\t\t\tf = 7.5625 * (k -= (2.25 / 2.75)) * k + 0.9375;\n\t\t\t\t\t} else {\n\t\t\t\t\t\tf = 7.5625 * (k -= (2.625 / 2.75)) * k + 0.984375;\n\t\t\t\t\t}\n\n\t\t\t\t\th += (1 - f) * dh;\n\n\t\t\t\t} else if (type === Composite.TYPE.bounceeaseout) {\n\n\t\t\t\t\tif ((t /= 1) < (1 / 2.75)) {\n\t\t\t\t\t\tf = 1 * (7.5625 * Math.pow(t, 2));\n\t\t\t\t\t} else if (t < (2 / 2.75)) {\n\t\t\t\t\t\tf = 7.5625 * (t -= (1.5 / 2.75)) * t + 0.75;\n\t\t\t\t\t} else if (t < (2.5 / 2.75)) {\n\t\t\t\t\t\tf = 7.5625 * (t -= (2.25 / 2.75)) * t + 0.9375;\n\t\t\t\t\t} else {\n\t\t\t\t\t\tf = 7.5625 * (t -= (2.625 / 2.75)) * t + 0.984375;\n\t\t\t\t\t}\n\n\t\t\t\t\th += f * dh;\n\n\t\t\t\t}\n\n\n\t\t\t\tentity.height = h;\n\n\n\t\t\t\treturn true;\n\n\t\t\t} else {\n\n\t\t\t\tentity.height = height;\n\n\n\t\t\t\treturn false;\n\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "b53fe6cf",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "height",

@@ -33,6 +33,7 @@
 			"chunk": "function(renderer) {\n\n\t\tlet font = this.font;\n\t\tif (font !== null && font.texture !== null) {\n\n\t\t\tif (this.__buffer !== null) {\n\t\t\t\tthis.__buffer.resize(this.width, this.height);\n\t\t\t} else {\n\t\t\t\tthis.__buffer = renderer.createBuffer(this.width, this.height);\n\t\t\t}\n\n\n\t\t\trenderer.clear(this.__buffer);\n\t\t\trenderer.setBuffer(this.__buffer);\n\t\t\trenderer.setAlpha(1.0);\n\n\n\t\t\tlet lines = this.__lines;\n\t\t\tlet lh    = font.lineheight;\n\t\t\tlet ll    = lines.length;\n\t\t\tif (ll > 0) {\n\n\t\t\t\tfor (let l = 0; l < ll; l++) {\n\n\t\t\t\t\trenderer.drawText(\n\t\t\t\t\t\t0,\n\t\t\t\t\t\t0 + lh * l,\n\t\t\t\t\t\tlines[l],\n\t\t\t\t\t\tfont,\n\t\t\t\t\t\tfalse\n\t\t\t\t\t);\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\trenderer.setBuffer(null);\n\t\t\tthis.__isDirty = false;\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "3913b345",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -55,6 +56,10 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Entity",
+				"_FONT"
 			]
 		},
 		"states": {
@@ -130,6 +135,7 @@
 				"chunk": "function(blob) {\n\n\t\t\tlet font = lychee.deserialize(blob.font);\n\t\t\tif (font !== null) {\n\t\t\t\tthis.setFont(font);\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "814dbb80",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -147,6 +153,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Entity.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.app.entity.Text';\n\n\t\t\tlet states = data['arguments'][0];\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.value !== '') states.value = this.value;\n\n\n\t\t\tif (this.font !== null) blob.font = lychee.serialize(this.font);\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "8f016d87",
+				"memory": [
+					"_Entity"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -160,6 +169,9 @@
 				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tlet alpha    = this.alpha;\n\t\t\tlet position = this.position;\n\t\t\tlet x        = position.x + offsetX;\n\t\t\tlet y        = position.y + offsetY;\n\t\t\tlet hwidth   = this.width  / 2;\n\t\t\tlet hheight  = this.height / 2;\n\n\n\t\t\tif (this.__isDirty === true) {\n\t\t\t\t_render_buffer.call(this, renderer);\n\t\t\t}\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(alpha);\n\t\t\t}\n\n\t\t\tif (this.__buffer !== null) {\n\n\t\t\t\trenderer.drawBuffer(\n\t\t\t\t\tx - hwidth,\n\t\t\t\t\ty - hheight,\n\t\t\t\t\tthis.__buffer\n\t\t\t\t);\n\n\t\t\t}\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(1.0);\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "17373cd3",
+				"memory": [
+					"_render_buffer"
+				],
 				"parameters": [
 					{
 						"chunk": null,
@@ -187,6 +199,7 @@
 				"chunk": "function(font) {\n\n\t\t\tfont = font instanceof Font ? font : null;\n\n\n\t\t\tif (font !== null) {\n\n\t\t\t\tthis.font = font;\n\n\t\t\t\t// refresh the layout\n\t\t\t\tif (this.value !== '') {\n\t\t\t\t\tthis.setValue(this.value);\n\t\t\t\t}\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "02ed6421",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "font instanceof Font ? font : null",
@@ -212,6 +225,7 @@
 				"chunk": "function(value) {\n\n\t\t\tvalue = typeof value === 'string' ? value : null;\n\n\n\t\t\tif (value !== null) {\n\n\t\t\t\tlet font = this.font;\n\t\t\t\tif (font !== null) {\n\n\t\t\t\t\tlet realwidth  = 0;\n\t\t\t\t\tlet realheight = 0;\n\t\t\t\t\tlet lines      = value.split('\\n');\n\n\t\t\t\t\tlines.forEach(function(line) {\n\n\t\t\t\t\t\tlet tmp = font.measure(line);\n\t\t\t\t\t\tif (tmp.realwidth  > realwidth)  realwidth  = tmp.realwidth;\n\t\t\t\t\t\tif (tmp.realheight > realheight) realheight = tmp.realheight;\n\n\t\t\t\t\t});\n\n\t\t\t\t\tthis.width  = realwidth;\n\t\t\t\t\tthis.height = realheight * lines.length;\n\n\t\t\t\t}\n\n\n\t\t\t\tthis.value = value;\n\n\t\t\t\tthis.__lines   = value.split('\\n');\n\t\t\t\tthis.__isDirty = true;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "7eb86250",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof value === 'string' ? value : null",

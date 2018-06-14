@@ -55,6 +55,7 @@
 			"chunk": "function() {\n\n\t\tlet main = global.MAIN || null;\n\t\tif (main !== null) {\n\n\t\t\tlet storage = main.storage || null;\n\t\t\tif (storage !== null) {\n\n\t\t\t\tlet data = lychee.serialize(storage);\n\t\t\t\tif (data !== null) {\n\n\t\t\t\t\tlet blob = data.blob || null;\n\t\t\t\t\tif (blob !== null) {\n\t\t\t\t\t\tdelete data.blob;\n\t\t\t\t\t}\n\n\t\t\t\t\tmain.storage = lychee.deserialize(data);\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "82f460f4",
+			"memory": [],
 			"parameters": [],
 			"values": []
 		},
@@ -62,6 +63,7 @@
 			"chunk": "function() {\n\n\t\tlet main = global.MAIN || null;\n\t\tif (main !== null) {\n\n\t\t\tlet storage = main.storage || null;\n\t\t\tif (storage !== null) {\n\n\t\t\t\tlet id   = storage.id;\n\t\t\t\tlet type = storage.type;\n\n\n\t\t\t\tthis.getEntity('id').setValue(id);\n\n\t\t\t\tif (type === _Storage.TYPE.persistent) {\n\t\t\t\t\tthis.getEntity('mode').setValue('persistent');\n\t\t\t\t} else if (type === _Storage.TYPE.temporary) {\n\t\t\t\t\tthis.getEntity('mode').setValue('temporary');\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "34ff3307",
+			"memory": [],
 			"parameters": [],
 			"values": []
 		},
@@ -69,6 +71,9 @@
 			"chunk": "function() {\n\n\t\tlet main = global.MAIN || null;\n\t\tif (main !== null) {\n\n\t\t\tlet storage = main.storage || null;\n\t\t\tif (storage !== null) {\n\n\t\t\t\tlet id   = this.getEntity('id').value;\n\t\t\t\tlet mode = this.getEntity('mode').value;\n\n\n\t\t\t\tstorage.setId(id);\n\n\t\t\t\tif (mode === 'persistent') {\n\t\t\t\t\tstorage.setType(_Storage.TYPE.persistent);\n\t\t\t\t} else if (mode === 'temporary') {\n\t\t\t\t\tstorage.setType(_Storage.TYPE.temporary);\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "7c1b1539",
+			"memory": [
+				"_Storage"
+			],
 			"parameters": [],
 			"values": []
 		}
@@ -85,6 +90,14 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Element",
+				"_Input",
+				"_Select",
+				"_clear",
+				"_read",
+				"_save"
 			]
 		},
 		"states": {},
@@ -96,6 +109,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -113,6 +127,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Element.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.element.Storage';\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "ce93308d",
+				"memory": [
+					"_Element"
+				],
 				"parameters": [],
 				"values": [
 					{

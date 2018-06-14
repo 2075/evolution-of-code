@@ -84,6 +84,9 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Agent"
 			]
 		},
 		"states": {},
@@ -95,6 +98,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -112,6 +116,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Agent.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ai.neat.Agent';\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "9a08febd",
+				"memory": [
+					"_Agent"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -125,6 +132,7 @@
 				"chunk": "function(agent) {\n\n\t\t\tagent = lychee.interfaceof(Composite, agent) ? agent : null;\n\n\n\t\t\tif (agent !== null) {\n\n\t\t\t\tlet zw_brain = null;\n\t\t\t\tlet zz_brain = null;\n\n\t\t\t\tif (agent.fitness > this.fitness) {\n\t\t\t\t\tzw_brain = this.brain;\n\t\t\t\t\tzz_brain = agent.brain;\n\t\t\t\t} else {\n\t\t\t\t\tzw_brain = agent.brain;\n\t\t\t\t\tzz_brain = this.brain;\n\t\t\t\t}\n\n\n\t\t\t\tlet zw_genes    = zw_brain.getGenes();\n\t\t\t\tlet zz_genes    = zz_brain.getGenes();\n\t\t\t\tlet zw0_genes   = [];\n\t\t\t\tlet innovations = {};\n\n\n\t\t\t\tfor (let z = 0, zl = zw_genes.length; z < zl; z++) {\n\n\t\t\t\t\tlet gene2 = zw_genes[z];\n\t\t\t\t\tinnovations[gene2.innovation] = gene2;\n\n\t\t\t\t}\n\n\t\t\t\tfor (let z = 0, zl = zz_genes.length; z < zl; z++) {\n\n\t\t\t\t\tlet gene1 = zz_genes[z];\n\t\t\t\t\tlet gene2 = innovations[gene1.innovation] || null;\n\t\t\t\t\tlet rand2 = Math.random();\n\n\t\t\t\t\tif (gene2 !== null && gene2.enabled === true && rand2 > 0.5) {\n\t\t\t\t\t\tzw0_genes.push(Object.assign({}, gene2));\n\t\t\t\t\t} else {\n\t\t\t\t\t\tzw0_genes.push(Object.assign({}, gene1));\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tlet zw0_agent = new Composite({\n\t\t\t\t\tbrain: new _Brain({\n\t\t\t\t\t\tgenes: zw0_genes\n\t\t\t\t\t})\n\t\t\t\t});\n\n\n\t\t\t\treturn zw0_agent;\n\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
 				"type": "function",
 				"hash": "47603039",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "lychee.interfaceof(Composite, agent) ? agent : null",
@@ -145,6 +153,7 @@
 				"chunk": "function() {\n\n\t\t\tfor (let mid in this.__mutation) {\n\n\t\t\t\tif (Math.random() > 0.5) {\n\t\t\t\t\tthis.__mutation[mid] *= 0.95;\n\t\t\t\t} else {\n\t\t\t\t\tthis.__mutation[mid] *= 1.05263;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tif (Math.random() > 0.25) {\n\t\t\t\t// TODO: pointMutate(genome);\n\t\t\t}\n\n\t\t\tif (Math.random() > _MUTATION_LINK) {\n\t\t\t\t// TODO: linkMutate(genome, false);\n\t\t\t}\n\n\t\t\tif (Math.random() > _MUTATION_BIAS) {\n\t\t\t\t// TODO: linkMutate(genome, true);\n\t\t\t}\n\n\n\t\t\tif (Math.random() > _MUTATION_NODE) {\n\t\t\t\t// TODO: nodeMutate(genome);\n\t\t\t}\n\n\t\t\tif (Math.random() > _MUTATION_ENABLE) {\n\t\t\t\t// TODO: Find an enabled gene and disable it\n\t\t\t}\n\n\t\t\tif (Math.random() > _MUTATION_DISABLE) {\n\t\t\t\t// TODO: Find a disabled gene and enable it\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "70ad83fb",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -158,6 +167,7 @@
 				"chunk": "function(diff, training) {\n\n\t\t\tdiff     = typeof diff === 'number'   ? Math.abs(diff | 0) : 1;\n\t\t\ttraining = training instanceof Object ? training           : null;\n\n\n\t\t\tthis.fitness += diff;\n\n\t\t\tif (training !== null) {\n\n\t\t\t\t// XXX: No Reinforcement Learning\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "23d9c57e",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof diff === 'number'   ? Math.abs(diff | 0) : 1",
@@ -189,6 +199,7 @@
 				"chunk": "function(diff, training) {\n\n\t\t\tdiff     = typeof diff === 'number'   ? Math.abs(diff | 0) : 1;\n\t\t\ttraining = training instanceof Object ? training           : null;\n\n\n\t\t\tthis.fitness -= diff;\n\n\t\t\tif (training !== null) {\n\n\t\t\t\t// XXX: No Reinforcement Learning\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "c2954767",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof diff === 'number'   ? Math.abs(diff | 0) : 1",

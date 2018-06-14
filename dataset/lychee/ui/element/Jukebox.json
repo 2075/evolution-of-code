@@ -46,6 +46,7 @@
 			"chunk": "function() {\n\n\t\tlet main = global.MAIN || null;\n\t\tif (main !== null) {\n\n\t\t\tlet jukebox = main.jukebox || null;\n\t\t\tif (jukebox !== null) {\n\n\t\t\t\tlet channels = jukebox.channels;\n\t\t\t\tlet music    = jukebox.music;\n\t\t\t\tlet sound    = jukebox.sound;\n\t\t\t\tlet volume   = jukebox.volume;\n\n\n\t\t\t\tthis.getEntity('channels').setValue(channels);\n\t\t\t\tthis.getEntity('music').setValue(music === true ? 'on' : 'off');\n\t\t\t\tthis.getEntity('sound').setValue(sound === true ? 'on' : 'off');\n\t\t\t\tthis.getEntity('volume').setValue(volume * 10);\n\n\t\t\t}\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "475cc0ba",
+			"memory": [],
 			"parameters": [],
 			"values": []
 		},
@@ -53,6 +54,7 @@
 			"chunk": "function() {\n\n\t\tlet main = global.MAIN || null;\n\t\tif (main !== null) {\n\n\t\t\tlet jukebox = main.jukebox || null;\n\t\t\tif (jukebox !== null) {\n\n\t\t\t\tlet channels = this.getEntity('channels').value;\n\t\t\t\tlet music    = this.getEntity('music').value;\n\t\t\t\tlet sound    = this.getEntity('sound').value;\n\t\t\t\tlet volume   = this.getEntity('volume').value;\n\n\n\t\t\t\tjukebox.setChannels(channels);\n\t\t\t\tjukebox.setMusic(music === 'on' ? true : false);\n\t\t\t\tjukebox.setSound(sound === 'on' ? true : false);\n\t\t\t\tjukebox.setVolume(volume / 10);\n\n\t\t\t}\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "eb4ffc2d",
+			"memory": [],
 			"parameters": [],
 			"values": []
 		}
@@ -69,6 +71,13 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Element",
+				"_Slider",
+				"_Switch",
+				"_read",
+				"_save"
 			]
 		},
 		"states": {},
@@ -80,6 +89,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -97,6 +107,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Element.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.element.Jukebox';\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "e952713a",
+				"memory": [
+					"_Element"
+				],
 				"parameters": [],
 				"values": [
 					{

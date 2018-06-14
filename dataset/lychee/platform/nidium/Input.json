@@ -197,6 +197,10 @@
 			"chunk": "function(code, ctrl, alt, shift) {\n\n\t\tif (this.key === false) {\n\t\t\treturn false;\n\t\t}\n\n\n\t\tctrl  =  ctrl === true;\n\t\talt   =   alt === true;\n\t\tshift = shift === true;\n\n\n\t\tconsole.log(code, _KEYMAP[code], _SPECIALMAP[code]);\n\n\t\tif (_KEYMAP[code] === undefined && _SPECIALMAP[code] === undefined) {\n\n\t\t\treturn false;\n\n\t\t} else if (this.keymodifier === false) {\n\n\t\t\tif (code === 16 && shift === true) {\n\t\t\t\treturn true;\n\t\t\t}\n\n\t\t\tif (code === 17 && ctrl === true) {\n\t\t\t\treturn true;\n\t\t\t}\n\n\t\t\tif (code === 18 && alt === true) {\n\t\t\t\treturn true;\n\t\t\t}\n\n\t\t}\n\n\n\t\tlet key     = null;\n\t\tlet name    = null;\n\t\tlet tmp     = null;\n\t\tlet handled = false;\n\t\tlet delta   = Date.now() - this.__clock.key;\n\n\t\tif (delta < this.delay) {\n\t\t\treturn true;\n\t\t} else {\n\t\t\tthis.__clock.key = Date.now();\n\t\t}\n\n\n\t\t// 0. Computation of Special Characters\n\t\tif (_SPECIALMAP[code] !== undefined) {\n\n\t\t\ttmp  = _SPECIALMAP[code];\n\t\t\tkey  = shift === true ? tmp[1] : tmp[0];\n\t\t\tname = '';\n\n\t\t\tif (ctrl  === true) name += 'ctrl-';\n\t\t\tif (alt   === true) name += 'alt-';\n\t\t\tif (shift === true) name += 'shift-';\n\n\t\t\tname += tmp[0];\n\n\t\t\t// 0. Computation of Normal Characters\n\t\t} else if (_KEYMAP[code] !== undefined) {\n\n\t\t\tkey  = _KEYMAP[code];\n\t\t\tname = '';\n\n\t\t\tif (ctrl  === true && key !== 'ctrl')  name += 'ctrl-';\n\t\t\tif (alt   === true && key !== 'alt')   name += 'alt-';\n\t\t\tif (shift === true && key !== 'shift') name += 'shift-';\n\n\n\t\t\tif (shift === true && key !== 'ctrl' && key !== 'alt' && key !== 'shift') {\n\n\t\t\t\ttmp = String.fromCharCode(code);\n\t\t\t\tkey = tmp.trim() !== '' ? tmp : key;\n\n\t\t\t}\n\n\n\t\t\tname += key.toLowerCase();\n\n\t\t}\n\n\n\t\t// 1. Event API\n\t\tif (key !== null) {\n\n\t\t\t// bind('key') and bind('ctrl-a');\n\t\t\t// bind('!')   and bind('shift-1');\n\n\t\t\thandled = this.trigger('key', [ key, name, delta ]) || handled;\n\t\t\thandled = this.trigger(name,  [ delta ])            || handled;\n\n\t\t}\n\n\n\t\treturn handled;\n\n\t}",
 			"type": "function",
 			"hash": "a9d61f49",
+			"memory": [
+				"_KEYMAP",
+				"_SPECIALMAP"
+			],
 			"parameters": [
 				{
 					"chunk": null,
@@ -255,6 +259,7 @@
 			"chunk": "function(id, state, x, y) {\n\n\t\tif (this.swipe === false) {\n\t\t\treturn false;\n\t\t}\n\n\n\t\tlet position = { x: x, y: y };\n\t\tlet swipe    = { x: 0, y: 0 };\n\t\tlet handled  = false;\n\t\tlet delta    = Date.now() - this.__clock.swipe;\n\n\t\tif (delta < this.delay) {\n\t\t\treturn true;\n\t\t} else {\n\t\t\tthis.__clock.swipe = Date.now();\n\t\t}\n\n\n\t\t// 0. Computation of Swipe\n\t\tif (this.__swipes[id] !== null) {\n\n\t\t\t// FIX for touchend events\n\t\t\tif (state === 'end' && x === 0 && y === 0) {\n\t\t\t\tposition.x = this.__swipes[id].x;\n\t\t\t\tposition.y = this.__swipes[id].y;\n\t\t\t}\n\n\t\t\tswipe.x = x - this.__swipes[id].x;\n\t\t\tswipe.y = y - this.__swipes[id].y;\n\n\t\t}\n\n\n\t\t// 1. Event API\n\t\tif (state === 'start') {\n\n\t\t\thandled = this.trigger(\n\t\t\t\t'swipe',\n\t\t\t\t[ id, 'start', position, delta, swipe ]\n\t\t\t) || handled;\n\n\t\t\tthis.__swipes[id] = {\n\t\t\t\tx: x, y: y\n\t\t\t};\n\n\t\t} else if (state === 'move') {\n\n\t\t\thandled = this.trigger(\n\t\t\t\t'swipe',\n\t\t\t\t[ id, 'move', position, delta, swipe ]\n\t\t\t) || handled;\n\n\t\t} else if (state === 'end') {\n\n\t\t\thandled = this.trigger(\n\t\t\t\t'swipe',\n\t\t\t\t[ id, 'end', position, delta, swipe ]\n\t\t\t) || handled;\n\n\t\t\tthis.__swipes[id] = null;\n\n\t\t}\n\n\n\t\treturn handled;\n\n\t}",
 			"type": "function",
 			"hash": "d25b3ddb",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -294,6 +299,9 @@
 			"chunk": "function(id, x, y) {\n\n\t\tif (this.touch === false && this.swipe === true) {\n\n\t\t\tif (this.__swipes[id] === null) {\n\t\t\t\t_process_swipe.call(this, id, 'start', x, y);\n\t\t\t}\n\n\t\t\treturn true;\n\n\t\t} else if (this.touch === false) {\n\n\t\t\treturn false;\n\n\t\t}\n\n\n\t\tlet position = { x: x, y: y };\n\t\tlet handled  = false;\n\t\tlet delta    = Date.now() - this.__clock.touch;\n\n\t\tif (delta < this.delay) {\n\t\t\treturn true;\n\t\t} else {\n\t\t\tthis.__clock.touch = Date.now();\n\t\t}\n\n\n\t\t// 1. Event API\n\t\thandled = this.trigger('touch', [ id, position, delta ]) || handled;\n\n\n\t\t// 1. Event API: Swipe only for tracked Touches\n\t\tif (this.__swipes[id] === null) {\n\t\t\thandled = _process_swipe.call(this, id, 'start', x, y) || handled;\n\t\t}\n\n\n\t\treturn handled;\n\n\t}",
 			"type": "function",
 			"hash": "3955c99c",
+			"memory": [
+				"_process_swipe"
+			],
 			"parameters": [
 				{
 					"chunk": null,
@@ -349,6 +357,10 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Emitter",
+				"_INSTANCES"
 			]
 		},
 		"states": {
@@ -435,10 +447,10 @@
 					"type": "Object",
 					"hash": "ae8beaac",
 					"value": {
-						"key": 1528885397267,
-						"scroll": 1528885397267,
-						"swipe": 1528885397267,
-						"touch": 1528885397267
+						"key": 1528968313829,
+						"scroll": 1528968313829,
+						"swipe": 1528968313829,
+						"touch": 1528968313829
 					}
 				}
 			},
@@ -463,6 +475,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -480,6 +493,9 @@
 				"chunk": "function() {\n\n\t\t\tlet found = false;\n\n\t\t\tfor (let i = 0, il = _INSTANCES.length; i < il; i++) {\n\n\t\t\t\tif (_INSTANCES[i] === this) {\n\t\t\t\t\t_INSTANCES.splice(i, 1);\n\t\t\t\t\tfound = true;\n\t\t\t\t\til--;\n\t\t\t\t\ti--;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\tthis.unbind();\n\n\n\t\t\treturn found;\n\n\t\t}",
 				"type": "function",
 				"hash": "a596dbf3",
+				"memory": [
+					"_INSTANCES"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -498,6 +514,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.Input';\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.delay !== 0)           states.delay       = this.delay;\n\t\t\tif (this.key !== false)         states.key         = this.key;\n\t\t\tif (this.keymodifier !== false) states.keymodifier = this.keymodifier;\n\t\t\tif (this.touch !== false)       states.touch       = this.touch;\n\t\t\tif (this.swipe !== false)       states.swipe       = this.swipe;\n\n\n\t\t\tdata['arguments'][0] = states;\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "8581f469",
+				"memory": [
+					"_Emitter"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -511,6 +530,7 @@
 				"chunk": "function(delay) {\n\n\t\t\tdelay = typeof delay === 'number' ? delay : null;\n\n\n\t\t\tif (delay !== null) {\n\n\t\t\t\tthis.delay = delay;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "e667e003",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof delay === 'number' ? delay : null",
@@ -536,6 +556,7 @@
 				"chunk": "function(key) {\n\n\t\t\tkey = typeof key === 'boolean' ? key : null;\n\n\n\t\t\tif (key !== null) {\n\n\t\t\t\tthis.key = key;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "f5d2bcc1",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof key === 'boolean' ? key : null",
@@ -561,6 +582,7 @@
 				"chunk": "function(keymodifier) {\n\n\t\t\tkeymodifier = typeof keymodifier === 'boolean' ? keymodifier : null;\n\n\n\t\t\tif (keymodifier !== null) {\n\n\t\t\t\tthis.keymodifier = keymodifier;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "981c834f",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof keymodifier === 'boolean' ? keymodifier : null",
@@ -586,6 +608,7 @@
 				"chunk": "function(touch) {\n\n\t\t\ttouch = typeof touch === 'boolean' ? touch : null;\n\n\n\t\t\tif (touch !== null) {\n\n\t\t\t\tthis.touch = touch;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "7c114448",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof touch === 'boolean' ? touch : null",
@@ -611,6 +634,7 @@
 				"chunk": "function(scroll) {\n\n\t\t\tscroll = typeof scroll === 'boolean' ? scroll : null;\n\n\n\t\t\tif (scroll !== null) {\n\n\t\t\t\t// XXX: Nidium has not (yet) scroll support\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "07d1b951",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof scroll === 'boolean' ? scroll : null",
@@ -631,6 +655,7 @@
 				"chunk": "function(swipe) {\n\n\t\t\tswipe = typeof swipe === 'boolean' ? swipe : null;\n\n\n\t\t\tif (swipe !== null) {\n\n\t\t\t\tthis.swipe = swipe;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "49938078",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof swipe === 'boolean' ? swipe : null",

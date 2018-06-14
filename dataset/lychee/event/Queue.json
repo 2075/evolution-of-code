@@ -24,6 +24,9 @@
 			"chunk": "function(result) {\n\n\t\tif (result instanceof Object) {\n\t\t\t_process_stack.call(this);\n\t\t} else if (result === true) {\n\t\t\t_process_stack.call(this);\n\t\t} else {\n\t\t\tthis.trigger('error');\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "a53aa0e9",
+			"memory": [
+				"_process_stack"
+			],
 			"parameters": [
 				{
 					"chunk": null,
@@ -37,6 +40,9 @@
 			"chunk": "function() {\n\n\t\tlet data = this.___stack.shift() || null;\n\t\tif (data !== null) {\n\n\t\t\tthis.trigger('update', [ data, _process_recursive.bind(this) ]);\n\n\t\t} else {\n\n\t\t\tthis.trigger('complete');\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "79728313",
+			"memory": [
+				"_process_recursive"
+			],
 			"parameters": [],
 			"values": []
 		}
@@ -47,7 +53,10 @@
 			"chunk": "function() {\n\n\t\tthis.___init  = false;\n\t\tthis.___stack = [];\n\n\t\t_Emitter.call(this);\n\n\t}",
 			"type": "function",
 			"hash": "f3f7f255",
-			"parameters": []
+			"parameters": [],
+			"memory": [
+				"_Emitter"
+			]
 		},
 		"states": {},
 		"properties": {
@@ -92,6 +101,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -109,6 +119,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.event.Queue';\n\n\t\t\tlet blob = (data['blob'] || {});\n\n\n\t\t\tif (this.___stack.length > 0) {\n\n\t\t\t\tblob.stack = [];\n\n\t\t\t\tfor (let s = 0, sl = this.___stack.length; s < sl; s++) {\n\t\t\t\t\tblob.stack.push(lychee.serialize(this.___stack[s]));\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "28161952",
+				"memory": [
+					"_Emitter"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -122,6 +135,7 @@
 				"chunk": "function(data) {\n\n\t\t\tdata = data instanceof Object ? data : null;\n\n\n\t\t\tif (data !== null) {\n\n\t\t\t\tthis.___stack.push(data);\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "c0dd0731",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "data instanceof Object ? data : null",
@@ -147,6 +161,9 @@
 				"chunk": "function() {\n\n\t\t\tif (this.___init === false) {\n\n\t\t\t\tthis.___init = true;\n\n\n\t\t\t\tif (this.___stack.length > 0) {\n\n\t\t\t\t\t_process_stack.call(this);\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t} else {\n\n\t\t\t\t\tthis.trigger('error');\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "0f8879b9",
+				"memory": [
+					"_process_stack"
+				],
 				"parameters": [],
 				"values": [
 					{

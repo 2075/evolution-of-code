@@ -24,6 +24,7 @@
 			"chunk": "function() {\n\n\t\tlet val = this.value;\n\t\tlet map = this.__cursor.map;\n\n\n\t\tmap.x = (val.x / 2) * (this.width  - 44);\n\t\tmap.y = (val.y / 2) * (this.height - 44);\n\n\n\t\tthis.__isDirty = false;\n\n\t}",
 			"type": "function",
 			"hash": "6d3bb4e9",
+			"memory": [],
 			"parameters": [],
 			"values": []
 		}
@@ -40,6 +41,9 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Entity"
 			]
 		},
 		"states": {
@@ -135,6 +139,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -152,6 +157,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Entity.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.entity.Joystick';\n\n\t\t\tlet states = data['arguments'][0];\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.value.x !== 0 || this.value.y !== 0) {\n\n\t\t\t\tstates.value = {};\n\n\t\t\t\tif (this.value.x !== 0) states.value.x = this.value.x;\n\t\t\t\tif (this.value.y !== 0) states.value.y = this.value.y;\n\n\t\t\t}\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "5616586c",
+				"memory": [
+					"_Entity"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -165,6 +173,10 @@
 				"chunk": "function(clock, delta) {\n\n\t\t\tlet pulse = this.__pulse;\n\t\t\tif (pulse.active === true) {\n\n\t\t\t\tif (pulse.start === null) {\n\t\t\t\t\tpulse.start = clock;\n\t\t\t\t}\n\n\t\t\t\tlet pt = (clock - pulse.start) / pulse.duration;\n\t\t\t\tif (pt <= 1) {\n\t\t\t\t\tpulse.alpha = (1 - pt);\n\t\t\t\t} else {\n\t\t\t\t\tpulse.alpha  = 0.0;\n\t\t\t\t\tpulse.active = false;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tlet cursor = this.__cursor;\n\t\t\tif (cursor.active === true) {\n\n\t\t\t\tif (cursor.start === null) {\n\t\t\t\t\tcursor.start = clock;\n\t\t\t\t}\n\n\n\t\t\t\tlet ct = (clock - cursor.start) / cursor.duration;\n\t\t\t\tif (ct <= 1) {\n\t\t\t\t\tcursor.alpha = cursor.pingpong === true ? (1 - ct) : ct;\n\t\t\t\t} else {\n\t\t\t\t\tcursor.start    = clock;\n\t\t\t\t\tcursor.pingpong = !cursor.pingpong;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tif (this.__isDirty === true) {\n\t\t\t\t_update_cursor.call(this);\n\t\t\t}\n\n\n\t\t\t_Entity.prototype.update.call(this, clock, delta);\n\n\t\t}",
 				"type": "function",
 				"hash": "91c8d200",
+				"memory": [
+					"_Entity",
+					"_update_cursor"
+				],
 				"parameters": [
 					{
 						"chunk": null,
@@ -187,6 +199,7 @@
 				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tif (this.visible === false) return;\n\n\n\t\t\tlet alpha    = this.alpha;\n\t\t\tlet position = this.position;\n\t\t\tlet cursor   = this.__cursor;\n\t\t\tlet x        = position.x + offsetX;\n\t\t\tlet y        = position.y + offsetY;\n\t\t\tlet hwidth   = (this.width  - 2) / 2;\n\t\t\tlet hheight  = (this.height - 2) / 2;\n\n\n\t\t\tlet col = this.state === 'active' ? '#32afe5' : '#545454';\n\t\t\tlet map = cursor.map;\n\t\t\tlet cx  = x + map.x;\n\t\t\tlet cy  = y + map.y;\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(alpha);\n\t\t\t}\n\n\t\t\trenderer.drawBox(\n\t\t\t\tx - hwidth,\n\t\t\t\ty - hheight,\n\t\t\t\tx + hwidth,\n\t\t\t\ty + hheight,\n\t\t\t\tcol,\n\t\t\t\tfalse,\n\t\t\t\t2\n\t\t\t);\n\n\t\t\trenderer.drawBox(\n\t\t\t\tx - hwidth  + 9,\n\t\t\t\ty - hheight + 9,\n\t\t\t\tx + hwidth  - 9,\n\t\t\t\ty + hheight - 9,\n\t\t\t\tcol,\n\t\t\t\tfalse,\n\t\t\t\t1\n\t\t\t);\n\n\t\t\trenderer.drawLine(\n\t\t\t\tx - hwidth  + 10,\n\t\t\t\ty,\n\t\t\t\tx + hwidth  - 10,\n\t\t\t\ty,\n\t\t\t\tcol,\n\t\t\t\tfalse,\n\t\t\t\t1\n\t\t\t);\n\n\t\t\trenderer.drawLine(\n\t\t\t\tx,\n\t\t\t\ty - hheight + 10,\n\t\t\t\tx,\n\t\t\t\ty + hheight - 10,\n\t\t\t\tcol,\n\t\t\t\tfalse,\n\t\t\t\t1\n\t\t\t);\n\n\t\t\trenderer.drawCircle(\n\t\t\t\tcx,\n\t\t\t\tcy,\n\t\t\t\t11,\n\t\t\t\tcol,\n\t\t\t\tfalse,\n\t\t\t\t2\n\t\t\t);\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(1.0);\n\t\t\t}\n\n\n\t\t\tif (cursor.active === true) {\n\n\t\t\t\trenderer.setAlpha(cursor.alpha);\n\n\t\t\t\trenderer.drawCircle(\n\t\t\t\t\tcx,\n\t\t\t\t\tcy,\n\t\t\t\t\t12,\n\t\t\t\t\t'#32afe5',\n\t\t\t\t\ttrue\n\t\t\t\t);\n\n\t\t\t\trenderer.setAlpha(1.0);\n\n\t\t\t}\n\n\n\t\t\tlet pulse = this.__pulse;\n\t\t\tif (pulse.active === true) {\n\n\t\t\t\trenderer.setAlpha(pulse.alpha);\n\n\t\t\t\trenderer.drawBox(\n\t\t\t\t\tx - hwidth,\n\t\t\t\t\ty - hheight,\n\t\t\t\t\tx + hwidth,\n\t\t\t\t\ty + hheight,\n\t\t\t\t\t'#32afe5',\n\t\t\t\t\ttrue\n\t\t\t\t);\n\n\t\t\t\trenderer.setAlpha(1.0);\n\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "47b78d02",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -214,6 +227,9 @@
 				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null) {\n\n\t\t\t\tlet result = _Entity.prototype.setState.call(this, id);\n\t\t\t\tif (result === true) {\n\n\t\t\t\t\tlet cursor = this.__cursor;\n\t\t\t\t\tlet pulse  = this.__pulse;\n\n\n\t\t\t\t\tif (id === 'active') {\n\n\t\t\t\t\t\tcursor.start  = null;\n\t\t\t\t\t\tcursor.active = true;\n\n\t\t\t\t\t\tpulse.alpha   = 1.0;\n\t\t\t\t\t\tpulse.start   = null;\n\t\t\t\t\t\tpulse.active  = true;\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tcursor.active = false;\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "998628dc",
+				"memory": [
+					"_Entity"
+				],
 				"parameters": [
 					{
 						"chunk": "typeof id === 'string' ? id : null",
@@ -239,6 +255,7 @@
 				"chunk": "function(value) {\n\n\t\t\tvalue = value instanceof Object ? value : null;\n\n\n\t\t\tif (value !== null) {\n\n\t\t\t\tthis.value.x = typeof value.x === 'number' ? value.x : this.value.x;\n\t\t\t\tthis.value.y = typeof value.y === 'number' ? value.y : this.value.y;\n\n\n\t\t\t\tlet val = 0;\n\n\t\t\t\tval = this.value.x;\n\t\t\t\tval = val >= -1.0 ? val : -1.0;\n\t\t\t\tval = val <=  1.0 ? val :  1.0;\n\t\t\t\tthis.value.x = val;\n\n\t\t\t\tval = this.value.y;\n\t\t\t\tval = val >= -1.0 ? val : -1.0;\n\t\t\t\tval = val <=  1.0 ? val :  1.0;\n\t\t\t\tthis.value.y = val;\n\n\n\t\t\t\tthis.__isDirty = true;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "3b25e31c",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "value instanceof Object ? value : null",

@@ -13,6 +13,7 @@
 			"chunk": "function(str) {\n\n\t\tlet tmp = str.split('-');\n\n\t\tfor (let t = 0, tl = tmp.length; t < tl; t++) {\n\t\t\tlet ch = tmp[t];\n\t\t\ttmp[t] = ch.charAt(0).toUpperCase() + ch.substr(1);\n\t\t}\n\n\t\treturn tmp.join('-');\n\n\t}",
 			"type": "function",
 			"hash": "cec3fc9d",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -32,6 +33,9 @@
 			"chunk": "function(payload, headers, binary) {\n\n\t\tlet type           = this.type;\n\t\tlet buffer         = null;\n\n\t\tlet headers_data   = null;\n\t\tlet headers_length = 0;\n\t\tlet payload_data   = payload;\n\t\tlet payload_length = payload.length;\n\n\n\t\tif (type === Composite.TYPE.client) {\n\n\t\t\tlet url            = headers['url']             || null;\n\t\t\tlet method         = headers['method']          || null;\n\t\t\tlet service_id     = headers['@service-id']     || null;\n\t\t\tlet service_event  = headers['@service-event']  || null;\n\t\t\tlet service_method = headers['@service-method'] || null;\n\n\n\t\t\tif (service_id !== null) {\n\n\t\t\t\tif (service_method !== null) {\n\n\t\t\t\t\tmethod = 'GET';\n\t\t\t\t\turl    = '/api/' + service_id + '/' + service_method;\n\n\t\t\t\t} else if (service_event !== null) {\n\n\t\t\t\t\tmethod = 'POST';\n\t\t\t\t\turl    = '/api/' + service_id + '/' + service_event;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tif (url !== null && method !== null) {\n\t\t\t\theaders_data = method + ' ' + url + ' HTTP/1.1\\r\\n';\n\t\t\t} else {\n\t\t\t\theaders_data = 'GET * HTTP/1.1\\r\\n';\n\t\t\t}\n\n\n\t\t\theaders_data += 'Connection: keep-alive\\r\\n';\n\t\t\theaders_data += 'Content-Length: ' + payload_length + '\\r\\n';\n\n\t\t\tfor (let key in headers) {\n\n\t\t\t\tif (key.charAt(0) === '@') {\n\t\t\t\t\theaders_data += '' + _uppercase('x-' + key.substr(1)) + ': ' + headers[key] + '\\r\\n';\n\t\t\t\t} else if (/url|method/g.test(key) === false) {\n\t\t\t\t\theaders_data += '' + _uppercase(key) + ': ' + headers[key] + '\\r\\n';\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\theaders_data  += '\\r\\n';\n\t\t\theaders_length = headers_data.length;\n\n\t\t} else {\n\n\t\t\tlet status  = headers['status'] || Composite.STATUS.normal_okay;\n\t\t\tlet exposed = [ 'Content-Type' ];\n\n\n\t\t\theaders_data  = 'HTTP/1.1 ' + status + '\\r\\n';\n\t\t\theaders_data += 'Connection: keep-alive\\r\\n';\n\t\t\theaders_data += 'Content-Length: ' + payload_length + '\\r\\n';\n\n\t\t\tfor (let key in headers) {\n\n\t\t\t\tif (key.charAt(0) === '@') {\n\t\t\t\t\theaders_data += '' + _uppercase('x-' + key.substr(1)) + ': ' + headers[key] + '\\r\\n';\n\t\t\t\t\texposed.push(_uppercase('x-' + key.substr(1)));\n\t\t\t\t} else if (/status/g.test(key) === false) {\n\t\t\t\t\theaders_data += '' + _uppercase(key) + ': ' + headers[key] + '\\r\\n';\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\theaders_data  += 'Access-Control-Expose-Headers: ' + exposed.join(', ') + '\\r\\n';\n\t\t\theaders_data  += '\\r\\n';\n\t\t\theaders_length = headers_data.length;\n\n\t\t}\n\n\n\t\tlet content_type = headers['content-type'] || 'text/plain';\n\t\tif (/text\\//g.test(content_type) === true) {\n\n\t\t\tbuffer = new Buffer(headers_length + payload_length + 4);\n\t\t\tbuffer.write(headers_data, 0, headers_length, 'utf8');\n\t\t\tpayload_data.copy(buffer, headers_length, 0, payload_length);\n\t\t\tbuffer.write('\\r\\n\\r\\n', headers_length + payload_length, 4, 'utf8');\n\n\t\t} else {\n\n\t\t\tbuffer = new Buffer(headers_length + payload_length + 4);\n\t\t\tbuffer.write(headers_data, 0, headers_length, 'utf8');\n\t\t\tpayload_data.copy(buffer, headers_length, 0, payload_length);\n\t\t\tbuffer.write('\\r\\n\\r\\n', headers_length + payload_length, 4, 'utf8');\n\n\t\t}\n\n\n\t\treturn buffer;\n\n\t}",
 			"type": "function",
 			"hash": "95c71209",
+			"memory": [
+				"_uppercase"
+			],
 			"parameters": [
 				{
 					"chunk": null,
@@ -66,6 +70,7 @@
 			"chunk": "function(buffer) {\n\n\t\tbuffer = buffer.toString('utf8');\n\n\n\t\tlet chunk = {\n\t\t\tbytes:   -1,\n\t\t\theaders: {},\n\t\t\tpayload: null\n\t\t};\n\n\n\t\tif (buffer.indexOf('\\r\\n\\r\\n') === -1) {\n\t\t\treturn chunk;\n\t\t}\n\n\n\t\tlet headers_length = buffer.indexOf('\\r\\n\\r\\n') + 4;\n\t\tlet headers_data   = buffer.substr(0, headers_length);\n\t\tlet payload_data   = buffer.substr(headers_length);\n\t\tlet payload_length = payload_data.length;\n\n\n\t\tlet i_end = payload_data.indexOf('\\r\\n\\r\\n');\n\t\tif (i_end !== -1) {\n\t\t\tpayload_data   = payload_data.substr(0, i_end);\n\t\t\tpayload_length = payload_data.length + 4;\n\t\t}\n\n\n\t\theaders_data.split('\\r\\n').forEach(function(line) {\n\n\t\t\tlet tmp = line.trim();\n\t\t\tif (/^(OPTIONS|GET|POST)/g.test(tmp) === true) {\n\n\t\t\t\tlet tmp2   = tmp.split(' ');\n\t\t\t\tlet method = (tmp2[0] || '').trim() || null;\n\t\t\t\tlet url    = (tmp2[1] || '').trim() || null;\n\n\t\t\t\tif (method !== null && url !== null) {\n\n\t\t\t\t\tchunk.headers['method'] = method;\n\t\t\t\t\tchunk.headers['url']    = url;\n\n\t\t\t\t}\n\n\n\t\t\t\tif (url.startsWith('/api/')) {\n\n\t\t\t\t\tlet tmp3 = [];\n\n\t\t\t\t\tif (url.indexOf('?') !== -1) {\n\t\t\t\t\t\ttmp3 = url.split('?')[0].split('/');\n\t\t\t\t\t} else {\n\t\t\t\t\t\ttmp3 = url.split('/');\n\t\t\t\t\t}\n\n\t\t\t\t\tif (tmp3.length === 4) {\n\n\t\t\t\t\t\tif (method === 'GET') {\n\n\t\t\t\t\t\t\tchunk.headers['@service-id']     = tmp3[2];\n\t\t\t\t\t\t\tchunk.headers['@service-method'] = tmp3[3];\n\n\t\t\t\t\t\t} else if (method === 'POST') {\n\n\t\t\t\t\t\t\tchunk.headers['@service-id']    = tmp3[2];\n\t\t\t\t\t\t\tchunk.headers['@service-event'] = tmp3[3];\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t} else if (tmp.startsWith('HTTP')) {\n\n\t\t\t\tif (/[0-9]{3}/g.test(tmp) === true) {\n\t\t\t\t\tchunk.headers['status'] = tmp.split(' ')[1];\n\t\t\t\t}\n\n\t\t\t} else if (/^[0-9]{3}/g.test(tmp) === true) {\n\n\t\t\t\tchunk.headers['status'] = tmp.split(' ')[0];\n\n\t\t\t} else if (/:/g.test(tmp)) {\n\n\t\t\t\tlet i_tmp = tmp.indexOf(':');\n\t\t\t\tlet key   = tmp.substr(0, i_tmp).trim().toLowerCase();\n\t\t\t\tlet val   = tmp.substr(i_tmp + 1).trim().toLowerCase();\n\n\t\t\t\tif (key === 'host') {\n\n\t\t\t\t\tif (/^\\[([a-f0-9:]+)\\](.*)$/g.test(val) === true) {\n\t\t\t\t\t\tchunk.headers[key] = val.split(/^\\[([a-f0-9:]+)\\](.*)$/g)[1];\n\t\t\t\t\t} else {\n\t\t\t\t\t\tchunk.headers[key] = val;\n\t\t\t\t\t}\n\n\t\t\t\t} else if (/origin|connection|upgrade|content-type|content-length|accept-encoding|accept-language|e-tag/g.test(key) === true) {\n\n\t\t\t\t\tchunk.headers[key] = val;\n\n\t\t\t\t} else if (/expires|if-modified-since|last-modified/g.test(key) === true) {\n\n\t\t\t\t\tval = tmp.split(':').slice(1).join(':').trim();\n\t\t\t\t\tchunk.headers[key] = val;\n\n\t\t\t\t} else if (/access-control/g.test(key) === true) {\n\n\t\t\t\t\tchunk.headers[key] = val;\n\n\t\t\t\t} else if (key.startsWith('x-')) {\n\n\t\t\t\t\tchunk.headers['@' + key.substr(2)] = val;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t});\n\n\n\t\tlet check = chunk.headers['method'] || null;\n\t\tif (check === 'GET') {\n\n\t\t\tlet tmp4 = chunk.headers['url'] || '';\n\t\t\tif (tmp4.indexOf('?') !== -1) {\n\n\t\t\t\tlet tmp5 = tmp4.split('?')[1].split('&');\n\t\t\t\tlet tmp6 = {};\n\n\t\t\t\ttmp5.forEach(function(str) {\n\n\t\t\t\t\tlet key = str.split('=')[0] || '';\n\t\t\t\t\tlet val = str.split('=')[1] || '';\n\n\t\t\t\t\tif (key !== '' && val !== '') {\n\t\t\t\t\t\ttmp6[key] = val;\n\t\t\t\t\t}\n\n\t\t\t\t});\n\n\n\t\t\t\tchunk.bytes   = headers_length + payload_length;\n\t\t\t\tchunk.payload = new Buffer(JSON.stringify(tmp6), 'utf8');\n\n\t\t\t} else {\n\n\t\t\t\tchunk.bytes   = headers_length + payload_length;\n\t\t\t\tchunk.payload = new Buffer('', 'utf8');\n\n\t\t\t}\n\n\t\t} else if (check === 'OPTIONS') {\n\n\t\t\tchunk.bytes   = headers_length + payload_length;\n\t\t\tchunk.payload = new Buffer('', 'utf8');\n\n\t\t} else if (check === 'POST') {\n\n\t\t\tchunk.bytes   = headers_length + payload_length;\n\t\t\tchunk.payload = new Buffer(payload_data, 'utf8');\n\n\t\t} else {\n\n\t\t\tlet status = chunk.headers['status'] || null;\n\t\t\tif (status !== null) {\n\n\t\t\t\tchunk.bytes   = headers_length + payload_length;\n\t\t\t\tchunk.payload = new Buffer(payload_data, 'utf8');\n\n\t\t\t} else {\n\n\t\t\t\tchunk.bytes   = buffer.length;\n\t\t\t\tchunk.headers = null;\n\t\t\t\tchunk.payload = null;\n\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn chunk;\n\n\t}",
 			"type": "function",
 			"hash": "ea312faf",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": "buffer.toString('utf8')",
@@ -99,7 +104,8 @@
 					"name": "data",
 					"type": "Object"
 				}
-			]
+			],
+			"memory": []
 		},
 		"states": {},
 		"properties": {
@@ -269,6 +275,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -286,6 +293,7 @@
 				"chunk": "function() {\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.type !== null) states.type = this.type;\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.net.protocol.HTTP',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        null\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "18834de7",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -299,6 +307,9 @@
 				"chunk": "function(payload, headers, binary) {\n\n\t\t\tpayload = payload instanceof Buffer ? payload : null;\n\t\t\theaders = headers instanceof Object ? headers : null;\n\t\t\tbinary  = binary === true;\n\n\n\t\t\tif (payload !== null) {\n\n\t\t\t\tif (this.__isClosed === false) {\n\t\t\t\t\treturn _encode_buffer.call(this, payload, headers, binary);\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
 				"type": "function",
 				"hash": "cc10e060",
+				"memory": [
+					"_encode_buffer"
+				],
 				"parameters": [
 					{
 						"chunk": "payload instanceof Buffer ? payload : null",
@@ -340,6 +351,9 @@
 				"chunk": "function(blob) {\n\n\t\t\tblob = blob instanceof Buffer ? blob : null;\n\n\n\t\t\tlet chunks = [];\n\n\n\t\t\tif (blob !== null) {\n\n\t\t\t\tif (blob.length > Composite.FRAMESIZE) {\n\n\t\t\t\t\tchunks.push(this.close(Composite.STATUS.message_too_big));\n\n\t\t\t\t} else if (this.__isClosed === false) {\n\n\t\t\t\t\tlet buf = this.__buffer;\n\t\t\t\t\tlet tmp = new Buffer(buf.length + blob.length);\n\n\n\t\t\t\t\tbuf.copy(tmp);\n\t\t\t\t\tblob.copy(tmp, buf.length);\n\t\t\t\t\tbuf = tmp;\n\n\n\t\t\t\t\tlet chunk = _decode_buffer.call(this, buf);\n\n\t\t\t\t\twhile (chunk.bytes !== -1) {\n\n\t\t\t\t\t\tif (chunk.payload !== null) {\n\t\t\t\t\t\t\tchunks.push(chunk);\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\ttmp = new Buffer(buf.length - chunk.bytes);\n\t\t\t\t\t\tbuf.copy(tmp, 0, chunk.bytes);\n\t\t\t\t\t\tbuf = tmp;\n\n\t\t\t\t\t\tchunk = null;\n\t\t\t\t\t\tchunk = _decode_buffer.call(this, buf);\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\tthis.__buffer = buf;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn chunks;\n\n\t\t}",
 				"type": "function",
 				"hash": "d2806d5f",
+				"memory": [
+					"_decode_buffer"
+				],
 				"parameters": [
 					{
 						"chunk": "blob instanceof Buffer ? blob : null",
@@ -360,6 +374,7 @@
 				"chunk": "function(status) {\n\n\t\t\tstatus = typeof status === 'number' ? status : Composite.STATUS.no_content;\n\n\n\t\t\tif (this.__isClosed === false) {\n\n\t\t\t\t// TODO: Close method should create a close status buffer\n\t\t\t\t// let buffer = new Buffer(4);\n\n\t\t\t\t// buffer[0]  = 128 + 0x08;\n\t\t\t\t// buffer[1]  =   0 + 0x02;\n\n\t\t\t\t// buffer.write(String.fromCharCode((status >> 8) & 0xff) + String.fromCharCode((status >> 0) & 0xff), 2, 'binary');\n\n\t\t\t\t// this.__isClosed = true;\n\n\n\t\t\t\t// return buffer;\n\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
 				"type": "function",
 				"hash": "f72219d3",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof status === 'number' ? status : Composite.STATUS.no_content",

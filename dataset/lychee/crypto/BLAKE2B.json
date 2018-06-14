@@ -23,6 +23,7 @@
 			"chunk": "function(v, a, b) {\n\n\t\tlet o0 = v[a]     + v[b];\n\t\tlet o1 = v[a + 1] + v[b + 1];\n\t\tif (o0 >= 0x100000000) {\n\t\t\to1++;\n\t\t}\n\n\t\tv[a]     = o0;\n\t\tv[a + 1] = o1;\n\n\t}",
 			"type": "function",
 			"hash": "3239c524",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -46,6 +47,7 @@
 			"chunk": "function(v, a, b0, b1) {\n\n\t\tlet o0 = v[a] + b0;\n\t\tif (b0 < 0) {\n\t\t\to0 += 0x100000000;\n\t\t}\n\n\t\tlet o1 = v[a + 1] + b1;\n\t\tif (o0 >= 0x100000000) {\n\t\t\to1++;\n\t\t}\n\n\t\tv[a]     = o0;\n\t\tv[a + 1] = o1;\n\n\t}",
 			"type": "function",
 			"hash": "959028e9",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -74,6 +76,7 @@
 			"chunk": "function(arr, a) {\n\t\treturn (arr[a] ^ (arr[a + 1] << 8) ^ (arr[a + 2] << 16) ^ (arr[a + 3] << 24));\n\t}",
 			"type": "function",
 			"hash": "4b65427c",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -98,6 +101,10 @@
 			"chunk": "function(m, v, a, b, c, d, ix, iy) {\n\n\t\tlet x0 = m[ix];\n\t\tlet x1 = m[ix + 1];\n\t\tlet y0 = m[iy];\n\t\tlet y1 = m[iy + 1];\n\n\t\t_add_64_aa(v, a, b);\n\t\t_add_64_ac(v, a, x0, x1);\n\n\t\tlet xor0 = v[d] ^ v[a];\n\t\tlet xor1 = v[d + 1] ^ v[a + 1];\n\n\t\tv[d]     = xor1;\n\t\tv[d + 1] = xor0;\n\n\t\t_add_64_aa(v, c, d);\n\n\t\txor0 = v[b]     ^ v[c];\n\t\txor1 = v[b + 1] ^ v[c + 1];\n\t\tv[b]     = (xor0 >>> 24) ^ (xor1 << 8);\n\t\tv[b + 1] = (xor1 >>> 24) ^ (xor0 << 8);\n\n\t\t_add_64_aa(v, a, b);\n\t\t_add_64_ac(v, a, y0, y1);\n\n\t\txor0 = v[d]     ^ v[a];\n\t\txor1 = v[d + 1] ^ v[a + 1];\n\t\tv[d]     = (xor0 >>> 16) ^ (xor1 << 16);\n\t\tv[d + 1] = (xor1 >>> 16) ^ (xor0 << 16);\n\n\t\t_add_64_aa(v, c, d);\n\n\t\txor0 = v[b]     ^ v[c];\n\t\txor1 = v[b + 1] ^ v[c + 1];\n\t\tv[b]     = (xor1 >>> 31) ^ (xor0 << 1);\n\t\tv[b + 1] = (xor0 >>> 31) ^ (xor1 << 1);\n\n\t}",
 			"type": "function",
 			"hash": "6e391642",
+			"memory": [
+				"_add_64_aa",
+				"_add_64_ac"
+			],
 			"parameters": [
 				{
 					"chunk": null,
@@ -146,6 +153,11 @@
 			"chunk": "function(last) {\n\n\t\tlast = last === true;\n\n\n\t\tlet m = this.__m;\n\t\tlet v = this.__v;\n\n\t\tlet hash = this.__hash;\n\t\tfor (let i = 0; i < 16; i++) {\n\t\t\tv[i]      = hash[i];\n\t\t\tv[i + 16] = _BLAKE2B_IV32[i];\n\t\t}\n\n\n\t\tlet t = this.__t;\n\n\t\tv[24] = v[24] ^ t;\n\t\tv[25] = v[25] ^ (t / 0x100000000);\n\n\t\tif (last === true) {\n\t\t\tv[28] = ~v[28];\n\t\t\tv[29] = ~v[29];\n\t\t}\n\n\n\t\tlet buffer = this.__buffer;\n\t\tfor (let i = 0; i < 32; i++) {\n\t\t\tm[i] = _read_int32LE(buffer, 4 * i);\n\t\t}\n\n\n\t\tfor (let i = 0; i < 12; i++) {\n\t\t\t_rotate(m, v, 0,  8, 16, 24, _SIGMA82[i * 16 +  0], _SIGMA82[i * 16 +  1]);\n\t\t\t_rotate(m, v, 2, 10, 18, 26, _SIGMA82[i * 16 +  2], _SIGMA82[i * 16 +  3]);\n\t\t\t_rotate(m, v, 4, 12, 20, 28, _SIGMA82[i * 16 +  4], _SIGMA82[i * 16 +  5]);\n\t\t\t_rotate(m, v, 6, 14, 22, 30, _SIGMA82[i * 16 +  6], _SIGMA82[i * 16 +  7]);\n\t\t\t_rotate(m, v, 0, 10, 20, 30, _SIGMA82[i * 16 +  8], _SIGMA82[i * 16 +  9]);\n\t\t\t_rotate(m, v, 2, 12, 22, 24, _SIGMA82[i * 16 + 10], _SIGMA82[i * 16 + 11]);\n\t\t\t_rotate(m, v, 4, 14, 16, 26, _SIGMA82[i * 16 + 12], _SIGMA82[i * 16 + 13]);\n\t\t\t_rotate(m, v, 6,  8, 18, 28, _SIGMA82[i * 16 + 14], _SIGMA82[i * 16 + 15]);\n\t\t}\n\n\t\tfor (let i = 0; i < 16; i++) {\n\t\t\thash[i] = hash[i] ^ v[i] ^ v[i + 16];\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "b610b3d5",
+			"memory": [
+				"_BLAKE2B_IV32",
+				"_read_int32LE",
+				"_rotate"
+			],
 			"parameters": [
 				{
 					"chunk": "last === true",
@@ -163,7 +175,10 @@
 			"chunk": "function() {\n\n\t\tthis.__buffer = new Uint8Array(128);\n\t\tthis.__hash   = new Uint32Array(16);\n\t\tthis.__c      = 0;\n\t\tthis.__m      = new Uint32Array(32);\n\t\tthis.__t      = 0;\n\t\tthis.__v      = new Uint32Array(32);\n\n\t\tfor (let i = 0; i < 16; i++) {\n\t\t\tthis.__hash[i] = _BLAKE2B_IV32[i];\n\t\t}\n\n\t\tthis.__hash[0] ^= 0x01010000 ^ 0 ^ 64;\n\n\t}",
 			"type": "function",
 			"hash": "062c789d",
-			"parameters": []
+			"parameters": [],
+			"memory": [
+				"_BLAKE2B_IV32"
+			]
 		},
 		"states": {},
 		"properties": {
@@ -241,6 +256,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -258,6 +274,7 @@
 				"chunk": "function() {\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.crypto.BLAKE2B',\n\t\t\t\t'arguments':   []\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "57b6b8a8",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -274,6 +291,9 @@
 				"chunk": "function(data) {\n\n\t\t\tdata = data instanceof Buffer ? data : new Buffer(data, 'utf8');\n\n\n\t\t\tlet input  = new Uint8Array(data);\n\t\t\tlet buffer = this.__buffer;\n\n\t\t\tfor (let d = 0; d < input.length; d++) {\n\n\t\t\t\tif (this.__c === 128) {\n\t\t\t\t\tthis.__t += this.__c;\n\t\t\t\t\t_compress.call(this, false);\n\t\t\t\t\tthis.__c = 0;\n\t\t\t\t}\n\n\t\t\t\tbuffer[this.__c++] = input[d];\n\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "54b21152",
+				"memory": [
+					"_compress"
+				],
 				"parameters": [
 					{
 						"chunk": "data instanceof Buffer ? data : new Buffer(data, 'utf8')",
@@ -291,6 +311,9 @@
 				"chunk": "function() {\n\n\t\t\tthis.__t += this.__c;\n\n\n\t\t\twhile (this.__c < 128) {\n\t\t\t\tthis.__buffer[this.__c++] = 0;\n\t\t\t}\n\n\t\t\t_compress.call(this, true);\n\n\n\t\t\tlet out = new Uint8Array(64);\n\t\t\tfor (let i = 0; i < 64; i++) {\n\t\t\t\tout[i] = this.__hash[i >> 2] >> (8 * (i & 3));\n\t\t\t}\n\n\n\t\t\tlet hash = '';\n\n\t\t\tfor (let i = 0; i < 64; i++) {\n\n\t\t\t\tlet val = out[i];\n\t\t\t\tif (val < 16) {\n\t\t\t\t\thash += '0';\n\t\t\t\t}\n\n\t\t\t\thash += (val).toString(16);\n\n\t\t\t}\n\n\t\t\treturn new Buffer(hash, 'hex');\n\n\t\t}",
 				"type": "function",
 				"hash": "09c28b33",
+				"memory": [
+					"_compress"
+				],
 				"parameters": [],
 				"values": [
 					{

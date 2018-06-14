@@ -21,7 +21,8 @@
 					"name": "data",
 					"type": "Object"
 				}
-			]
+			],
+			"memory": []
 		},
 		"states": {},
 		"properties": {},
@@ -32,6 +33,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -49,6 +51,7 @@
 				"chunk": "function() {\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.ai.neat.Species',\n\t\t\t\t'arguments':   []\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "4dad1055",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{

@@ -21,7 +21,8 @@
 					"name": "data",
 					"type": "Object"
 				}
-			]
+			],
+			"memory": []
 		},
 		"states": {
 			"genes": "setGenes"
@@ -57,6 +58,7 @@
 				"chunk": "function(blob) {\n\n\t\t\tif (blob.genes instanceof Array) {\n\n\t\t\t\tlet genes = blob.genes;\n\t\t\t\tlet map   = {};\n\n\n\t\t\t\tif (blob.map instanceof Object) {\n\n\t\t\t\t\tfor (let bid in blob.map) {\n\n\t\t\t\t\t\tlet index = blob.map[bid];\n\t\t\t\t\t\tif (typeof index === 'number') {\n\t\t\t\t\t\t\tmap[bid] = index;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tfor (let g = 0, gl = genes.length; g < gl; g++) {\n\n\t\t\t\t\tlet id = null;\n\t\t\t\t\tfor (let mid in map) {\n\n\t\t\t\t\t\tif (map[mid] === g) {\n\t\t\t\t\t\t\tid = mid;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\tif (id !== null) {\n\t\t\t\t\t\tthis.setGene(id, genes[g]);\n\t\t\t\t\t} else {\n\t\t\t\t\t\tthis.addGene(genes[g]);\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "73aff951",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -74,6 +76,7 @@
 				"chunk": "function() {\n\n\t\t\tlet blob = {};\n\n\n\t\t\tif (this.genes.length > 0) {\n\t\t\t\tblob.genes = this.genes.map(lychee.serialize);\n\t\t\t}\n\n\n\t\t\tif (blob.genes instanceof Array && Object.keys(this.__map).length > 0) {\n\n\t\t\t\tblob.map = Object.map(this.__map, function(val, key) {\n\n\t\t\t\t\tlet index = this.genes.indexOf(val);\n\t\t\t\t\tif (index !== -1) {\n\t\t\t\t\t\treturn index;\n\t\t\t\t\t}\n\n\n\t\t\t\t\treturn undefined;\n\n\t\t\t\t}, this);\n\n\t\t\t}\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.ai.enn.Genome',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "284df515",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -87,6 +90,7 @@
 				"chunk": "function(gene) {\n\n\t\t\tgene = gene instanceof Object ? gene : null;\n\n\n\t\t\tif (gene !== null) {\n\n\t\t\t\tlet index = this.genes.indexOf(gene);\n\t\t\t\tif (index === -1) {\n\n\t\t\t\t\tthis.genes.push(gene);\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "49a73a22",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "gene instanceof Object ? gene : null",
@@ -112,6 +116,7 @@
 				"chunk": "function(id, gene) {\n\n\t\t\tid   = typeof id === 'string' ? id   : null;\n\t\t\tgene = gene instanceof Object ? gene : null;\n\n\n\t\t\tif (id !== null && gene !== null && this.__map[id] === undefined) {\n\n\t\t\t\tthis.__map[id] = gene;\n\n\t\t\t\tlet result = this.addGene(gene);\n\t\t\t\tif (result === true) {\n\t\t\t\t\treturn true;\n\t\t\t\t} else {\n\t\t\t\t\tdelete this.__map[id];\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "2e1be4c9",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof id === 'string' ? id   : null",
@@ -143,6 +148,7 @@
 				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tlet found = null;\n\n\n\t\t\tif (id !== null) {\n\n\t\t\t\tif (this.__map[id] !== undefined) {\n\t\t\t\t\tfound = this.__map[id];\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn found;\n\n\t\t}",
 				"type": "function",
 				"hash": "351583f3",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof id === 'string' ? id : null",
@@ -171,6 +177,7 @@
 				"chunk": "function(gene) {\n\n\t\t\tgene = gene instanceof Object ? gene : null;\n\n\n\t\t\tif (gene !== null) {\n\n\t\t\t\tlet found = false;\n\n\t\t\t\tlet index = this.genes.indexOf(gene);\n\t\t\t\tif (index !== -1) {\n\t\t\t\t\tthis.genes.splice(index, 1);\n\t\t\t\t\tfound = true;\n\t\t\t\t}\n\n\n\t\t\t\tfor (let id in this.__map) {\n\n\t\t\t\t\tif (this.__map[id] === gene) {\n\n\t\t\t\t\t\tdelete this.__map[id];\n\t\t\t\t\t\tfound = true;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\treturn found;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "36854afd",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "gene instanceof Object ? gene : null",
@@ -196,6 +203,7 @@
 				"chunk": "function(genes) {\n\n\t\t\tgenes = genes instanceof Object ? genes : null;\n\n\n\t\t\tlet all = true;\n\n\t\t\tif (genes !== null) {\n\n\t\t\t\tfor (let g = 0, gl = genes.length; g < gl; g++) {\n\n\t\t\t\t\tlet result = this.addGene(genes[g]);\n\t\t\t\t\tif (result === false) {\n\t\t\t\t\t\tall = false;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn all;\n\n\t\t}",
 				"type": "function",
 				"hash": "233ef155",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "genes instanceof Object ? genes : null",
@@ -221,6 +229,7 @@
 				"chunk": "function() {\n\n\t\t\tlet genes = this.genes;\n\n\t\t\tfor (let g = 0, gl = genes.length; g < gl; g++) {\n\n\t\t\t\tthis.removeGene(genes[g]);\n\n\t\t\t\tgl--;\n\t\t\t\tg--;\n\n\t\t\t}\n\n\t\t\treturn true;\n\n\t\t}",
 				"type": "function",
 				"hash": "9839c1d3",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{

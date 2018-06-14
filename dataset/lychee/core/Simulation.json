@@ -21,7 +21,8 @@
 					"name": "data",
 					"type": "Object"
 				}
-			]
+			],
+			"memory": []
 		},
 		"states": {
 			"id": "setId",
@@ -136,6 +137,7 @@
 				"chunk": "function(blob) {\n\n\t\t\tif (blob.specifications instanceof Object) {\n\n\t\t\t\tfor (let id in blob.specifications) {\n\t\t\t\t\tthis.specifications[id] = lychee.deserialize(blob.specifications[id]);\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\tif (blob.environment instanceof Object) {\n\t\t\t\tthis.setEnvironment(lychee.deserialize(blob.environment));\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "526b8089",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -153,6 +155,7 @@
 				"chunk": "function() {\n\n\t\t\tlet states = {};\n\t\t\tlet blob   = {};\n\n\n\t\t\tif (this.id !== '')             states.id      = this.id;\n\t\t\tif (this.target !== 'app.Main') states.target  = this.target;\n\t\t\tif (this.timeout !== 10000)     states.timeout = this.timeout;\n\n\n\t\t\tif (Object.keys(this.specifications).length > 0) {\n\n\t\t\t\tblob.specifications = {};\n\n\t\t\t\tfor (let sid in this.specifications) {\n\t\t\t\t\tblob.specifications[sid] = lychee.serialize(this.specifications[sid]);\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.Simulation',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "10cc6a8b",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -166,6 +169,9 @@
 				"chunk": "function(identifier) {\n\n\t\t\tidentifier = typeof identifier === 'string' ? identifier : null;\n\n\n\t\t\tif (identifier !== null) {\n\n\t\t\t\tlet tmp    = identifier.split('.');\n\t\t\t\tlet pkg_id = tmp[0];\n\t\t\t\tlet def_id = tmp.slice(1).join('.');\n\n\n\t\t\t\tlet specification = this.specifications[identifier] || null;\n\t\t\t\tif (specification !== null) {\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t} else {\n\n\t\t\t\t\tlet pkg = this.__packages[pkg_id] || null;\n\t\t\t\t\tif (pkg !== null && pkg.config !== null) {\n\n\t\t\t\t\t\tlet result = pkg.load(def_id);\n\t\t\t\t\t\tif (result === true) {\n\n\t\t\t\t\t\t\tlet debug = _get_debug.call(this);\n\t\t\t\t\t\t\tif (debug === true) {\n\t\t\t\t\t\t\t\tconsole.log('lychee.Simulation (\"' + this.id + '\"): Loading \"' + identifier + '\" from Package \"' + pkg.id + '\".');\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\treturn result;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "e8b2be80",
+				"memory": [
+					"_get_debug"
+				],
 				"parameters": [
 					{
 						"chunk": "typeof identifier === 'string' ? identifier : null",
@@ -191,6 +197,10 @@
 				"chunk": "function(specification, inject) {\n\n\t\t\tspecification = specification instanceof lychee.Specification ? specification : null;\n\t\t\tinject        = inject === true;\n\n\n\t\t\tlet console = _get_console.call(this);\n\t\t\tlet debug   = _get_debug.call(this);\n\n\n\t\t\tif (specification !== null) {\n\n\t\t\t\tlet url = specification.url || null;\n\t\t\t\tif (url !== null && inject === false) {\n\n\t\t\t\t\tlet old_pkg_id   = specification.id.split('.')[0];\n\t\t\t\t\tlet new_pkg_id   = null;\n\t\t\t\t\tlet assimilation = true;\n\n\n\t\t\t\t\tlet packages = this.__packages;\n\n\t\t\t\t\tfor (let pid in packages) {\n\n\t\t\t\t\t\tlet pkg = packages[pid];\n\n\t\t\t\t\t\tif (url.startsWith(pkg.root)) {\n\t\t\t\t\t\t\tnew_pkg_id = pkg.id;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\tif (pid === old_pkg_id || pid === new_pkg_id) {\n\t\t\t\t\t\t\tassimilation = false;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\tif (assimilation === true) {\n\n\t\t\t\t\t\tif (debug === true) {\n\t\t\t\t\t\t\tconsole.log('lychee.Simulation (\"' + this.id + '\"): Assimilating Specification \"' + specification.id + '\".');\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\tthis.__cache.assimilations.push(specification.id);\n\n\t\t\t\t\t} else if (new_pkg_id !== null && new_pkg_id !== old_pkg_id) {\n\n\t\t\t\t\t\tif (debug === true) {\n\t\t\t\t\t\t\tconsole.log('lychee.Simulation (\"' + this.id + '\"): Injecting Specification \"' + specification.id + '\" into Package \"' + new_pkg_id + '\".');\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\tspecification.id = new_pkg_id + '.' + specification.id.split('.').slice(1).join('.');\n\n\t\t\t\t\t\tfor (let r = 0, rl = specification._requires.length; r < rl; r++) {\n\n\t\t\t\t\t\t\tlet req = specification._requires[r];\n\t\t\t\t\t\t\tif (req.startsWith(old_pkg_id)) {\n\t\t\t\t\t\t\t\tspecification._requires[r] = new_pkg_id + req.substr(old_pkg_id.length);\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t} else {\n\n\t\t\t\t\t// XXX: Direct injection has no auto-mapping\n\n\t\t\t\t}\n\n\n\t\t\t\tif (debug === true) {\n\t\t\t\t\tconsole.log('lychee.Simulation (\"' + this.id + '\"): Mapping Specification \"' + specification.id + '\".');\n\t\t\t\t}\n\n\n\t\t\t\tthis.specifications[specification.id] = specification;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\tconsole.error('lychee.Simulation (\"' + this.id + '\"): Invalid Specification \"' + specification.id + '\".');\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "ae963160",
+				"memory": [
+					"_get_console",
+					"_get_debug"
+				],
 				"parameters": [
 					{
 						"chunk": "specification instanceof lychee.Specification ? specification : null",
@@ -222,6 +232,14 @@
 				"chunk": "function(callback) {\n\n\t\t\tcallback = callback instanceof Function ? callback : null;\n\n\n\t\t\tlet cache       = this.__cache;\n\t\t\tlet console     = _get_console.call(this);\n\t\t\tlet debug       = _get_debug.call(this);\n\t\t\tlet environment = this.environment;\n\t\t\tlet target      = this.target;\n\n\n\t\t\tif (debug === true) {\n\t\t\t\tglobal.lychee.SIMULATIONS[this.id] = this;\n\t\t\t}\n\n\n\t\t\tif (target !== null && environment !== null && cache.active === false) {\n\n\t\t\t\tlet result = this.load(target);\n\t\t\t\tif (result === true) {\n\n\t\t\t\t\tif (debug === true) {\n\t\t\t\t\t\tconsole.info('lychee.Simulation (\"' + this.id + '\"): BUILD START (\"' + target + '\").');\n\t\t\t\t\t}\n\n\n\t\t\t\t\tcache.start   = Date.now();\n\t\t\t\t\tcache.timeout = Date.now() + this.timeout;\n\t\t\t\t\tcache.load    = [ target ];\n\t\t\t\t\tcache.trace   = [];\n\t\t\t\t\tcache.active  = true;\n\n\n\t\t\t\t\tlet interval = setInterval(function() {\n\n\t\t\t\t\t\tlet cache = this.__cache;\n\t\t\t\t\t\tif (cache.active === true) {\n\n\t\t\t\t\t\t\t_build_loop.call(this, cache);\n\n\t\t\t\t\t\t} else if (cache.active === false) {\n\n\t\t\t\t\t\t\tif (interval !== null) {\n\t\t\t\t\t\t\t\tclearInterval(interval);\n\t\t\t\t\t\t\t\tinterval = null;\n\t\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\t\tlet assimilations = cache.assimilations;\n\t\t\t\t\t\t\tif (assimilations.length > 0) {\n\n\t\t\t\t\t\t\t\tfor (let a = 0, al = assimilations.length; a < al; a++) {\n\n\t\t\t\t\t\t\t\t\tlet identifier    = assimilations[a];\n\t\t\t\t\t\t\t\t\tlet specification = this.specifications[identifier] || null;\n\t\t\t\t\t\t\t\t\tif (specification !== null) {\n\t\t\t\t\t\t\t\t\t\tspecification.export(this.sandboxes);\n\t\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\t\tcache.end = Date.now();\n\n\n\t\t\t\t\t\t\tif (cache.end > cache.timeout) {\n\t\t\t\t\t\t\t\t_on_build_timeout.call(this, cache, callback);\n\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\t_on_build_success.call(this, cache, callback);\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}.bind(this), (1000 / 60) | 0);\n\n\t\t\t\t} else {\n\n\t\t\t\t\tcache.retries++;\n\n\n\t\t\t\t\tif (cache.retries < 3) {\n\n\t\t\t\t\t\tif (debug === true) {\n\t\t\t\t\t\t\tconsole.warn('lychee.Simulation (\"' + this.id + '\"): Unready Package \"' + target + '\" (retrying in 100ms ...).');\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\tsetTimeout(function() {\n\t\t\t\t\t\t\tthis.init(callback);\n\t\t\t\t\t\t}.bind(this), 100);\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tconsole.error('lychee.Simulation (\"' + this.id + '\"): Invalid Dependencies\\n\\t - ' + target + ' (target).');\n\n\n\t\t\t\t\t\ttry {\n\t\t\t\t\t\t\tcallback.call(environment.global || null, null);\n\t\t\t\t\t\t} catch (err) {\n\t\t\t\t\t\t\t_lychee.Debugger.report(environment, err, null);\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\ttry {\n\t\t\t\tcallback.call(environment.global || null, null);\n\t\t\t} catch (err) {\n\t\t\t\t_lychee.Debugger.report(environment, err, null);\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "918cc8d8",
+				"memory": [
+					"_build_loop",
+					"_get_console",
+					"_get_debug",
+					"_lychee",
+					"_on_build_success",
+					"_on_build_timeout"
+				],
 				"parameters": [
 					{
 						"chunk": "callback instanceof Function ? callback : null",
@@ -247,6 +265,7 @@
 				"chunk": "function(environment) {\n\n\t\t\tenvironment = environment instanceof lychee.Environment ? environment : null;\n\n\n\t\t\tif (environment !== null) {\n\n\t\t\t\tthis.environment = environment;\n\t\t\t\tthis.__packages  = {};\n\n\t\t\t\tfor (let pid in environment.packages) {\n\n\t\t\t\t\tlet pkg = environment.packages[pid];\n\n\t\t\t\t\tthis.__packages[pid] = new lychee.Package({\n\t\t\t\t\t\tid:         pkg.id,\n\t\t\t\t\t\turl:        pkg.url,\n\t\t\t\t\t\ttype:       'review',\n\t\t\t\t\t\tsimulation: this\n\t\t\t\t\t});\n\n\t\t\t\t}\n\n\t\t\t\treturn true;\n\n\t\t\t} else {\n\n\t\t\t\tthis.environment = null;\n\t\t\t\tthis.__packages  = {};\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "d55666da",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "environment instanceof lychee.Environment ? environment : null",
@@ -272,6 +291,7 @@
 				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null) {\n\n\t\t\t\tthis.id = id;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "da8aa1c6",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof id === 'string' ? id : null",
@@ -297,6 +317,7 @@
 				"chunk": "function(specifications) {\n\n\t\t\tspecifications = specifications instanceof Object ? specifications : null;\n\n\n\t\t\tif (specifications !== null) {\n\n\t\t\t\tfor (let identifier in specifications) {\n\n\t\t\t\t\tlet specification = specifications[identifier];\n\t\t\t\t\tif (specification instanceof lychee.Specification) {\n\t\t\t\t\t\tthis.specifications[identifier] = specification;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "638ee960",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "specifications instanceof Object ? specifications : null",
@@ -322,6 +343,7 @@
 				"chunk": "function(identifier) {\n\n\t\t\tidentifier = typeof identifier === 'string' ? identifier : null;\n\n\n\t\t\tif (identifier !== null) {\n\n\t\t\t\tlet pid = identifier.split('.')[0];\n\t\t\t\tlet pkg = this.__packages[pid] || null;\n\t\t\t\tif (pkg !== null) {\n\n\t\t\t\t\tthis.target = identifier;\n\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "e8ec8e20",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof identifier === 'string' ? identifier : null",
@@ -347,6 +369,7 @@
 				"chunk": "function(timeout) {\n\n\t\t\ttimeout = typeof timeout === 'number' ? (timeout | 0) : null;\n\n\n\t\t\tif (timeout !== null) {\n\n\t\t\t\tthis.timeout = timeout;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "2b8fca99",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof timeout === 'number' ? (timeout | 0) : null",

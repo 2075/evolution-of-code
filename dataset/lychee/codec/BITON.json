@@ -63,6 +63,9 @@
 			"chunk": "function(str) {\n\n\t\tlet san  = str;\n\t\tlet keys = Object.keys(_CHARS_META);\n\t\tlet vals = Object.values(_CHARS_META);\n\n\n\t\tkeys.forEach(function(key, i) {\n\t\t\tsan = san.replace(key, vals[i]);\n\t\t});\n\n\n\t\tif (_CHARS_ESCAPABLE.test(san)) {\n\n\t\t\tsan = san.replace(_CHARS_ESCAPABLE, function(chr) {\n\t\t\t\treturn '\\\\u' + (chr.charCodeAt(0).toString(16)).slice(-4);\n\t\t\t});\n\n\t\t}\n\n\t\treturn san;\n\n\t}",
 			"type": "function",
 			"hash": "449c3481",
+			"memory": [
+				"_CHARS_ESCAPABLE"
+			],
 			"parameters": [
 				{
 					"chunk": null,
@@ -76,6 +79,7 @@
 			"chunk": "function(san) {\n\n\t\tlet str  = san;\n\t\tlet keys = Object.keys(_CHARS_META);\n\t\tlet vals = Object.values(_CHARS_META);\n\n\n\t\tvals.forEach(function(val, i) {\n\n\t\t\tif (val !== '') {\n\t\t\t\tstr = str.replace(val, keys[i]);\n\t\t\t}\n\n\t\t});\n\n\n\t\treturn str;\n\n\t}",
 			"type": "function",
 			"hash": "65e15cf4",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -89,6 +93,7 @@
 			"chunk": "function(identifier, scope) {\n\n\t\tlet pointer = scope;\n\n\t\tlet ns = identifier.split('.');\n\t\tfor (let n = 0, l = ns.length; n < l; n++) {\n\n\t\t\tlet name = ns[n];\n\n\t\t\tif (pointer[name] !== undefined) {\n\t\t\t\tpointer = pointer[name];\n\t\t\t} else {\n\t\t\t\tpointer = null;\n\t\t\t\tbreak;\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn pointer;\n\n\t}",
 			"type": "function",
 			"hash": "5e181d5d",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -113,6 +118,7 @@
 			"chunk": "function(buffer, mode) {\n\n\t\tthis.__buffer    = typeof buffer === 'string' ? buffer : '';\n\t\tthis.__mode      = typeof mode === 'number'   ? mode   : 0;\n\n\t\tthis.__pointer   = 0;\n\t\tthis.__value     = 0;\n\t\tthis.__remaining = 8;\n\t\tthis.__index     = 0;\n\n\t\tif (this.__mode === _Stream.MODE.read) {\n\t\t\tthis.__value = this.__buffer.charCodeAt(this.__index);\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "9c37b4e2",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -131,6 +137,10 @@
 			"chunk": "function(stream, data) {\n\n\t\t// 0: Boolean, Null (or EOS), Undefined, Infinity, NaN\n\t\tif (\n\t\t\ttypeof data === 'boolean'\n\t\t\t|| data === null\n\t\t\t|| data === undefined\n\t\t\t|| (\n\t\t\t\ttypeof data === 'number'\n\t\t\t\t&& (\n\t\t\t\t\tdata === Infinity\n\t\t\t\t\t|| data === -Infinity\n\t\t\t\t\t|| isNaN(data) === true\n\t\t\t\t)\n\t\t\t)\n\t\t) {\n\n\t\t\tstream.write(0, 3);\n\n\t\t\tif (data === null) {\n\t\t\t\tstream.write(1, 3);\n\t\t\t} else if (data === undefined) {\n\t\t\t\tstream.write(2, 3);\n\t\t\t} else if (data === false) {\n\t\t\t\tstream.write(3, 3);\n\t\t\t} else if (data === true) {\n\t\t\t\tstream.write(4, 3);\n\t\t\t} else if (data === Infinity) {\n\t\t\t\tstream.write(5, 3);\n\t\t\t} else if (data === -Infinity) {\n\t\t\t\tstream.write(6, 3);\n\t\t\t} else if (isNaN(data) === true) {\n\t\t\t\tstream.write(7, 3);\n\t\t\t}\n\n\n\t\t// 1: Integer, 2: Float\n\t\t} else if (typeof data === 'number') {\n\n\t\t\tlet type = 1;\n\t\t\tif (data < 268435456 && data !== (data | 0)) {\n\t\t\t\ttype = 2;\n\t\t\t}\n\n\n\t\t\tstream.write(type, 3);\n\n\n\t\t\t// Negative value\n\t\t\tlet sign = 0;\n\t\t\tif (data < 0) {\n\t\t\t\tdata = -data;\n\t\t\t\tsign = 1;\n\t\t\t}\n\n\n\t\t\t// Float only: Calculate the integer value and remember the shift\n\t\t\tlet shift = 0;\n\n\t\t\tif (type === 2) {\n\n\t\t\t\tlet step = 10;\n\t\t\t\tlet m    = data;\n\t\t\t\tlet tmp  = 0;\n\n\n\t\t\t\t// Calculate the exponent and shift\n\t\t\t\tdo {\n\n\t\t\t\t\tm     = data * step;\n\t\t\t\t\tstep *= 10;\n\t\t\t\t\ttmp   = m | 0;\n\t\t\t\t\tshift++;\n\n\t\t\t\t} while (m - tmp > 1 / step && shift < 8 && m < 214748364);\n\n\n\t\t\t\tstep = tmp / 10;\n\n\t\t\t\t// Recorrect shift if we are > 0.5\n\t\t\t\t// and shift is too high\n\t\t\t\tif (step === (step | 0)) {\n\t\t\t\t\ttmp = step;\n\t\t\t\t\tshift--;\n\t\t\t\t}\n\n\t\t\t\tdata = tmp;\n\n\t\t\t}\n\n\n\n\t\t\tif (data < 2) {\n\n\t\t\t\tstream.write(0, 4);\n\t\t\t\tstream.write(data, 1);\n\n\t\t\t} else if (data < 16) {\n\n\t\t\t\tstream.write(1, 4);\n\t\t\t\tstream.write(data, 4);\n\n\t\t\t} else if (data < 256) {\n\n\t\t\t\tstream.write(2, 4);\n\t\t\t\tstream.write(data, 8);\n\n\t\t\t} else if (data < 4096) {\n\n\t\t\t\tstream.write(3, 4);\n\t\t\t\tstream.write(data >>  8 & 0xff, 4);\n\t\t\t\tstream.write(data       & 0xff, 8);\n\n\t\t\t} else if (data < 65536) {\n\n\t\t\t\tstream.write(4, 4);\n\t\t\t\tstream.write(data >>  8 & 0xff, 8);\n\t\t\t\tstream.write(data       & 0xff, 8);\n\n\t\t\t} else if (data < 1048576) {\n\n\t\t\t\tstream.write(5, 4);\n\t\t\t\tstream.write(data >> 16 & 0xff, 4);\n\t\t\t\tstream.write(data >>  8 & 0xff, 8);\n\t\t\t\tstream.write(data       & 0xff, 8);\n\n\t\t\t} else if (data < 16777216) {\n\n\t\t\t\tstream.write(6, 4);\n\t\t\t\tstream.write(data >> 16 & 0xff, 8);\n\t\t\t\tstream.write(data >>  8 & 0xff, 8);\n\t\t\t\tstream.write(data       & 0xff, 8);\n\n\t\t\t} else if (data < 268435456) {\n\n\t\t\t\tstream.write(7, 4);\n\t\t\t\tstream.write(data >> 24 & 0xff, 8);\n\t\t\t\tstream.write(data >> 16 & 0xff, 8);\n\t\t\t\tstream.write(data >>  8 & 0xff, 8);\n\t\t\t\tstream.write(data       & 0xff, 8);\n\n\t\t\t} else {\n\n\t\t\t\tstream.write(8, 4);\n\n\t\t\t\t_encode(stream, data.toString());\n\n\t\t\t}\n\n\n\t\t\tstream.write(sign, 1);\n\n\n\t\t\t// Float only: Remember the shift for precision\n\t\t\tif (type === 2) {\n\t\t\t\tstream.write(shift, 4);\n\t\t\t}\n\n\n\t\t// 3: String\n\t\t} else if (typeof data === 'string') {\n\n\t\t\tdata = _sanitize_string(data);\n\n\n\t\t\tstream.write(3, 3);\n\n\n\t\t\tlet l = data.length;\n\n\t\t\t// Write Size Field\n\t\t\tif (l > 65535) {\n\n\t\t\t\tstream.write(31, 5);\n\n\t\t\t\tstream.write(l >> 24 & 0xff, 8);\n\t\t\t\tstream.write(l >> 16 & 0xff, 8);\n\t\t\t\tstream.write(l >>  8 & 0xff, 8);\n\t\t\t\tstream.write(l       & 0xff, 8);\n\n\t\t\t} else if (l > 255) {\n\n\t\t\t\tstream.write(30, 5);\n\n\t\t\t\tstream.write(l >>  8 & 0xff, 8);\n\t\t\t\tstream.write(l       & 0xff, 8);\n\n\t\t\t} else if (l > 28) {\n\n\t\t\t\tstream.write(29, 5);\n\n\t\t\t\tstream.write(l, 8);\n\n\t\t\t} else {\n\n\t\t\t\tstream.write(l, 5);\n\n\t\t\t}\n\n\n\t\t\tstream.writeRAW(data);\n\n\n\t\t// 4: Start of Array\n\t\t} else if (data instanceof Array) {\n\n\t\t\tstream.write(4, 3);\n\n\t\t\tfor (let d = 0, dl = data.length; d < dl; d++) {\n\t\t\t\tstream.write(0, 3);\n\t\t\t\t_encode(stream, data[d]);\n\t\t\t}\n\n\t\t\t// Write EOO marker\n\t\t\tstream.write(7, 3);\n\n\n\t\t// 5: Start of Object\n\t\t} else if (data instanceof Object && typeof data.serialize !== 'function') {\n\n\t\t\tstream.write(5, 3);\n\n\t\t\tfor (let prop in data) {\n\n\t\t\t\tif (data.hasOwnProperty(prop)) {\n\t\t\t\t\tstream.write(0, 3);\n\t\t\t\t\t_encode(stream, prop);\n\t\t\t\t\t_encode(stream, data[prop]);\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\t// Write EOO marker\n\t\t\tstream.write(7, 3);\n\n\n\t\t// 6: Custom High-Level Implementation\n\t\t} else if (data instanceof Object && typeof data.serialize === 'function') {\n\n\t\t\tstream.write(6, 3);\n\n\t\t\tlet blob = lychee.serialize(data);\n\n\t\t\t_encode(stream, blob);\n\n\t\t\t// Write EOO marker\n\t\t\tstream.write(7, 3);\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "efe63945",
+			"memory": [
+				"_encode",
+				"_sanitize_string"
+			],
 			"parameters": [
 				{
 					"chunk": null,
@@ -149,6 +159,11 @@
 			"chunk": "function(stream) {\n\n\t\tlet value  = undefined;\n\t\tlet tmp    = 0;\n\t\tlet errors = 0;\n\t\tlet check  = 0;\n\n\t\tif (stream.pointer() < stream.length()) {\n\n\t\t\tlet type = stream.read(3);\n\n\n\t\t\t// 0: Boolean, Null (or EOS), Undefined, Infinity, NaN\n\t\t\tif (type === 0) {\n\n\t\t\t\ttmp = stream.read(3);\n\n\t\t\t\tif (tmp === 1) {\n\t\t\t\t\tvalue = null;\n\t\t\t\t} else if (tmp === 2) {\n\t\t\t\t\tvalue = undefined;\n\t\t\t\t} else if (tmp === 3) {\n\t\t\t\t\tvalue = false;\n\t\t\t\t} else if (tmp === 4) {\n\t\t\t\t\tvalue = true;\n\t\t\t\t} else if (tmp === 5) {\n\t\t\t\t\tvalue = Infinity;\n\t\t\t\t} else if (tmp === 6) {\n\t\t\t\t\tvalue = -Infinity;\n\t\t\t\t} else if (tmp === 7) {\n\t\t\t\t\tvalue = NaN;\n\t\t\t\t}\n\n\n\t\t\t// 1: Integer, 2: Float\n\t\t\t} else if (type === 1 || type === 2) {\n\n\t\t\t\ttmp = stream.read(4);\n\n\n\t\t\t\tif (tmp === 0) {\n\n\t\t\t\t\tvalue = stream.read(1);\n\n\t\t\t\t} else if (tmp === 1) {\n\n\t\t\t\t\tvalue = stream.read(4);\n\n\t\t\t\t} else if (tmp === 2) {\n\n\t\t\t\t\tvalue = stream.read(8);\n\n\t\t\t\t} else if (tmp === 3) {\n\n\t\t\t\t\tvalue = (stream.read(4) <<  8) + stream.read(8);\n\n\t\t\t\t} else if (tmp === 4) {\n\n\t\t\t\t\tvalue = (stream.read(8) <<  8) + stream.read(8);\n\n\t\t\t\t} else if (tmp === 5) {\n\n\t\t\t\t\tvalue = (stream.read(4) << 16) + (stream.read(8) <<  8) + stream.read(8);\n\n\t\t\t\t} else if (tmp === 6) {\n\n\t\t\t\t\tvalue = (stream.read(8) << 16) + (stream.read(8) <<  8) + stream.read(8);\n\n\t\t\t\t} else if (tmp === 7) {\n\n\t\t\t\t\tvalue = (stream.read(8) << 24) + (stream.read(8) << 16) + (stream.read(8) <<  8) + stream.read(8);\n\n\t\t\t\t} else if (tmp === 8) {\n\n\t\t\t\t\tlet str = _decode(stream);\n\n\t\t\t\t\tvalue = parseInt(str, 10);\n\n\t\t\t\t}\n\n\n\t\t\t\t// Negative value\n\t\t\t\tlet sign = stream.read(1);\n\t\t\t\tif (sign === 1) {\n\t\t\t\t\tvalue = -1 * value;\n\t\t\t\t}\n\n\n\t\t\t\t// Float only: Shift it back by the precision\n\t\t\t\tif (type === 2) {\n\t\t\t\t\tlet shift = stream.read(4);\n\t\t\t\t\tvalue /= _RPOW_TABLE[shift];\n\t\t\t\t}\n\n\n\t\t\t// 3: String\n\t\t\t} else if (type === 3) {\n\n\t\t\t\tlet size = stream.read(5);\n\n\t\t\t\tif (size === 31) {\n\n\t\t\t\t\tsize = (stream.read(8) << 24) + (stream.read(8) << 16) + (stream.read(8) <<  8) + stream.read(8);\n\n\t\t\t\t} else if (size === 30) {\n\n\t\t\t\t\tsize = (stream.read(8) <<  8) + stream.read(8);\n\n\t\t\t\t} else if (size === 29) {\n\n\t\t\t\t\tsize = stream.read(8);\n\n\t\t\t\t}\n\n\n\t\t\t\tvalue = _desanitize_string(stream.readRAW(size));\n\n\n\t\t\t// 4: Array\n\t\t\t} else if (type === 4) {\n\n\t\t\t\tvalue = [];\n\n\n\t\t\t\twhile (errors === 0) {\n\n\t\t\t\t\tcheck = stream.read(3);\n\n\t\t\t\t\tif (check === 0) {\n\t\t\t\t\t\tvalue.push(_decode(stream));\n\t\t\t\t\t} else if (check === 7) {\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t} else {\n\t\t\t\t\t\terrors++;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t// 5: Object\n\t\t\t} else if (type === 5) {\n\n\t\t\t\tvalue = {};\n\n\n\t\t\t\twhile (errors === 0) {\n\n\t\t\t\t\tcheck = stream.read(3);\n\n\t\t\t\t\tif (check === 0) {\n\t\t\t\t\t\tvalue[_decode(stream)] = _decode(stream);\n\t\t\t\t\t} else if (check === 7) {\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t} else {\n\t\t\t\t\t\terrors++;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t// 6: Custom High-Level Implementation\n\t\t\t} else if (type === 6) {\n\n\t\t\t\tlet blob = _decode(stream);\n\n\t\t\t\tvalue = lychee.deserialize(blob);\n\t\t\t\tcheck = stream.read(3);\n\n\t\t\t\tif (check !== 7) {\n\t\t\t\t\tvalue = undefined;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn value;\n\n\t}",
 			"type": "function",
 			"hash": "11b98e15",
+			"memory": [
+				"_RPOW_TABLE",
+				"_decode",
+				"_desanitize_string"
+			],
 			"parameters": [
 				{
 					"chunk": null,
@@ -228,6 +243,7 @@
 				"chunk": "function() {\n\n\t\t\treturn {\n\t\t\t\t'reference': 'lychee.codec.BITON',\n\t\t\t\t'blob':      null\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "28165cbe",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -244,6 +260,9 @@
 				"chunk": "function(data) {\n\n\t\t\tdata = data instanceof Object ? data : null;\n\n\n\t\t\tif (data !== null) {\n\n\t\t\t\tlet stream = new _Stream('', _Stream.MODE.write);\n\n\t\t\t\t_encode(stream, data);\n\n\t\t\t\treturn new Buffer(stream.toString(), 'utf8');\n\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
 				"type": "function",
 				"hash": "e16dd912",
+				"memory": [
+					"_encode"
+				],
 				"parameters": [
 					{
 						"chunk": "data instanceof Object ? data : null",
@@ -268,6 +287,9 @@
 				"chunk": "function(data) {\n\n\t\t\tdata = data instanceof Buffer ? data : null;\n\n\n\t\t\tif (data !== null) {\n\n\t\t\t\tlet stream = new _Stream(data.toString('utf8'), _Stream.MODE.read);\n\t\t\t\tlet object = _decode(stream);\n\t\t\t\tif (object !== undefined) {\n\t\t\t\t\treturn object;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
 				"type": "function",
 				"hash": "2747f57a",
+				"memory": [
+					"_decode"
+				],
 				"parameters": [
 					{
 						"chunk": "data instanceof Buffer ? data : null",

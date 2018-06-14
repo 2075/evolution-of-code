@@ -24,6 +24,7 @@
 			"chunk": "function(identifier) {\n\n\t\tlet pointer = this;\n\n\t\tlet ns = identifier.split('.');\n\t\tfor (let n = 0, l = ns.length; n < l; n++) {\n\n\t\t\tlet name = ns[n];\n\n\t\t\tif (pointer[name] !== undefined) {\n\t\t\t\tpointer = pointer[name];\n\t\t\t} else {\n\t\t\t\tpointer = null;\n\t\t\t\tbreak;\n\t\t\t}\n\n\t\t}\n\n\t\treturn pointer;\n\n\t}",
 			"type": "function",
 			"hash": "4212fea4",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -57,6 +58,10 @@
 					"name": "client",
 					"type": "undefined"
 				}
+			],
+			"memory": [
+				"_Service",
+				"_resolve_reference"
 			]
 		},
 		"states": {},
@@ -68,6 +73,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -85,6 +91,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Service.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.net.client.Debugger';\n\t\t\tdata['arguments']   = [ data['arguments'][1] ];\n\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "6b009299",
+				"memory": [
+					"_Service"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -98,6 +107,7 @@
 				"chunk": "function(message, blob) {\n\n\t\t\tmessage = typeof message === 'string' ? message : null;\n\t\t\tblob    = blob instanceof Object      ? blob    : null;\n\n\n\t\t\tif (message !== null) {\n\n\t\t\t\tlet tunnel = this.tunnel;\n\t\t\t\tif (tunnel !== null) {\n\n\t\t\t\t\ttunnel.send({\n\t\t\t\t\t\tmessage: message,\n\t\t\t\t\t\tblob:    blob\n\t\t\t\t\t}, {\n\t\t\t\t\t\tid:    this.id,\n\t\t\t\t\t\tevent: 'error'\n\t\t\t\t\t});\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "11823db1",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof message === 'string' ? message : null",
@@ -129,6 +139,7 @@
 				"chunk": "function(tid, data) {\n\n\t\t\ttid  = typeof tid === 'string' ? tid  : null;\n\t\t\tdata = data instanceof Object  ? data : null;\n\n\n\t\t\tif (data !== null && this.tunnel !== null) {\n\n\t\t\t\tthis.tunnel.send({\n\t\t\t\t\ttid:         tid,\n\t\t\t\t\tconstructor: data.constructor || null,\n\t\t\t\t\treference:   data.reference   || null,\n\t\t\t\t\targuments:   data.arguments   || null\n\t\t\t\t}, {\n\t\t\t\t\tid:    'debugger',\n\t\t\t\t\tevent: 'define'\n\t\t\t\t});\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "9e18ebd1",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof tid === 'string' ? tid  : null",
@@ -160,6 +171,7 @@
 				"chunk": "function(tid, data) {\n\n\t\t\ttid  = typeof tid === 'string' ? tid  : null;\n\t\t\tdata = data instanceof Object  ? data : null;\n\n\n\t\t\tif (data !== null && this.tunnel !== null) {\n\n\t\t\t\tthis.tunnel.send({\n\t\t\t\t\ttid:       tid,\n\t\t\t\t\treference: data.reference || null,\n\t\t\t\t\targuments: data.arguments || null\n\t\t\t\t}, {\n\t\t\t\t\tid:    'debugger',\n\t\t\t\t\tevent: 'execute'\n\t\t\t\t});\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "0e688dd8",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof tid === 'string' ? tid  : null",
@@ -191,6 +203,7 @@
 				"chunk": "function(tid, data) {\n\n\t\t\ttid  = typeof tid === 'string' ? tid  : null;\n\t\t\tdata = data instanceof Object  ? data : null;\n\n\n\t\t\tif (this.tunnel !== null) {\n\n\t\t\t\tthis.tunnel.send({\n\t\t\t\t\ttid:       tid,\n\t\t\t\t\treference: data.reference || null\n\t\t\t\t}, {\n\t\t\t\t\tid:    'debugger',\n\t\t\t\t\tevent: 'expose'\n\t\t\t\t});\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "889d5894",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof tid === 'string' ? tid  : null",
@@ -222,6 +235,7 @@
 				"chunk": "function(tid, data) {\n\n\t\t\ttid  = typeof tid === 'string' ? tid  : null;\n\t\t\tdata = data instanceof Object  ? data : null;\n\n\n\t\t\tif (this.tunnel !== null) {\n\n\t\t\t\tthis.tunnel.send({\n\t\t\t\t\ttid:       tid,\n\t\t\t\t\treference: data.reference || null\n\t\t\t\t}, {\n\t\t\t\t\tid:    'debugger',\n\t\t\t\t\tevent: 'snapshot'\n\t\t\t\t});\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "f2046736",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof tid === 'string' ? tid  : null",

@@ -51,6 +51,11 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_CONFIG",
+				"_Sprite",
+				"_TEXTURE"
 			]
 		},
 		"states": {},
@@ -62,6 +67,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -79,6 +85,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Sprite.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.sprite.Emblem';\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "7cfc210d",
+				"memory": [
+					"_Sprite"
+				],
 				"parameters": [],
 				"values": [
 					{

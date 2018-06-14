@@ -50,6 +50,9 @@
 					"name": "data",
 					"type": "undefined"
 				}
+			],
+			"memory": [
+				"_Service"
 			]
 		},
 		"states": {
@@ -161,6 +164,7 @@
 				"chunk": "function(blob) {\n\n\t\t\tif (blob.admin === true) {\n\t\t\t\tthis.setAdmin(true);\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "92df58f0",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -178,6 +182,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Service.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.net.client.Session';\n\n\t\t\tlet states = {};\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.autoadmin !== true)                   states.autoadmin = this.autoadmin;\n\t\t\tif (this.autolock !== true)                    states.autolock  = this.autolock;\n\t\t\tif (this.autostart !== true)                   states.autostart = this.autostart;\n\t\t\tif (this.max !== 4)                            states.max       = this.max;\n\t\t\tif (this.min !== 2)                            states.min       = this.min;\n\t\t\tif (this.sid.startsWith('session-') === false) states.sid       = this.sid;\n\n\n\t\t\tif (this.admin !== false) blob.admin = this.admin;\n\n\n\t\t\tdata['arguments'][2] = states;\n\t\t\tdata['blob']         = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "b1369d",
+				"memory": [
+					"_Service"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -191,6 +198,7 @@
 				"chunk": "function() {\n\n\t\t\tif (this.sid !== null) {\n\n\t\t\t\tif (this.tunnel !== null) {\n\n\t\t\t\t\tif (lychee.debug === true) {\n\t\t\t\t\t\tconsole.log('lychee.net.client.Session: Joining session \"' + this.sid + '\"');\n\t\t\t\t\t}\n\n\t\t\t\t\tthis.tunnel.send({\n\t\t\t\t\t\tautoadmin: this.autoadmin,\n\t\t\t\t\t\tautolock:  this.autolock,\n\t\t\t\t\t\tautostart: this.autostart,\n\t\t\t\t\t\tsid:       this.sid,\n\t\t\t\t\t\tmin:       this.min,\n\t\t\t\t\t\tmax:       this.max\n\t\t\t\t\t}, {\n\t\t\t\t\t\tid:    this.id,\n\t\t\t\t\t\tevent: 'join'\n\t\t\t\t\t});\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "6cdf8eff",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -204,6 +212,7 @@
 				"chunk": "function() {\n\n\t\t\tif (this.sid !== null) {\n\n\t\t\t\tif (this.tunnel !== null) {\n\n\t\t\t\t\tthis.tunnel.send({\n\t\t\t\t\t\tsid: this.sid\n\t\t\t\t\t}, {\n\t\t\t\t\t\tid:    this.id,\n\t\t\t\t\t\tevent: 'start'\n\t\t\t\t\t});\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "2ae426fa",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -222,6 +231,7 @@
 				"chunk": "function() {\n\n\t\t\tif (this.sid !== null) {\n\n\t\t\t\tif (this.tunnel !== null) {\n\n\t\t\t\t\tthis.tunnel.send({\n\t\t\t\t\t\tsid: this.sid\n\t\t\t\t\t}, {\n\t\t\t\t\t\tid:    this.id,\n\t\t\t\t\t\tevent: 'stop'\n\t\t\t\t\t});\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "127f5a10",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -240,6 +250,7 @@
 				"chunk": "function() {\n\n\t\t\tif (this.sid !== null) {\n\n\t\t\t\tif (this.tunnel !== null) {\n\n\t\t\t\t\tif (lychee.debug === true) {\n\t\t\t\t\t\tconsole.log('lychee.net.client.Session: Leaving session \"' + this.sid + '\"');\n\t\t\t\t\t}\n\n\t\t\t\t\tthis.tunnel.send({\n\t\t\t\t\t\tsid:   this.sid\n\t\t\t\t\t}, {\n\t\t\t\t\t\tid:    this.id,\n\t\t\t\t\t\tevent: 'leave'\n\t\t\t\t\t});\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "2a87bbef",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -258,6 +269,7 @@
 				"chunk": "function(admin) {\n\n\t\t\tadmin = typeof admin === 'boolean' ? admin : null;\n\n\n\t\t\tif (admin !== null) {\n\n\t\t\t\tthis.admin = admin;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "1a7c9466",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof admin === 'boolean' ? admin : null",
@@ -283,6 +295,7 @@
 				"chunk": "function(autoadmin) {\n\n\t\t\tautoadmin = typeof autoadmin === 'boolean' ? autoadmin : null;\n\n\n\t\t\tif (autoadmin !== null) {\n\n\t\t\t\tthis.autoadmin = autoadmin;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "f0dfaa91",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof autoadmin === 'boolean' ? autoadmin : null",
@@ -308,6 +321,7 @@
 				"chunk": "function(autolock) {\n\n\t\t\tautolock = typeof autolock === 'boolean' ? autolock : null;\n\n\n\t\t\tif (autolock !== null) {\n\n\t\t\t\tthis.autolock = autolock;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "0c75841a",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof autolock === 'boolean' ? autolock : null",
@@ -333,6 +347,7 @@
 				"chunk": "function(autostart) {\n\n\t\t\tautostart = typeof autostart === 'boolean' ? autostart : null;\n\n\n\t\t\tif (autostart !== null) {\n\n\t\t\t\tthis.autostart = autostart;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "a4d6d33b",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof autostart === 'boolean' ? autostart : null",
@@ -358,6 +373,7 @@
 				"chunk": "function(max) {\n\n\t\t\tmax = typeof max === 'number' ? max : null;\n\n\n\t\t\tif (max !== null) {\n\n\t\t\t\tthis.max = max;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "6aec857d",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof max === 'number' ? max : null",
@@ -383,6 +399,7 @@
 				"chunk": "function(min) {\n\n\t\t\tmin = typeof min === 'number' ? min : null;\n\n\n\t\t\tif (min !== null) {\n\n\t\t\t\tthis.min = min;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "efffbb93",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof min === 'number' ? min : null",
@@ -408,6 +425,7 @@
 				"chunk": "function(sid) {\n\n\t\t\tsid = typeof sid === 'string' ? sid : null;\n\n\n\t\t\tif (sid !== null) {\n\n\t\t\t\tthis.sid = sid;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "2fb7c513",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof sid === 'string' ? sid : null",

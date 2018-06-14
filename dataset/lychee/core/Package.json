@@ -21,7 +21,8 @@
 					"name": "data",
 					"type": "Object"
 				}
-			]
+			],
+			"memory": []
 		},
 		"states": {
 			"id": "setId",
@@ -138,6 +139,7 @@
 				"chunk": "function(blob) {\n\n\t\t\tif (blob.config instanceof Object) {\n\t\t\t\tthis.config = lychee.deserialize(blob.config);\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "cf3fa764",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -155,6 +157,7 @@
 				"chunk": "function() {\n\n\t\t\tlet states = {};\n\t\t\tlet blob   = {};\n\n\n\t\t\tif (this.id !== '')         states.id   = this.id;\n\t\t\tif (this.type !== 'source') states.type = this.type;\n\t\t\tif (this.url !== '')        states.url  = this.url;\n\n\n\t\t\tif (this.config !== null) {\n\t\t\t\tblob.config = lychee.serialize(this.config);\n\t\t\t}\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.Package',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "98ddfda5",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -168,6 +171,10 @@
 				"chunk": "function(id, tags) {\n\n\t\t\tid   = typeof id === 'string' ? id   : null;\n\t\t\ttags = tags instanceof Object ? tags : null;\n\n\n\t\t\tlet config = this.config;\n\n\t\t\tif (id !== null && config !== null) {\n\n\t\t\t\tlet request = this.__requests[id] || null;\n\t\t\t\tif (request === null) {\n\n\t\t\t\t\tlet candidates = _resolve_candidates.call(this, id, tags);\n\t\t\t\t\tif (candidates.length > 0) {\n\n\t\t\t\t\t\t_load_candidate.call(this, id, candidates);\n\n\t\t\t\t\t\treturn true;\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tif (tags !== null) {\n\t\t\t\t\t\t\tlet info = Object.keys(tags).length > 0 ? (' (' + JSON.stringify(tags) + ')') : '.';\n\t\t\t\t\t\t\tconsole.error('lychee.Package (\"' + this.id + '\"): Invalid Definition \"' + id + '\"' + info);\n\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\tconsole.error('lychee.Package (\"' + this.id + '\"): Invalid Definition \"' + id + '\"');\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\treturn false;\n\n\t\t\t\t\t}\n\n\t\t\t\t} else {\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "96d7cfe3",
+				"memory": [
+					"_load_candidate",
+					"_resolve_candidates"
+				],
 				"parameters": [
 					{
 						"chunk": "typeof id === 'string' ? id   : null",
@@ -199,6 +206,9 @@
 				"chunk": "function(id, tags) {\n\n\t\t\tid   = typeof id === 'string' ? id   : null;\n\t\t\ttags = tags instanceof Object ? tags : null;\n\n\n\t\t\tlet config   = this.config;\n\t\t\tlet filtered = [];\n\n\t\t\tif (id !== null && config !== null) {\n\n\t\t\t\tlet candidates = _resolve_candidates.call(this, id, tags);\n\t\t\t\tif (candidates.length > 0) {\n\n\t\t\t\t\tfor (let c = 0, cl = candidates.length; c < cl; c++) {\n\t\t\t\t\t\tfiltered.push(candidates[c]);\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\treturn filtered;\n\n\t\t}",
 				"type": "function",
 				"hash": "bad22096",
+				"memory": [
+					"_resolve_candidates"
+				],
 				"parameters": [
 					{
 						"chunk": "typeof id === 'string' ? id   : null",
@@ -225,6 +235,7 @@
 				"chunk": "function(identifier) {\n\n\t\t\tidentifier = typeof identifier === 'string' ? identifier : null;\n\n\n\t\t\tif (identifier !== null && /^([a-z]+)$/g.test(identifier)) {\n\n\t\t\t\tthis.id = identifier;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "18a48a66",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof identifier === 'string' ? identifier : null",
@@ -250,6 +261,7 @@
 				"chunk": "function(url) {\n\n\t\t\turl = typeof url === 'string' ? url : null;\n\n\n\t\t\tif (url !== null && url.endsWith('/lychee.pkg')) {\n\n\t\t\t\tthis.config = null;\n\t\t\t\tthis.root   = url.split('/').slice(0, -1).join('/');\n\t\t\t\tthis.url    = url;\n\n\n\t\t\t\tlet that   = this;\n\t\t\t\tlet config = new Config(url);\n\n\t\t\t\tconfig.onload = function(result) {\n\n\t\t\t\t\tlet buffer = this.buffer || null;\n\t\t\t\t\tif (\n\t\t\t\t\t\tbuffer !== null\n\t\t\t\t\t\t&& buffer instanceof Object\n\t\t\t\t\t\t&& buffer.build instanceof Object\n\t\t\t\t\t\t&& buffer.review instanceof Object\n\t\t\t\t\t\t&& buffer.source instanceof Object\n\t\t\t\t\t) {\n\n\t\t\t\t\t\tconsole.info('lychee.Package (\"' + that.id + '\"): Config \"' + this.url + '\" ready.');\n\n\t\t\t\t\t\tthat.config = this;\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tconsole.error('lychee.Package (\"' + that.id + '\"): Config \"' + this.url + '\" corrupt.');\n\n\t\t\t\t\t}\n\n\t\t\t\t};\n\n\t\t\t\tconfig.load();\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "1065f978",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof url === 'string' ? url : null",
@@ -275,6 +287,7 @@
 				"chunk": "function(environment) {\n\n\t\t\tenvironment = environment instanceof lychee.Environment ? environment : null;\n\n\n\t\t\tif (environment !== null) {\n\n\t\t\t\tthis.environment = environment;\n\n\t\t\t\treturn true;\n\n\t\t\t} else {\n\n\t\t\t\tthis.environment = null;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "a3ae2e89",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "environment instanceof lychee.Environment ? environment : null",
@@ -300,6 +313,7 @@
 				"chunk": "function(simulation) {\n\n\t\t\tsimulation = simulation instanceof lychee.Simulation ? simulation : null;\n\n\n\t\t\tif (simulation !== null) {\n\n\t\t\t\tthis.simulation = simulation;\n\n\t\t\t\treturn true;\n\n\t\t\t} else {\n\n\t\t\t\tthis.simulation = null;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "fe28f29e",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "simulation instanceof lychee.Simulation ? simulation : null",
@@ -325,6 +339,7 @@
 				"chunk": "function(type) {\n\n\t\t\ttype = typeof type === 'string' ? type : null;\n\n\n\t\t\tif (type !== null) {\n\n\t\t\t\tif (/^(build|review|source)$/g.test(type)) {\n\n\t\t\t\t\tthis.type = type;\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "2b97ace9",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof type === 'string' ? type : null",

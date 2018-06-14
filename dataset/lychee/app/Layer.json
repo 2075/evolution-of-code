@@ -35,6 +35,7 @@
 			"chunk": "function(effect) {\n\n\t\tif (effect instanceof Object) {\n\n\t\t\tif (\n\t\t\t\ttypeof effect.update === 'function'\n\t\t\t\t&& typeof effect.render === 'function'\n\t\t\t) {\n\t\t\t\treturn true;\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn false;\n\n\t}",
 			"type": "function",
 			"hash": "a333e882",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -59,6 +60,7 @@
 			"chunk": "function(entity) {\n\n\t\tif (entity instanceof Object) {\n\n\t\t\tif (\n\t\t\t\ttypeof entity.update === 'function'\n\t\t\t\t&& typeof entity.render === 'function'\n\t\t\t\t&& typeof entity.shape === 'number'\n\t\t\t\t&& typeof entity.isAtPosition === 'function'\n\t\t\t) {\n\t\t\t\treturn true;\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn false;\n\n\t}",
 			"type": "function",
 			"hash": "8eb1bf0c",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -83,6 +85,7 @@
 			"chunk": "function(mode) {\n\n\t\tlet grid       = this.grid;\n\t\tlet projection = this.projection;\n\n\n\t\tif (mode === true) {\n\n\t\t\tthis.entities.forEach(function(entity) {\n\n\t\t\t\tlet w = entity.width;\n\t\t\t\tlet h = entity.height;\n\t\t\t\tlet d = entity.depth;\n\t\t\t\tlet x = entity.position.x;\n\t\t\t\tlet y = entity.position.y;\n\t\t\t\tlet z = entity.position.z;\n\n\n\t\t\t\tif (projection === Composite.PROJECTION.tile) {\n\n\t\t\t\t\tw = w * grid.width;\n\t\t\t\t\th = h * grid.height;\n\t\t\t\t\td = d * grid.depth;\n\t\t\t\t\tx = x * grid.width;\n\t\t\t\t\ty = y * grid.height;\n\t\t\t\t\tz = z * grid.depth;\n\n\t\t\t\t} else if (projection === Composite.PROJECTION.isometry) {\n\n\t\t\t\t\tw = w * grid.width;\n\t\t\t\t\th = h * grid.height;\n\t\t\t\t\td = d * grid.depth;\n\t\t\t\t\tx = (x - y) * grid.width;\n\t\t\t\t\ty = (x + y) * (grid.height / 2);\n\t\t\t\t\tz = z * grid.depth;\n\n\t\t\t\t}\n\n\n\t\t\t\tentity.width      = w;\n\t\t\t\tentity.height     = h;\n\t\t\t\tentity.depth      = d;\n\t\t\t\tentity.position.x = x;\n\t\t\t\tentity.position.y = y;\n\t\t\t\tentity.position.z = z;\n\n\t\t\t});\n\n\t\t} else {\n\n\t\t\tthis.entities.forEach(function(entity) {\n\n\t\t\t\tlet w = entity.width;\n\t\t\t\tlet h = entity.height;\n\t\t\t\tlet d = entity.depth;\n\t\t\t\tlet x = entity.position.x;\n\t\t\t\tlet y = entity.position.y;\n\t\t\t\tlet z = entity.position.z;\n\n\n\t\t\t\tif (projection === Composite.PROJECTION.tile) {\n\n\t\t\t\t\tw = w / grid.width;\n\t\t\t\t\th = h / grid.height;\n\t\t\t\t\td = d / grid.depth;\n\t\t\t\t\tx = x / grid.width;\n\t\t\t\t\ty = y / grid.height;\n\t\t\t\t\tz = z / grid.depth;\n\n\t\t\t\t} else if (projection === Composite.PROJECTION.isometry) {\n\n\t\t\t\t\tw = w / grid.width;\n\t\t\t\t\th = h / grid.height;\n\t\t\t\t\td = d / grid.depth;\n\t\t\t\t\tx = (y / grid.height) + (x / (2 * grid.width));\n\t\t\t\t\ty = (y / grid.height) - (x / (2 * grid.width));\n\t\t\t\t\tz = z / grid.depth;\n\n\t\t\t\t}\n\n\n\t\t\t\tentity.width      = w;\n\t\t\t\tentity.height     = h;\n\t\t\t\tentity.depth      = d;\n\t\t\t\tentity.position.x = x;\n\t\t\t\tentity.position.y = y;\n\t\t\t\tentity.position.z = z;\n\n\t\t\t});\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "a78c98a9",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -96,6 +99,9 @@
 			"chunk": "function() {\n\n\t\tif (this.__project === true) {\n\n\t\t\t_project_layer.call(this, true);\n\n\t\t\tthis.__project = false;\n\n\t\t} else {\n\n\t\t\t_project_layer.call(this, false);\n\t\t\t_project_layer.call(this, true);\n\n\t\t\tthis.__project = false;\n\n\t\t}\n\n\n\t\tif (this.__relayout === true) {\n\n\t\t\tlet hwidth  = this.width  / 2;\n\t\t\tlet hheight = this.height / 2;\n\t\t\tlet hdepth  = this.depth  / 2;\n\n\t\t\tfor (let e = 0, el = this.entities.length; e < el; e++) {\n\n\t\t\t\tlet entity = this.entities[e];\n\t\t\t\tif (typeof entity.trigger === 'function') {\n\t\t\t\t\tentity.trigger('relayout');\n\t\t\t\t}\n\n\n\t\t\t\tlet boundx = Math.abs(entity.position.x + this.offset.x);\n\t\t\t\tlet boundy = Math.abs(entity.position.y + this.offset.y);\n\t\t\t\tlet boundz = Math.abs(entity.position.z + this.offset.z);\n\n\t\t\t\tif (entity.shape === _Entity.SHAPE.circle) {\n\t\t\t\t\tboundx += entity.radius;\n\t\t\t\t\tboundy += entity.radius;\n\t\t\t\t\tboundz += entity.radius;\n\t\t\t\t} else if (entity.shape === _Entity.SHAPE.rectangle) {\n\t\t\t\t\tboundx += entity.width  / 2;\n\t\t\t\t\tboundy += entity.height / 2;\n\t\t\t\t\tboundz += entity.depth  / 2;\n\t\t\t\t}\n\n\t\t\t\thwidth  = Math.max(hwidth,  boundx);\n\t\t\t\thheight = Math.max(hheight, boundy);\n\t\t\t\thdepth  = Math.max(hdepth,  boundz);\n\n\t\t\t}\n\n\n\t\t\tthis.width  = hwidth  * 2;\n\t\t\tthis.height = hheight * 2;\n\t\t\tthis.depth  = hdepth  * 2;\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "920114eb",
+			"memory": [
+				"_project_layer"
+			],
 			"parameters": [],
 			"values": []
 		}
@@ -112,6 +118,11 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Emitter",
+				"_Entity",
+				"_on_relayout"
 			]
 		},
 		"states": {
@@ -367,6 +378,7 @@
 				"chunk": "function(blob) {\n\n\t\t\tif (blob.entities instanceof Array) {\n\n\t\t\t\tlet entities = [];\n\t\t\t\tlet map      = {};\n\n\t\t\t\tfor (let be = 0, bel = blob.entities.length; be < bel; be++) {\n\t\t\t\t\tentities.push(lychee.deserialize(blob.entities[be]));\n\t\t\t\t}\n\n\n\t\t\t\tif (blob.map instanceof Object) {\n\n\t\t\t\t\tfor (let bid in blob.map) {\n\n\t\t\t\t\t\tlet index = blob.map[bid];\n\t\t\t\t\t\tif (typeof index === 'number') {\n\t\t\t\t\t\t\tmap[bid] = index;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tfor (let e = 0, el = entities.length; e < el; e++) {\n\n\t\t\t\t\tlet id = null;\n\t\t\t\t\tfor (let mid in map) {\n\n\t\t\t\t\t\tif (map[mid] === e) {\n\t\t\t\t\t\t\tid = mid;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\tif (id !== null) {\n\t\t\t\t\t\tthis.setEntity(id, entities[e]);\n\t\t\t\t\t} else {\n\t\t\t\t\t\tthis.addEntity(entities[e]);\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tif (blob.project === false) {\n\t\t\t\tthis.__project = false;\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "eda6dbcc",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -384,6 +396,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.app.Layer';\n\n\t\t\tlet states = {};\n\t\t\tlet blob     = (data['blob'] || {});\n\n\n\t\t\tif (this.width  !== 0) states.width  = this.width;\n\t\t\tif (this.height !== 0) states.height = this.height;\n\t\t\tif (this.depth !== 0)  states.depth  = this.depth;\n\t\t\tif (this.radius !== 0) states.radius = this.radius;\n\n\n\t\t\tif (this.grid.width !== 0 || this.grid.height !== 0 || this.grid.depth !== 0) {\n\n\t\t\t\tstates.grid = {};\n\n\t\t\t\tif (this.grid.width !== 0)  states.grid.width  = this.grid.width;\n\t\t\t\tif (this.grid.height !== 0) states.grid.height = this.grid.height;\n\t\t\t\tif (this.grid.depth !== 0)  states.grid.depth  = this.grid.depth;\n\n\t\t\t}\n\n\t\t\tif (this.offset.x !== 0 || this.offset.y !== 0 || this.offset.z !== 0) {\n\n\t\t\t\tstates.offset = {};\n\n\t\t\t\tif (this.offset.x !== 0) states.offset.x = this.offset.x;\n\t\t\t\tif (this.offset.y !== 0) states.offset.y = this.offset.y;\n\t\t\t\tif (this.offset.z !== 0) states.offset.z = this.offset.z;\n\n\t\t\t}\n\n\t\t\tif (this.position.x !== 0 || this.position.y !== 0 || this.position.z !== 0) {\n\n\t\t\t\tstates.position = {};\n\n\t\t\t\tif (this.position.x !== 0) states.position.x = this.position.x;\n\t\t\t\tif (this.position.y !== 0) states.position.y = this.position.y;\n\t\t\t\tif (this.position.z !== 0) states.position.z = this.position.z;\n\n\t\t\t}\n\n\t\t\tif (this.alpha !== 1)                               states.alpha      = this.alpha;\n\t\t\tif (this.__project !== true)                        blob.project        = this.__project;\n\t\t\tif (this.projection !== Composite.PROJECTION.pixel) states.projection = this.projection;\n\t\t\tif (this.__relayout !== true)                       states.relayout   = this.__relayout;\n\t\t\tif (this.visible !== true)                          states.visible    = this.visible;\n\n\n\t\t\tif (this.entities.length > 0) {\n\t\t\t\tblob.entities = this.entities.map(lychee.serialize);\n\t\t\t}\n\n\n\t\t\tif (blob.entities instanceof Array && Object.keys(this.__map).length > 0) {\n\n\t\t\t\tblob.map = Object.map(this.__map, function(val, key) {\n\n\t\t\t\t\tlet index = this.entities.indexOf(val);\n\t\t\t\t\tif (index !== -1) {\n\t\t\t\t\t\treturn index;\n\t\t\t\t\t}\n\n\n\t\t\t\t\treturn undefined;\n\n\t\t\t\t}, this);\n\n\t\t\t}\n\n\n\t\t\tdata['arguments'][0] = states;\n\t\t\tdata['blob']         = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "25128a45",
+				"memory": [
+					"_Emitter"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -397,6 +412,7 @@
 				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tif (this.visible === false) return;\n\n\n\t\t\tlet alpha    = this.alpha;\n\t\t\tlet position = this.position;\n\t\t\tlet offset   = this.offset;\n\n\n\t\t\tlet ox = position.x + offsetX + offset.x;\n\t\t\tlet oy = position.y + offsetY + offset.y;\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(alpha);\n\t\t\t}\n\n\n\t\t\tlet entities = this.entities;\n\t\t\tfor (let en = 0, enl = entities.length; en < enl; en++) {\n\t\t\t\tentities[en].render(renderer, ox, oy);\n\t\t\t}\n\n\t\t\tlet effects = this.effects;\n\t\t\tfor (let ef = 0, efl = effects.length; ef < efl; ef++) {\n\t\t\t\teffects[ef].render(renderer, offsetX, offsetY);\n\t\t\t}\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(1.0);\n\t\t\t}\n\n\n\t\t\tif (lychee.debug === true) {\n\n\t\t\t\tlet bx      = position.x + offsetX;\n\t\t\t\tlet by      = position.y + offsetY;\n\t\t\t\tlet hwidth  = this.width  / 2;\n\t\t\t\tlet hheight = this.height / 2;\n\n\n\t\t\t\trenderer.drawBox(\n\t\t\t\t\tbx - hwidth,\n\t\t\t\t\tby - hheight,\n\t\t\t\t\tbx + hwidth,\n\t\t\t\t\tby + hheight,\n\t\t\t\t\t'#ffff00',\n\t\t\t\t\tfalse,\n\t\t\t\t\t1\n\t\t\t\t);\n\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "7fd1f49e",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -424,6 +440,7 @@
 				"chunk": "function(clock, delta) {\n\n\t\t\tlet entities = this.entities;\n\t\t\tfor (let en = 0, enl = entities.length; en < enl; en++) {\n\t\t\t\tentities[en].update(clock, delta);\n\t\t\t}\n\n\t\t\tlet effects = this.effects;\n\t\t\tfor (let ef = 0, efl = effects.length; ef < efl; ef++) {\n\n\t\t\t\tlet effect = effects[ef];\n\t\t\t\tif (effect.update(this, clock, delta) === false) {\n\t\t\t\t\tthis.removeEffect(effect);\n\t\t\t\t\tefl--;\n\t\t\t\t\tef--;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "a7da0da6",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -446,6 +463,7 @@
 				"chunk": "function(query) {\n\n\t\t\tquery = typeof query === 'string' ? query : null;\n\n\n\t\t\tif (query !== null) {\n\n\t\t\t\tlet tmp    = query.split(' > ');\n\t\t\t\tlet entity = this.getEntity(tmp[0].trim());\n\t\t\t\tif (entity !== null) {\n\n\t\t\t\t\tfor (let t = 1, tl = tmp.length; t < tl; t++) {\n\n\t\t\t\t\t\tentity = entity.getEntity(tmp[t].trim());\n\n\t\t\t\t\t\tif (entity === null) {\n\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t\treturn entity;\n\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
 				"type": "function",
 				"hash": "50be07ef",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof query === 'string' ? query : null",
@@ -474,6 +492,7 @@
 				"chunk": "function(position) {\n\n\t\t\tposition = position instanceof Object ? position : null;\n\n\n\t\t\tif (position !== null) {\n\n\t\t\t\tif (typeof position.x === 'number' && typeof position.y === 'number') {\n\n\t\t\t\t\tlet ax = position.x;\n\t\t\t\t\tlet ay = position.y;\n\t\t\t\t\tlet bx = this.position.x;\n\t\t\t\t\tlet by = this.position.y;\n\n\n\t\t\t\t\tlet shape = this.shape;\n\t\t\t\t\tif (shape === _Entity.SHAPE.circle) {\n\n\t\t\t\t\t\tlet dist = Math.sqrt(Math.pow(ax - bx, 2) + Math.pow(ay - by, 2));\n\t\t\t\t\t\tif (dist < this.radius) {\n\t\t\t\t\t\t\treturn true;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t} else if (shape === _Entity.SHAPE.rectangle) {\n\n\t\t\t\t\t\tlet hwidth  = this.width  / 2;\n\t\t\t\t\t\tlet hheight = this.height / 2;\n\t\t\t\t\t\tlet colX    = (ax >= bx - hwidth)  && (ax <= bx + hwidth);\n\t\t\t\t\t\tlet colY    = (ay >= by - hheight) && (ay <= by + hheight);\n\n\n\t\t\t\t\t\treturn colX && colY;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "157395b8",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "position instanceof Object ? position : null",
@@ -499,6 +518,7 @@
 				"chunk": "function(alpha) {\n\n\t\t\talpha = typeof alpha === 'number' ? alpha : null;\n\n\n\t\t\tif (alpha !== null) {\n\n\t\t\t\tthis.alpha = Math.min(Math.max(alpha, 0), 1);\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "8c452654",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof alpha === 'number' ? alpha : null",
@@ -524,6 +544,9 @@
 				"chunk": "function(effect) {\n\n\t\t\teffect = _validate_effect(effect) ? effect : null;\n\n\n\t\t\tif (effect !== null) {\n\n\t\t\t\tlet index = this.effects.indexOf(effect);\n\t\t\t\tif (index === -1) {\n\n\t\t\t\t\tthis.effects.push(effect);\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "09f5f6a1",
+				"memory": [
+					"_validate_effect"
+				],
 				"parameters": [
 					{
 						"chunk": "_validate_effect(effect) ? effect : null",
@@ -552,6 +575,9 @@
 				"chunk": "function(effect) {\n\n\t\t\teffect = _validate_effect(effect) ? effect : null;\n\n\n\t\t\tif (effect !== null) {\n\n\t\t\t\tlet index = this.effects.indexOf(effect);\n\t\t\t\tif (index !== -1) {\n\n\t\t\t\t\tthis.effects.splice(index, 1);\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "6b39208a",
+				"memory": [
+					"_validate_effect"
+				],
 				"parameters": [
 					{
 						"chunk": "_validate_effect(effect) ? effect : null",
@@ -580,6 +606,7 @@
 				"chunk": "function() {\n\n\t\t\tlet effects = this.effects;\n\n\t\t\tfor (let e = 0, el = effects.length; e < el; e++) {\n\n\t\t\t\teffects[e].update(this, Infinity, 0);\n\t\t\t\tthis.removeEffect(effects[e]);\n\n\t\t\t\tel--;\n\t\t\t\te--;\n\n\t\t\t}\n\n\n\t\t\treturn true;\n\n\t\t}",
 				"type": "function",
 				"hash": "1cbe2218",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -593,6 +620,9 @@
 				"chunk": "function(entity) {\n\n\t\t\tentity = _validate_entity(entity) === true ? entity : null;\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tlet index = this.entities.indexOf(entity);\n\t\t\t\tif (index === -1) {\n\n\t\t\t\t\tthis.entities.push(entity);\n\n\t\t\t\t\tif (this.__relayout === true) {\n\t\t\t\t\t\tthis.trigger('relayout');\n\t\t\t\t\t}\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "4f2f97b0",
+				"memory": [
+					"_validate_entity"
+				],
 				"parameters": [
 					{
 						"chunk": "_validate_entity(entity) === true ? entity : null",
@@ -621,6 +651,9 @@
 				"chunk": "function(id, entity) {\n\n\t\t\tid     = typeof id === 'string'            ? id     : null;\n\t\t\tentity = _validate_entity(entity) === true ? entity : null;\n\n\n\t\t\tif (id !== null && entity !== null && this.__map[id] === undefined) {\n\n\t\t\t\tthis.__map[id] = entity;\n\t\t\t\tthis.entities.push(entity);\n\n\t\t\t\tif (this.__relayout === true) {\n\t\t\t\t\tthis.trigger('relayout');\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "931d4b59",
+				"memory": [
+					"_validate_entity"
+				],
 				"parameters": [
 					{
 						"chunk": "typeof id === 'string'            ? id     : null",
@@ -655,6 +688,7 @@
 				"chunk": "function(id, position) {\n\n\t\t\tid       = typeof id === 'string'     ? id       : null;\n\t\t\tposition = position instanceof Object ? position : null;\n\n\n\t\t\tlet found = null;\n\n\n\t\t\tif (id !== null) {\n\n\t\t\t\tlet num = parseInt(id, 10);\n\n\t\t\t\tif (this.__map[id] !== undefined) {\n\t\t\t\t\tfound = this.__map[id];\n\t\t\t\t} else if (isNaN(num) === false) {\n\t\t\t\t\tfound = this.entities[num] || null;\n\t\t\t\t}\n\n\t\t\t} else if (position !== null) {\n\n\t\t\t\tif (typeof position.x === 'number' && typeof position.y === 'number') {\n\n\t\t\t\t\tfor (let e = this.entities.length - 1; e >= 0; e--) {\n\n\t\t\t\t\t\tlet entity = this.entities[e];\n\t\t\t\t\t\tif (entity.visible === false) continue;\n\n\t\t\t\t\t\tif (entity.isAtPosition(position) === true) {\n\t\t\t\t\t\t\tfound = entity;\n\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn found;\n\n\t\t}",
 				"type": "function",
 				"hash": "d662d2be",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof id === 'string'     ? id       : null",
@@ -705,6 +739,9 @@
 				"chunk": "function(entity) {\n\n\t\t\tentity = _validate_entity(entity) === true ? entity : null;\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tlet found = false;\n\n\t\t\t\tlet index = this.entities.indexOf(entity);\n\t\t\t\tif (index !== -1) {\n\n\t\t\t\t\tthis.entities.splice(index, 1);\n\t\t\t\t\tfound = true;\n\n\t\t\t\t}\n\n\n\t\t\t\tfor (let id in this.__map) {\n\n\t\t\t\t\tif (this.__map[id] === entity) {\n\n\t\t\t\t\t\tdelete this.__map[id];\n\t\t\t\t\t\tfound = true;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tif (found === true) {\n\n\t\t\t\t\tif (this.__relayout === true) {\n\t\t\t\t\t\tthis.trigger('relayout');\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\treturn found;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "780876ac",
+				"memory": [
+					"_validate_entity"
+				],
 				"parameters": [
 					{
 						"chunk": "_validate_entity(entity) === true ? entity : null",
@@ -733,6 +770,7 @@
 				"chunk": "function(entities) {\n\n\t\t\tentities = entities instanceof Array ? entities : null;\n\n\n\t\t\tlet all = true;\n\n\t\t\tif (entities !== null) {\n\n\t\t\t\tlet filtered = [];\n\n\t\t\t\tfor (let e = 0, el = entities.length; e < el; e++) {\n\n\t\t\t\t\tlet entity = entities[e];\n\t\t\t\t\tlet index  = filtered.indexOf(entity);\n\t\t\t\t\tif (index === -1) {\n\t\t\t\t\t\tfiltered.push(entity);\n\t\t\t\t\t} else {\n\t\t\t\t\t\tall = false;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t\tthis.entities = filtered;\n\n\t\t\t\tif (this.__relayout === true) {\n\t\t\t\t\tthis.trigger('relayout');\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\treturn all;\n\n\t\t}",
 				"type": "function",
 				"hash": "6804c03b",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "entities instanceof Array ? entities : null",
@@ -758,6 +796,7 @@
 				"chunk": "function() {\n\n\t\t\tlet entities = this.entities;\n\n\t\t\tfor (let e = 0, el = entities.length; e < el; e++) {\n\n\t\t\t\tentities.splice(e, 1);\n\t\t\t\tel--;\n\t\t\t\te--;\n\n\t\t\t}\n\n\t\t\treturn true;\n\n\t\t}",
 				"type": "function",
 				"hash": "21216de3",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -771,6 +810,7 @@
 				"chunk": "function(grid) {\n\n\t\t\tgrid = grid instanceof Object ? grid : null;\n\n\n\t\t\tif (grid !== null) {\n\n\t\t\t\tthis.grid.width  = typeof grid.width === 'number'  ? grid.width  : this.grid.width;\n\t\t\t\tthis.grid.height = typeof grid.height === 'number' ? grid.height : this.grid.height;\n\t\t\t\tthis.grid.depth  = typeof grid.depth === 'number'  ? grid.depth  : this.grid.depth;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "c54034de",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "grid instanceof Object ? grid : null",
@@ -796,6 +836,7 @@
 				"chunk": "function(offset) {\n\n\t\t\toffset = offset instanceof Object ? offset : null;\n\n\n\t\t\tif (offset !== null) {\n\n\t\t\t\tthis.offset.x = typeof offset.x === 'number' ? offset.x : this.offset.x;\n\t\t\t\tthis.offset.y = typeof offset.y === 'number' ? offset.y : this.offset.y;\n\t\t\t\tthis.offset.z = typeof offset.z === 'number' ? offset.z : this.offset.z;\n\n\t\t\t\tif (this.__relayout === true) {\n\t\t\t\t\tthis.trigger('relayout');\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "fdb6d262",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "offset instanceof Object ? offset : null",
@@ -821,6 +862,7 @@
 				"chunk": "function(position) {\n\n\t\t\tposition = position instanceof Object ? position : null;\n\n\n\t\t\tif (position !== null) {\n\n\t\t\t\tthis.position.x = typeof position.x === 'number' ? position.x : this.position.x;\n\t\t\t\tthis.position.y = typeof position.y === 'number' ? position.y : this.position.y;\n\t\t\t\tthis.position.z = typeof position.z === 'number' ? position.z : this.position.z;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "da2f4510",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "position instanceof Object ? position : null",
@@ -846,6 +888,7 @@
 				"chunk": "function(projection) {\n\n\t\t\tprojection = lychee.enumof(Composite.PROJECTION, projection) ? projection : null;\n\n\n\t\t\tif (projection !== null) {\n\n\t\t\t\tthis.projection = projection;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "95863738",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "lychee.enumof(Composite.PROJECTION, projection) ? projection : null",
@@ -871,6 +914,7 @@
 				"chunk": "function(relayout) {\n\n\t\t\trelayout = typeof relayout === 'boolean' ? relayout : null;\n\n\n\t\t\tif (relayout !== null) {\n\n\t\t\t\tthis.__relayout = relayout;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "856613bb",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof relayout === 'boolean' ? relayout : null",
@@ -896,6 +940,7 @@
 				"chunk": "function(visible) {\n\n\t\t\tvisible = typeof visible === 'boolean' ? visible : null;\n\n\n\t\t\tif (visible !== null) {\n\n\t\t\t\tthis.visible = visible;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "ec37f945",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof visible === 'boolean' ? visible : null",

@@ -167,6 +167,7 @@
 				"chunk": "function() {\n\n\t\t\treturn {\n\t\t\t\t'reference': 'lychee.DIST',\n\t\t\t\t'arguments': []\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "816aef7e",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{

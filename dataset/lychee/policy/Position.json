@@ -21,7 +21,8 @@
 					"name": "states",
 					"type": "Object"
 				}
-			]
+			],
+			"memory": []
 		},
 		"states": {},
 		"properties": {
@@ -59,6 +60,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -76,6 +78,7 @@
 				"chunk": "function() {\n\n\t\t\tlet states = {\n\t\t\t\tentity: null,\n\t\t\t\tlimit:  this.limit\n\t\t\t};\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.policy.Position',\n\t\t\t\t'arguments':   [ states ]\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "e64dbf7a",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -89,6 +92,7 @@
 				"chunk": "function() {\n\n\t\t\tlet entity = this.entity;\n\t\t\tlet limit  = this.limit;\n\t\t\tlet values = [ 0.5, 0.5, 0.5 ];\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tlet hlx = limit.x / 2;\n\t\t\t\tlet hly = limit.y / 2;\n\t\t\t\tlet hlz = limit.z / 2;\n\n\t\t\t\tvalues[0] = (hlx + entity.position.x) / (hlx * 2);\n\t\t\t\tvalues[1] = (hly + entity.position.y) / (hly * 2);\n\t\t\t\tvalues[2] = (hlz + entity.position.z) / (hlz * 2);\n\n\t\t\t}\n\n\n\t\t\treturn values;\n\n\t\t}",
 				"type": "function",
 				"hash": "c3ebcb40",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -106,6 +110,7 @@
 				"chunk": "function(values) {\n\n\t\t\tlet entity = this.entity;\n\t\t\tlet limit  = this.limit;\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tlet hlx = limit.x / 2;\n\t\t\t\tlet hly = limit.y / 2;\n\t\t\t\tlet hlz = limit.z / 2;\n\n\t\t\t\tentity.position.x = (values[0] * (hlx * 2)) - hlx;\n\t\t\t\tentity.position.y = (values[1] * (hly * 2)) - hly;\n\t\t\t\tentity.position.z = (values[2] * (hlz * 2)) - hlz;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "eba7f69c",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,

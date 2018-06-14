@@ -48,6 +48,9 @@
 					"name": "rigidity",
 					"type": "undefined"
 				}
+			],
+			"memory": [
+				"_CACHE"
 			]
 		},
 		"states": {},
@@ -104,6 +107,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -121,6 +125,7 @@
 				"chunk": "function() {\n\n\t\t\tlet a_vector = lychee.serialize(this.__a_vector);\n\t\t\tlet b_vector = lychee.serialize(this.__b_vector);\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.verlet.Constraint',\n\t\t\t\t'arguments':   [ a_vector, b_vector, this.rigidity ],\n\t\t\t\t'blob':        null\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "c0815cfa",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -134,6 +139,9 @@
 				"chunk": "function(clock, delta) {\n\n\t\t\tlet u = delta / 1000;\n\t\t\tlet a = this.__a_vector;\n\t\t\tlet b = this.__b_vector;\n\n\n\t\t\tif (a !== null && b !== null) {\n\n\t\t\t\ta.copy(_CACHE);\n\t\t\t\t_CACHE.sub(b);\n\n\t\t\t\tlet distance = this.__distance;\n\t\t\t\tlet rigidity = this.rigidity;\n\t\t\t\tlet m        = _CACHE.squaredLength();\n\t\t\t\tlet scale    = ((distance - m) / m) * rigidity * u;\n\n\t\t\t\t_CACHE.scale(scale);\n\t\t\t\ta.add(_CACHE);\n\t\t\t\tb.sub(_CACHE);\n\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "276b0a47",
+				"memory": [
+					"_CACHE"
+				],
 				"parameters": [
 					{
 						"chunk": null,
@@ -156,6 +164,7 @@
 				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tlet a = this.__a_vector;\n\t\t\tlet b = this.__b_vector;\n\n\n\t\t\tif (a !== null && b !== null) {\n\n\t\t\t\trenderer.drawLine(\n\t\t\t\t\ta.x + offsetX,\n\t\t\t\t\ta.y + offsetY,\n\t\t\t\t\tb.x + offsetX,\n\t\t\t\t\tb.y + offsetY,\n\t\t\t\t\t'#ff0000',\n\t\t\t\t\t2\n\t\t\t\t);\n\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "cf138ad0",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,

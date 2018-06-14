@@ -33,6 +33,7 @@
 			"chunk": "function(renderer) {\n\n\t\tlet font = this.font;\n\t\tif (font !== null && font.texture !== null) {\n\n\t\t\tif (this.__buffer !== null) {\n\t\t\t\tthis.__buffer.resize(this.width - 16, this.height - 16);\n\t\t\t} else {\n\t\t\t\tthis.__buffer = renderer.createBuffer(this.width - 16, this.height - 16);\n\t\t\t}\n\n\n\t\t\trenderer.clear(this.__buffer);\n\t\t\trenderer.setBuffer(this.__buffer);\n\t\t\trenderer.setAlpha(1.0);\n\n\n\t\t\tlet lines  = this.__lines;\n\t\t\tlet buffer = this.__buffer;\n\t\t\tlet cur    = this.__cursor.map;\n\t\t\tlet lh     = font.lineheight;\n\t\t\tlet ll     = lines.length;\n\t\t\tif (ll > 0) {\n\n\t\t\t\tlet dim_x = font.measure(lines[ll - 1]).width;\n\t\t\t\tlet dim_y = ll * lh;\n\t\t\t\tlet off_x = 0;\n\t\t\t\tlet off_y = 0;\n\n\n\t\t\t\tif (dim_x > buffer.width)  {\n\t\t\t\t\toff_x = buffer.width - dim_x;\n\t\t\t\t\tcur.x = buffer.width;\n\t\t\t\t} else {\n\t\t\t\t\tcur.x = dim_x;\n\t\t\t\t}\n\n\n\t\t\t\tif (dim_y > buffer.height) {\n\t\t\t\t\toff_y = buffer.height - dim_y;\n\t\t\t\t\tcur.y = buffer.height - lh;\n\t\t\t\t} else {\n\t\t\t\t\tcur.y = dim_y - lh;\n\t\t\t\t}\n\n\n\t\t\t\tfor (let l = 0; l < ll; l++) {\n\n\t\t\t\t\trenderer.drawText(\n\t\t\t\t\t\toff_x,\n\t\t\t\t\t\toff_y + lh * l,\n\t\t\t\t\t\tlines[l],\n\t\t\t\t\t\tfont,\n\t\t\t\t\t\tfalse\n\t\t\t\t\t);\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\trenderer.setBuffer(null);\n\t\t\tthis.__isDirty = false;\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "3d358e01",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -55,6 +56,10 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Entity",
+				"_FONT"
 			]
 		},
 		"states": {
@@ -201,6 +206,7 @@
 				"chunk": "function(blob) {\n\n\t\t\tlet font = lychee.deserialize(blob.font);\n\t\t\tif (font !== null) {\n\t\t\t\tthis.setFont(font);\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "814dbb80",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -218,6 +224,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Entity.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.entity.Textarea';\n\n\t\t\tlet states = data['arguments'][0];\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.value !== '') states.value = this.value;\n\n\n\t\t\tif (this.font !== null) blob.font = lychee.serialize(this.font);\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "a241492a",
+				"memory": [
+					"_Entity"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -231,6 +240,9 @@
 				"chunk": "function(clock, delta) {\n\n\t\t\tlet pulse = this.__pulse;\n\t\t\tif (pulse.active === true) {\n\n\t\t\t\tif (pulse.start === null) {\n\t\t\t\t\tpulse.start = clock;\n\t\t\t\t}\n\n\t\t\t\tlet pt = (clock - pulse.start) / pulse.duration;\n\t\t\t\tif (pt <= 1) {\n\t\t\t\t\tpulse.alpha = (1 - pt);\n\t\t\t\t} else {\n\t\t\t\t\tpulse.alpha  = 0.0;\n\t\t\t\t\tpulse.active = false;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tlet cursor = this.__cursor;\n\t\t\tif (cursor.active === true) {\n\n\t\t\t\tif (cursor.start === null) {\n\t\t\t\t\tcursor.start = clock;\n\t\t\t\t}\n\n\n\t\t\t\tlet ct = (clock - cursor.start) / cursor.duration;\n\t\t\t\tif (ct <= 1) {\n\t\t\t\t\tcursor.alpha = cursor.pingpong === true ? (1 - ct) : ct;\n\t\t\t\t} else {\n\t\t\t\t\tcursor.start    = clock;\n\t\t\t\t\tcursor.pingpong = !cursor.pingpong;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\t_Entity.prototype.update.call(this, clock, delta);\n\n\t\t}",
 				"type": "function",
 				"hash": "e58ea5bb",
+				"memory": [
+					"_Entity"
+				],
 				"parameters": [
 					{
 						"chunk": null,
@@ -253,6 +265,9 @@
 				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tif (this.visible === false) return;\n\n\n\t\t\tlet alpha    = this.alpha;\n\t\t\tlet position = this.position;\n\t\t\tlet x        = position.x + offsetX;\n\t\t\tlet y        = position.y + offsetY;\n\t\t\tlet hwidth   = (this.width  - 2) / 2;\n\t\t\tlet hheight  = (this.height - 2) / 2;\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(alpha);\n\t\t\t}\n\n\t\t\trenderer.drawBox(\n\t\t\t\tx - hwidth,\n\t\t\t\ty - hheight,\n\t\t\t\tx + hwidth,\n\t\t\t\ty + hheight,\n\t\t\t\tthis.state === 'active' ? '#32afe5' : '#545454',\n\t\t\t\tfalse,\n\t\t\t\t2\n\t\t\t);\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(1.0);\n\t\t\t}\n\n\n\t\t\tif (this.__isDirty === true) {\n\t\t\t\t_render_buffer.call(this, renderer);\n\t\t\t}\n\n\n\t\t\tlet cursor = this.__cursor;\n\t\t\tif (cursor.active === true) {\n\n\t\t\t\tlet map = cursor.map;\n\t\t\t\tlet cx1 = x - hwidth  + map.x + 8;\n\t\t\t\tlet cy1 = y - hheight + map.y + 8;\n\n\n\t\t\t\trenderer.setAlpha(cursor.alpha);\n\n\t\t\t\trenderer.drawBox(\n\t\t\t\t\tcx1,\n\t\t\t\t\tcy1,\n\t\t\t\t\tcx1 + map.w,\n\t\t\t\t\tcy1 + map.h,\n\t\t\t\t\t'#32afe5',\n\t\t\t\t\ttrue\n\t\t\t\t);\n\n\t\t\t\trenderer.setAlpha(1.0);\n\n\t\t\t}\n\n\n\t\t\tlet pulse = this.__pulse;\n\t\t\tif (pulse.active === true) {\n\n\t\t\t\trenderer.setAlpha(pulse.alpha);\n\n\t\t\t\trenderer.drawBox(\n\t\t\t\t\tx - hwidth,\n\t\t\t\t\ty - hheight,\n\t\t\t\t\tx + hwidth,\n\t\t\t\t\ty + hheight,\n\t\t\t\t\t'#32afe5',\n\t\t\t\t\ttrue\n\t\t\t\t);\n\n\t\t\t\trenderer.setAlpha(1.0);\n\n\t\t\t}\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(alpha);\n\t\t\t}\n\n\t\t\tif (this.__buffer !== null) {\n\n\t\t\t\trenderer.drawBuffer(\n\t\t\t\t\tx - hwidth  + 8,\n\t\t\t\t\ty - hheight + 8,\n\t\t\t\t\tthis.__buffer\n\t\t\t\t);\n\n\t\t\t}\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(1.0);\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "a3db47a4",
+				"memory": [
+					"_render_buffer"
+				],
 				"parameters": [
 					{
 						"chunk": null,
@@ -280,6 +295,7 @@
 				"chunk": "function(font) {\n\n\t\t\tfont = font instanceof Font ? font : null;\n\n\n\t\t\tif (font !== null) {\n\n\t\t\t\tthis.font = font;\n\n\n\t\t\t\tlet map = this.__cursor.map;\n\n\t\t\t\tmap.w = font.measure('_').realwidth;\n\t\t\t\tmap.h = font.measure('_').realheight;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "0dce8e2d",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "font instanceof Font ? font : null",
@@ -305,6 +321,9 @@
 				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null) {\n\n\t\t\t\tlet result = _Entity.prototype.setState.call(this, id);\n\t\t\t\tif (result === true) {\n\n\t\t\t\t\tlet cursor = this.__cursor;\n\t\t\t\t\tlet pulse  = this.__pulse;\n\n\n\t\t\t\t\tif (id === 'active') {\n\n\t\t\t\t\t\tcursor.start  = null;\n\t\t\t\t\t\tcursor.active = true;\n\n\t\t\t\t\t\tpulse.alpha   = 1.0;\n\t\t\t\t\t\tpulse.start   = null;\n\t\t\t\t\t\tpulse.active  = true;\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tcursor.active = false;\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "998628dc",
+				"memory": [
+					"_Entity"
+				],
 				"parameters": [
 					{
 						"chunk": "typeof id === 'string' ? id : null",
@@ -330,6 +349,7 @@
 				"chunk": "function(value) {\n\n\t\t\tvalue = typeof value === 'string' ? value : null;\n\n\n\t\t\tif (value !== null) {\n\n\t\t\t\tthis.value = value;\n\n\t\t\t\tthis.__lines   = value.split('\\n');\n\t\t\t\tthis.__isDirty = true;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "70b8b294",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof value === 'string' ? value : null",

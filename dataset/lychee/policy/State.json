@@ -21,7 +21,8 @@
 					"name": "states",
 					"type": "Object"
 				}
-			]
+			],
+			"memory": []
 		},
 		"states": {},
 		"properties": {
@@ -58,6 +59,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -75,6 +77,7 @@
 				"chunk": "function() {\n\n\t\t\tlet states = {\n\t\t\t\tentity: null,\n\t\t\t\tlimit:  this.limit\n\t\t\t};\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.policy.State',\n\t\t\t\t'arguments':   [ states ]\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "63b3e1cc",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -88,6 +91,7 @@
 				"chunk": "function() {\n\n\t\t\tlet entity = this.entity;\n\t\t\tlet limit  = this.limit;\n\t\t\tlet values = [ 0.5 ];\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tlet index = limit.indexOf(entity.state);\n\t\t\t\tif (index !== -1) {\n\t\t\t\t\tvalues[0] = (index / limit.length);\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn values;\n\n\t\t}",
 				"type": "function",
 				"hash": "aa80b557",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -103,6 +107,7 @@
 				"chunk": "function(values) {\n\n\t\t\tlet entity = this.entity;\n\t\t\tlet limit  = this.limit;\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tlet index = (values[0] * limit.length) | 0;\n\t\t\t\tif (index >= 0) {\n\n\t\t\t\t\tif (typeof entity.setState === 'function') {\n\n\t\t\t\t\t\tentity.setState(limit[index]);\n\n\t\t\t\t\t\treturn true;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "8499852e",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,

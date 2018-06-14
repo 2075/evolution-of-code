@@ -30,6 +30,10 @@
 			"chunk": "function() {\n\n\t\tfor (let rId in _CHATS) {\n\n\t\t\tlet index = _CHATS[rId].tunnels.indexOf(this.tunnel);\n\t\t\tif (index !== -1) {\n\t\t\t\t_CHATS[rId].users.splice(index, 1);\n\t\t\t\t_CHATS[rId].tunnels.splice(index, 1);\n\t\t\t\t_sync_chat.call(this, _CHATS[rId]);\n\t\t\t}\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "8a862729",
+			"memory": [
+				"_CHATS",
+				"_sync_chat"
+			],
 			"parameters": [],
 			"values": []
 		},
@@ -37,6 +41,10 @@
 			"chunk": "function(data) {\n\n\t\tlet user = data.user || null;\n\t\tlet room = data.room || null;\n\t\tif (user !== null && room !== null) {\n\n\t\t\t// 1. Create Room\n\t\t\tlet chat = _CHATS[room] || null;\n\t\t\tif (chat === null) {\n\n\t\t\t\tchat = _CHATS[room] = {\n\t\t\t\t\tmessages: [],\n\t\t\t\t\tusers:    [ user ],\n\t\t\t\t\ttunnels:  [ this.tunnel ]\n\t\t\t\t};\n\n\t\t\t// 2. Join Room\n\t\t\t} else {\n\n\t\t\t\tlet tid = chat.tunnels.indexOf(this.tunnel);\n\t\t\t\tif (tid === -1) {\n\t\t\t\t\tchat.tunnels.push(this.tunnel);\n\t\t\t\t\tchat.users.push(user);\n\t\t\t\t} else {\n\t\t\t\t\tchat.users[tid] = user;\n\t\t\t\t}\n\n\n\t\t\t\t_sync_chat.call(this, chat);\n\n\t\t\t}\n\n\n\t\t\t// 3. Leave Room (only one at a time allowed)\n\t\t\tfor (let rId in _CHATS) {\n\n\t\t\t\tif (rId === room) continue;\n\n\t\t\t\tlet index = _CHATS[rId].tunnels.indexOf(this.tunnel);\n\t\t\t\tif (index !== -1) {\n\n\t\t\t\t\t_CHATS[rId].users.splice(index, 1);\n\t\t\t\t\t_CHATS[rId].tunnels.splice(index, 1);\n\n\t\t\t\t\t_sync_chat.call(this, _CHATS[rId]);\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "62ca7395",
+			"memory": [
+				"_CHATS",
+				"_sync_chat"
+			],
 			"parameters": [
 				{
 					"chunk": null,
@@ -50,6 +58,10 @@
 			"chunk": "function(data) {\n\n\t\tlet user    = data.user    || null;\n\t\tlet room    = data.room    || null;\n\t\tlet message = data.message || null;\n\t\tif (user !== null && room !== null && message !== null) {\n\n\t\t\tlet chat = _CHATS[room] || null;\n\t\t\tif (chat !== null) {\n\n\t\t\t\tlet limit = this.limit;\n\t\t\t\tif (chat.messages.length > limit - 1) {\n\t\t\t\t\tchat.messages.splice(0, 1);\n\t\t\t\t}\n\n\t\t\t\tchat.messages.push({\n\t\t\t\t\tuser:    user,\n\t\t\t\t\tmessage: message\n\t\t\t\t});\n\n\n\t\t\t\t_sync_chat.call(this, chat);\n\n\t\t\t}\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "63a4dbf4",
+			"memory": [
+				"_CHATS",
+				"_sync_chat"
+			],
 			"parameters": [
 				{
 					"chunk": null,
@@ -63,6 +75,7 @@
 			"chunk": "function(chat) {\n\n\t\tlet data = {\n\t\t\tmessages: chat.messages,\n\t\t\tusers:    chat.users\n\t\t};\n\n\n\t\tfor (let t = 0, tl = chat.tunnels.length; t < tl; t++) {\n\n\t\t\tlet tunnel = chat.tunnels[t];\n\t\t\tif (tunnel !== null) {\n\n\t\t\t\ttunnel.send(data, {\n\t\t\t\t\tid:    this.id,\n\t\t\t\t\tevent: 'sync'\n\t\t\t\t});\n\n\t\t\t}\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "96c1252d",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -96,6 +109,11 @@
 					"name": "data",
 					"type": "undefined"
 				}
+			],
+			"memory": [
+				"_Service",
+				"_on_disconnect",
+				"_on_message"
 			]
 		},
 		"states": {
@@ -121,6 +139,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -138,6 +157,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Service.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.net.remote.Chat';\n\n\t\t\tlet states = {};\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.limit !== 128) states.limit = this.limit;\n\n\n\t\t\tdata['arguments'] = [ this.id, null, states ];\n\t\t\tdata['blob']      = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "4418f5cd",
+				"memory": [
+					"_Service"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -151,6 +173,7 @@
 				"chunk": "function(limit) {\n\n\t\t\tlimit = typeof limit === 'number' ? limit : null;\n\n\n\t\t\tif (limit !== null) {\n\n\t\t\t\tthis.limit = limit;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "1899c812",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof limit === 'number' ? limit : null",

@@ -64,6 +64,12 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Debugger",
+				"_Stash",
+				"_Storage",
+				"_Tunnel"
 			]
 		},
 		"states": {},
@@ -75,6 +81,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -92,6 +99,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Tunnel.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.net.Client';\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "7c28fb53",
+				"memory": [
+					"_Tunnel"
+				],
 				"parameters": [],
 				"values": [
 					{

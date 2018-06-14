@@ -33,6 +33,9 @@
 					"name": "client",
 					"type": "undefined"
 				}
+			],
+			"memory": [
+				"_Service"
 			]
 		},
 		"states": {},
@@ -44,6 +47,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -61,6 +65,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Service.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.net.client.Stash';\n\t\t\tdata['arguments']   = [ data['arguments'][1] ];\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "2ffd6d4d",
+				"memory": [
+					"_Service"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -74,6 +81,7 @@
 				"chunk": "function(assets) {\n\n\t\t\tassets = assets instanceof Object ? assets : null;\n\n\n\t\t\tif (assets !== null && this.tunnel !== null) {\n\n\t\t\t\tlet data = {};\n\n\t\t\t\tfor (let id in assets) {\n\t\t\t\t\tdata[id] = lychee.serialize(assets[id]);\n\t\t\t\t}\n\n\n\t\t\t\tthis.tunnel.send({\n\t\t\t\t\ttimestamp: Date.now(),\n\t\t\t\t\tassets:    data\n\t\t\t\t}, {\n\t\t\t\t\tid:    'stash',\n\t\t\t\t\tevent: 'sync'\n\t\t\t\t});\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "ad5714f2",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "assets instanceof Object ? assets : null",

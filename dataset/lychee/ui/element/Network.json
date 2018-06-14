@@ -45,6 +45,7 @@
 			"chunk": "(function(location) {\n\n\t\tlet origin = location.origin || '';\n\t\tlet proto  = origin.split(':')[0];\n\n\t\tif (/app|file|chrome-extension/g.test(proto)) {\n\n\t\t\treturn 'http://harvester.artificial.engineering:4848';\n\n\t\t} else if (/http|https/g.test(proto)) {\n\n\t\t\treturn location.origin;\n\n\t\t} else {\n\n\t\t\treturn '';\n\n\t\t}\n\n\t})(global.location || {})",
 			"type": "function",
 			"hash": "9951f4bf",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -69,6 +70,7 @@
 			"chunk": "function(url, callback, scope) {\n\n\t\turl = typeof url === 'string' ? url : '/api/server/connect?identifier=/projects/boilerplate';\n\n\n\t\tlet config = new Config(_API_ORIGIN + url);\n\n\t\tconfig.onload = function(result) {\n\t\t\tcallback.call(scope, result === true ? this.buffer : null);\n\t\t};\n\n\t\tconfig.load();\n\n\t}",
 			"type": "function",
 			"hash": "b3020ac0",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": "typeof url === 'string' ? url : '/api/server/connect?identifier=/projects/boilerplate'",
@@ -93,6 +95,7 @@
 			"chunk": "function() {\n\n\t\tlet main = global.MAIN || null;\n\t\tif (main !== null) {\n\n\t\t\tlet client = main.defaults.client;\n\t\t\tlet server = main.defaults.server;\n\n\n\t\t\tif (typeof client === 'string') {\n\n\t\t\t\tthis.getEntity('API').setValue(client);\n\t\t\t\tthis.getEntity('mode').setValue('dynamic');\n\n\t\t\t} else if (client instanceof Object) {\n\n\t\t\t\tthis.getEntity('host').setValue(client.host);\n\t\t\t\tthis.getEntity('port').setValue(client.port);\n\t\t\t\tthis.getEntity('mode').setValue('static');\n\n\t\t\t}\n\n\n\t\t\tif (typeof server === 'string') {\n\n\t\t\t\tthis.getEntity('API').setValue(server);\n\t\t\t\tthis.getEntity('mode').setValue('dynamic');\n\n\t\t\t} else if (server instanceof Object) {\n\n\t\t\t\tthis.getEntity('host').setValue(server.host);\n\t\t\t\tthis.getEntity('port').setValue(server.port);\n\t\t\t\tthis.getEntity('mode').setValue('static');\n\n\t\t\t}\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "1f749bf5",
+			"memory": [],
 			"parameters": [],
 			"values": []
 		},
@@ -100,6 +103,9 @@
 			"chunk": "function() {\n\n\t\tlet main = global.MAIN || null;\n\t\tif (main !== null) {\n\n\t\t\tlet client = main.client || null;\n\t\t\tlet server = main.server || null;\n\n\n\t\t\tlet mode = this.getEntity('mode').value;\n\t\t\tif (mode === 'dynamic') {\n\n\t\t\t\tif (client !== null) {\n\n\t\t\t\t\t_load_api(this.getEntity('API').value, function(settings) {\n\n\t\t\t\t\t\tclient.disconnect();\n\t\t\t\t\t\tclient.setHost(settings.host);\n\t\t\t\t\t\tclient.setPort(settings.port);\n\t\t\t\t\t\tclient.connect();\n\n\t\t\t\t\t}, this);\n\n\t\t\t\t}\n\n\n\t\t\t\tif (server !== null) {\n\n\t\t\t\t\t_load_api(this.getEntity('API').value, function(settings) {\n\n\t\t\t\t\t\tserver.disconnect();\n\t\t\t\t\t\tserver.setHost(settings.host);\n\t\t\t\t\t\tserver.setPort(settings.port);\n\t\t\t\t\t\tserver.connect();\n\n\t\t\t\t\t}, this);\n\n\t\t\t\t}\n\n\t\t\t} else if (mode === 'static') {\n\n\n\t\t\t\tif (client !== null) {\n\n\t\t\t\t\tclient.disconnect();\n\t\t\t\t\tclient.setHost(this.getEntity('host').value);\n\t\t\t\t\tclient.setPort(this.getEntity('port').value);\n\t\t\t\t\tclient.connect();\n\n\t\t\t\t}\n\n\n\t\t\t\tif (server !== null) {\n\n\t\t\t\t\tserver.disconnect();\n\t\t\t\t\tserver.setHost(this.getEntity('host').value);\n\t\t\t\t\tserver.setPort(this.getEntity('port').value);\n\t\t\t\t\tserver.connect();\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "9273b354",
+			"memory": [
+				"_load_api"
+			],
 			"parameters": [],
 			"values": []
 		}
@@ -116,6 +122,13 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Element",
+				"_Input",
+				"_Select",
+				"_read",
+				"_save"
 			]
 		},
 		"states": {},
@@ -136,6 +149,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -153,6 +167,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Element.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.element.Network';\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "eb570b39",
+				"memory": [
+					"_Element"
+				],
 				"parameters": [],
 				"values": [
 					{

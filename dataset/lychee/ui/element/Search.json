@@ -54,6 +54,10 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Element",
+				"_Input"
 			]
 		},
 		"states": {
@@ -116,6 +120,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -133,6 +138,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Element.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.element.Search';\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "400ed85c",
+				"memory": [
+					"_Element"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -146,6 +154,9 @@
 				"chunk": "function(id, position) {\n\n\t\t\tid        = typeof id === 'string'    ? id       : null;\n\t\t\tposition = position instanceof Object ? position : null;\n\n\n\t\t\tif (id === 'search') {\n\t\t\t\treturn this.entities[3] || null;\n\t\t\t} else if (id === 'select') {\n\t\t\t\treturn this.entities[5] || null;\n\t\t\t}\n\n\n\t\t\treturn _Element.prototype.getEntity.call(this, id, position);\n\n\t\t}",
 				"type": "function",
 				"hash": "0912f822",
+				"memory": [
+					"_Element"
+				],
 				"parameters": [
 					{
 						"chunk": "typeof id === 'string'    ? id       : null",
@@ -209,6 +220,7 @@
 				"chunk": "function(data) {\n\n\t\t\tdata = data instanceof Array ? data : null;\n\n\n\t\t\tif (data !== null) {\n\n\t\t\t\tthis.data = data.map(function(value) {\n\t\t\t\t\treturn '' + value;\n\t\t\t\t}).sort();\n\n\n\t\t\t\tlet select = this.getEntity('select');\n\t\t\t\tif (select !== null) {\n\t\t\t\t\tselect.setOptions(this.data);\n\t\t\t\t\tselect.height = Math.min(32 * this.data.length, this.height - 128);\n\t\t\t\t\tthis.trigger('relayout');\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "4c5f4846",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "data instanceof Array ? data : null",
@@ -234,6 +246,7 @@
 				"chunk": "function(value) {\n\n\t\t\tvalue = typeof value === 'string' ? value : null;\n\n\n\t\t\tif (value !== null) {\n\n\t\t\t\tthis.value = value;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "0b16663f",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof value === 'string' ? value : null",

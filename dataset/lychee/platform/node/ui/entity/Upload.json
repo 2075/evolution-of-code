@@ -50,6 +50,9 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Button"
 			]
 		},
 		"states": {
@@ -155,6 +158,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -172,6 +176,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Button.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.entity.Upload';\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "3585a5d7",
+				"memory": [
+					"_Button"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -185,6 +192,7 @@
 				"chunk": "function(type) {\n\n\t\t\ttype = lychee.enumof(Composite.TYPE, type) ? type : null;\n\n\n\t\t\tif (type !== null) {\n\n\t\t\t\tthis.type = type;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "454cae67",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "lychee.enumof(Composite.TYPE, type) ? type : null",
@@ -210,6 +218,7 @@
 				"chunk": "function(value) {\n\n\t\t\tvalue = value instanceof Array ? value : null;\n\n\n\t\t\tif (value !== null) {\n\n\t\t\t\tthis.value = value.filter(function(asset) {\n\n\t\t\t\t\tif (asset instanceof global.Config)  return true;\n\t\t\t\t\tif (asset instanceof global.Font)    return true;\n\t\t\t\t\tif (asset instanceof global.Music)   return true;\n\t\t\t\t\tif (asset instanceof global.Sound)   return true;\n\t\t\t\t\tif (asset instanceof global.Texture) return true;\n\t\t\t\t\tif (asset instanceof global.Stuff)   return true;\n\n\n\t\t\t\t\treturn false;\n\n\t\t\t\t});\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "ce16362c",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "value instanceof Array ? value : null",

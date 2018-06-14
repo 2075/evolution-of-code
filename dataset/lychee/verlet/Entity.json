@@ -45,6 +45,10 @@
 			"chunk": "function() {\n\n\t\tlet constraints = [];\n\t\tlet particles   = [ this.position ];\n\t\tlet rigidity    = this.rigidity;\n\t\tlet shape       = this.shape;\n\n\n\t\tif (shape === Composite.SHAPE.circle) {\n\n\t\t\tlet origin   = new _Vector3(this.position);\n\t\t\tlet radius   = this.radius;\n\t\t\tlet segments = Math.min(64, Math.max(4, Math.pow(radius / 8, 2)));\n\t\t\tlet s        = 0;\n\n\t\t\tfor (s = 0; s < segments; s++) {\n\n\t\t\t\tlet theta = s * (2 * Math.PI) / segments;\n\n\t\t\t\tparticles.push(new _Vector3({\n\t\t\t\t\tx: origin.x + Math.cos(theta) * radius,\n\t\t\t\t\ty: origin.y + Math.sin(theta) * radius,\n\t\t\t\t\tz: 0\n\t\t\t\t}));\n\n\t\t\t}\n\n\t\t\tfor (s = 0; s < segments; s++) {\n\n\t\t\t\tlet curr = particles[s % segments];\n\t\t\t\tlet prev = particles[(s - 1) % segments] || null;\n\t\t\t\tlet next = particles[(s + 1) % segments] || null;\n\n\n\t\t\t\tif (curr !== prev && prev !== null) {\n\t\t\t\t\tconstraints.push(new _Constraint(curr, prev, rigidity));\n\t\t\t\t}\n\n\t\t\t\tif (curr !== next && next !== null) {\n\t\t\t\t\tconstraints.push(new _Constraint(curr, next, rigidity));\n\t\t\t\t}\n\n\t\t\t\tconstraints.push(new _Constraint(curr, origin, rigidity));\n\n\t\t\t}\n\n\n\t\t// TODO: Implement this stuff here\n\t\t// } else if (shape === Composite.SHAPE.sphere) {\n\t\t// } else if (shape === Composite.SHAPE.rectangle) {\n\t\t// } else if (shape === Composite.SHAPE.cuboid) {\n\t\t}\n\n\n\t\tthis.constraints = constraints;\n\t\tthis.particles   = particles;\n\n\t}",
 			"type": "function",
 			"hash": "53e2e634",
+			"memory": [
+				"_Constraint",
+				"_Vector3"
+			],
 			"parameters": [],
 			"values": []
 		}
@@ -61,6 +65,9 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Entity"
 			]
 		},
 		"states": {
@@ -149,6 +156,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -166,6 +174,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Entity.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.verlet.Entity';\n\n\t\t\tlet states = data['arguments'][0];\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.position.length() > 0) states.position = lychee.serialize(this.position);\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "1c45a74a",
+				"memory": [
+					"_Entity"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -179,6 +190,9 @@
 				"chunk": "function(clock, delta) {\n\n\t\t\t_Entity.prototype.update.call(this, clock, delta);\n\n\n\t\t\tlet constraints = this.constraints;\n\t\t\tfor (let c = 0, cl = constraints.length; c < cl; c++) {\n\t\t\t\tconstraints[c].update(clock, delta);\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "c0530133",
+				"memory": [
+					"_Entity"
+				],
 				"parameters": [
 					{
 						"chunk": null,
@@ -201,6 +215,9 @@
 				"chunk": "function(position) {\n\n\t\t\tposition = position instanceof _Vector3 ? position : null;\n\n\n\t\t\tif (position !== null) {\n\n\t\t\t\tthis.position = position;\n\t\t\t\t_on_change.call(this);\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "72e6700c",
+				"memory": [
+					"_on_change"
+				],
 				"parameters": [
 					{
 						"chunk": "position instanceof _Vector3 ? position : null",
@@ -226,6 +243,9 @@
 				"chunk": "function(rigidity) {\n\n\t\t\trigidity = typeof rigidity === 'number' ? rigidity : null;\n\n\n\t\t\tif (rigidity !== null) {\n\n\t\t\t\tthis.rigidity = rigidity;\n\t\t\t\t_on_change.call(this);\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "6f2a233c",
+				"memory": [
+					"_on_change"
+				],
 				"parameters": [
 					{
 						"chunk": "typeof rigidity === 'number' ? rigidity : null",
@@ -251,6 +271,9 @@
 				"chunk": "function(shape) {\n\n\t\t\tshape = lychee.enumof(Composite.SHAPE, shape) ? shape : null;\n\n\n\t\t\tif (shape !== null) {\n\n\t\t\t\tthis.shape = shape;\n\t\t\t\t_on_change.call(this);\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\n\t\t}",
 				"type": "function",
 				"hash": "13caa161",
+				"memory": [
+					"_on_change"
+				],
 				"parameters": [
 					{
 						"chunk": "lychee.enumof(Composite.SHAPE, shape) ? shape : null",

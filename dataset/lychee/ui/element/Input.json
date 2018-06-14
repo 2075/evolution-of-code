@@ -46,6 +46,7 @@
 			"chunk": "function() {\n\n\t\tlet main = global.MAIN || null;\n\t\tif (main !== null) {\n\n\t\t\tlet input = main.input || null;\n\t\t\tif (input !== null) {\n\n\t\t\t\tlet delay       = input.delay;\n\t\t\t\tlet key         = input.key;\n\t\t\t\tlet keymodifier = input.keymodifier;\n\t\t\t\tlet touch       = input.touch;\n\t\t\t\tlet swipe       = input.swipe;\n\n\n\t\t\t\tthis.getEntity('delay').setValue(delay);\n\t\t\t\tthis.getEntity('key').setValue(key === true ? 'on' : 'off');\n\t\t\t\tthis.getEntity('keymodifier').setValue(keymodifier === true ? 'on' : 'off');\n\t\t\t\tthis.getEntity('touch').setValue(touch === true ? 'on' : 'off');\n\t\t\t\tthis.getEntity('swipe').setValue(swipe === true ? 'on' : 'off');\n\n\t\t\t}\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "87f2d3f1",
+			"memory": [],
 			"parameters": [],
 			"values": []
 		},
@@ -53,6 +54,7 @@
 			"chunk": "function() {\n\n\t\tlet main = global.MAIN || null;\n\t\tif (main !== null) {\n\n\t\t\tlet input = main.input || null;\n\t\t\tif (input !== null) {\n\n\t\t\t\tlet delay       = this.getEntity('delay').value;\n\t\t\t\tlet key         = this.getEntity('key').value;\n\t\t\t\tlet keymodifier = this.getEntity('keymodifier').value;\n\t\t\t\tlet touch       = this.getEntity('touch').value;\n\t\t\t\tlet swipe       = this.getEntity('swipe').value;\n\n\n\t\t\t\tinput.setDelay(delay);\n\t\t\t\tinput.setKey(key === 'on' ? true : false);\n\t\t\t\tinput.setKeyModifier(keymodifier === 'on' ? true : false);\n\t\t\t\tinput.setTouch(touch === 'on' ? true : false);\n\t\t\t\tinput.setSwipe(swipe === 'on' ? true : false);\n\n\t\t\t}\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "38891a0c",
+			"memory": [],
 			"parameters": [],
 			"values": []
 		}
@@ -69,6 +71,13 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Element",
+				"_Slider",
+				"_Switch",
+				"_read",
+				"_save"
 			]
 		},
 		"states": {},
@@ -80,6 +89,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -97,6 +107,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Element.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.element.Input';\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "a6073add",
+				"memory": [
+					"_Element"
+				],
 				"parameters": [],
 				"values": [
 					{

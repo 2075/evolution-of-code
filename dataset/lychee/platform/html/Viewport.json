@@ -80,6 +80,12 @@
 			"chunk": "function() {\n\n\t\tif (_reshapeactive === true || (_reshapewidth === global.innerWidth && _reshapeheight === global.innerHeight)) {\n\t\t\treturn false;\n\t\t}\n\n\n\t\t_reshapeactive = true;\n\n\n\n\t\t/*\n\t\t * ISSUE in Mobile WebKit:\n\t\t *\n\t\t * An issue occurs if width of viewport is higher than\n\t\t * the width of the viewport of future rotation state.\n\t\t *\n\t\t * This bugfix prevents the viewport to scale higher\n\t\t * than 1.0, even if the meta tag is correctly setup.\n\t\t */\n\n\t\tlet elements = global.document.querySelectorAll('.lychee-Renderer');\n\t\tfor (let e = 0, el = elements.length; e < el; e++) {\n\n\t\t\tlet element = elements[e];\n\n\t\t\telement.style.width  = '1px';\n\t\t\telement.style.height = '1px';\n\n\t\t}\n\n\n\n\t\t/*\n\t\t * ISSUE in Mobile Firefox and Mobile WebKit\n\t\t *\n\t\t * The reflow is too slow for an update, so we have\n\t\t * to lock the heuristic to only be executed once,\n\t\t * waiting for 500ms to let the reflow finish.\n\t\t */\n\n\t\tsetTimeout(function() {\n\n\t\t\tfor (let i = 0, l = _INSTANCES.length; i < l; i++) {\n\t\t\t\t_process_reshape.call(_INSTANCES[i], global.innerWidth, global.innerHeight);\n\t\t\t}\n\n\t\t\t_reshapewidth  = global.innerWidth  | 0;\n\t\t\t_reshapeheight = global.innerHeight | 0;\n\t\t\t_reshapeactive = false;\n\n\t\t}, 500);\n\n\t}",
 			"type": "function",
 			"hash": "f5aa02e5",
+			"memory": [
+				"_process_reshape",
+				"_reshapeactive",
+				"_reshapeheight",
+				"_reshapewidth"
+			],
 			"parameters": [],
 			"values": [
 				{
@@ -111,6 +117,7 @@
 			"chunk": "function() {\n\n\t\treturn this.trigger('show');\n\n\t}",
 			"type": "function",
 			"hash": "e1fe8bc5",
+			"memory": [],
 			"parameters": [],
 			"values": [
 				{
@@ -127,6 +134,7 @@
 			"chunk": "function() {\n\n\t\treturn this.trigger('hide');\n\n\t}",
 			"type": "function",
 			"hash": "9488e2b6",
+			"memory": [],
 			"parameters": [],
 			"values": [
 				{
@@ -143,6 +151,7 @@
 			"chunk": "function(orientation) {\n\n\t\torientation = typeof orientation === 'number' ? orientation : null;\n\n\t\tif (orientation !== null) {\n\t\t\tthis.__orientation = orientation;\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "4826ca7e",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": "typeof orientation === 'number' ? orientation : null",
@@ -157,6 +166,7 @@
 			"chunk": "function(width, height) {\n\n\t\tif (width === this.width && height === this.height) {\n\t\t\treturn false;\n\t\t}\n\n\n\t\tthis.width  = width;\n\t\tthis.height = height;\n\n\n\t\tlet orientation = null;\n\t\tlet rotation    = null;\n\n\n\n\t\t/*\n\t\t *    TOP\n\t\t *  _______\n\t\t * |       |\n\t\t * |       |\n\t\t * |       |\n\t\t * |       |\n\t\t * |       |\n\t\t * [X][X][X]\n\t\t *\n\t\t *  BOTTOM\n\t\t */\n\n\t\tif (this.__orientation === 0) {\n\n\t\t\tif (width > height) {\n\n\t\t\t\torientation = 'landscape';\n\t\t\t\trotation    = 'landscape';\n\n\t\t\t} else {\n\n\t\t\t\torientation = 'portrait';\n\t\t\t\trotation    = 'portrait';\n\n\t\t\t}\n\n\n\n\t\t/*\n\t\t *  BOTTOM\n\t\t *\n\t\t * [X][X][X]\n\t\t * |       |\n\t\t * |       |\n\t\t * |       |\n\t\t * |       |\n\t\t * |_______|\n\t\t *\n\t\t *    TOP\n\t\t */\n\n\t\t} else if (this.__orientation === 180) {\n\n\t\t\tif (width > height) {\n\n\t\t\t\torientation = 'landscape';\n\t\t\t\trotation    = 'landscape';\n\n\t\t\t} else {\n\n\t\t\t\torientation = 'portrait';\n\t\t\t\trotation    = 'portrait';\n\n\t\t\t}\n\n\n\n\t\t/*\n\t\t *    ____________    B\n\t\t * T |            [x] O\n\t\t * O |            [x] T\n\t\t * P |____________[x] T\n\t\t *                    O\n\t\t *                    M\n\t\t */\n\n\t\t} else if (this.__orientation === 90) {\n\n\t\t\tif (width > height) {\n\n\t\t\t\torientation = 'portrait';\n\t\t\t\trotation    = 'landscape';\n\n\t\t\t} else {\n\n\t\t\t\torientation = 'landscape';\n\t\t\t\trotation    = 'portrait';\n\n\t\t\t}\n\n\n\n\t\t/*\n\t\t * B    ____________\n\t\t * O [x]            | T\n\t\t * T [x]            | O\n\t\t * T [x]____________| P\n\t\t * O\n\t\t * M\n\t\t */\n\n\t\t} else if (this.__orientation === -90) {\n\n\t\t\tif (width > height) {\n\n\t\t\t\torientation = 'portrait';\n\t\t\t\trotation    = 'landscape';\n\n\t\t\t} else {\n\n\t\t\t\torientation = 'landscape';\n\t\t\t\trotation    = 'portrait';\n\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn this.trigger('reshape', [ orientation, rotation, width, height ]);\n\n\t}",
 			"type": "function",
 			"hash": "55dc354a",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -198,6 +208,11 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Emitter",
+				"_INSTANCES",
+				"_process_reshape"
 			]
 		},
 		"states": {
@@ -256,6 +271,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -273,6 +289,9 @@
 				"chunk": "function() {\n\n\t\t\tlet found = false;\n\n\t\t\tfor (let i = 0, il = _INSTANCES.length; i < il; i++) {\n\n\t\t\t\tif (_INSTANCES[i] === this) {\n\t\t\t\t\t_INSTANCES.splice(i, 1);\n\t\t\t\t\tfound = true;\n\t\t\t\t\til--;\n\t\t\t\t\ti--;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\tthis.unbind();\n\n\n\t\t\treturn found;\n\n\t\t}",
 				"type": "function",
 				"hash": "a596dbf3",
+				"memory": [
+					"_INSTANCES"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -291,6 +310,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.Viewport';\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.fullscreen !== false) states.fullscreen = this.fullscreen;\n\n\n\t\t\tdata['arguments'][0] = states;\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "cf868d0c",
+				"memory": [
+					"_Emitter"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -304,6 +326,10 @@
 				"chunk": "function(fullscreen) {\n\n\t\t\tfullscreen = typeof fullscreen === 'boolean' ? fullscreen : null;\n\n\n\t\t\tif (fullscreen !== null) {\n\n\t\t\t\tif (fullscreen === true && this.fullscreen === false) {\n\n\t\t\t\t\tif (_enterFullscreen !== null) {\n\n\t\t\t\t\t\t_enterFullscreen();\n\t\t\t\t\t\tthis.fullscreen = true;\n\n\t\t\t\t\t\treturn true;\n\n\t\t\t\t\t}\n\n\t\t\t\t} else if (fullscreen === false && this.fullscreen === true) {\n\n\t\t\t\t\tif (_leaveFullscreen !== null) {\n\n\t\t\t\t\t\t_leaveFullscreen();\n\t\t\t\t\t\tthis.fullscreen = false;\n\n\t\t\t\t\t\treturn true;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "b6c4ea4a",
+				"memory": [
+					"_enterFullscreen",
+					"_leaveFullscreen"
+				],
 				"parameters": [
 					{
 						"chunk": "typeof fullscreen === 'boolean' ? fullscreen : null",

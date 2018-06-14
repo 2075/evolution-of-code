@@ -55,6 +55,7 @@
 			"chunk": "function(value) {\n\n\t\tvalue = typeof value === 'string' ? value : null;\n\n\n\t\tif (value !== null) {\n\n\t\t\tlet action   = value.split('=')[0] || '';\n\t\t\tlet resource = value.split('=')[1] || '';\n\t\t\tlet data     = value.split('=')[2] || '';\n\n\n\t\t\tif (action === 'boot' && resource !== '') {\n\n\t\t\t\treturn true;\n\n\t\t\t} else if (action === 'profile' && resource !== '' && data !== '') {\n\n\t\t\t\treturn true;\n\n\t\t\t} else if (action === 'unboot') {\n\n\t\t\t\treturn true;\n\n\t\t\t} else if (/^(start|stop|edit|file|web)$/g.test(action) && resource !== '') {\n\n\t\t\t\treturn true;\n\n\t\t\t} else if (action === 'refresh') {\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn false;\n\n\t}",
 			"type": "function",
 			"hash": "d0b60047",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": "typeof value === 'string' ? value : null",
@@ -80,6 +81,7 @@
 			"chunk": "function(value) {\n\n\t\tlet action  = value.split('=')[0];\n\t\tlet element = global.document.createElement('a');\n\n\n\t\tif (action === 'refresh') {\n\t\t\telement.href = './' + global.location.href.split('/').pop();\n\t\t} else {\n\t\t\telement.href = 'lycheejs://' + value;\n\t\t}\n\n\t\telement.click();\n\n\n\t\treturn true;\n\n\t}",
 			"type": "function",
 			"hash": "790b0df8",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -108,6 +110,10 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Button",
+				"_help"
 			]
 		},
 		"states": {},
@@ -131,6 +137,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -148,6 +155,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Button.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.entity.Helper';\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "9f302b7b",
+				"memory": [
+					"_Button"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -161,6 +171,10 @@
 				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tif (this.visible === false) return;\n\n\n\t\t\tlet action   = this.__action;\n\t\t\tlet alpha    = this.alpha;\n\t\t\tlet font     = this.font;\n\t\t\tlet label    = this.label;\n\t\t\tlet position = this.position;\n\t\t\tlet x        = position.x + offsetX;\n\t\t\tlet y        = position.y + offsetY;\n\t\t\tlet hwidth   = this.width  / 2;\n\t\t\tlet hheight  = this.height / 2;\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(alpha);\n\t\t\t}\n\n\n\t\t\trenderer.drawBox(\n\t\t\t\tx - hwidth,\n\t\t\t\ty - hheight,\n\t\t\t\tx + hwidth,\n\t\t\t\ty + hheight,\n\t\t\t\t'#545454',\n\t\t\t\ttrue\n\t\t\t);\n\n\n\t\t\tlet pulse = this.__pulse;\n\t\t\tif (pulse.active === true) {\n\n\t\t\t\trenderer.setAlpha(pulse.alpha);\n\n\t\t\t\trenderer.drawBox(\n\t\t\t\t\tx - hwidth,\n\t\t\t\t\ty - hheight,\n\t\t\t\t\tx + hwidth,\n\t\t\t\t\ty + hheight,\n\t\t\t\t\t'#32afe5',\n\t\t\t\t\ttrue\n\t\t\t\t);\n\n\t\t\t\trenderer.setAlpha(1.0);\n\n\t\t\t}\n\n\n\t\t\tif (action !== null) {\n\n\t\t\t\tlet map = _CONFIG.map[action] || null;\n\t\t\t\tif (map !== null) {\n\n\t\t\t\t\tif (this.width > 96) {\n\n\t\t\t\t\t\trenderer.drawSprite(\n\t\t\t\t\t\t\tx - hwidth,\n\t\t\t\t\t\t\ty - hheight,\n\t\t\t\t\t\t\t_TEXTURE,\n\t\t\t\t\t\t\tmap[0]\n\t\t\t\t\t\t);\n\n\t\t\t\t\t\trenderer.drawText(\n\t\t\t\t\t\t\tx,\n\t\t\t\t\t\t\ty,\n\t\t\t\t\t\t\tlabel,\n\t\t\t\t\t\t\tfont,\n\t\t\t\t\t\t\ttrue\n\t\t\t\t\t\t);\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\trenderer.drawSprite(\n\t\t\t\t\t\t\tx - map[0].w / 2,\n\t\t\t\t\t\t\ty - hheight,\n\t\t\t\t\t\t\t_TEXTURE,\n\t\t\t\t\t\t\tmap[0]\n\t\t\t\t\t\t);\n\n\t\t\t\t\t}\n\n\t\t\t\t} else if (label !== null && font !== null) {\n\n\t\t\t\t\trenderer.drawText(\n\t\t\t\t\t\tx,\n\t\t\t\t\t\ty,\n\t\t\t\t\t\tlabel,\n\t\t\t\t\t\tfont,\n\t\t\t\t\t\ttrue\n\t\t\t\t\t);\n\n\t\t\t\t}\n\n\t\t\t} else if (label !== null && font !== null) {\n\n\t\t\t\trenderer.drawText(\n\t\t\t\t\tx,\n\t\t\t\t\ty,\n\t\t\t\t\tlabel,\n\t\t\t\t\tfont,\n\t\t\t\t\ttrue\n\t\t\t\t);\n\n\t\t\t}\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(1.0);\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "ff033886",
+				"memory": [
+					"_CONFIG",
+					"_TEXTURE"
+				],
 				"parameters": [
 					{
 						"chunk": null,
@@ -188,6 +202,7 @@
 				"chunk": "function(value) {\n\n\t\t\tvalue = typeof value === 'string' ? value : null;\n\n\n\t\t\tif (value !== null && _is_value(value) === true) {\n\n\t\t\t\tthis.value    = value;\n\t\t\t\tthis.__action = value.split('=')[0] || null;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "b05372fd",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof value === 'string' ? value : null",

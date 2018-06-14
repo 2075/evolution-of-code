@@ -49,7 +49,7 @@
 			}
 		},
 		"_XHR": {
-			"chunk": "function() {}",
+			"chunk": "function () {}",
 			"type": "Function",
 			"hash": "455b736e"
 		},
@@ -57,6 +57,7 @@
 			"chunk": "function(str) {\n\n\t\tlet tmp = str.split('-');\n\n\t\tfor (let t = 0, tl = tmp.length; t < tl; t++) {\n\t\t\tlet ch = tmp[t];\n\t\t\ttmp[t] = ch.charAt(0).toUpperCase() + ch.substr(1);\n\t\t}\n\n\t\treturn tmp.join('-');\n\n\t}",
 			"type": "function",
 			"hash": "cec3fc9d",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -76,6 +77,7 @@
 			"chunk": "function(raw_headers, raw_payload) {\n\n\t\tlet blob = null;\n\t\tlet view = null;\n\n\n\t\tif (typeof raw_payload === 'string') {\n\n\t\t\tblob = new Buffer(raw_payload, 'utf8');\n\n\t\t} else if (raw_payload instanceof ArrayBuffer) {\n\n\t\t\tblob = new Buffer(raw_payload.byteLength);\n\t\t\tview = new Uint8Array(raw_payload);\n\n\t\t\tfor (let v = 0, vl = blob.length; v < vl; v++) {\n\t\t\t\tblob[v] = view[v];\n\t\t\t}\n\n\t\t}\n\n\n\t\tlet headers = {};\n\t\tlet payload = blob;\n\n\t\traw_headers.split('\\r\\n').forEach(function(line) {\n\n\t\t\tlet i1 = line.indexOf(':');\n\t\t\tif (i1 !== -1) {\n\n\t\t\t\tlet key = line.substr(0, i1).trim().toLowerCase();\n\t\t\t\tlet val = line.substr(i1 + 1).trim();\n\n\t\t\t\tif (key.startsWith('x-')) {\n\t\t\t\t\theaders['@' + key.substr(2)] = val;\n\t\t\t\t} else if (key.length > 0) {\n\t\t\t\t\theaders[key.toLowerCase()] = val;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t});\n\n\n\t\treturn [{\n\t\t\theaders: headers,\n\t\t\tpayload: payload\n\t\t}];\n\n\t}",
 			"type": "function",
 			"hash": "7321f724",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -100,6 +102,10 @@
 			"chunk": "function(chunk, headers, binary) {\n\n\t\tlet connection = this.__connection;\n\t\tif (connection !== null) {\n\n\t\t\tlet tmp    = chunk.toString('utf8').split('\\n')[0].trim().split(' ');\n\t\t\tlet method = tmp[0];\n\t\t\tlet url    = 'http://' + connection.host + ':' + connection.port + tmp[1];\n\t\t\tlet socket = new _XHR();\n\t\t\tlet that   = this;\n\n\n\t\t\tsocket.open(method, url, true);\n\t\t\tsocket.responseType = binary === true ? 'arraybuffer' : 'text';\n\n\t\t\tsocket.onload = function() {\n\n\t\t\t\tlet chunks = _receive_xhr.call(that, socket.getAllResponseHeaders(), socket.response);\n\t\t\t\tif (chunks.length > 0) {\n\n\t\t\t\t\tfor (let c = 0, cl = chunks.length; c < cl; c++) {\n\n\t\t\t\t\t\tlet chunk = chunks[c];\n\t\t\t\t\t\tif (chunk.payload !== null) {\n\t\t\t\t\t\t\tthat.trigger('receive', [ chunk.payload, chunk.headers ]);\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t};\n\n\t\t\tsocket.onerror = function() {\n\t\t\t\tthat.trigger('error');\n\t\t\t\tthat.disconnect();\n\t\t\t};\n\n\t\t\tsocket.ontimeout = function() {\n\t\t\t\tthat.trigger('error');\n\t\t\t\tthat.disconnect();\n\t\t\t};\n\n\t\t\tfor (let key in headers) {\n\n\t\t\t\tif (key.charAt(0) === '@') {\n\t\t\t\t\tsocket.setRequestHeader(_uppercase('x-' + key.substr(1)), headers[key]);\n\t\t\t\t} else {\n\t\t\t\t\tsocket.setRequestHeader(_uppercase(key), headers[key]);\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn socket;\n\n\t\t}\n\n\n\t\treturn null;\n\n\t}",
 			"type": "function",
 			"hash": "12784c5f",
+			"memory": [
+				"_receive_xhr",
+				"_uppercase"
+			],
 			"parameters": [
 				{
 					"chunk": null,
@@ -133,6 +139,7 @@
 			"chunk": "function(socket, protocol) {\n\n\t\tlet that = this;\n\t\tif (that.__connection !== socket) {\n\n\t\t\t// TODO: connect socket events\n\n\t\t\tthat.__connection = socket;\n\t\t\tthat.__protocol   = protocol;\n\n\t\t\tthat.trigger('connect');\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "ea7a4b37",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -151,6 +158,7 @@
 			"chunk": "function(socket, protocol) {\n\n\t\tlet that = this;\n\t\tif (that.__connection === socket) {\n\n\t\t\t// TODO: disconnect socket events\n\n\t\t\t// socket.destroy();\n\t\t\tprotocol.close();\n\n\n\t\t\tthat.__connection = null;\n\t\t\tthat.__protocol   = null;\n\n\n\t\t\tsetTimeout(function() {\n\t\t\t\tthat.trigger('disconnect');\n\t\t\t}, 0);\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "551457f6",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -172,7 +180,10 @@
 			"chunk": "function() {\n\n\t\tthis.__connection = null;\n\t\tthis.__protocol   = null;\n\n\n\t\t_Emitter.call(this);\n\n\t}",
 			"type": "function",
 			"hash": "bb238e6f",
-			"parameters": []
+			"parameters": [],
+			"memory": [
+				"_Emitter"
+			]
 		},
 		"states": {},
 		"properties": {
@@ -206,6 +217,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -223,6 +235,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.net.socket.HTTP';\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "9391ec9b",
+				"memory": [
+					"_Emitter"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -236,6 +251,10 @@
 				"chunk": "function(host, port, connection) {\n\n\t\t\thost       = typeof host === 'string'       ? host       : null;\n\t\t\tport       = typeof port === 'number'       ? (port | 0) : null;\n\t\t\tconnection = typeof connection === 'object' ? connection : null;\n\n\n\t\t\tlet that     = this;\n\t\t\tlet protocol = null;\n\n\n\t\t\tif (host !== null && port !== null) {\n\n\t\t\t\tif (connection !== null) {\n\n\t\t\t\t\tprotocol   = new _Protocol({\n\t\t\t\t\t\ttype: _Protocol.TYPE.remote\n\t\t\t\t\t});\n\t\t\t\t\tconnection = null;\n\n\t\t\t\t\t// TODO: Remote Socket API\n\n\t\t\t\t\t// _connect_socket.call(that, connection, protocol);\n\t\t\t\t\t// connection.resume();\n\n\t\t\t\t} else {\n\n\t\t\t\t\tprotocol   = new _Protocol({\n\t\t\t\t\t\ttype: _Protocol.TYPE.client\n\t\t\t\t\t});\n\t\t\t\t\tconnection = {\n\t\t\t\t\t\thost: host,\n\t\t\t\t\t\tport: port\n\t\t\t\t\t};\n\n\n\t\t\t\t\t_connect_socket.call(that, connection, protocol);\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "186f9816",
+				"memory": [
+					"_Protocol",
+					"_connect_socket"
+				],
 				"parameters": [
 					{
 						"chunk": "typeof host === 'string'       ? host       : null",
@@ -273,6 +292,9 @@
 				"chunk": "function(payload, headers, binary) {\n\n\t\t\tpayload = payload instanceof Buffer ? payload : null;\n\t\t\theaders = headers instanceof Object ? headers : null;\n\t\t\tbinary  = binary === true;\n\n\n\t\t\tif (payload !== null) {\n\n\t\t\t\tlet connection = this.__connection;\n\t\t\t\tlet protocol   = this.__protocol;\n\n\t\t\t\tif (connection !== null && protocol !== null) {\n\n\t\t\t\t\t// XXX: HTML XHR does not support Buffer data\n\t\t\t\t\tlet chunk = protocol.send(payload, headers, binary);\n\n\n\t\t\t\t\t// XXX: Web XHR does not support halfopen Sockets\n\t\t\t\t\tconnection = _reconnect_xhr.call(this, chunk, headers, binary);\n\t\t\t\t\tchunk      = payload;\n\n\n\t\t\t\t\tif (connection !== null && chunk !== null) {\n\n\t\t\t\t\t\tif (binary === true) {\n\n\t\t\t\t\t\t\tlet blob = new ArrayBuffer(chunk.length);\n\t\t\t\t\t\t\tlet view = new Uint8Array(blob);\n\n\t\t\t\t\t\t\tfor (let c = 0, cl = chunk.length; c < cl; c++) {\n\t\t\t\t\t\t\t\tview[c] = chunk[c];\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\tconnection.send(blob);\n\n\t\t\t\t\t\t} else {\n\n\t\t\t\t\t\t\tconnection.send(chunk.toString('utf8'));\n\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\treturn true;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "115a53b9",
+				"memory": [
+					"_reconnect_xhr"
+				],
 				"parameters": [
 					{
 						"chunk": "payload instanceof Buffer ? payload : null",
@@ -310,6 +332,9 @@
 				"chunk": "function() {\n\n\t\t\tlet connection = this.__connection;\n\t\t\tlet protocol   = this.__protocol;\n\n\t\t\tif (connection !== null && protocol !== null) {\n\n\t\t\t\t_disconnect_socket.call(this, connection, protocol);\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "64538337",
+				"memory": [
+					"_disconnect_socket"
+				],
 				"parameters": [],
 				"values": [
 					{

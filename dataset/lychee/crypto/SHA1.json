@@ -13,6 +13,7 @@
 			"chunk": "function(buffer, offset) {\n\t\treturn (buffer[offset] << 24) | (buffer[offset + 1] << 16) | (buffer[offset + 2] << 8) | (buffer[offset + 3]);\n\t}",
 			"type": "function",
 			"hash": "6455980c",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -37,6 +38,7 @@
 			"chunk": "function(buffer, value, offset) {\n\n\t\tvalue  = +value;\n\t\toffset = offset | 0;\n\n\n\t\tif (value < 0) {\n\t\t\tvalue = 0xffffffff + value + 1;\n\t\t}\n\n\t\tfor (let b = 0, bl = Math.min(buffer.length - offset, 4); b < bl; b++) {\n\t\t\tbuffer[offset + b] = (value >>> (3 - b) * 8) & 0xff;\n\t\t}\n\n\n\t\treturn offset + 4;\n\n\t}",
 			"type": "function",
 			"hash": "a89d8188",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": "(value >>> (3 - b) * 8) & 0xff",
@@ -68,6 +70,7 @@
 			"chunk": "function(buffer, start, end) {\n\n\t\tstart = typeof start === 'number' ? (start | 0) : 0;\n\t\tend   = typeof end === 'number'   ? (end   | 0) : buffer.length;\n\n\n\t\tif (start === end) return;\n\n\n\t\tend = Math.min(end, buffer.length);\n\n\n\t\tlet diff = end - start;\n\t\tfor (let b = 0; b < diff; b++) {\n\t\t\tbuffer[b + start] = 0;\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "bd3ad5db",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": "0",
@@ -93,6 +96,9 @@
 			"chunk": "function(w, i) {\n\t\treturn _rotate(w[i - 3] ^ w[i - 8] ^ w[i - 14] ^ w[i - 16], 1);\n\t}",
 			"type": "function",
 			"hash": "60c0e114",
+			"memory": [
+				"_rotate"
+			],
 			"parameters": [
 				{
 					"chunk": null,
@@ -117,6 +123,7 @@
 			"chunk": "function(number, count) {\n\t\treturn (number << count) | (number >>> (32 - count));\n\t}",
 			"type": "function",
 			"hash": "eb5d51",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -141,6 +148,11 @@
 			"chunk": "function(buffer) {\n\n\t\tlet a = this.__a;\n\t\tlet b = this.__b;\n\t\tlet c = this.__c;\n\t\tlet d = this.__d;\n\t\tlet e = this.__e;\n\t\tlet w = this.__w;\n\n\n\t\tlet j = 0;\n\t\tlet tmp1, tmp2;\n\n\t\twhile (j < 16) {\n\n\t\t\ttmp1 = _read_int32BE(buffer, j * 4);\n\t\t\ttmp2 = _rotate(a, 5) + ((b & c) | ((~b) & d)) + e + tmp1 + 1518500249;\n\t\t\tw[j] = tmp1;\n\n\t\t\te = d;\n\t\t\td = c;\n\t\t\tc = _rotate(b, 30);\n\t\t\tb = a;\n\t\t\ta = tmp2;\n\t\t\tj++;\n\n\t\t}\n\n\t\twhile (j < 20) {\n\n\t\t\ttmp1 = _calculate_w(w, j);\n\t\t\ttmp2 = _rotate(a, 5) + ((b & c) | ((~b) & d)) + e + tmp1 + 1518500249;\n\t\t\tw[j] = tmp1;\n\n\t\t\te = d;\n\t\t\td = c;\n\t\t\tc = _rotate(b, 30);\n\t\t\tb = a;\n\t\t\ta = tmp2;\n\t\t\tj++;\n\n\t\t}\n\n\t\twhile (j < 40) {\n\n\t\t\ttmp1 = _calculate_w(w, j);\n\t\t\ttmp2 = _rotate(a, 5) + (b ^ c ^ d) + e + tmp1 + 1859775393;\n\t\t\tw[j] = tmp1;\n\n\t\t\te = d;\n\t\t\td = c;\n\t\t\tc = _rotate(b, 30);\n\t\t\tb = a;\n\t\t\ta = tmp2;\n\t\t\tj++;\n\n\t\t}\n\n\t\twhile (j < 60) {\n\n\t\t\ttmp1 = _calculate_w(w, j);\n\t\t\ttmp2 = _rotate(a, 5) + ((b & c) | (b & d) | (c & d)) + e + tmp1 - 1894007588;\n\t\t\tw[j] = tmp1;\n\n\t\t\te = d;\n\t\t\td = c;\n\t\t\tc = _rotate(b, 30);\n\t\t\tb = a;\n\t\t\ta = tmp2;\n\t\t\tj++;\n\n\t\t}\n\n\t\twhile (j < 80) {\n\n\t\t\ttmp1 = _calculate_w(w, j);\n\t\t\ttmp2 = _rotate(a, 5) + (b ^ c ^ d) + e + tmp1 - 899497514;\n\t\t\tw[j] = tmp1;\n\n\t\t\te = d;\n\t\t\td = c;\n\t\t\tc = _rotate(b, 30);\n\t\t\tb = a;\n\t\t\ta = tmp2;\n\t\t\tj++;\n\n\t\t}\n\n\n\t\tthis.__a = (a + this.__a) | 0;\n\t\tthis.__b = (b + this.__b) | 0;\n\t\tthis.__c = (c + this.__c) | 0;\n\t\tthis.__d = (d + this.__d) | 0;\n\t\tthis.__e = (e + this.__e) | 0;\n\n\t}",
 			"type": "function",
 			"hash": "bf96c13f",
+			"memory": [
+				"_calculate_w",
+				"_read_int32BE",
+				"_rotate"
+			],
 			"parameters": [
 				{
 					"chunk": null,
@@ -157,7 +169,8 @@
 			"chunk": "function() {\n\n\t\tthis.__a = 0x67452301 | 0;\n\t\tthis.__b = 0xefcdab89 | 0;\n\t\tthis.__c = 0x98badcfe | 0;\n\t\tthis.__d = 0x10325476 | 0;\n\t\tthis.__e = 0xc3d2e1f0 | 0;\n\t\tthis.__w = new Array(80);\n\n\t\tthis.__buffer  = new Buffer(64);\n\t\tthis.__length  = 0;\n\t\tthis.__pointer = 0;\n\n\t}",
 			"type": "function",
 			"hash": "ec056a5c",
-			"parameters": []
+			"parameters": [],
+			"memory": []
 		},
 		"states": {},
 		"properties": {
@@ -268,6 +281,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -285,6 +299,7 @@
 				"chunk": "function() {\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.crypto.SHA1',\n\t\t\t\t'arguments':   []\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "2c431bbe",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -301,6 +316,9 @@
 				"chunk": "function(data) {\n\n\t\t\tdata = data instanceof Buffer ? data : new Buffer(data, 'utf8');\n\n\n\t\t\tlet buffer  = this.__buffer;\n\t\t\tlet length  = this.__length + data.length;\n\t\t\tlet pointer = this.__pointer;\n\n\n\t\t\tlet p = 0;\n\n\t\t\twhile (pointer < length) {\n\n\t\t\t\tlet size = (Math.min(data.length, p + 64 - (pointer % 64)) - p);\n\n\t\t\t\tfor (let s = 0; s < size; s++) {\n\t\t\t\t\tbuffer[(pointer % 64) + s] = data[s + p];\n\t\t\t\t}\n\n\t\t\t\tpointer += size;\n\t\t\t\tp       += size;\n\n\t\t\t\tif (pointer % 64 === 0) {\n\t\t\t\t\t_update_chunk.call(this, buffer);\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tthis.__length  = length;\n\t\t\tthis.__pointer = p;\n\n\t\t}",
 				"type": "function",
 				"hash": "b68aebc7",
+				"memory": [
+					"_update_chunk"
+				],
 				"parameters": [
 					{
 						"chunk": "data instanceof Buffer ? data : new Buffer(data, 'utf8')",
@@ -318,6 +336,11 @@
 				"chunk": "function() {\n\n\t\t\tlet buffer = this.__buffer;\n\t\t\tlet length = this.__length;\n\n\n\t\t\tbuffer[length % 64] = 0x80;\n\t\t\t_write_zero(buffer, length % 64 + 1);\n\t\t\t// buffer.fill(0, length % 64 + 1);\n\n\n\t\t\tif ((length * 8) % (64 * 8) >= (56 * 8)) {\n\t\t\t\t_update_chunk.call(this, buffer);\n\t\t\t\t_write_zero(buffer);\n\t\t\t\t// buffer.fill(0);\n\t\t\t}\n\n\n\t\t\t_write_int32BE(buffer, length * 8, 64 - 4);\n\t\t\t_update_chunk.call(this, buffer);\n\n\n\t\t\tlet hash = new Buffer(20);\n\n\t\t\t_write_int32BE(hash, this.__a | 0,  0);\n\t\t\t_write_int32BE(hash, this.__b | 0,  4);\n\t\t\t_write_int32BE(hash, this.__c | 0,  8);\n\t\t\t_write_int32BE(hash, this.__d | 0, 12);\n\t\t\t_write_int32BE(hash, this.__e | 0, 16);\n\n\t\t\treturn hash;\n\n\t\t}",
 				"type": "function",
 				"hash": "50926098",
+				"memory": [
+					"_update_chunk",
+					"_write_int32BE",
+					"_write_zero"
+				],
 				"parameters": [],
 				"values": [
 					{

@@ -51,6 +51,10 @@
 			"chunk": "function(str) {\n\n\t\tlet san = str;\n\n\n\t\tif (_CHARS_ESCAPABLE.test(san)) {\n\n\t\t\tsan = san.replace(_CHARS_ESCAPABLE, function(char) {\n\n\t\t\t\tlet val = _CHARS_META[char];\n\t\t\t\tif (typeof val === 'string') {\n\t\t\t\t\treturn val;\n\t\t\t\t} else {\n\t\t\t\t\treturn '\\\\u' + (char.charCodeAt(0).toString(16)).slice(-4);\n\t\t\t\t}\n\n\t\t\t});\n\n\t\t}\n\n\t\treturn san;\n\n\t}",
 			"type": "function",
 			"hash": "4fab11cb",
+			"memory": [
+				"_CHARS_ESCAPABLE",
+				"_CHARS_META"
+			],
 			"parameters": [
 				{
 					"chunk": null,
@@ -64,6 +68,7 @@
 			"chunk": "function(buffer) {\n\n\t\tthis.__buffer = typeof buffer === 'string' ? buffer : '';\n\t\tthis.__index  = 0;\n\n\t}",
 			"type": "function",
 			"hash": "7f26013b",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -77,6 +82,10 @@
 			"chunk": "function(stream, data) {\n\n\t\t// Boolean, Null, Undefined, Infinity, NaN\n\t\tif (\n\t\t\ttypeof data === 'boolean'\n\t\t\t|| data === null\n\t\t\t|| data === undefined\n\t\t\t|| (\n\t\t\t\ttypeof data === 'number'\n\t\t\t\t&& (\n\t\t\t\t\tdata === Infinity\n\t\t\t\t\t|| data === -Infinity\n\t\t\t\t\t|| isNaN(data) === true\n\t\t\t\t)\n\t\t\t)\n\t\t) {\n\n\t\t\tif (data === null) {\n\t\t\t\tstream.write('pne');\n\t\t\t} else if (data === undefined) {\n\t\t\t\tstream.write('pue');\n\t\t\t} else if (data === false) {\n\t\t\t\tstream.write('pfe');\n\t\t\t} else if (data === true) {\n\t\t\t\tstream.write('pte');\n\t\t\t} else if (data === Infinity) {\n\t\t\t\tstream.write('p+e');\n\t\t\t} else if (data === -Infinity) {\n\t\t\t\tstream.write('p-e');\n\t\t\t} else if (isNaN(data) === true) {\n\t\t\t\tstream.write('p_e');\n\t\t\t}\n\n\n\t\t// i123e : Integer\n\t\t// f12.3e : Float\n\t\t} else if (typeof data === 'number') {\n\n\t\t\tlet type = 'i';\n\t\t\tif (data < 268435456 && data !== (data | 0)) {\n\t\t\t\ttype = 'f';\n\t\t\t}\n\n\t\t\tlet sign = 0;\n\t\t\tif (data < 0) {\n\t\t\t\tdata = -data;\n\t\t\t\tsign = 1;\n\t\t\t}\n\n\n\t\t\tstream.write(type);\n\n\t\t\tif (sign === 1) {\n\t\t\t\tstream.write('-');\n\t\t\t}\n\n\t\t\tstream.write(data.toString());\n\n\t\t\tstream.write('e');\n\n\n\t\t// <length>:<contents> : String\n\t\t} else if (typeof data === 'string') {\n\n\t\t\tdata = _sanitize_string(data);\n\n\n\t\t\tstream.write(data.length + ':' + data);\n\n\n\t\t// l<contents>e : Array\n\t\t} else if (data instanceof Array) {\n\n\t\t\tstream.write('l');\n\n\t\t\tfor (let d = 0, dl = data.length; d < dl; d++) {\n\t\t\t\t_encode(stream, data[d]);\n\t\t\t}\n\n\t\t\tstream.write('e');\n\n\n\t\t// d<contents>e : Object\n\t\t} else if (data instanceof Object && typeof data.serialize !== 'function') {\n\n\t\t\tstream.write('d');\n\n\t\t\tlet keys = Object.keys(data).sort(function(a, b) {\n\t\t\t\tif (a > b) return  1;\n\t\t\t\tif (a < b) return -1;\n\t\t\t\treturn 0;\n\t\t\t});\n\n\t\t\tfor (let k = 0, kl = keys.length; k < kl; k++) {\n\n\t\t\t\tlet key = keys[k];\n\n\t\t\t\t_encode(stream, key);\n\t\t\t\t_encode(stream, data[key]);\n\n\t\t\t}\n\n\t\t\tstream.write('e');\n\n\n\t\t// s<contents>e : Custom High-Level Implementation\n\t\t} else if (data instanceof Object && typeof data.serialize === 'function') {\n\n\t\t\tstream.write('s');\n\n\t\t\tlet blob = lychee.serialize(data);\n\n\t\t\t_encode(stream, blob);\n\n\t\t\tstream.write('e');\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "b14125de",
+			"memory": [
+				"_encode",
+				"_sanitize_string"
+			],
 			"parameters": [
 				{
 					"chunk": null,
@@ -95,6 +104,7 @@
 			"chunk": "function(str) {\n\n\t\tlet head = str.charAt(0);\n\t\tif (/([piflds]+)/g.test(head) === true) {\n\t\t\treturn true;\n\t\t} else if (isNaN(parseInt(head, 10)) === false) {\n\t\t\treturn true;\n\t\t}\n\n\t\treturn false;\n\n\t}",
 			"type": "function",
 			"hash": "338bb74b",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -119,6 +129,9 @@
 			"chunk": "function(stream) {\n\n\t\tlet value  = undefined;\n\t\tlet size   = 0;\n\t\tlet tmp    = 0;\n\t\tlet errors = 0;\n\t\tlet check  = null;\n\n\n\t\tif (stream.pointer() < stream.length()) {\n\n\t\t\tlet seek = stream.seek(1);\n\n\n\t\t\t// Boolean, Null, Undefined, Infinity, NaN\n\t\t\tif (seek === 'p') {\n\n\t\t\t\tcheck = stream.seek(3);\n\n\t\t\t\tif (check === 'pne') {\n\t\t\t\t\tstream.read(3);\n\t\t\t\t\tvalue = null;\n\t\t\t\t} else if (check === 'pue') {\n\t\t\t\t\tstream.read(3);\n\t\t\t\t\tvalue = undefined;\n\t\t\t\t} else if (check === 'pfe') {\n\t\t\t\t\tstream.read(3);\n\t\t\t\t\tvalue = false;\n\t\t\t\t} else if (check === 'pte') {\n\t\t\t\t\tstream.read(3);\n\t\t\t\t\tvalue = true;\n\t\t\t\t} else if (check === 'p+e') {\n\t\t\t\t\tstream.read(3);\n\t\t\t\t\tvalue = +Infinity;\n\t\t\t\t} else if (check === 'p-e') {\n\t\t\t\t\tstream.read(3);\n\t\t\t\t\tvalue = -Infinity;\n\t\t\t\t} else if (check === 'p_e') {\n\t\t\t\t\tstream.read(3);\n\t\t\t\t\tvalue = NaN;\n\t\t\t\t}\n\n\n\t\t\t// i123e : Integer\n\t\t\t} else if (seek === 'i') {\n\n\t\t\t\tstream.read(1);\n\n\t\t\t\tsize = stream.search([ 'e' ]);\n\n\t\t\t\tif (size > 0) {\n\n\t\t\t\t\ttmp   = stream.read(size);\n\t\t\t\t\tvalue = parseInt(tmp, 10);\n\t\t\t\t\tcheck = stream.read(1);\n\n\t\t\t\t}\n\n\t\t\t// f12.3e : Float\n\t\t\t} else if (seek === 'f') {\n\n\t\t\t\tstream.read(1);\n\n\t\t\t\tsize = stream.search([ 'e' ]);\n\n\t\t\t\tif (size > 0) {\n\n\t\t\t\t\ttmp   = stream.read(size);\n\t\t\t\t\tvalue = parseFloat(tmp, 10);\n\t\t\t\t\tcheck = stream.read(1);\n\n\t\t\t\t}\n\n\n\t\t\t// <length>:<contents> : String\n\t\t\t} else if (isNaN(parseInt(seek, 10)) === false) {\n\n\t\t\t\tsize = stream.search([ ':' ]);\n\n\t\t\t\tif (size > 0) {\n\n\t\t\t\t\tsize  = parseInt(stream.read(size), 10);\n\t\t\t\t\tcheck = stream.read(1);\n\n\t\t\t\t\tif (isNaN(size) === false && check === ':') {\n\t\t\t\t\t\tvalue = stream.read(size);\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t// l<contents>e : Array\n\t\t\t} else if (seek === 'l') {\n\n\t\t\t\tvalue = [];\n\n\n\t\t\t\tstream.read(1);\n\n\t\t\t\twhile (errors === 0) {\n\n\t\t\t\t\tvalue.push(_decode(stream));\n\n\t\t\t\t\tcheck = stream.seek(1);\n\n\t\t\t\t\tif (check === 'e') {\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t} else if (_is_decodeable_value(check) === false) {\n\t\t\t\t\t\terrors++;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t\tstream.read(1);\n\n\n\t\t\t// d<contents>e : Object\n\t\t\t} else if (seek === 'd') {\n\n\t\t\t\tvalue = {};\n\n\n\t\t\t\tstream.read(1);\n\n\t\t\t\twhile (errors === 0) {\n\n\t\t\t\t\tlet object_key   = _decode(stream);\n\t\t\t\t\tlet object_value = _decode(stream);\n\n\t\t\t\t\tcheck = stream.seek(1);\n\n\t\t\t\t\tvalue[object_key] = object_value;\n\n\t\t\t\t\tif (check === 'e') {\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t} else if (isNaN(parseInt(check, 10))) {\n\t\t\t\t\t\terrors++;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t\tstream.read(1);\n\n\n\t\t\t// s<contents>e : Custom High-Level Implementation\n\t\t\t} else if (seek === 's') {\n\n\t\t\t\tstream.read(1);\n\n\t\t\t\tlet blob = _decode(stream);\n\n\t\t\t\tvalue = lychee.deserialize(blob);\n\t\t\t\tcheck = stream.read(1);\n\n\t\t\t\tif (check !== 'e') {\n\t\t\t\t\tvalue = undefined;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn value;\n\n\t}",
 			"type": "function",
 			"hash": "40210001",
+			"memory": [
+				"_decode"
+			],
 			"parameters": [
 				{
 					"chunk": null,
@@ -193,6 +206,7 @@
 				"chunk": "function() {\n\n\t\t\treturn {\n\t\t\t\t'reference': 'lychee.codec.BENCODE',\n\t\t\t\t'blob':      null\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "9d8b4358",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -209,6 +223,9 @@
 				"chunk": "function(data) {\n\n\t\t\tdata = data instanceof Object ? data : null;\n\n\n\t\t\tif (data !== null) {\n\n\t\t\t\tlet stream = new _Stream('');\n\n\t\t\t\t_encode(stream, data);\n\n\t\t\t\treturn new Buffer(stream.toString(), 'utf8');\n\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
 				"type": "function",
 				"hash": "7323ed09",
+				"memory": [
+					"_encode"
+				],
 				"parameters": [
 					{
 						"chunk": "data instanceof Object ? data : null",
@@ -233,6 +250,9 @@
 				"chunk": "function(data) {\n\n\t\t\tdata = data instanceof Buffer ? data : null;\n\n\n\t\t\tif (data !== null) {\n\n\t\t\t\tlet stream = new _Stream(data.toString('utf8'));\n\t\t\t\tlet object = _decode(stream);\n\t\t\t\tif (object !== undefined) {\n\t\t\t\t\treturn object;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
 				"type": "function",
 				"hash": "5be01c5f",
+				"memory": [
+					"_decode"
+				],
 				"parameters": [
 					{
 						"chunk": "data instanceof Buffer ? data : null",

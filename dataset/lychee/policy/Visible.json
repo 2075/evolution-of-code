@@ -21,7 +21,8 @@
 					"name": "states",
 					"type": "Object"
 				}
-			]
+			],
+			"memory": []
 		},
 		"states": {},
 		"properties": {
@@ -44,6 +45,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -61,6 +63,7 @@
 				"chunk": "function() {\n\n\t\t\tlet states = {\n\t\t\t\tentity: null\n\t\t\t};\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.policy.Visible',\n\t\t\t\t'arguments':   [ states ]\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "424a2ab0",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -74,6 +77,7 @@
 				"chunk": "function() {\n\n\t\t\tlet entity = this.entity;\n\t\t\tlet values = [ 0.5 ];\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tlet visible = entity.visible;\n\t\t\t\tif (visible === true) {\n\t\t\t\t\tvalues[0] = 1;\n\t\t\t\t} else if (visible === false) {\n\t\t\t\t\tvalues[0] = 0;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn values;\n\n\t\t}",
 				"type": "function",
 				"hash": "07a113a4",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -89,6 +93,7 @@
 				"chunk": "function(values) {\n\n\t\t\tlet entity = this.entity;\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tif (values[0] > 0.5) {\n\t\t\t\t\tentity.visible = true;\n\t\t\t\t} else if (values[0] < 0.5) {\n\t\t\t\t\tentity.visible = false;\n\t\t\t\t}\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "de4b4847",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,

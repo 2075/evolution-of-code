@@ -21,7 +21,8 @@
 					"name": "states",
 					"type": "Object"
 				}
-			]
+			],
+			"memory": []
 		},
 		"states": {},
 		"properties": {
@@ -155,6 +156,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -172,6 +174,7 @@
 				"chunk": "function() {\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.type !== Composite.TYPE.easeout) states.type     = this.type;\n\t\t\tif (this.delay !== 0)                     states.delay    = this.delay;\n\t\t\tif (this.duration !== 250)                states.duration = this.duration;\n\n\n\t\t\tif (this.offset.x !== null || this.offset.y !== null) {\n\n\t\t\t\tstates.offset = {};\n\n\t\t\t\tif (this.offset.x !== null) states.offset.x = this.offset.x;\n\t\t\t\tif (this.offset.y !== null) states.offset.y = this.offset.y;\n\n\t\t\t}\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.effect.Offset',\n\t\t\t\t'arguments':   [ states ]\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "f8d68513",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -185,6 +188,7 @@
 				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t}",
 				"type": "function",
 				"hash": "04f47507",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -212,6 +216,7 @@
 				"chunk": "function(entity, clock, delta) {\n\n\t\t\tif (this.__start === null) {\n\t\t\t\tthis.__start = clock + this.delay;\n\t\t\t}\n\n\n\t\t\tlet t = (clock - this.__start) / this.duration;\n\t\t\tif (t < 0) {\n\t\t\t\treturn true;\n\t\t\t} else if (this.__origin.x === null) {\n\t\t\t\tthis.__origin.x = entity.offset.x || 0;\n\t\t\t\tthis.__origin.y = entity.offset.y || 0;\n\t\t\t}\n\n\n\t\t\tlet origin  = this.__origin;\n\t\t\tlet originx = origin.x;\n\t\t\tlet originy = origin.y;\n\n\t\t\tlet offset  = this.offset;\n\t\t\tlet offsetx = offset.x;\n\t\t\tlet offsety = offset.y;\n\n\t\t\tlet x       = originx;\n\t\t\tlet y       = originy;\n\n\t\t\tif (t <= 1) {\n\n\t\t\t\tlet f  = 0;\n\t\t\t\tlet dx = offsetx - originx;\n\t\t\t\tlet dy = offsety - originy;\n\n\n\t\t\t\tlet type = this.type;\n\t\t\t\tif (type === Composite.TYPE.linear) {\n\n\t\t\t\t\tx += t * dx;\n\t\t\t\t\ty += t * dy;\n\n\t\t\t\t} else if (type === Composite.TYPE.easein) {\n\n\t\t\t\t\tf = 1 * Math.pow(t, 3);\n\n\t\t\t\t\tx += f * dx;\n\t\t\t\t\ty += f * dy;\n\n\t\t\t\t} else if (type === Composite.TYPE.easeout) {\n\n\t\t\t\t\tf = Math.pow(t - 1, 3) + 1;\n\n\t\t\t\t\tx += f * dx;\n\t\t\t\t\ty += f * dy;\n\n\t\t\t\t} else if (type === Composite.TYPE.bounceeasein) {\n\n\t\t\t\t\tlet k = 1 - t;\n\n\t\t\t\t\tif ((k /= 1) < (1 / 2.75)) {\n\t\t\t\t\t\tf = 1 * (7.5625 * Math.pow(k, 2));\n\t\t\t\t\t} else if (k < (2 / 2.75)) {\n\t\t\t\t\t\tf = 7.5625 * (k -= (1.5 / 2.75)) * k + 0.75;\n\t\t\t\t\t} else if (k < (2.5 / 2.75)) {\n\t\t\t\t\t\tf = 7.5625 * (k -= (2.25 / 2.75)) * k + 0.9375;\n\t\t\t\t\t} else {\n\t\t\t\t\t\tf = 7.5625 * (k -= (2.625 / 2.75)) * k + 0.984375;\n\t\t\t\t\t}\n\n\t\t\t\t\tx += (1 - f) * dx;\n\t\t\t\t\ty += (1 - f) * dy;\n\n\t\t\t\t} else if (type === Composite.TYPE.bounceeaseout) {\n\n\t\t\t\t\tif ((t /= 1) < (1 / 2.75)) {\n\t\t\t\t\t\tf = 1 * (7.5625 * Math.pow(t, 2));\n\t\t\t\t\t} else if (t < (2 / 2.75)) {\n\t\t\t\t\t\tf = 7.5625 * (t -= (1.5 / 2.75)) * t + 0.75;\n\t\t\t\t\t} else if (t < (2.5 / 2.75)) {\n\t\t\t\t\t\tf = 7.5625 * (t -= (2.25 / 2.75)) * t + 0.9375;\n\t\t\t\t\t} else {\n\t\t\t\t\t\tf = 7.5625 * (t -= (2.625 / 2.75)) * t + 0.984375;\n\t\t\t\t\t}\n\n\t\t\t\t\tx += f * dx;\n\t\t\t\t\ty += f * dy;\n\n\t\t\t\t}\n\n\n\t\t\t\tif (offsetx !== null) entity.offset.x = x;\n\t\t\t\tif (offsety !== null) entity.offset.y = y;\n\n\t\t\t\tentity.__isDirty = true;\n\n\n\t\t\t\treturn true;\n\n\t\t\t} else {\n\n\t\t\t\tif (offsetx !== null) entity.offset.x = offsetx;\n\t\t\t\tif (offsety !== null) entity.offset.y = offsety;\n\n\t\t\t\tentity.__isDirty = true;\n\n\n\t\t\t\treturn false;\n\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "6da06da2",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "true",

@@ -21,7 +21,8 @@
 					"name": "data",
 					"type": "Object"
 				}
-			]
+			],
+			"memory": []
 		},
 		"states": {
 			"enabled": "setEnabled",
@@ -94,6 +95,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -111,6 +113,7 @@
 				"chunk": "function() {\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.ai.neat.Gene',\n\t\t\t\t'arguments':   []\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "1365c39c",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -127,6 +130,7 @@
 				"chunk": "function(enabled) {\n\n\t\t\tenabled = typeof enabled === 'boolean' ? enabled : null;\n\n\n\t\t\tif (enabled !== null) {\n\n\t\t\t\tthis.enabled = enabled;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "40306b34",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof enabled === 'boolean' ? enabled : null",
@@ -152,6 +156,7 @@
 				"chunk": "function(innovation) {\n\n\t\t\tinnovation = typeof innovation === 'number' ? (innovation | 0) : null;\n\n\n\t\t\tif (innovation !== null) {\n\n\t\t\t\tthis.innovation = innovation;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "e4ffbbca",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof innovation === 'number' ? (innovation | 0) : null",
@@ -177,6 +182,7 @@
 				"chunk": "function(into) {\n\n\t\t\tinto = typeof into === 'number' ? into : null;\n\n\n\t\t\tif (into !== null) {\n\n\t\t\t\tthis.into = into;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "5c8768ba",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof into === 'number' ? into : null",
@@ -202,6 +208,7 @@
 				"chunk": "function(out) {\n\n\t\t\tout = typeof out === 'number' ? out : null;\n\n\n\t\t\tif (out !== null) {\n\n\t\t\t\tthis.out = out;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "73158f25",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof out === 'number' ? out : null",

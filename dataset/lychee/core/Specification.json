@@ -21,7 +21,8 @@
 					"name": "data",
 					"type": "Object"
 				}
-			]
+			],
+			"memory": []
 		},
 		"states": {
 			"url": "setUrl",
@@ -80,6 +81,7 @@
 				"chunk": "function(blob) {\n\n\t\t\tif (blob.requires instanceof Array) {\n\t\t\t\tthis.requires(blob.requires);\n\t\t\t}\n\n\n\t\t\tlet index1   = 0;\n\t\t\tlet index2   = 0;\n\t\t\tlet tmp      = null;\n\t\t\tlet bindargs = null;\n\n\t\t\tif (typeof blob.exports === 'string') {\n\n\t\t\t\t// Function head\n\t\t\t\ttmp      = blob.exports.split('{')[0].trim().substr('function '.length);\n\t\t\t\tbindargs = tmp.substr(1, tmp.length - 2).split(',');\n\n\t\t\t\t// Function body\n\t\t\t\tindex1 = blob.exports.indexOf('{') + 1;\n\t\t\t\tindex2 = blob.exports.lastIndexOf('}') - 1;\n\t\t\t\tbindargs.push(blob.exports.substr(index1, index2 - index1));\n\n\t\t\t\tthis.exports(Function.apply(Function, bindargs));\n\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "aa00bb3e",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -97,6 +99,7 @@
 				"chunk": "function() {\n\n\t\t\tlet states = {};\n\t\t\tlet blob   = {};\n\n\n\t\t\tif (this.id !== '')  states.id  = this.id;\n\t\t\tif (this.url !== '') states.url = this.url;\n\n\t\t\tif (this._requires.length > 0)         blob.requires = this._requires.slice(0);\n\t\t\tif (this._exports instanceof Function) blob.exports  = this._exports.toString();\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.Specification',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "e51d83e5",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -110,6 +113,9 @@
 				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null) {\n\n\t\t\t\tif (id.includes('.') && /^([A-Za-z0-9-.]+)$/g.test(id)) {\n\n\t\t\t\t\tthis.id = id;\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t} else {\n\n\t\t\t\t\tlet fuzzed = _fuzz_id.call(this);\n\t\t\t\t\tif (fuzzed !== null) {\n\n\t\t\t\t\t\tthis.id = fuzzed;\n\n\t\t\t\t\t\tconsole.warn('lychee.Specification: Injecting Identifier \"' + fuzzed + '\" (' + this.url + ')');\n\n\t\t\t\t\t\treturn true;\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tconsole.error('lychee.Specification: Invalid Identifier \"' + id + '\" (' + this.url + ')');\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "e6fecb",
+				"memory": [
+					"_fuzz_id"
+				],
 				"parameters": [
 					{
 						"chunk": "typeof id === 'string' ? id : null",
@@ -135,6 +141,7 @@
 				"chunk": "function(url) {\n\n\t\t\turl = typeof url === 'string' ? url : null;\n\n\n\t\t\tif (url !== null) {\n\n\t\t\t\tthis.url = url;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "135134e1",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof url === 'string' ? url : null",
@@ -160,6 +167,9 @@
 				"chunk": "function(sandboxes) {\n\n\t\t\tsandboxes = sandboxes instanceof Object ? sandboxes : global;\n\n\n\t\t\tlet check = _resolve.call(sandboxes, this.id);\n\t\t\tif (check === null) {\n\n\t\t\t\tif (this._exports !== null) {\n\n\t\t\t\t\tlet requires = this._requires.map(function(id) {\n\t\t\t\t\t\treturn _resolve.call(sandboxes, id);\n\t\t\t\t\t});\n\n\n\t\t\t\t\tif (requires.includes(null) === false) {\n\n\t\t\t\t\t\tlet id        = this.id;\n\t\t\t\t\t\tlet namespace = _resolve.call(sandboxes, id.split('.').slice(0, -1).join('.'));\n\t\t\t\t\t\tlet name      = id.split('.').pop();\n\t\t\t\t\t\tlet sandbox   = new _Sandbox(id);\n\n\n\t\t\t\t\t\ttry {\n\t\t\t\t\t\t\tthis._exports.call(\n\t\t\t\t\t\t\t\tthis._exports,\n\t\t\t\t\t\t\t\tlychee,\n\t\t\t\t\t\t\t\tsandbox\n\t\t\t\t\t\t\t) || null;\n\t\t\t\t\t\t} catch (err) {\n\t\t\t\t\t\t\tlychee.Debugger.report(lychee.environment, err, this);\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\tnamespace[name] = sandbox;\n\n\n\t\t\t\t\t\treturn true;\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tlet invalid_requires = this._requires.filter(function(id, r) {\n\t\t\t\t\t\t\treturn requires[r] === null;\n\t\t\t\t\t\t});\n\n\t\t\t\t\t\tif (invalid_requires.length > 0) {\n\n\t\t\t\t\t\t\tfor (let i = 0, il = invalid_requires.length; i < il; i++) {\n\t\t\t\t\t\t\t\tlet tmp = invalid_requires[i];\n\t\t\t\t\t\t\t\tconsole.error('lychee.Specification (\"' + this.id + '\"): Invalid Requirement of \"' + tmp + '\".');\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "2dfbfd89",
+				"memory": [
+					"_resolve"
+				],
 				"parameters": [
 					{
 						"chunk": "sandboxes instanceof Object ? sandboxes : global",
@@ -184,6 +194,7 @@
 				"chunk": "function(callback) {\n\n\t\t\tcallback = callback instanceof Function ? callback : null;\n\n\n\t\t\tif (callback !== null) {\n\t\t\t\tthis._exports = callback;\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
 				"type": "function",
 				"hash": "ef750818",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "callback instanceof Function ? callback : null",
@@ -204,6 +215,7 @@
 				"chunk": "function(definitions) {\n\n\t\t\tdefinitions = definitions instanceof Array ? definitions : null;\n\n\n\t\t\tif (definitions !== null) {\n\n\t\t\t\tfor (let d = 0, dl = definitions.length; d < dl; d++) {\n\n\t\t\t\t\tlet definition = definitions[d];\n\t\t\t\t\tif (typeof definition === 'string') {\n\n\t\t\t\t\t\tlet is_definition = definition.includes('.');\n\t\t\t\t\t\tlet is_namespace  = definition === definition.toLowerCase();\n\n\t\t\t\t\t\tif (is_definition === true) {\n\n\t\t\t\t\t\t\tif (this._requires.includes(definition) === false) {\n\t\t\t\t\t\t\t\tthis._requires.push(definition);\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t} else if (is_namespace === true) {\n\t\t\t\t\t\t\tthis._requires.push(definition);\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn this;\n\n\t\t}",
 				"type": "function",
 				"hash": "969a9d44",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "definitions instanceof Array ? definitions : null",

@@ -59,7 +59,7 @@
 			}
 		},
 		"_WebSocket": {
-			"chunk": "function(url, protocols) {}",
+			"chunk": "function (url, protocols) {}",
 			"type": "Function",
 			"hash": "58465347"
 		},
@@ -67,6 +67,9 @@
 			"chunk": "function(socket, protocol) {\n\n\t\tlet that = this;\n\t\tif (that.__connection !== socket) {\n\n\t\t\tsocket.onmessage = function(event) {\n\n\t\t\t\tlet blob = null;\n\t\t\t\tlet view = null;\n\n\t\t\t\tif (typeof event.data === 'string') {\n\n\t\t\t\t\tblob = new Buffer(event.data, 'utf8');\n\n\t\t\t\t} else if (event.data instanceof ArrayBuffer) {\n\n\t\t\t\t\tblob = new Buffer(event.data.byteLength);\n\t\t\t\t\tview = new Uint8Array(event.data);\n\n\t\t\t\t\tfor (let v = 0, vl = blob.length; v < vl; v++) {\n\t\t\t\t\t\tblob[v] = view[v];\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tlet temp = _JSON.decode(blob);\n\t\t\t\tif (temp === null) {\n\t\t\t\t\treturn;\n\t\t\t\t}\n\n\n\t\t\t\t// XXX: HTML WebSocket doesn't support Buffer data\n\t\t\t\tlet chunks = [ temp ];\n\t\t\t\tif (chunks.length > 0) {\n\n\t\t\t\t\tfor (let c = 0, cl = chunks.length; c < cl; c++) {\n\n\t\t\t\t\t\tlet chunk = chunks[c];\n\t\t\t\t\t\tif (chunk.payload[0] === 136) {\n\n\t\t\t\t\t\t\tthat.send(chunk.payload, chunk.headers, true);\n\t\t\t\t\t\t\tthat.disconnect();\n\n\t\t\t\t\t\t\treturn;\n\n\t\t\t\t\t\t} else {\n\n\t\t\t\t\t\t\tthat.trigger('receive', [ chunk.payload, chunk.headers ]);\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t};\n\n\t\t\tsocket.onerror = function() {\n\t\t\t\tthat.trigger('error');\n\t\t\t\tthat.disconnect();\n\t\t\t};\n\n\t\t\tsocket.ontimeout = function() {\n\t\t\t\tthat.trigger('error');\n\t\t\t\tthat.disconnect();\n\t\t\t};\n\n\t\t\tsocket.onclose = function() {\n\t\t\t\tthat.disconnect();\n\t\t\t};\n\n\n\t\t\tthat.__connection = socket;\n\t\t\tthat.__protocol   = protocol;\n\n\n\t\t\tsocket.onopen = function() {\n\t\t\t\tthat.trigger('connect');\n\t\t\t};\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "6ef99ebf",
+			"memory": [
+				"_JSON"
+			],
 			"parameters": [
 				{
 					"chunk": "function() {",
@@ -85,6 +88,7 @@
 			"chunk": "function(socket, protocol) {\n\n\t\tlet that = this;\n\t\tif (that.__connection === socket) {\n\n\t\t\tsocket.onmessage = function() {};\n\t\t\tsocket.onerror   = function() {};\n\t\t\tsocket.ontimeout = function() {};\n\t\t\tsocket.onclose   = function() {};\n\n\t\t\tsocket.close();\n\t\t\tprotocol.close();\n\n\n\t\t\tthat.__connection = null;\n\t\t\tthat.__protocol   = null;\n\n\t\t\tthat.trigger('disconnect');\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "3ab1aa96",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": "function() {}",
@@ -106,7 +110,10 @@
 			"chunk": "function() {\n\n\t\tthis.__connection = null;\n\t\tthis.__protocol   = null;\n\n\n\t\t_Emitter.call(this);\n\n\t}",
 			"type": "function",
 			"hash": "bb238e6f",
-			"parameters": []
+			"parameters": [],
+			"memory": [
+				"_Emitter"
+			]
 		},
 		"states": {},
 		"properties": {
@@ -140,6 +147,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -157,6 +165,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.net.socket.WS';\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "fb831f00",
+				"memory": [
+					"_Emitter"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -170,6 +181,10 @@
 				"chunk": "function(host, port, connection) {\n\n\t\t\thost       = typeof host === 'string'       ? host       : null;\n\t\t\tport       = typeof port === 'number'       ? (port | 0) : null;\n\t\t\tconnection = typeof connection === 'object' ? connection : null;\n\n\n\t\t\tlet that     = this;\n\t\t\tlet url      = /:/g.test(host) ? ('ws://[' + host + ']:' + port) : ('ws://' + host + ':' + port);\n\t\t\tlet protocol = null;\n\n\n\t\t\tif (host !== null && port !== null) {\n\n\t\t\t\tif (connection !== null) {\n\n\t\t\t\t\tprotocol   = new _Protocol({\n\t\t\t\t\t\ttype: _Protocol.TYPE.remote\n\t\t\t\t\t});\n\t\t\t\t\tconnection = null;\n\n\t\t\t\t\t// TODO: Remote Socket API\n\n\t\t\t\t\t// _connect_socket.call(that, connection, protocol);\n\t\t\t\t\t// connection.resume();\n\n\t\t\t\t} else {\n\n\t\t\t\t\tprotocol   = new _Protocol({\n\t\t\t\t\t\ttype: _Protocol.TYPE.client\n\t\t\t\t\t});\n\t\t\t\t\tconnection = new _WebSocket(url, [ 'lycheejs' ]);\n\n\n\t\t\t\t\t_connect_socket.call(that, connection, protocol);\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "d2f18a83",
+				"memory": [
+					"_Protocol",
+					"_connect_socket"
+				],
 				"parameters": [
 					{
 						"chunk": "typeof host === 'string'       ? host       : null",
@@ -207,6 +222,9 @@
 				"chunk": "function(payload, headers, binary) {\n\n\t\t\tpayload = payload instanceof Buffer ? payload : null;\n\t\t\theaders = headers instanceof Object ? headers : {};\n\t\t\tbinary  = binary === true;\n\n\n\t\t\tif (payload !== null) {\n\n\t\t\t\tlet connection = this.__connection;\n\t\t\t\tlet protocol   = this.__protocol;\n\n\t\t\t\tif (connection !== null && protocol !== null) {\n\n\t\t\t\t\t// XXX: HTML WebSocket does not support Buffer data\n\t\t\t\t\tlet chunk = _JSON.encode({\n\t\t\t\t\t\theaders: headers,\n\t\t\t\t\t\tpayload: payload\n\t\t\t\t\t});\n\n\t\t\t\t\tif (chunk !== null) {\n\n\t\t\t\t\t\tif (binary === true) {\n\n\t\t\t\t\t\t\tlet blob = new ArrayBuffer(chunk.length);\n\t\t\t\t\t\t\tlet view = new Uint8Array(blob);\n\n\t\t\t\t\t\t\tfor (let c = 0, cl = chunk.length; c < cl; c++) {\n\t\t\t\t\t\t\t\tview[c] = chunk[c];\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\tconnection.send(blob);\n\n\t\t\t\t\t\t} else {\n\n\t\t\t\t\t\t\tconnection.send(chunk.toString('utf8'));\n\n\t\t\t\t\t\t}\n\n\n\t\t\t\t\t\treturn true;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "e0164905",
+				"memory": [
+					"_JSON"
+				],
 				"parameters": [
 					{
 						"chunk": "payload instanceof Buffer ? payload : null",
@@ -244,6 +262,9 @@
 				"chunk": "function() {\n\n\t\t\tlet connection = this.__connection;\n\t\t\tlet protocol   = this.__protocol;\n\n\t\t\tif (connection !== null && protocol !== null) {\n\n\t\t\t\t_disconnect_socket.call(this, connection, protocol);\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "64538337",
+				"memory": [
+					"_disconnect_socket"
+				],
 				"parameters": [],
 				"values": [
 					{

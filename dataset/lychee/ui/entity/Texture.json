@@ -54,6 +54,10 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Entity",
+				"_Upload"
 			]
 		},
 		"states": {
@@ -143,6 +147,7 @@
 				"chunk": "function(blob) {\n\n\t\t\tlet font = lychee.deserialize(blob.font);\n\t\t\tif (font !== null) {\n\t\t\t\tthis.setFont(font);\n\t\t\t}\n\n\t\t\tlet value = lychee.deserialize(blob.value);\n\t\t\tif (value !== null) {\n\t\t\t\tthis.setValue(value);\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "380d43db",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -160,6 +165,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Entity.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.entity.Button';\n\n\t\t\tlet states = data['arguments'][0];\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.label !== null) states.label = this.label;\n\n\n\t\t\tif (this.font !== null)  blob.font  = lychee.serialize(this.font);\n\t\t\tif (this.value !== null) blob.value = lychee.serialize(this.value);\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "378cbd3f",
+				"memory": [
+					"_Entity"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -173,6 +181,9 @@
 				"chunk": "function(clock, delta) {\n\n\t\t\t_Entity.prototype.render.call(this, clock, delta);\n\n\t\t\tthis.__sprite.update(clock, delta);\n\t\t\tthis.__upload.update(clock, delta);\n\n\t\t}",
 				"type": "function",
 				"hash": "5ddaf9a0",
+				"memory": [
+					"_Entity"
+				],
 				"parameters": [
 					{
 						"chunk": null,
@@ -195,6 +206,9 @@
 				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tif (this.visible === false) return;\n\n\n\t\t\tlet position = this.position;\n\t\t\tlet x        = position.x + offsetX;\n\t\t\tlet y        = position.y + offsetY;\n\n\n\t\t\t_Entity.prototype.render.call(this, renderer, offsetX, offsetY);\n\n\t\t\tthis.__sprite.render(renderer, x, y);\n\t\t\tthis.__upload.render(renderer, x, y);\n\n\t\t}",
 				"type": "function",
 				"hash": "01ab0996",
+				"memory": [
+					"_Entity"
+				],
 				"parameters": [
 					{
 						"chunk": null,
@@ -222,6 +236,7 @@
 				"chunk": "function(font) {\n\n\t\t\tfont = font instanceof Font ? font : null;\n\n\n\t\t\tif (font !== null) {\n\n\t\t\t\tthis.__upload.setFont(font);\n\t\t\t\tthis.font = font;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "50f1736f",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "font instanceof Font ? font : null",
@@ -247,6 +262,7 @@
 				"chunk": "function(label) {\n\n\t\t\tlabel = typeof label === 'string' ? label : null;\n\n\n\t\t\tif (label !== null) {\n\n\t\t\t\tthis.__upload.setLabel(label);\n\t\t\t\tthis.label = label;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "d5ea0c2b",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof label === 'string' ? label : null",
@@ -272,6 +288,7 @@
 				"chunk": "function(value) {\n\n\t\t\tvalue = value instanceof Texture ? value : null;\n\n\n\t\t\tif (value !== null) {\n\n\t\t\t\tthis.__sprite.setTexture(value);\n\t\t\t\tthis.value = value;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "be949f68",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "value instanceof Texture ? value : null",

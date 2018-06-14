@@ -84,6 +84,7 @@
 			"chunk": "function() {\n\n\t\tlet button = this.getEntity('@options-next');\n\t\tlet label  = this.getEntity('@label');\n\t\tlet x2     = 1 / 2 * this.width;\n\n\n\t\tif (button.visible === true) {\n\t\t\tlabel.position.x = -48 - 8;\n\t\t} else {\n\t\t\tlabel.position.x = 0;\n\t\t}\n\n\n\t\tbutton.width      = 96;\n\t\tbutton.position.x = x2 - button.width / 2 - 16;\n\n\t}",
 			"type": "function",
 			"hash": "7944b2a1",
+			"memory": [],
 			"parameters": [],
 			"values": []
 		}
@@ -100,6 +101,13 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Button",
+				"_FONT",
+				"_Label",
+				"_Layer",
+				"_on_relayout"
 			]
 		},
 		"states": {
@@ -218,6 +226,7 @@
 				"chunk": "function(blob) {\n\n\t\t\tlet font = lychee.deserialize(blob.font);\n\t\t\tif (font !== null) {\n\t\t\t\tthis.setFont(font);\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "814dbb80",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -235,6 +244,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Layer.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.Notice';\n\n\t\t\tlet states = data['arguments'][0];\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.label !== 'Changes applied.') states.label   = this.label;\n\t\t\tif (this.options.join(',') !== 'Undo') states.options = this.options.slice(0, this.options.length);\n\t\t\tif (this.state !== 'default')          states.state   = this.state;\n\n\n\t\t\tif (this.font !== null) blob.font = lychee.serialize(this.font);\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "fc425820",
+				"memory": [
+					"_Layer"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -248,6 +260,9 @@
 				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tif (this.visible === false) return;\n\n\n\t\t\tlet alpha    = this.alpha;\n\t\t\tlet position = this.position;\n\n\n\t\t\tlet x  = position.x + offsetX;\n\t\t\tlet y  = position.y + offsetY;\n\t\t\tlet x1 = x - this.width  / 2;\n\t\t\tlet y1 = y - this.height / 2;\n\t\t\tlet x2 = x + this.width  / 2;\n\t\t\tlet y2 = y + this.height / 2;\n\n\n\t\t\trenderer.drawBox(\n\t\t\t\tx1,\n\t\t\t\ty1,\n\t\t\t\tx2,\n\t\t\t\ty2,\n\t\t\t\t'#363f3e',\n\t\t\t\ttrue\n\t\t\t);\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(alpha);\n\t\t\t}\n\n\n\t\t\tif (alpha !== 0) {\n\t\t\t\t_Layer.prototype.render.call(this, renderer, offsetX, offsetY);\n\t\t\t}\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(1.0);\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "5d371e77",
+				"memory": [
+					"_Layer"
+				],
 				"parameters": [
 					{
 						"chunk": null,
@@ -275,6 +290,7 @@
 				"chunk": "function(font) {\n\n\t\t\tfont = font instanceof Font ? font : null;\n\n\n\t\t\tif (font !== null) {\n\n\t\t\t\tthis.getEntity('@label').setFont(font);\n\t\t\t\tthis.font = font;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "b5ff0b4e",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "font instanceof Font ? font : null",
@@ -300,6 +316,7 @@
 				"chunk": "function(label) {\n\n\t\t\tlabel = typeof label === 'string' ? label : null;\n\n\n\t\t\tif (label !== null) {\n\n\t\t\t\tthis.getEntity('@label').setValue(label);\n\t\t\t\tthis.label = label;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "4c7b0e33",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof label === 'string' ? label : null",
@@ -325,6 +342,7 @@
 				"chunk": "function(options) {\n\n\t\t\toptions = options instanceof Array ? options : null;\n\n\n\t\t\tif (options !== null) {\n\n\t\t\t\tthis.options = options.map(function(option) {\n\t\t\t\t\treturn '' + option;\n\t\t\t\t});\n\n\n\t\t\t\tlet next = this.getEntity('@options-next');\n\n\t\t\t\tif (this.options.length === 0) {\n\n\t\t\t\t\tnext.visible = false;\n\t\t\t\t\tthis.trigger('relayout');\n\n\t\t\t\t} else if (this.options.length === 1) {\n\n\t\t\t\t\tnext.visible = true;\n\t\t\t\t\tnext.setLabel(this.options[0]);\n\t\t\t\t\tnext.setValue(this.options[0].toLowerCase());\n\t\t\t\t\tthis.trigger('relayout');\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "dc1c6196",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "options instanceof Array ? options : null",
@@ -350,6 +368,11 @@
 				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null && id !== this.state && this.states[id] !== undefined) {\n\n\t\t\t\tif (id === 'active') {\n\n\t\t\t\t\tthis.removeEffects();\n\n\t\t\t\t\tthis.setPosition({\n\t\t\t\t\t\ty: this.__boundary + this.height / 2\n\t\t\t\t\t});\n\n\t\t\t\t\tthis.addEffect(new _Alpha({\n\t\t\t\t\t\ttype:     _Alpha.TYPE.easeout,\n\t\t\t\t\t\tdelay:    300,\n\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\talpha:    1.0\n\t\t\t\t\t}));\n\n\t\t\t\t\tthis.addEffect(new _Position({\n\t\t\t\t\t\ttype:     _Position.TYPE.easeout,\n\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\tposition: {\n\t\t\t\t\t\t\ty: this.__boundary - this.height / 2\n\t\t\t\t\t\t}\n\t\t\t\t\t}));\n\n\t\t\t\t\tthis.addEffect(new _State({\n\t\t\t\t\t\tdelay: 3000,\n\t\t\t\t\t\tstate: 'default'\n\t\t\t\t\t}));\n\n\t\t\t\t} else {\n\n\t\t\t\t\tthis.removeEffects();\n\n\t\t\t\t\tthis.addEffect(new _Alpha({\n\t\t\t\t\t\ttype:     _Alpha.TYPE.easeout,\n\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\talpha:    0.0\n\t\t\t\t\t}));\n\n\t\t\t\t\tthis.addEffect(new _Position({\n\t\t\t\t\t\ttype:     _Position.TYPE.easeout,\n\t\t\t\t\t\tdelay:    300,\n\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\tposition: {\n\t\t\t\t\t\t\ty: this.__boundary + this.height / 2\n\t\t\t\t\t\t}\n\t\t\t\t\t}));\n\n\t\t\t\t}\n\n\n\t\t\t\tthis.state = id;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "c416d12c",
+				"memory": [
+					"_Alpha",
+					"_Position",
+					"_State"
+				],
 				"parameters": [
 					{
 						"chunk": "typeof id === 'string' ? id : null",

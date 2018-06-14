@@ -21,7 +21,8 @@
 					"name": "states",
 					"type": "Object"
 				}
-			]
+			],
+			"memory": []
 		},
 		"states": {},
 		"properties": {
@@ -55,6 +56,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -72,6 +74,7 @@
 				"chunk": "function() {\n\n\t\t\tlet states = {\n\t\t\t\tentity: null,\n\t\t\t\tlimit:  this.limit\n\t\t\t};\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.policy.Height',\n\t\t\t\t'arguments':   [ states ]\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "8c085673",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -85,6 +88,7 @@
 				"chunk": "function() {\n\n\t\t\tlet entity = this.entity;\n\t\t\tlet limit  = this.limit;\n\t\t\tlet values = [ 0.5 ];\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tlet hl = limit / 2;\n\n\t\t\t\tvalues[0] = (hl + entity.height) / (hl * 2);\n\n\t\t\t}\n\n\n\t\t\treturn values;\n\n\t\t}",
 				"type": "function",
 				"hash": "b01df60f",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -100,6 +104,7 @@
 				"chunk": "function(values) {\n\n\t\t\tlet entity = this.entity;\n\t\t\tlet limit  = this.limit;\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tlet hl = limit / 2;\n\n\t\t\t\tentity.height = (values[0] * (hl * 2)) - hl;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "9222e2aa",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,

@@ -44,6 +44,9 @@
 					"name": "data",
 					"type": "undefined"
 				}
+			],
+			"memory": [
+				"_Service"
 			]
 		},
 		"states": {
@@ -81,6 +84,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -98,6 +102,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Service.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.net.client.Chat';\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.room !== null) states.room = this.room;\n\t\t\tif (this.user !== null) states.user = this.user;\n\n\n\t\t\tdata['arguments'][2] = states;\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "7e589585",
+				"memory": [
+					"_Service"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -111,6 +118,7 @@
 				"chunk": "function() {\n\n\t\t\tlet user = this.user;\n\t\t\tlet room = this.room;\n\t\t\tif (user !== null && room !== null) {\n\n\t\t\t\tif (this.tunnel !== null) {\n\n\t\t\t\t\tthis.tunnel.send({\n\t\t\t\t\t\tuser: user,\n\t\t\t\t\t\troom: room\n\t\t\t\t\t}, {\n\t\t\t\t\t\tid:    this.id,\n\t\t\t\t\t\tevent: 'sync'\n\t\t\t\t\t});\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "14810a39",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -129,6 +137,7 @@
 				"chunk": "function(message) {\n\n\t\t\tmessage = typeof message === 'string' ? message : null;\n\n\n\t\t\tif (message !== null) {\n\n\t\t\t\tlet user = this.user;\n\t\t\t\tlet room = this.room;\n\t\t\t\tif (user !== null && room !== null) {\n\n\t\t\t\t\tif (this.tunnel !== null) {\n\n\t\t\t\t\t\tthis.tunnel.send({\n\t\t\t\t\t\t\tmessage: message,\n\t\t\t\t\t\t\tuser:    user,\n\t\t\t\t\t\t\troom:    room\n\t\t\t\t\t\t}, {\n\t\t\t\t\t\t\tid:    this.id,\n\t\t\t\t\t\t\tevent: 'message'\n\t\t\t\t\t\t});\n\n\t\t\t\t\t\treturn true;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "144be61a",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof message === 'string' ? message : null",
@@ -154,6 +163,7 @@
 				"chunk": "function(room) {\n\n\t\t\troom = typeof room === 'string' ? room : null;\n\n\n\t\t\tif (room !== null) {\n\n\t\t\t\tthis.room = room;\n\t\t\t\tthis.sync();\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "0d0b624d",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof room === 'string' ? room : null",
@@ -179,6 +189,7 @@
 				"chunk": "function(user) {\n\n\t\t\tuser = typeof user === 'string' ? user : null;\n\n\n\t\t\tif (user !== null) {\n\n\t\t\t\tthis.user = user;\n\t\t\t\tthis.sync();\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "91ae526a",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof user === 'string' ? user : null",

@@ -24,6 +24,9 @@
 			"chunk": "function(count, result) {\n\n\t\tif (result === true) {\n\n\t\t\tif (this.___timeout === null) {\n\n\t\t\t\tthis.___timeout = setTimeout(function() {\n\n\t\t\t\t\tthis.___timeout = null;\n\t\t\t\t\t_process_stack.call(this);\n\n\t\t\t\t}.bind(this), 0);\n\n\t\t\t}\n\n\t\t} else {\n\n\t\t\tthis.trigger('error', [ count ]);\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "d297849f",
+			"memory": [
+				"_process_stack"
+			],
 			"parameters": [
 				{
 					"chunk": null,
@@ -42,6 +45,9 @@
 			"chunk": "function() {\n\n\t\tlet entry = this.___stack.shift() || null;\n\t\tif (entry !== null) {\n\n\t\t\tlet count    = this.___count++;\n\t\t\tlet callback = entry.callback;\n\t\t\tlet scope    = entry.scope;\n\n\n\t\t\ttry {\n\n\t\t\t\tcallback.call(scope, _process_recursive.bind(this, count));\n\n\t\t\t} catch (err) {\n\n\t\t\t\tthis.trigger('error', [ err ]);\n\n\t\t\t}\n\n\n\t\t} else {\n\n\t\t\tthis.trigger('complete');\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "7d85d4cb",
+			"memory": [
+				"_process_recursive"
+			],
 			"parameters": [],
 			"values": []
 		}
@@ -58,6 +64,9 @@
 					"name": "main",
 					"type": "undefined"
 				}
+			],
+			"memory": [
+				"_Emitter"
 			]
 		},
 		"states": {},
@@ -229,6 +238,7 @@
 				"chunk": "function(blob) {\n\n\t\t\tif (blob.stack instanceof Array) {\n\t\t\t\t// TODO: deserialize stack\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "73d6852f",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -246,6 +256,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.app.Flow';\n\n\n\t\t\tlet blob = (data['blob'] || {});\n\n\n\t\t\tif (this.___stack.length > 0) {\n\n\t\t\t\tblob.stack = [];\n\n\t\t\t\tfor (let s = 0, sl = this.___stack.length; s < sl; s++) {\n\n\t\t\t\t\tlet entry = this.___stack[s];\n\n\t\t\t\t\tblob.stack.push({\n\t\t\t\t\t\tcallback: lychee.serialize(entry.callback),\n\t\t\t\t\t\t// scope:    lychee.serialize(entry.scope),\n\t\t\t\t\t\tscope: null\n\t\t\t\t\t});\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "822b4677",
+				"memory": [
+					"_Emitter"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -259,6 +272,7 @@
 				"chunk": "function(callback, scope) {\n\n\t\t\tcallback = callback instanceof Function ? callback : null;\n\t\t\tscope    = scope !== undefined          ? scope    : this;\n\n\n\t\t\tif (callback !== null) {\n\n\t\t\t\tthis.___stack.push({\n\t\t\t\t\tcallback: callback,\n\t\t\t\t\tscope:    scope\n\t\t\t\t});\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "30c7a13f",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "callback instanceof Function ? callback : null",
@@ -290,6 +304,9 @@
 				"chunk": "function() {\n\n\t\t\tif (this.___init === false) {\n\n\t\t\t\tthis.___init = true;\n\n\n\t\t\t\tif (this.___stack.length > 0) {\n\n\t\t\t\t\t_process_stack.call(this);\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "0ed6bd16",
+				"memory": [
+					"_process_stack"
+				],
 				"parameters": [],
 				"values": [
 					{

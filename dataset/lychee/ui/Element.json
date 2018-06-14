@@ -61,6 +61,7 @@
 			"chunk": "function(entity) {\n\n\t\tif (entity instanceof Object) {\n\n\t\t\tif (\n\t\t\t\ttypeof entity.update === 'function'\n\t\t\t\t&& typeof entity.render === 'function'\n\t\t\t\t&& typeof entity.shape === 'number'\n\t\t\t\t&& typeof entity.isAtPosition === 'function'\n\t\t\t) {\n\t\t\t\treturn true;\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn false;\n\n\t}",
 			"type": "function",
 			"hash": "8eb1bf0c",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -85,6 +86,7 @@
 			"chunk": "function() {\n\n\t\tlet entities = this.entities;\n\t\tlet entity   = null;\n\t\tlet layout   = [\n\t\t\tthis.getEntity('@order'),\n\t\t\tthis.getEntity('@label'),\n\t\t\tthis.getEntity('@options-prev'),\n\t\t\tthis.getEntity('@options-next')\n\t\t];\n\t\tlet type     = this.type;\n\n\n\t\tlet x1 = -1 / 2 * this.width;\n\t\tlet x2 =  1 / 2 * this.width;\n\t\tlet y1 = -1 / 2 * this.height;\n\t\tlet y2 =  1 / 2 * this.height;\n\n\n\t\tif (\n\t\t\tentities[entities.length - 2] !== layout[2]\n\t\t\t|| entities[entities.length - 1] !== layout[3]\n\t\t) {\n\n\t\t\tentities.splice(entities.indexOf(layout[2]), 1);\n\t\t\tentities.splice(entities.indexOf(layout[3]), 1);\n\t\t\tentities.push(layout[2]);\n\t\t\tentities.push(layout[3]);\n\n\t\t}\n\n\n\t\tif (entities.length > 4) {\n\n\t\t\tlet boundary_x = 0;\n\n\t\t\tfor (let e = 2, el = entities.length - 2; e < el; e += 2) {\n\n\t\t\t\tlet label  = entities[e];\n\t\t\t\tlet entity = entities[e + 1];\n\n\t\t\t\tif (entity.visible === true) {\n\n\t\t\t\t\tif (label.value !== '') {\n\t\t\t\t\t\tboundary_x = Math.max(label.width, boundary_x);\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tlet offset_x = Math.round(boundary_x / 16) * 16;\n\t\t\tlet offset_y = 64 + 16;\n\n\t\t\tif (offset_x - boundary_x < 16) {\n\t\t\t\toffset_x += 16;\n\t\t\t}\n\n\t\t\tfor (let e = 2, el = entities.length - 2; e < el; e += 2) {\n\n\t\t\t\tlet label  = entities[e];\n\t\t\t\tlet entity = entities[e + 1];\n\n\t\t\t\tif (entity.visible === true) {\n\n\t\t\t\t\tlet has_label = label.value !== '';\n\n\t\t\t\t\tlabel.position.x  = x1 + 16 + label.width / 2;\n\t\t\t\t\tlabel.visible     = has_label;\n\n\n\t\t\t\t\tif (type === Composite.TYPE.view) {\n\n\t\t\t\t\t\tif (has_label === true) {\n\n\t\t\t\t\t\t\tentity.width      = 1 / 2 * (this.width - 32);\n\t\t\t\t\t\t\tentity.position.x = 1 / 4 * (this.width - 32);\n\n\t\t\t\t\t\t} else {\n\n\t\t\t\t\t\t\tentity.width      = this.width - 32;\n\t\t\t\t\t\t\tentity.position.x = 0;\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t} else if (type === Composite.TYPE.full) {\n\n\t\t\t\t\t\tentity.position.x = 0;\n\n\t\t\t\t\t} else if (type === Composite.TYPE.auto) {\n\n\t\t\t\t\t\tif (has_label === true) {\n\n\t\t\t\t\t\t\tentity.width      = this.width - offset_x - 32;\n\t\t\t\t\t\t\tentity.position.x = (this.width - entity.width - 32) / 2;\n\n\t\t\t\t\t\t} else {\n\n\t\t\t\t\t\t\tentity.width      = this.width - 32;\n\t\t\t\t\t\t\tentity.position.x = 0;\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\tentity.trigger('relayout');\n\n\n\t\t\t\t\tlet boundary_y = Math.max(label.height, entity.height);\n\n\t\t\t\t\tlabel.position.y  = y1 + offset_y + boundary_y / 2;\n\t\t\t\t\tentity.position.y = y1 + offset_y + boundary_y / 2;\n\n\t\t\t\t\toffset_y += boundary_y + 16;\n\n\t\t\t\t} else {\n\n\t\t\t\t\tlabel.visible = false;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\n\t\tlet order_w = 0;\n\n\t\tentity            = layout[0];\n\t\torder_w           = entity.width;\n\t\tentity.position.x = x1 + 16 + order_w / 2;\n\t\tentity.position.y = y1 + 32 - 1;\n\n\t\tentity            = layout[1];\n\t\tentity.width      = this.width - 48 - order_w;\n\t\tentity.position.x = x1 + 32 + order_w + entity.width / 2;\n\t\tentity.position.y = y1 + 32;\n\n\t\tentity            = layout[2];\n\t\tentity.width      = 96;\n\t\tentity.position.x = x1 + 16 + entity.width / 2;\n\t\tentity.position.y = y2 - 32;\n\n\t\tentity = layout[3];\n\t\tentity.width      = 96;\n\t\tentity.position.x = x2 - 16 - entity.width / 2;\n\t\tentity.position.y = y2 - 32;\n\n\t}",
 			"type": "function",
 			"hash": "addf70df",
+			"memory": [],
 			"parameters": [],
 			"values": []
 		}
@@ -101,6 +103,11 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_FONTS",
+				"_Layer",
+				"_on_relayout"
 			]
 		},
 		"states": {
@@ -227,6 +234,9 @@
 				"chunk": "function(blob) {\n\n\t\t\t_Layer.prototype.deserialize.call(this, blob);\n\n\t\t\tthis.trigger('relayout');\n\n\t\t}",
 				"type": "function",
 				"hash": "b048bdd2",
+				"memory": [
+					"_Layer"
+				],
 				"parameters": [
 					{
 						"chunk": null,
@@ -244,6 +254,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Layer.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.Element';\n\n\t\t\tlet states = data['arguments'][0];\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.label !== 'CONTENT')                 states.label   = this.label;\n\t\t\tif (this.options.join(',') !== 'Okay,Cancel') states.options = Array.from(this.options);\n\t\t\tif (this.order !== 1)                         states.order   = this.order;\n\n\n\t\t\tif (this.entities.length > 4) {\n\n\t\t\t\tlet entities = this.entities.slice(2, -2).filter(function(value, index) {\n\t\t\t\t\treturn index % 2 === 1;\n\t\t\t\t});\n\n\t\t\t\tlet map = Object.map(this.__map, function(val, key) {\n\n\t\t\t\t\tlet index = entities.indexOf(val);\n\t\t\t\t\tif (index !== -1) {\n\t\t\t\t\t\treturn index;\n\t\t\t\t\t}\n\n\n\t\t\t\t\treturn undefined;\n\n\t\t\t\t}, this);\n\n\n\t\t\t\tblob.entities = entities.map(lychee.serialize);\n\t\t\t\tblob.map      = map;\n\n\t\t\t} else {\n\n\t\t\t\tdelete blob.entities;\n\t\t\t\tdelete blob.map;\n\n\t\t\t}\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "14b6c2bf",
+				"memory": [
+					"_Layer"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -257,6 +270,9 @@
 				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tif (this.visible === false) return;\n\n\n\t\t\tlet alpha    = this.alpha;\n\t\t\tlet position = this.position;\n\t\t\tlet x        = position.x + offsetX;\n\t\t\tlet y        = position.y + offsetY;\n\t\t\tlet hwidth   = this.width  / 2;\n\t\t\tlet hheight  = this.height / 2;\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(alpha);\n\t\t\t}\n\n\t\t\trenderer.drawBox(\n\t\t\t\tx - hwidth,\n\t\t\t\ty - hheight,\n\t\t\t\tx + hwidth,\n\t\t\t\ty - hheight + 64,\n\t\t\t\t'#2f3736',\n\t\t\t\ttrue\n\t\t\t);\n\n\t\t\trenderer.drawBox(\n\t\t\t\tx - hwidth,\n\t\t\t\ty - hheight + 64,\n\t\t\t\tx + hwidth,\n\t\t\t\ty + hheight,\n\t\t\t\t'#363f3e',\n\t\t\t\ttrue\n\t\t\t);\n\n\t\t\tif (alpha !== 0) {\n\t\t\t\t_Layer.prototype.render.call(this, renderer, offsetX, offsetY);\n\t\t\t}\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(1.0);\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "01f70c3c",
+				"memory": [
+					"_Layer"
+				],
 				"parameters": [
 					{
 						"chunk": null,
@@ -284,6 +300,9 @@
 				"chunk": "function(entity) {\n\n\t\t\tentity = _validate_entity(entity) === true ? entity : null;\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tlet index = this.entities.indexOf(entity);\n\t\t\t\tif (index === -1) {\n\n\t\t\t\t\tlet label = new _Label({\n\t\t\t\t\t\tvalue: ''\n\t\t\t\t\t});\n\n\n\t\t\t\t\tthis.entities.push(label);\n\t\t\t\t\tthis.entities.push(entity);\n\n\t\t\t\t\tif (this.__relayout === true) {\n\t\t\t\t\t\tthis.trigger('relayout');\n\t\t\t\t\t}\n\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "a10c5a51",
+				"memory": [
+					"_validate_entity"
+				],
 				"parameters": [
 					{
 						"chunk": "_validate_entity(entity) === true ? entity : null",
@@ -312,6 +331,7 @@
 				"chunk": "function(id, position) {\n\n\t\t\tid        = typeof id === 'string'    ? id       : null;\n\t\t\tposition = position instanceof Object ? position : null;\n\n\n\t\t\tlet found = null;\n\n\n\t\t\tif (id !== null) {\n\n\t\t\t\tlet num = parseInt(id, 10);\n\n\t\t\t\tif (this.__map[id] !== undefined) {\n\t\t\t\t\tfound = this.__map[id];\n\t\t\t\t} else if (isNaN(num) === false) {\n\n\t\t\t\t\t// XXX: Ignore @order, @label, @options-prev, @optiones-next\n\t\t\t\t\tif (num >= 0 && num <= this.entities.length - 4) {\n\t\t\t\t\t\tfound = this.entities[num + 2] || null;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t} else if (position !== null) {\n\n\t\t\t\tif (typeof position.x === 'number' && typeof position.y === 'number') {\n\n\t\t\t\t\tfor (let e = this.entities.length - 1; e >= 0; e--) {\n\n\t\t\t\t\t\tlet entity = this.entities[e];\n\t\t\t\t\t\tif (entity.visible === false) continue;\n\n\t\t\t\t\t\tif (entity.isAtPosition(position) === true) {\n\t\t\t\t\t\t\tfound = entity;\n\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn found;\n\n\t\t}",
 				"type": "function",
 				"hash": "c13d7884",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof id === 'string'    ? id       : null",
@@ -359,6 +379,9 @@
 				"chunk": "function(id, entity) {\n\n\t\t\tid     = typeof id === 'string'            ? id     : null;\n\t\t\tentity = _validate_entity(entity) === true ? entity : null;\n\n\n\t\t\tif (id !== null && entity !== null && this.__map[id] === undefined) {\n\n\t\t\t\tlet label = new _Label({\n\t\t\t\t\tvalue: id.charAt(0).toUpperCase() + id.substr(1)\n\t\t\t\t});\n\n\n\t\t\t\tthis.__map[id] = entity;\n\n\t\t\t\tthis.entities.push(label);\n\t\t\t\tthis.entities.push(entity);\n\n\n\t\t\t\tif (this.__relayout === true) {\n\t\t\t\t\tthis.trigger('relayout');\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "ae170c90",
+				"memory": [
+					"_validate_entity"
+				],
 				"parameters": [
 					{
 						"chunk": "typeof id === 'string'            ? id     : null",
@@ -393,6 +416,9 @@
 				"chunk": "function(entity) {\n\n\t\t\tentity = _validate_entity(entity) === true ? entity : null;\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tlet found   = false;\n\t\t\t\tlet e_index = this.entities.indexOf(entity);\n\t\t\t\tlet l_index = e_index - 1;\n\n\t\t\t\tif (e_index !== -1 && l_index !== -1) {\n\n\t\t\t\t\tlet check = this.entities[l_index] || null;\n\t\t\t\t\tif (check !== null && check instanceof _Label) {\n\t\t\t\t\t\tthis.entities.splice(l_index, 2);\n\t\t\t\t\t} else {\n\t\t\t\t\t\tthis.entities.splice(e_index, 1);\n\t\t\t\t\t}\n\n\t\t\t\t\tfound = true;\n\n\t\t\t\t}\n\n\n\t\t\t\tfor (let id in this.__map) {\n\n\t\t\t\t\tif (this.__map[id] === entity) {\n\t\t\t\t\t\tdelete this.__map[id];\n\t\t\t\t\t\tfound = true;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tif (found === true) {\n\n\t\t\t\t\tif (this.__relayout === true) {\n\t\t\t\t\t\tthis.trigger('relayout');\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\treturn found;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "9f4a019f",
+				"memory": [
+					"_validate_entity"
+				],
 				"parameters": [
 					{
 						"chunk": "_validate_entity(entity) === true ? entity : null",
@@ -421,6 +447,7 @@
 				"chunk": "function(entities) {\n\n\t\t\tentities = entities instanceof Array ? entities : null;\n\n\n\t\t\tlet all = true;\n\n\t\t\tif (entities !== null) {\n\n\t\t\t\tlet filtered = [\n\t\t\t\t\tthis.getEntity('@order'),\n\t\t\t\t\tthis.getEntity('@label'),\n\t\t\t\t\tthis.getEntity('@options-prev'),\n\t\t\t\t\tthis.getEntity('@options-next')\n\t\t\t\t];\n\n\t\t\t\tfor (let e = 0, el = entities.length; e < el; e++) {\n\n\t\t\t\t\tlet entity = entities[e];\n\t\t\t\t\tlet index  = filtered.indexOf(entity);\n\t\t\t\t\tif (index === -1) {\n\t\t\t\t\t\tfiltered.push(entity);\n\t\t\t\t\t} else {\n\t\t\t\t\t\tall = false;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t\tthis.entities = filtered;\n\n\t\t\t\tif (this.__relayout === true) {\n\t\t\t\t\tthis.trigger('relayout');\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\treturn all;\n\n\t\t}",
 				"type": "function",
 				"hash": "d5185877",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "entities instanceof Array ? entities : null",
@@ -446,6 +473,7 @@
 				"chunk": "function() {\n\n\t\t\tlet entities = this.entities;\n\n\t\t\tfor (let e = 2, el = entities.length - 2; e < el; e++) {\n\n\t\t\t\tentities.splice(e, 1);\n\t\t\t\tel--;\n\t\t\t\te--;\n\n\t\t\t}\n\n\t\t\treturn true;\n\n\t\t}",
 				"type": "function",
 				"hash": "a14aeb42",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -459,6 +487,7 @@
 				"chunk": "function(label) {\n\n\t\t\tlabel = typeof label === 'string' ? label : null;\n\n\n\t\t\tif (label !== null) {\n\n\t\t\t\tthis.getEntity('@label').setValue(label);\n\t\t\t\tthis.label = label;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "4c7b0e33",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof label === 'string' ? label : null",
@@ -484,6 +513,7 @@
 				"chunk": "function(options) {\n\n\t\t\toptions = options instanceof Array ? options : null;\n\n\n\t\t\tif (options !== null) {\n\n\t\t\t\tthis.options = options.map(function(option) {\n\t\t\t\t\treturn '' + option;\n\t\t\t\t});\n\n\n\t\t\t\tlet next = this.getEntity('@options-next');\n\t\t\t\tlet prev = this.getEntity('@options-prev');\n\n\t\t\t\tif (this.options.length === 0) {\n\n\t\t\t\t\tnext.visible = false;\n\t\t\t\t\tprev.visible = false;\n\n\t\t\t\t} else if (this.options.length === 1) {\n\n\t\t\t\t\tnext.visible = true;\n\t\t\t\t\tnext.setLabel(this.options[0]);\n\t\t\t\t\tnext.setValue(this.options[0].toLowerCase());\n\n\t\t\t\t\tprev.visible = false;\n\n\t\t\t\t} else if (this.options.length === 2) {\n\n\t\t\t\t\tnext.visible = true;\n\t\t\t\t\tnext.setLabel(this.options[0]);\n\t\t\t\t\tnext.setValue(this.options[0].toLowerCase());\n\n\t\t\t\t\tprev.visible = true;\n\t\t\t\t\tprev.setLabel(this.options[1]);\n\t\t\t\t\tprev.setValue(this.options[1].toLowerCase());\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "e72119e4",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "options instanceof Array ? options : null",
@@ -509,6 +539,7 @@
 				"chunk": "function(order) {\n\n\t\t\torder = typeof order === 'number' ? (order | 0) : null;\n\n\n\t\t\tif (order !== null) {\n\n\t\t\t\tthis.getEntity('@order').setValue('' + order);\n\t\t\t\tthis.order = order;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "33a18abf",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof order === 'number' ? (order | 0) : null",
@@ -534,6 +565,7 @@
 				"chunk": "function(type) {\n\n\t\t\ttype = lychee.enumof(Composite.TYPE, type) ? type : null;\n\n\n\t\t\tif (type !== null) {\n\n\t\t\t\tthis.type = type;\n\n\t\t\t\tif (this.__relayout === true) {\n\t\t\t\t\tthis.trigger('relayout');\n\t\t\t\t}\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "5ffa5474",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "lychee.enumof(Composite.TYPE, type) ? type : null",

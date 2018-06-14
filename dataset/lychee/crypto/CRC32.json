@@ -13,6 +13,7 @@
 			"chunk": "(function(table) {\n\n\t\tlet value = 0;\n\n\t\tfor (let t = 0, tl = table.length; t < tl; t++) {\n\n\t\t\tvalue = t;\n\n\t\t\tvalue = ((value & 1) ? (-306674912 ^ (value >>> 1)) : (value >>> 1));\n\t\t\tvalue = ((value & 1) ? (-306674912 ^ (value >>> 1)) : (value >>> 1));\n\t\t\tvalue = ((value & 1) ? (-306674912 ^ (value >>> 1)) : (value >>> 1));\n\t\t\tvalue = ((value & 1) ? (-306674912 ^ (value >>> 1)) : (value >>> 1));\n\t\t\tvalue = ((value & 1) ? (-306674912 ^ (value >>> 1)) : (value >>> 1));\n\t\t\tvalue = ((value & 1) ? (-306674912 ^ (value >>> 1)) : (value >>> 1));\n\t\t\tvalue = ((value & 1) ? (-306674912 ^ (value >>> 1)) : (value >>> 1));\n\t\t\tvalue = ((value & 1) ? (-306674912 ^ (value >>> 1)) : (value >>> 1));\n\n\t\t\ttable[t] = value;\n\n\t\t}\n\n\t\treturn table;\n\n\t})(new Array(256))",
 			"type": "function",
 			"hash": "395cb64e",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -26,6 +27,9 @@
 			"chunk": "function(buffer) {\n\n\t\tlet value = -1;\n\n\t\tfor (let b = 0; b < buffer.length; b++) {\n\t\t\tvalue = _CRC_TABLE[(value ^ buffer[b]) & 0xff] ^ (value >>> 8);\n\t\t}\n\n\t\treturn value ^ -1;\n\n\t}",
 			"type": "function",
 			"hash": "50f25e26",
+			"memory": [
+				"_CRC_TABLE"
+			],
 			"parameters": [
 				{
 					"chunk": null,
@@ -42,7 +46,8 @@
 			"chunk": "function() {\n\n\t\tthis.__crc = 0;\n\n\t}",
 			"type": "function",
 			"hash": "37faed1d",
-			"parameters": []
+			"parameters": [],
+			"memory": []
 		},
 		"states": {},
 		"properties": {
@@ -65,6 +70,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -82,6 +88,7 @@
 				"chunk": "function() {\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.crypto.CRC32',\n\t\t\t\t'arguments':   []\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "5fa3fdd9",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -98,6 +105,9 @@
 				"chunk": "function(data) {\n\n\t\t\tdata = data instanceof Buffer ? data : new Buffer(data, 'utf8');\n\n\n\t\t\tthis.__crc = _bytes_to_value(data);\n\n\t\t}",
 				"type": "function",
 				"hash": "234268f0",
+				"memory": [
+					"_bytes_to_value"
+				],
 				"parameters": [
 					{
 						"chunk": "data instanceof Buffer ? data : new Buffer(data, 'utf8')",
@@ -115,6 +125,7 @@
 				"chunk": "function() {\n\n\t\t\tlet hash = (this.__crc >>> 0).toString(16);\n\t\t\tif (hash.length % 2 === 1) {\n\t\t\t\thash = '0' + hash;\n\t\t\t}\n\n\t\t\treturn new Buffer(hash, 'hex');\n\n\t\t}",
 				"type": "function",
 				"hash": "2839cbd6",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{

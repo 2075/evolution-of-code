@@ -33,6 +33,7 @@
 			"chunk": "function(x) {\n\t\treturn 2 / (1 + Math.exp(-4.9 * x)) - 1;\n\t}",
 			"type": "function",
 			"hash": "655acb4e",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -52,6 +53,7 @@
 			"chunk": "function() {\n\n\t\tthis.incoming = [];\n\t\tthis.value    = 0.0;\n\n\t}",
 			"type": "function",
 			"hash": "5ce74d22",
+			"memory": [],
 			"parameters": [],
 			"values": []
 		}
@@ -68,7 +70,8 @@
 					"name": "data",
 					"type": "Object"
 				}
-			]
+			],
+			"memory": []
 		},
 		"states": {
 			"genes": "setGenes",
@@ -116,6 +119,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -133,6 +137,7 @@
 				"chunk": "function() {\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.ai.neat.Genome',\n\t\t\t\t'arguments':   []\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "8ee7c21e",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -149,6 +154,7 @@
 				"chunk": "function() {\n\n\t\t\treturn new Composite({\n\t\t\t\tgenes: this.genes.map(lychee.serialize)\n\t\t\t});\n\n\t\t}",
 				"type": "function",
 				"hash": "e2d6f582",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -162,6 +168,9 @@
 				"chunk": "function(input, inputs, outputs) {\n\n\t\t\tinput   = input === true;\n\t\t\tinputs  = inputs instanceof Array  ? inputs  : null;\n\t\t\toutputs = outputs instanceof Array ? outputs : null;\n\n\n\t\t\tlet neurons = [];\n\n\t\t\tif (input === true) {\n\n\t\t\t\tinputs.forEach(function(input, i) {\n\t\t\t\t\tneurons.push(i);\n\t\t\t\t});\n\n\t\t\t\tthis.genes.forEach(function(gene) {\n\n\t\t\t\t\tif (neurons.indexOf(gene.into) === -1) {\n\t\t\t\t\t\tneurons.push(gene.into);\n\t\t\t\t\t}\n\n\t\t\t\t\tif (neurons.indexOf(gene.out) === -1) {\n\t\t\t\t\t\tneurons.push(gene.out);\n\t\t\t\t\t}\n\n\t\t\t\t});\n\n\t\t\t} else {\n\n\t\t\t\tthis.genes.forEach(function(gene) {\n\n\t\t\t\t\tif (neurons.indexOf(gene.into) === -1 && gene.into > inputs.length) {\n\t\t\t\t\t\tneurons.push(gene.into);\n\t\t\t\t\t}\n\n\t\t\t\t\tif (neurons.indexOf(gene.out) === -1 && gene.out > inputs.length) {\n\t\t\t\t\t\tneurons.push(gene.out);\n\t\t\t\t\t}\n\n\t\t\t\t});\n\n\t\t\t}\n\n\t\t\toutputs.forEach(function(output, o) {\n\t\t\t\tneurons.push(_MAX_NODES + o);\n\t\t\t});\n\n\n\t\t\tlet neuron = neurons[(Math.random() * neurons.length) | 0] || null;\n\t\t\tif (neuron === null) {\n\t\t\t\treturn neurons[0];\n\t\t\t}\n\n\t\t\treturn neuron;\n\n\t\t}",
 				"type": "function",
 				"hash": "90f62bd5",
+				"memory": [
+					"_MAX_NODES"
+				],
 				"parameters": [
 					{
 						"chunk": "input === true",

@@ -47,6 +47,7 @@
 			"chunk": "function() {\n\n\t\tlet main = global.MAIN || null;\n\t\tif (main !== null) {\n\n\t\t\tlet renderer = main.renderer || null;\n\t\t\tlet viewport = main.viewport || null;\n\n\t\t\tif (renderer !== null && viewport !== null) {\n\n\t\t\t\tlet background = renderer.background;\n\t\t\t\tlet fullscreen = viewport.fullscreen;\n\t\t\t\tlet width      = renderer.width;\n\t\t\t\tlet height     = renderer.height;\n\n\n\t\t\t\tif (width  === viewport.width)  width  = null;\n\t\t\t\tif (height === viewport.height) height = null;\n\n\n\t\t\t\tthis.getEntity('background').setValue(background);\n\n\n\t\t\t\tif (fullscreen === true) {\n\n\t\t\t\t\tthis.getEntity('mode').setValue('fullscreen');\n\n\t\t\t\t} else if (width === null && height === null) {\n\n\t\t\t\t\tthis.getEntity('mode').setValue('dynamic');\n\n\t\t\t\t} else {\n\n\t\t\t\t\tthis.getEntity('mode').setValue('static');\n\t\t\t\t\tthis.getEntity('width').setValue(width);\n\t\t\t\t\tthis.getEntity('height').setValue(height);\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "1846571b",
+			"memory": [],
 			"parameters": [],
 			"values": []
 		},
@@ -54,6 +55,7 @@
 			"chunk": "function() {\n\n\t\tlet main = global.MAIN || null;\n\t\tif (main !== null) {\n\n\t\t\tlet renderer = main.renderer || null;\n\t\t\tlet viewport = main.viewport || null;\n\n\t\t\tif (renderer !== null && viewport !== null) {\n\n\t\t\t\tlet background = this.getEntity('background').value;\n\t\t\t\tlet mode       = this.getEntity('mode').value;\n\t\t\t\tlet width      = this.getEntity('width').value;\n\t\t\t\tlet height     = this.getEntity('height').value;\n\n\n\t\t\t\tif (mode === 'fullscreen') {\n\n\t\t\t\t\tmain.settings.renderer.width      = null;\n\t\t\t\t\tmain.settings.renderer.height     = null;\n\t\t\t\t\tmain.settings.renderer.background = background;\n\n\t\t\t\t\trenderer.setBackground(background);\n\t\t\t\t\trenderer.setWidth(null);\n\t\t\t\t\trenderer.setHeight(null);\n\n\t\t\t\t\tviewport.setFullscreen(true);\n\n\t\t\t\t} else if (mode === 'dynamic') {\n\n\t\t\t\t\tmain.settings.renderer.width      = null;\n\t\t\t\t\tmain.settings.renderer.height     = null;\n\t\t\t\t\tmain.settings.renderer.background = background;\n\n\t\t\t\t\trenderer.setBackground(background);\n\t\t\t\t\trenderer.setWidth(null);\n\t\t\t\t\trenderer.setHeight(null);\n\n\t\t\t\t\tviewport.setFullscreen(false);\n\n\t\t\t\t} else if (mode === 'static') {\n\n\t\t\t\t\tmain.settings.renderer.width      = width;\n\t\t\t\t\tmain.settings.renderer.height     = height;\n\t\t\t\t\tmain.settings.renderer.background = background;\n\n\t\t\t\t\trenderer.setBackground(background);\n\t\t\t\t\trenderer.setWidth(width);\n\t\t\t\t\trenderer.setHeight(height);\n\n\t\t\t\t\tviewport.setFullscreen(false);\n\n\t\t\t\t}\n\n\n\t\t\t\tviewport.trigger('reshape', [\n\t\t\t\t\tnull,\n\t\t\t\t\tnull,\n\t\t\t\t\tviewport.width,\n\t\t\t\t\tviewport.height\n\t\t\t\t]);\n\n\t\t\t}\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "1adc036d",
+			"memory": [],
 			"parameters": [],
 			"values": []
 		}
@@ -70,6 +72,13 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Element",
+				"_Input",
+				"_Select",
+				"_read",
+				"_save"
 			]
 		},
 		"states": {},
@@ -90,6 +99,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -107,6 +117,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Element.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.element.Viewport';\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "a5fc72b1",
+				"memory": [
+					"_Element"
+				],
 				"parameters": [],
 				"values": [
 					{

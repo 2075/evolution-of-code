@@ -44,6 +44,9 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Layer"
 			]
 		},
 		"states": {
@@ -90,6 +93,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -107,6 +111,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Layer.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.verlet.Layer';\n\n\t\t\tlet states = data['arguments'][0];\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.friction !== 0.99)      states.friction = this.friction;\n\t\t\tif (this.gravity.length() !== 0) states.gravity  = lychee.serialize(this.gravity);\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "d511b084",
+				"memory": [
+					"_Layer"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -120,6 +127,9 @@
 				"chunk": "function(clock, delta) {\n\n\t\t\t_Layer.prototype.update.call(this, clock, delta);\n\n\n\t\t\tlet entities = this.entities;\n\t\t\tlet friction = this.friction;\n\t\t\tlet gravity  = this.gravity;\n\t\t\tlet velocity = this.__velocity;\n\n\n\t\t\tlet hheight = this.height / 2;\n\n\t\t\tfor (let e = 0, el = entities.length; e < el; e++) {\n\n\t\t\t\tlet entity    = entities[e];\n\t\t\t\tlet position  = entity.position.clone();\n\t\t\t\tlet particles = entity.particles;\n\n\t\t\t\tfor (let p = 0, pl = particles.length; p < pl; p++) {\n\n\t\t\t\t\tlet particle = particles[p];\n\n\n\t\t\t\t\tparticle.copy(velocity);\n\t\t\t\t\tvelocity.sub(position);\n\t\t\t\t\tvelocity.scale(friction);\n\n\n\t\t\t\t\tif (particle.y >= hheight && velocity.squaredLength() > 0.00000001) {\n\n\t\t\t\t\t\tlet m = velocity.length();\n\n\t\t\t\t\t\tvelocity.x /= m;\n\t\t\t\t\t\tvelocity.y /= m;\n\t\t\t\t\t\tvelocity.z /= m;\n\n\t\t\t\t\t\tvelocity.scale(m * 0.8);\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\tparticle.copy(position);\n\t\t\t\t\tparticle.add(gravity);\n\t\t\t\t\tparticle.add(velocity);\n\n\n\t\t\t\t\tif (particle.y > hheight) {\n\t\t\t\t\t\tparticle.y = hheight;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "36be95a0",
+				"memory": [
+					"_Layer"
+				],
 				"parameters": [
 					{
 						"chunk": null,
@@ -142,6 +152,7 @@
 				"chunk": "function(friction) {\n\n\t\t\tfriction = typeof friction === 'number' ? friction : 0.99;\n\n\n\t\t\tif (friction > 0 && friction < 1) {\n\n\t\t\t\tthis.friction = 1 - friction;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "f4b297c1",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof friction === 'number' ? friction : 0.99",
@@ -167,6 +178,7 @@
 				"chunk": "function(gravity) {\n\n\t\t\tgravity = gravity instanceof _Vector3 ? gravity : null;\n\n\n\t\t\tif (gravity !== null) {\n\n\t\t\t\tthis.gravity = gravity;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "2711158d",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "gravity instanceof _Vector3 ? gravity : null",

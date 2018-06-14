@@ -21,7 +21,8 @@
 					"name": "states",
 					"type": "Object"
 				}
-			]
+			],
+			"memory": []
 		},
 		"states": {},
 		"properties": {
@@ -44,6 +45,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -61,6 +63,7 @@
 				"chunk": "function() {\n\n\t\t\tlet states = {\n\t\t\t\tmusic: null\n\t\t\t};\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.policy.Music',\n\t\t\t\t'arguments':   [ states ]\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "4d587df2",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -74,6 +77,7 @@
 				"chunk": "function() {\n\n\t\t\tlet music  = this.music;\n\t\t\tlet values = [ 0.5 ];\n\n\n\t\t\tif (music !== null) {\n\n\t\t\t\tlet is_idle = music.isIdle;\n\t\t\t\tif (is_idle === true) {\n\t\t\t\t\tvalues[0] = 0;\n\t\t\t\t} else if (is_idle === false) {\n\t\t\t\t\tvalues[0] = 1;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn values;\n\n\t\t}",
 				"type": "function",
 				"hash": "fadb21c3",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -89,6 +93,7 @@
 				"chunk": "function(values) {\n\n\t\t\tlet music = this.music;\n\n\n\t\t\tif (music !== null) {\n\n\t\t\t\tlet is_idle = music.isIdle;\n\t\t\t\tif (is_idle === true && values[0] > 0.5) {\n\t\t\t\t\tmusic.play();\n\t\t\t\t} else if (is_idle === false && values[0] < 0.5) {\n\t\t\t\t\tmusic.stop();\n\t\t\t\t}\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "b22835dc",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,

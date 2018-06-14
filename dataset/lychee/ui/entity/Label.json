@@ -42,6 +42,10 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Entity",
+				"_FONT"
 			]
 		},
 		"states": {
@@ -84,6 +88,7 @@
 				"chunk": "function(blob) {\n\n\t\t\tlet font = lychee.deserialize(blob.font);\n\t\t\tif (font !== null) {\n\t\t\t\tthis.setFont(font);\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "814dbb80",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -101,6 +106,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Entity.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.entity.Label';\n\n\t\t\tlet states = data['arguments'][0];\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.value !== '') states.value = this.value;\n\n\n\t\t\tif (this.font !== null) blob.font = lychee.serialize(this.font);\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "7e5bee41",
+				"memory": [
+					"_Entity"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -114,6 +122,7 @@
 				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tif (this.visible === false) return;\n\n\n\t\t\tlet alpha    = this.alpha;\n\t\t\tlet position = this.position;\n\n\t\t\tlet x = position.x + offsetX;\n\t\t\tlet y = position.y + offsetY;\n\n\n\t\t\tlet font  = this.font;\n\t\t\tlet value = this.value;\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(alpha);\n\t\t\t}\n\n\n\t\t\tif (font !== null) {\n\n\t\t\t\tlet cur = font.measure(value);\n\t\t\t\tlet max = this.width;\n\n\t\t\t\tif (cur.realwidth <= max) {\n\n\t\t\t\t\trenderer.drawText(\n\t\t\t\t\t\tx,\n\t\t\t\t\t\ty,\n\t\t\t\t\t\tvalue,\n\t\t\t\t\t\tfont,\n\t\t\t\t\t\ttrue\n\t\t\t\t\t);\n\n\t\t\t\t} else {\n\n\t\t\t\t\tlet len = (max / cur.realwidth * value.length) | 0;\n\t\t\t\t\tlet str = value.substr(0, len);\n\n\t\t\t\t\trenderer.drawText(\n\t\t\t\t\t\tx,\n\t\t\t\t\t\ty,\n\t\t\t\t\t\tstr,\n\t\t\t\t\t\tfont,\n\t\t\t\t\t\ttrue\n\t\t\t\t\t);\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(1.0);\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "18fdbc64",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -141,6 +150,7 @@
 				"chunk": "function(font) {\n\n\t\t\tfont = font instanceof Font ? font : null;\n\n\n\t\t\tif (font !== null) {\n\n\t\t\t\tthis.font = font;\n\n\t\t\t\t// refresh the layout\n\t\t\t\tif (this.value !== '') {\n\t\t\t\t\tthis.setValue(this.value);\n\t\t\t\t}\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "02ed6421",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "font instanceof Font ? font : null",
@@ -166,6 +176,7 @@
 				"chunk": "function(value) {\n\n\t\t\tvalue = typeof value === 'string' ? value : null;\n\n\n\t\t\tif (value !== null) {\n\n\t\t\t\tlet font = this.font;\n\t\t\t\tif (font !== null) {\n\n\t\t\t\t\tlet dim = font.measure(value);\n\n\t\t\t\t\tthis.width  = dim.realwidth;\n\t\t\t\t\tthis.height = dim.realheight;\n\n\t\t\t\t}\n\n\n\t\t\t\tthis.value = value;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "82c6c351",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof value === 'string' ? value : null",

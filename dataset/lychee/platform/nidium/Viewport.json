@@ -65,6 +65,7 @@
 			"chunk": "function() {\n\n\t\treturn this.trigger('show');\n\n\t}",
 			"type": "function",
 			"hash": "e1fe8bc5",
+			"memory": [],
 			"parameters": [],
 			"values": [
 				{
@@ -81,6 +82,7 @@
 			"chunk": "function() {\n\n\t\treturn this.trigger('hide');\n\n\t}",
 			"type": "function",
 			"hash": "9488e2b6",
+			"memory": [],
 			"parameters": [],
 			"values": [
 				{
@@ -97,6 +99,7 @@
 			"chunk": "function(width, height) {\n\n\t\tif (width === this.width && height === this.height) {\n\t\t\treturn false;\n\t\t}\n\n\n\t\tthis.width  = width;\n\t\tthis.height = height;\n\n\n\t\tlet orientation = null;\n\t\tlet rotation    = null;\n\n\n\t\tif (width > height) {\n\n\t\t\torientation = 'landscape';\n\t\t\trotation    = 'landscape';\n\n\t\t} else {\n\n\t\t\torientation = 'portrait';\n\t\t\trotation    = 'portrait';\n\n\t\t}\n\n\n\t\treturn this.trigger('reshape', [ orientation, rotation, width, height ]);\n\n\t}",
 			"type": "function",
 			"hash": "15b689f8",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -138,6 +141,12 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Emitter",
+				"_INSTANCES",
+				"_process_reshape",
+				"_window"
 			]
 		},
 		"states": {
@@ -185,6 +194,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -202,6 +212,9 @@
 				"chunk": "function() {\n\n\t\t\tlet found = false;\n\n\t\t\tfor (let i = 0, il = _INSTANCES.length; i < il; i++) {\n\n\t\t\t\tif (_INSTANCES[i] === this) {\n\t\t\t\t\t_INSTANCES.splice(i, 1);\n\t\t\t\t\tfound = true;\n\t\t\t\t\til--;\n\t\t\t\t\ti--;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\tthis.unbind();\n\n\n\t\t\treturn found;\n\n\t\t}",
 				"type": "function",
 				"hash": "a596dbf3",
+				"memory": [
+					"_INSTANCES"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -220,6 +233,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.Viewport';\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.fullscreen !== false) states.fullscreen = this.fullscreen;\n\n\n\t\t\tdata['arguments'][0] = states;\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "cf868d0c",
+				"memory": [
+					"_Emitter"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -233,6 +249,7 @@
 				"chunk": "function(fullscreen) {\n\n\t\t\tfullscreen = typeof fullscreen === 'boolean' ? fullscreen : null;\n\n\n\t\t\tif (fullscreen !== null) {\n\n\t\t\t\t// XXX: No Fullscreen support\n\t\t\t\t// https://github.com/nidium/Nidium/issues/65\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "f67fd165",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof fullscreen === 'boolean' ? fullscreen : null",

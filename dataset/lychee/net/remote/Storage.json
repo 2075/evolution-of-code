@@ -33,6 +33,9 @@
 					"name": "remote",
 					"type": "undefined"
 				}
+			],
+			"memory": [
+				"_Service"
 			]
 		},
 		"states": {},
@@ -44,6 +47,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -61,6 +65,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Service.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.net.remote.Storage';\n\t\t\tdata['arguments']   = [];\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "044434c9",
+				"memory": [
+					"_Service"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -74,6 +81,7 @@
 				"chunk": "function(objects) {\n\n\t\t\tobjects = objects instanceof Array ? objects : null;\n\n\n\t\t\tif (objects !== null && this.tunnel !== null) {\n\n\t\t\t\tthis.tunnel.send({\n\t\t\t\t\ttimestamp: Date.now(),\n\t\t\t\t\tobjects:   objects\n\t\t\t\t}, {\n\t\t\t\t\tid:    'storage',\n\t\t\t\t\tevent: 'sync'\n\t\t\t\t});\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "18aa3742",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "objects instanceof Array ? objects : null",

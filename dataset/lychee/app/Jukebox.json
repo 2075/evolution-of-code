@@ -13,6 +13,7 @@
 			"chunk": "function(track) {\n\n\t\tif (\n\t\t\ttrack instanceof Music\n\t\t\t|| track instanceof Sound\n\t\t) {\n\t\t\treturn true;\n\t\t}\n\n\n\t\treturn false;\n\n\t}",
 			"type": "function",
 			"hash": "0514f092",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -37,6 +38,7 @@
 			"chunk": "function(track) {\n\n\t\tlet volume = this.volume;\n\n\t\tif (track instanceof Music && this.music === true) {\n\n\t\t\tlet music = this.__music;\n\t\t\tif (music !== null) {\n\t\t\t\tmusic.stop();\n\t\t\t}\n\n\n\t\t\tthis.__music = track;\n\t\t\tthis.__music.setVolume(volume);\n\t\t\tthis.__music.play();\n\n\n\t\t\treturn true;\n\n\t\t} else if (track instanceof Sound && this.sound === true) {\n\n\t\t\tlet found  = false;\n\t\t\tlet sounds = this.__sounds;\n\n\t\t\tfor (let s = 0, sl = sounds.length; s < sl; s++) {\n\n\t\t\t\tlet sound = sounds[s];\n\t\t\t\tif (sound === null) {\n\n\t\t\t\t\tsounds[s] = track.clone();\n\t\t\t\t\tsounds[s].setVolume(volume);\n\t\t\t\t\tsounds[s].play();\n\t\t\t\t\tfound = true;\n\n\t\t\t\t\tbreak;\n\n\t\t\t\t} else if (sound.isIdle === true) {\n\n\t\t\t\t\tif (sound.url === track.url) {\n\n\t\t\t\t\t\tsound.setVolume(volume);\n\t\t\t\t\t\tsound.play();\n\t\t\t\t\t\tfound = true;\n\n\t\t\t\t\t\tbreak;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tif (found === false) {\n\n\t\t\t\tif (track.isIdle === true) {\n\n\t\t\t\t\ttrack.setVolume(volume);\n\t\t\t\t\ttrack.play();\n\n\t\t\t\t} else {\n\n\t\t\t\t\tfor (let s = 0, sl = sounds.length; s < sl; s++) {\n\n\t\t\t\t\t\tlet sound = sounds[s];\n\t\t\t\t\t\tif (sound.isIdle === true) {\n\n\t\t\t\t\t\t\tsounds[s] = null;\n\t\t\t\t\t\t\tsounds[s] = track.clone();\n\t\t\t\t\t\t\tsounds[s].setVolume(volume);\n\t\t\t\t\t\t\tsounds[s].play();\n\n\t\t\t\t\t\t\tbreak;\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn true;\n\n\t\t}\n\n\n\t\treturn false;\n\n\t}",
 			"type": "function",
 			"hash": "b6dd8db2",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -61,6 +63,7 @@
 			"chunk": "function(track) {\n\n\t\tlet found  = false;\n\t\tlet music  = this.__music;\n\t\tlet sounds = this.__sounds;\n\n\n\t\tlet s, sl, sound = null;\n\n\t\tif (track instanceof Music) {\n\n\t\t\tif (music === track) {\n\t\t\t\tfound = true;\n\t\t\t\tmusic.stop();\n\t\t\t}\n\n\n\t\t\tthis.__music = null;\n\n\t\t} else if (track instanceof Sound) {\n\n\t\t\tfor (s = 0, sl = sounds.length; s < sl; s++) {\n\n\t\t\t\tsound = sounds[s];\n\n\t\t\t\tif (sound !== null && sound.url === track.url && sound.isIdle === false) {\n\t\t\t\t\tfound = true;\n\t\t\t\t\tsound.stop();\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t} else if (track === null) {\n\n\t\t\tif (music !== null) {\n\t\t\t\tfound = true;\n\t\t\t\tmusic.stop();\n\t\t\t}\n\n\n\t\t\tfor (s = 0, sl = sounds.length; s < sl; s++) {\n\n\t\t\t\tsound = sounds[s];\n\n\t\t\t\tif (sound !== null && sound.isIdle === false) {\n\t\t\t\t\tfound = true;\n\t\t\t\t\tsound.stop();\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\n\t\tif (found === true) {\n\t\t\treturn true;\n\t\t}\n\n\n\t\treturn false;\n\n\t}",
 			"type": "function",
 			"hash": "0ab04771",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -94,7 +97,8 @@
 					"name": "data",
 					"type": "Object"
 				}
-			]
+			],
+			"memory": []
 		},
 		"states": {
 			"channels": "setChannels",
@@ -186,6 +190,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -203,6 +208,7 @@
 				"chunk": "function() {\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.channels !== 8) states.channels = this.channels;\n\t\t\tif (this.music !== true) states.music    = this.music;\n\t\t\tif (this.sound !== true) states.sound    = this.sound;\n\t\t\tif (this.volume !== 1.0) states.volume   = this.volume;\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.app.Jukebox',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        null\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "b6f8dacc",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -216,6 +222,10 @@
 				"chunk": "function(track) {\n\n\t\t\ttrack = _validate_track(track) ? track : null;\n\n\n\t\t\tif (track !== null) {\n\n\t\t\t\tlet result = _play_track.call(this, track);\n\t\t\t\tif (result === true) {\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "83c63de9",
+				"memory": [
+					"_play_track",
+					"_validate_track"
+				],
 				"parameters": [
 					{
 						"chunk": "_validate_track(track) ? track : null",
@@ -244,6 +254,10 @@
 				"chunk": "function(track) {\n\n\t\t\ttrack = _validate_track(track) ? track : null;\n\n\n\t\t\tif (track !== null) {\n\n\t\t\t\tlet result = _stop_track.call(this, track);\n\t\t\t\tif (result === true) {\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "1ab982fd",
+				"memory": [
+					"_stop_track",
+					"_validate_track"
+				],
 				"parameters": [
 					{
 						"chunk": "_validate_track(track) ? track : null",
@@ -272,6 +286,7 @@
 				"chunk": "function(channels) {\n\n\t\t\tchannels = typeof channels === 'number' ? channels : null;\n\n\n\t\t\tif (channels !== null) {\n\n\t\t\t\tthis.channels = channels;\n\t\t\t\tthis.__sounds.fill(null);\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "3b1affb9",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof channels === 'number' ? channels : null",
@@ -297,6 +312,7 @@
 				"chunk": "function(music) {\n\n\t\t\tmusic = typeof music === 'boolean' ? music : null;\n\n\n\t\t\tif (music !== null) {\n\n\t\t\t\tthis.music = music;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "faff5574",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof music === 'boolean' ? music : null",
@@ -322,6 +338,7 @@
 				"chunk": "function(sound) {\n\n\t\t\tsound = typeof sound === 'boolean' ? sound : null;\n\n\n\t\t\tif (sound !== null) {\n\n\t\t\t\tthis.sound = sound;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "e3149151",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof sound === 'boolean' ? sound : null",
@@ -347,6 +364,7 @@
 				"chunk": "function(volume) {\n\n\t\t\tvolume = typeof volume === 'number' ? volume : null;\n\n\n\t\t\tif (volume !== null) {\n\n\t\t\t\tthis.volume = Math.min(Math.max(0, volume), 1);\n\n\n\t\t\t\tlet music = this.__music;\n\t\t\t\tif (music !== null) {\n\t\t\t\t\tmusic.setVolume(this.volume);\n\t\t\t\t}\n\n\t\t\t\tlet sounds = this.__sounds;\n\t\t\t\tfor (let s = 0, sl = sounds.length; s < sl; s++) {\n\n\t\t\t\t\tlet sound = sounds[s];\n\t\t\t\t\tif (sound !== null) {\n\t\t\t\t\t\tsound.setVolume(this.volume);\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "6795aa6a",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof volume === 'number' ? volume : null",

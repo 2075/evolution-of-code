@@ -65,6 +65,7 @@
 			"chunk": "function(silent) {\n\n\t\tsilent = silent === true;\n\n\n\t\tlet id   = this.id;\n\t\tlet blob = null;\n\n\n\t\tlet type = this.type;\n\t\tif (type === Composite.TYPE.persistent) {\n\n\t\t\tif (_PERSISTENT !== null) {\n\t\t\t\tblob = JSON.parse(_PERSISTENT.getItem(id));\n\t\t\t}\n\n\t\t} else if (type === Composite.TYPE.temporary) {\n\n\t\t\tif (_TEMPORARY !== null) {\n\t\t\t\tblob = JSON.parse(_TEMPORARY.getItem(id));\n\t\t\t}\n\n\t\t}\n\n\n\t\tif (blob !== null) {\n\n\t\t\tif (this.model === null) {\n\n\t\t\t\tif (blob['@model'] instanceof Object) {\n\t\t\t\t\tthis.model = blob['@model'];\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tif (Object.keys(this.__objects).length !== Object.keys(blob['@objects']).length) {\n\n\t\t\t\tif (blob['@objects'] instanceof Object) {\n\n\t\t\t\t\tthis.__objects = {};\n\n\t\t\t\t\tfor (let o in blob['@objects']) {\n\t\t\t\t\t\tthis.__objects[o] = blob['@objects'][o];\n\t\t\t\t\t}\n\n\n\t\t\t\t\tif (silent === false) {\n\t\t\t\t\t\tthis.trigger('sync', [ this.__objects ]);\n\t\t\t\t\t}\n\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn false;\n\n\t}",
 			"type": "function",
 			"hash": "e5d179c1",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": "silent === true",
@@ -90,6 +91,10 @@
 			"chunk": "function(silent) {\n\n\t\tsilent = silent === true;\n\n\n\t\tlet operations = this.__operations;\n\t\tif (operations.length !== 0) {\n\n\t\t\twhile (operations.length > 0) {\n\n\t\t\t\tlet operation = operations.shift();\n\t\t\t\tif (operation.type === 'update') {\n\n\t\t\t\t\tif (this.__objects[operation.id] !== operation.object) {\n\t\t\t\t\t\tthis.__objects[operation.id] = operation.object;\n\t\t\t\t\t}\n\n\t\t\t\t} else if (operation.type === 'remove') {\n\n\t\t\t\t\tif (this.__objects[operation.id] !== undefined) {\n\t\t\t\t\t\tdelete this.__objects[operation.id];\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tlet id   = this.id;\n\t\t\tlet blob = {\n\t\t\t\t'@model':   this.model,\n\t\t\t\t'@objects': this.__objects\n\t\t\t};\n\n\n\t\t\tlet type = this.type;\n\t\t\tif (type === Composite.TYPE.persistent) {\n\n\t\t\t\tif (_PERSISTENT !== null) {\n\t\t\t\t\t_PERSISTENT.setItem(id, _JSON.encode(blob));\n\t\t\t\t}\n\n\t\t\t} else if (type === Composite.TYPE.temporary) {\n\n\t\t\t\tif (_TEMPORARY !== null) {\n\t\t\t\t\t_TEMPORARY.setItem(id, _JSON.encode(blob));\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tif (silent === false) {\n\t\t\t\tthis.trigger('sync', [ this.__objects ]);\n\t\t\t}\n\n\n\t\t\treturn true;\n\n\t\t}\n\n\n\t\treturn false;\n\n\t}",
 			"type": "function",
 			"hash": "7e571570",
+			"memory": [
+				"_PERSISTENT",
+				"_TEMPORARY"
+			],
 			"parameters": [
 				{
 					"chunk": "silent === true",
@@ -124,6 +129,10 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Emitter",
+				"_read_storage"
 			]
 		},
 		"states": {
@@ -218,6 +227,10 @@
 				"chunk": "function(silent) {\n\n\t\t\tsilent = silent === true;\n\n\n\t\t\tlet result = false;\n\n\n\t\t\tif (this.__operations.length > 0) {\n\t\t\t\tresult = _write_storage.call(this, silent);\n\t\t\t} else {\n\t\t\t\tresult = _read_storage.call(this, silent);\n\t\t\t}\n\n\n\t\t\treturn result;\n\n\t\t}",
 				"type": "function",
 				"hash": "b8039ef7",
+				"memory": [
+					"_read_storage",
+					"_write_storage"
+				],
 				"parameters": [
 					{
 						"chunk": "silent === true",
@@ -238,6 +251,7 @@
 				"chunk": "function(blob) {\n\n\t\t\tif (blob.objects instanceof Object) {\n\n\t\t\t\tthis.__objects = {};\n\n\t\t\t\tfor (let o in blob.objects) {\n\n\t\t\t\t\tlet object = blob.objects[o];\n\n\t\t\t\t\tif (lychee.interfaceof(this.model, object)) {\n\t\t\t\t\t\tthis.__objects[o] = object;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "5ddd34d8",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -255,6 +269,10 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.Storage';\n\n\t\t\tlet states = {};\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.id.startsWith('lychee-Storage-') === false) states.id    = this.id;\n\t\t\tif (Object.keys(this.model).length !== 0)            states.model = this.model;\n\t\t\tif (this.type !== Composite.TYPE.persistent)         states.type  = this.type;\n\n\n\t\t\tif (Object.keys(this.__objects).length > 0) {\n\n\t\t\t\tblob.objects = {};\n\n\t\t\t\tfor (let o in this.__objects) {\n\n\t\t\t\t\tlet object = this.__objects[o];\n\t\t\t\t\tif (object instanceof Object) {\n\t\t\t\t\t\tblob.objects[o] = _JSON.decode(_JSON.encode(object));\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tdata['arguments'][0] = states;\n\t\t\tdata['blob']         = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "d1b64d2d",
+				"memory": [
+					"_Emitter",
+					"_JSON"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -268,6 +286,7 @@
 				"chunk": "function() {\n\t\t\treturn lychee.assignunlink({}, this.model);\n\t\t}",
 				"type": "function",
 				"hash": "ce4bfdf4",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -281,6 +300,7 @@
 				"chunk": "function(callback, scope) {\n\n\t\t\tcallback = callback instanceof Function ? callback : null;\n\t\t\tscope    = scope !== undefined          ? scope    : this;\n\n\n\t\t\tlet filtered = [];\n\n\n\t\t\tif (callback !== null) {\n\n\t\t\t\tfor (let o in this.__objects) {\n\n\t\t\t\t\tlet object = this.__objects[o];\n\n\t\t\t\t\tif (callback.call(scope, object, o) === true) {\n\t\t\t\t\t\tfiltered.push(object);\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t}\n\n\n\t\t\treturn filtered;\n\n\t\t}",
 				"type": "function",
 				"hash": "71722dd1",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "callback instanceof Function ? callback : null",
@@ -307,6 +327,7 @@
 				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null) {\n\n\t\t\t\tlet object = this.__objects[id] || null;\n\t\t\t\tif (object !== null) {\n\t\t\t\t\treturn object;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
 				"type": "function",
 				"hash": "2df1e003",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof id === 'string' ? id : null",
@@ -332,6 +353,9 @@
 				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null) {\n\n\t\t\t\tlet object = this.__objects[id] || null;\n\t\t\t\tif (object !== null) {\n\n\t\t\t\t\tthis.__operations.push({\n\t\t\t\t\t\ttype:   'remove',\n\t\t\t\t\t\tid:     id,\n\t\t\t\t\t\tobject: object\n\t\t\t\t\t});\n\n\n\t\t\t\t\t_write_storage.call(this);\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "ef1ba480",
+				"memory": [
+					"_write_storage"
+				],
 				"parameters": [
 					{
 						"chunk": "typeof id === 'string' ? id : null",
@@ -357,6 +381,9 @@
 				"chunk": "function(id, object) {\n\n\t\t\tid     = typeof id === 'string'                    ? id     : null;\n\t\t\tobject = lychee.diff(this.model, object) === false ? object : null;\n\n\n\t\t\tif (id !== null && object !== null) {\n\n\t\t\t\tthis.__operations.push({\n\t\t\t\t\ttype:   'update',\n\t\t\t\t\tid:     id,\n\t\t\t\t\tobject: object\n\t\t\t\t});\n\n\n\t\t\t\t_write_storage.call(this);\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "5058dc47",
+				"memory": [
+					"_write_storage"
+				],
 				"parameters": [
 					{
 						"chunk": "typeof id === 'string'                    ? id     : null",
@@ -388,6 +415,7 @@
 				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null) {\n\n\t\t\t\tthis.id = id;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "da8aa1c6",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof id === 'string' ? id : null",
@@ -413,6 +441,9 @@
 				"chunk": "function(model) {\n\n\t\t\tmodel = model instanceof Object ? model : null;\n\n\n\t\t\tif (model !== null) {\n\n\t\t\t\tthis.model = _JSON.decode(_JSON.encode(model));\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "44d38950",
+				"memory": [
+					"_JSON"
+				],
 				"parameters": [
 					{
 						"chunk": "model instanceof Object ? model : null",
@@ -438,6 +469,7 @@
 				"chunk": "function(type) {\n\n\t\t\ttype = lychee.enumof(Composite.TYPE, type) ? type : null;\n\n\n\t\t\tif (type !== null) {\n\n\t\t\t\tthis.type = type;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "454cae67",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "lychee.enumof(Composite.TYPE, type) ? type : null",

@@ -21,7 +21,8 @@
 					"name": "states",
 					"type": "Object"
 				}
-			]
+			],
+			"memory": []
 		},
 		"states": {},
 		"properties": {
@@ -77,6 +78,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -94,6 +96,7 @@
 				"chunk": "function() {\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.delay !== 0)      states.delay   = this.delay;\n\t\t\tif (this.visible !== true) states.visible = this.visible;\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.effect.Visible',\n\t\t\t\t'arguments':   [ states ]\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "f729d9be",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -107,6 +110,7 @@
 				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t}",
 				"type": "function",
 				"hash": "04f47507",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -134,6 +138,7 @@
 				"chunk": "function(entity, clock, delta) {\n\n\t\t\tif (this.__start === null) {\n\t\t\t\tthis.__start = clock;\n\t\t\t}\n\n\n\t\t\tlet t = (clock - this.__start) / this.delay;\n\t\t\tif (t < 0) {\n\t\t\t\treturn true;\n\t\t\t} else if (this.__origin === null) {\n\t\t\t\tthis.__origin = entity.visible || false;\n\t\t\t}\n\n\n\t\t\tlet origin  = this.__origin;\n\t\t\tlet visible = this.visible;\n\n\t\t\tif (t <= 1) {\n\n\t\t\t\tentity.visible = origin;\n\n\n\t\t\t\treturn true;\n\n\t\t\t} else {\n\n\t\t\t\tentity.visible = visible;\n\n\n\t\t\t\treturn false;\n\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "07995d7f",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,

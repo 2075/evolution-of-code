@@ -59,6 +59,10 @@
 			"chunk": "function() {\n\n\t\tlet found = null;\n\t\tlet style = this.__canvas.style;\n\n\t\tfor (let v = 0, vl = _VENDORS.length; v < vl; v++) {\n\n\t\t\tlet vendor = _VENDORS[v];\n\t\t\tif (vendor + 'UserSelect' in style) {\n\t\t\t\tfound = vendor;\n\t\t\t\tbreak;\n\t\t\t}\n\n\t\t}\n\n\t\tif (found !== null) {\n\t\t\tstyle[found + 'UserSelect'] = 'none';\n\t\t} else {\n\t\t\tstyle['userSelect'] = 'none';\n\t\t}\n\n\t\tstyle['display'] = 'block';\n\n\n\t\tif (_body !== null) {\n\t\t\t_body.style['margin']   = '0px';\n\t\t\t_body.style['padding']  = '0px';\n\t\t\t_body.style['overflow'] = 'hidden';\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "8fe4c010",
+			"memory": [
+				"_VENDORS",
+				"_body"
+			],
 			"parameters": [],
 			"values": []
 		},
@@ -66,6 +70,7 @@
 			"chunk": "function(width, height) {\n\n\t\tthis.width  = typeof width === 'number'  ? width  : 1;\n\t\tthis.height = typeof height === 'number' ? height : 1;\n\n\t\tthis.__buffer = global.document.createElement('canvas');\n\t\tthis.__ctx    = this.__buffer.getContext('2d');\n\n\n\t\tthis.resize(this.width, this.height);\n\n\t}",
 			"type": "function",
 			"hash": "cb411b47",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -93,6 +98,10 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_body",
+				"_fix_css"
 			]
 		},
 		"states": {
@@ -218,6 +227,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -235,6 +245,7 @@
 				"chunk": "function() {\n\n\t\t\tlet canvas = this.__canvas;\n\t\t\tif (canvas.parentNode !== null) {\n\t\t\t\tcanvas.parentNode.removeChild(canvas);\n\t\t\t}\n\n\n\t\t\treturn true;\n\n\t\t}",
 				"type": "function",
 				"hash": "141050b0",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -248,6 +259,7 @@
 				"chunk": "function() {\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.alpha !== 1.0)                               states.alpha      = this.alpha;\n\t\t\tif (this.background !== '#000000')                    states.background = this.background;\n\t\t\tif (this.id.startsWith('lychee-Renderer-') === false) states.id         = this.id;\n\t\t\tif (this.width !== null)                              states.width      = this.width;\n\t\t\tif (this.height !== null)                             states.height     = this.height;\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.Renderer',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        null\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "09c6e721",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -261,6 +273,7 @@
 				"chunk": "function(alpha) {\n\n\t\t\talpha = typeof alpha === 'number' ? alpha : null;\n\n\n\t\t\tif (alpha !== null) {\n\n\t\t\t\tif (alpha >= 0 && alpha <= 1) {\n\n\t\t\t\t\tthis.alpha = alpha;\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "d1c8efaa",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof alpha === 'number' ? alpha : null",
@@ -286,6 +299,7 @@
 				"chunk": "function(color) {\n\n\t\t\tcolor = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : null;\n\n\n\t\t\tif (color !== null) {\n\n\t\t\t\tthis.background = color;\n\t\t\t\tthis.__canvas.style.backgroundColor = color;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "75c091b0",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "/(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : null",
@@ -317,6 +331,7 @@
 				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null) {\n\n\t\t\t\tthis.id = id;\n\t\t\t\tthis.__canvas.id = id;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "ba3a1680",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof id === 'string' ? id : null",
@@ -342,6 +357,7 @@
 				"chunk": "function(width) {\n\n\t\t\twidth = typeof width === 'number' ? width : null;\n\n\n\t\t\tif (width !== null) {\n\t\t\t\tthis.width = width | 0;\n\t\t\t} else {\n\t\t\t\tthis.width = global.innerWidth | 0;\n\t\t\t}\n\n\n\t\t\tthis.__canvas.width       = this.width;\n\t\t\tthis.__canvas.style.width = this.width + 'px';\n\t\t\tthis.offset.x             = this.__canvas.getBoundingClientRect().left;\n\n\n\t\t\treturn true;\n\n\t\t}",
 				"type": "function",
 				"hash": "d16c4437",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof width === 'number' ? width : null",
@@ -362,6 +378,7 @@
 				"chunk": "function(height) {\n\n\t\t\theight = typeof height === 'number' ? height : null;\n\n\n\t\t\tif (height !== null) {\n\t\t\t\tthis.height = height | 0;\n\t\t\t} else {\n\t\t\t\tthis.height = global.innerHeight | 0;\n\t\t\t}\n\n\n\t\t\tthis.__canvas.height       = this.height;\n\t\t\tthis.__canvas.style.height = this.height + 'px';\n\t\t\tthis.offset.y              = this.__canvas.getBoundingClientRect().top;\n\n\n\t\t\treturn true;\n\n\t\t}",
 				"type": "function",
 				"hash": "1c017f28",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof height === 'number' ? height : null",
@@ -382,6 +399,7 @@
 				"chunk": "function(buffer) {\n\n\t\t\tbuffer = buffer instanceof _Buffer ? buffer : null;\n\n\n\t\t\tif (buffer !== null) {\n\n\t\t\t\tbuffer.clear();\n\n\t\t\t} else {\n\n\t\t\t\tlet ctx = this.__ctx;\n\n\t\t\t\tctx.fillStyle = this.background;\n\t\t\t\tctx.fillRect(0, 0, this.width, this.height);\n\n\t\t\t}\n\n\n\t\t\treturn true;\n\n\t\t}",
 				"type": "function",
 				"hash": "48bda3b9",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "buffer instanceof _Buffer ? buffer : null",
@@ -402,6 +420,7 @@
 				"chunk": "function() {\n\n\t\t\treturn true;\n\n\t\t}",
 				"type": "function",
 				"hash": "41246716",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -415,6 +434,9 @@
 				"chunk": "function(width, height) {\n\n\t\t\twidth  = typeof width === 'number'  ? width  : 1;\n\t\t\theight = typeof height === 'number' ? height : 1;\n\n\n\t\t\treturn new _Buffer(width, height);\n\n\t\t}",
 				"type": "function",
 				"hash": "de8818ae",
+				"memory": [
+					"_Buffer"
+				],
 				"parameters": [
 					{
 						"chunk": "typeof width === 'number'  ? width  : 1",
@@ -440,6 +462,7 @@
 				"chunk": "function(buffer) {\n\n\t\t\tbuffer = buffer instanceof _Buffer ? buffer : null;\n\n\n\t\t\tif (buffer !== null) {\n\t\t\t\tthis.__ctx = buffer.__ctx;\n\t\t\t} else {\n\t\t\t\tthis.__ctx = this.__canvas.getContext('2d');\n\t\t\t}\n\n\n\t\t\treturn true;\n\n\t\t}",
 				"type": "function",
 				"hash": "4e33ccdc",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "buffer instanceof _Buffer ? buffer : null",
@@ -460,6 +483,7 @@
 				"chunk": "function(x, y, start, end, radius, color, background, lineWidth) {\n\n\t\t\tx          = x | 0;\n\t\t\ty          = y | 0;\n\t\t\tradius     = radius | 0;\n\t\t\tstart      = typeof start === 'number'              ? start     : 0;\n\t\t\tend        = typeof end === 'number'                ? end       : 2;\n\t\t\tcolor      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color     : '#000000';\n\t\t\tbackground = background === true;\n\t\t\tlineWidth  = typeof lineWidth === 'number'          ? lineWidth : 1;\n\n\n\t\t\tlet ctx = this.__ctx;\n\n\n\t\t\tctx.globalAlpha = this.alpha;\n\t\t\tctx.beginPath();\n\n\t\t\tctx.arc(\n\t\t\t\tx,\n\t\t\t\ty,\n\t\t\t\tradius,\n\t\t\t\tstart * _PI2,\n\t\t\t\tend   * _PI2\n\t\t\t);\n\n\t\t\tif (background === false) {\n\t\t\t\tctx.lineWidth   = lineWidth;\n\t\t\t\tctx.strokeStyle = color;\n\t\t\t\tctx.stroke();\n\t\t\t} else {\n\t\t\t\tctx.fillStyle   = color;\n\t\t\t\tctx.fill();\n\t\t\t}\n\n\t\t\tctx.closePath();\n\n\n\t\t\treturn true;\n\n\t\t}",
 				"type": "function",
 				"hash": "993894d2",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "x | 0",
@@ -528,6 +552,7 @@
 				"chunk": "function(x1, y1, x2, y2, color, background, lineWidth) {\n\n\t\t\tx1         = x1 | 0;\n\t\t\ty1         = y1 | 0;\n\t\t\tx2         = x2 | 0;\n\t\t\ty2         = y2 | 0;\n\t\t\tcolor      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';\n\t\t\tbackground = background === true;\n\t\t\tlineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;\n\n\n\t\t\tlet ctx = this.__ctx;\n\n\n\t\t\tctx.globalAlpha = this.alpha;\n\n\t\t\tif (background === false) {\n\t\t\t\tctx.lineWidth   = lineWidth;\n\t\t\t\tctx.strokeStyle = color;\n\t\t\t\tctx.strokeRect(x1, y1, x2 - x1, y2 - y1);\n\t\t\t} else {\n\t\t\t\tctx.fillStyle   = color;\n\t\t\t\tctx.fillRect(x1, y1, x2 - x1, y2 - y1);\n\t\t\t}\n\n\n\t\t\treturn true;\n\n\t\t}",
 				"type": "function",
 				"hash": "57850114",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "x1 | 0",
@@ -590,6 +615,7 @@
 				"chunk": "function(x1, y1, buffer, map) {\n\n\t\t\tx1     = x1 | 0;\n\t\t\ty1     = y1 | 0;\n\t\t\tbuffer = buffer instanceof _Buffer ? buffer : null;\n\t\t\tmap    = map instanceof Object     ? map    : null;\n\n\n\t\t\tif (buffer !== null) {\n\n\t\t\t\tlet ctx    = this.__ctx;\n\t\t\t\tlet width  = 0;\n\t\t\t\tlet height = 0;\n\t\t\t\tlet x      = 0;\n\t\t\t\tlet y      = 0;\n\t\t\t\tlet r      = 0;\n\n\n\t\t\t\tctx.globalAlpha = this.alpha;\n\n\t\t\t\tif (map === null) {\n\n\t\t\t\t\twidth  = buffer.width;\n\t\t\t\t\theight = buffer.height;\n\n\t\t\t\t\tif (width > 0 && height > 0) {\n\n\t\t\t\t\t\tctx.drawImage(\n\t\t\t\t\t\t\tbuffer.__buffer,\n\t\t\t\t\t\t\tx,\n\t\t\t\t\t\t\ty,\n\t\t\t\t\t\t\twidth,\n\t\t\t\t\t\t\theight,\n\t\t\t\t\t\t\tx1,\n\t\t\t\t\t\t\ty1,\n\t\t\t\t\t\t\twidth,\n\t\t\t\t\t\t\theight\n\t\t\t\t\t\t);\n\n\t\t\t\t\t}\n\n\t\t\t\t} else {\n\n\t\t\t\t\twidth  = map.w;\n\t\t\t\t\theight = map.h;\n\t\t\t\t\tx      = map.x;\n\t\t\t\t\ty      = map.y;\n\t\t\t\t\tr      = map.r || 0;\n\n\t\t\t\t\tif (r === 0) {\n\n\t\t\t\t\t\tif (width > 0 && height > 0) {\n\n\t\t\t\t\t\t\tctx.drawImage(\n\t\t\t\t\t\t\t\tbuffer.__buffer,\n\t\t\t\t\t\t\t\tx,\n\t\t\t\t\t\t\t\ty,\n\t\t\t\t\t\t\t\twidth,\n\t\t\t\t\t\t\t\theight,\n\t\t\t\t\t\t\t\tx1,\n\t\t\t\t\t\t\t\ty1,\n\t\t\t\t\t\t\t\twidth,\n\t\t\t\t\t\t\t\theight\n\t\t\t\t\t\t\t);\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tlet cos = Math.cos(r * Math.PI / 180);\n\t\t\t\t\t\tlet sin = Math.sin(r * Math.PI / 180);\n\n\t\t\t\t\t\tctx.setTransform(\n\t\t\t\t\t\t\tcos,\n\t\t\t\t\t\t\tsin,\n\t\t\t\t\t\t\t-sin,\n\t\t\t\t\t\t\tcos,\n\t\t\t\t\t\t\tx1,\n\t\t\t\t\t\t\ty1\n\t\t\t\t\t\t);\n\n\t\t\t\t\t\tctx.drawImage(\n\t\t\t\t\t\t\tbuffer.__buffer,\n\t\t\t\t\t\t\tx,\n\t\t\t\t\t\t\ty,\n\t\t\t\t\t\t\twidth,\n\t\t\t\t\t\t\theight,\n\t\t\t\t\t\t\t-1 / 2 * width,\n\t\t\t\t\t\t\t-1 / 2 * height,\n\t\t\t\t\t\t\twidth,\n\t\t\t\t\t\t\theight\n\t\t\t\t\t\t);\n\n\t\t\t\t\t\tctx.setTransform(\n\t\t\t\t\t\t\t1,\n\t\t\t\t\t\t\t0,\n\t\t\t\t\t\t\t0,\n\t\t\t\t\t\t\t1,\n\t\t\t\t\t\t\t0,\n\t\t\t\t\t\t\t0\n\t\t\t\t\t\t);\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn true;\n\n\t\t}",
 				"type": "function",
 				"hash": "bf35900e",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "x1 | 0",
@@ -628,6 +654,9 @@
 				"chunk": "function(x, y, radius, color, background, lineWidth) {\n\n\t\t\tx          = x | 0;\n\t\t\ty          = y | 0;\n\t\t\tradius     = radius | 0;\n\t\t\tcolor      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';\n\t\t\tbackground = background === true;\n\t\t\tlineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;\n\n\n\t\t\tlet ctx = this.__ctx;\n\n\n\t\t\tctx.globalAlpha = this.alpha;\n\t\t\tctx.beginPath();\n\n\t\t\tctx.arc(\n\t\t\t\tx,\n\t\t\t\ty,\n\t\t\t\tradius,\n\t\t\t\t0,\n\t\t\t\t_PI2\n\t\t\t);\n\n\n\t\t\tif (background === false) {\n\t\t\t\tctx.lineWidth   = lineWidth;\n\t\t\t\tctx.strokeStyle = color;\n\t\t\t\tctx.stroke();\n\t\t\t} else {\n\t\t\t\tctx.fillStyle   = color;\n\t\t\t\tctx.fill();\n\t\t\t}\n\n\t\t\tctx.closePath();\n\n\n\t\t\treturn true;\n\n\t\t}",
 				"type": "function",
 				"hash": "b5f7ab35",
+				"memory": [
+					"_PI2"
+				],
 				"parameters": [
 					{
 						"chunk": "x | 0",
@@ -684,6 +713,7 @@
 				"chunk": "function(x1, y1, x2, y2, color, lineWidth) {\n\n\t\t\tx1        = x1 | 0;\n\t\t\ty1        = y1 | 0;\n\t\t\tx2        = x2 | 0;\n\t\t\ty2        = y2 | 0;\n\t\t\tcolor     = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';\n\t\t\tlineWidth = typeof lineWidth === 'number' ? lineWidth : 1;\n\n\n\t\t\tlet ctx = this.__ctx;\n\n\n\t\t\tctx.globalAlpha = this.alpha;\n\t\t\tctx.beginPath();\n\t\t\tctx.moveTo(x1, y1);\n\t\t\tctx.lineTo(x2, y2);\n\n\t\t\tctx.lineWidth   = lineWidth;\n\t\t\tctx.strokeStyle = color;\n\t\t\tctx.stroke();\n\n\t\t\tctx.closePath();\n\n\n\t\t\treturn true;\n\n\t\t}",
 				"type": "function",
 				"hash": "b46297a8",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "x1 | 0",
@@ -740,6 +770,7 @@
 				"chunk": "function(x1, y1, x2, y2, x3, y3, color, background, lineWidth) {\n\n\t\t\tx1         = x1 | 0;\n\t\t\ty1         = y1 | 0;\n\t\t\tx2         = x2 | 0;\n\t\t\ty2         = y2 | 0;\n\t\t\tx3         = x3 | 0;\n\t\t\ty3         = y3 | 0;\n\t\t\tcolor      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';\n\t\t\tbackground = background === true;\n\t\t\tlineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;\n\n\n\t\t\tlet ctx = this.__ctx;\n\n\n\t\t\tctx.globalAlpha = this.alpha;\n\t\t\tctx.beginPath();\n\t\t\tctx.moveTo(x1, y1);\n\t\t\tctx.lineTo(x2, y2);\n\t\t\tctx.lineTo(x3, y3);\n\t\t\tctx.lineTo(x1, y1);\n\n\t\t\tif (background === false) {\n\t\t\t\tctx.lineWidth   = lineWidth;\n\t\t\t\tctx.strokeStyle = color;\n\t\t\t\tctx.stroke();\n\t\t\t} else {\n\t\t\t\tctx.fillStyle   = color;\n\t\t\t\tctx.fill();\n\t\t\t}\n\n\t\t\tctx.closePath();\n\n\n\t\t\treturn true;\n\n\t\t}",
 				"type": "function",
 				"hash": "a8ed6e14",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "x1 | 0",
@@ -814,6 +845,7 @@
 				"chunk": "function(points, x1, y1) {\n\n\t\t\tpoints = typeof points === 'number' ? points : 0;\n\t\t\tx1     = x1 | 0;\n\t\t\ty1     = y1 | 0;\n\n\n\t\t\tlet l = arguments.length;\n\n\t\t\tif (points > 3) {\n\n\t\t\t\tlet optargs = l - (points * 2) - 1;\n\t\t\t\tlet color, background, lineWidth;\n\n\t\t\t\tif (optargs === 3) {\n\n\t\t\t\t\tcolor      = arguments[l - 3];\n\t\t\t\t\tbackground = arguments[l - 2];\n\t\t\t\t\tlineWidth  = arguments[l - 1];\n\n\t\t\t\t} else if (optargs === 2) {\n\n\t\t\t\t\tcolor      = arguments[l - 2];\n\t\t\t\t\tbackground = arguments[l - 1];\n\n\t\t\t\t} else if (optargs === 1) {\n\n\t\t\t\t\tcolor      = arguments[l - 1];\n\n\t\t\t\t}\n\n\n\t\t\t\tcolor      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';\n\t\t\t\tbackground = background === true;\n\t\t\t\tlineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;\n\n\n\t\t\t\tlet ctx = this.__ctx;\n\n\n\t\t\t\tctx.globalAlpha = this.alpha;\n\t\t\t\tctx.beginPath();\n\t\t\t\tctx.moveTo(x1, y1);\n\n\t\t\t\tfor (let p = 1; p < points; p++) {\n\n\t\t\t\t\tctx.lineTo(\n\t\t\t\t\t\targuments[1 + p * 2]     | 0,\n\t\t\t\t\t\targuments[1 + p * 2 + 1] | 0\n\t\t\t\t\t);\n\n\t\t\t\t}\n\n\t\t\t\tctx.lineTo(x1, y1);\n\n\t\t\t\tif (background === false) {\n\t\t\t\t\tctx.lineWidth   = lineWidth;\n\t\t\t\t\tctx.strokeStyle = color;\n\t\t\t\t\tctx.stroke();\n\t\t\t\t} else {\n\t\t\t\t\tctx.fillStyle   = color;\n\t\t\t\t\tctx.fill();\n\t\t\t\t}\n\n\t\t\t\tctx.closePath();\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "ae54f961",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof points === 'number' ? points : 0",
@@ -851,6 +883,7 @@
 				"chunk": "function(x1, y1, texture, map) {\n\n\t\t\tx1      = x1 | 0;\n\t\t\ty1      = y1 | 0;\n\t\t\ttexture = texture instanceof Texture ? texture : null;\n\t\t\tmap     = map instanceof Object      ? map     : null;\n\n\n\t\t\tif (texture !== null && texture.buffer !== null) {\n\n\t\t\t\tlet ctx    = this.__ctx;\n\t\t\t\tlet width  = 0;\n\t\t\t\tlet height = 0;\n\t\t\t\tlet x      = 0;\n\t\t\t\tlet y      = 0;\n\t\t\t\tlet r      = 0;\n\n\n\t\t\t\tctx.globalAlpha = this.alpha;\n\n\t\t\t\tif (map === null) {\n\n\t\t\t\t\twidth  = texture.width;\n\t\t\t\t\theight = texture.height;\n\n\t\t\t\t\tctx.drawImage(\n\t\t\t\t\t\ttexture.buffer,\n\t\t\t\t\t\tx,\n\t\t\t\t\t\ty,\n\t\t\t\t\t\twidth,\n\t\t\t\t\t\theight,\n\t\t\t\t\t\tx1,\n\t\t\t\t\t\ty1,\n\t\t\t\t\t\twidth,\n\t\t\t\t\t\theight\n\t\t\t\t\t);\n\n\t\t\t\t} else {\n\n\t\t\t\t\twidth  = map.w;\n\t\t\t\t\theight = map.h;\n\t\t\t\t\tx      = map.x;\n\t\t\t\t\ty      = map.y;\n\t\t\t\t\tr      = map.r || 0;\n\n\t\t\t\t\tif (r === 0) {\n\n\t\t\t\t\t\tctx.drawImage(\n\t\t\t\t\t\t\ttexture.buffer,\n\t\t\t\t\t\t\tx,\n\t\t\t\t\t\t\ty,\n\t\t\t\t\t\t\twidth,\n\t\t\t\t\t\t\theight,\n\t\t\t\t\t\t\tx1,\n\t\t\t\t\t\t\ty1,\n\t\t\t\t\t\t\twidth,\n\t\t\t\t\t\t\theight\n\t\t\t\t\t\t);\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tlet cos = Math.cos(r * Math.PI / 180);\n\t\t\t\t\t\tlet sin = Math.sin(r * Math.PI / 180);\n\n\t\t\t\t\t\tctx.setTransform(\n\t\t\t\t\t\t\tcos,\n\t\t\t\t\t\t\tsin,\n\t\t\t\t\t\t\t-sin,\n\t\t\t\t\t\t\tcos,\n\t\t\t\t\t\t\tx1,\n\t\t\t\t\t\t\ty1\n\t\t\t\t\t\t);\n\n\t\t\t\t\t\tctx.drawImage(\n\t\t\t\t\t\t\ttexture.buffer,\n\t\t\t\t\t\t\tx,\n\t\t\t\t\t\t\ty,\n\t\t\t\t\t\t\twidth,\n\t\t\t\t\t\t\theight,\n\t\t\t\t\t\t\t-1 / 2 * width,\n\t\t\t\t\t\t\t-1 / 2 * height,\n\t\t\t\t\t\t\twidth,\n\t\t\t\t\t\t\theight\n\t\t\t\t\t\t);\n\n\t\t\t\t\t\tctx.setTransform(\n\t\t\t\t\t\t\t1,\n\t\t\t\t\t\t\t0,\n\t\t\t\t\t\t\t0,\n\t\t\t\t\t\t\t1,\n\t\t\t\t\t\t\t0,\n\t\t\t\t\t\t\t0\n\t\t\t\t\t\t);\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "c0f31185",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "x1 | 0",
@@ -894,6 +927,7 @@
 				"chunk": "function(x1, y1, text, font, center) {\n\n\t\t\tx1     = x1 | 0;\n\t\t\ty1     = y1 | 0;\n\t\t\ttext   = typeof text === 'string' ? text : null;\n\t\t\tfont   = font instanceof Font     ? font : null;\n\t\t\tcenter = center === true;\n\n\n\t\t\tif (text !== null && font !== null) {\n\n\t\t\t\tif (center === true) {\n\n\t\t\t\t\tlet dim = font.measure(text);\n\n\t\t\t\t\tx1 = (x1 - dim.realwidth / 2) | 0;\n\t\t\t\t\ty1 = (y1 - (dim.realheight - font.baseline) / 2) | 0;\n\n\t\t\t\t}\n\n\n\t\t\t\ty1 = (y1 - font.baseline / 2) | 0;\n\n\n\t\t\t\tlet margin  = 0;\n\t\t\t\tlet texture = font.texture;\n\t\t\t\tif (texture !== null && texture.buffer !== null) {\n\n\t\t\t\t\tlet ctx = this.__ctx;\n\n\n\t\t\t\t\tctx.globalAlpha = this.alpha;\n\n\t\t\t\t\tfor (let t = 0, l = text.length; t < l; t++) {\n\n\t\t\t\t\t\tlet chr = font.measure(text[t]);\n\n\t\t\t\t\t\tctx.drawImage(\n\t\t\t\t\t\t\ttexture.buffer,\n\t\t\t\t\t\t\tchr.x,\n\t\t\t\t\t\t\tchr.y,\n\t\t\t\t\t\t\tchr.width,\n\t\t\t\t\t\t\tchr.height,\n\t\t\t\t\t\t\tx1 + margin - font.spacing,\n\t\t\t\t\t\t\ty1,\n\t\t\t\t\t\t\tchr.width,\n\t\t\t\t\t\t\tchr.height\n\t\t\t\t\t\t);\n\n\t\t\t\t\t\tmargin = margin + chr.realwidth + font.kerning;\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "2bf8b1a6",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "x1 | 0",

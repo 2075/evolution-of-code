@@ -123,6 +123,12 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_FONT",
+				"_Label",
+				"_Layer",
+				"_Select"
 			]
 		},
 		"states": {
@@ -316,6 +322,7 @@
 				"chunk": "function(blob) {\n\n\t\t\tlet font = lychee.deserialize(blob.font);\n\t\t\tif (font !== null) {\n\t\t\t\tthis.setFont(font);\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "814dbb80",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -333,6 +340,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Layer.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.Menu';\n\n\t\t\tlet states = data['arguments'][0];\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.label !== 'MENU')                 states.label   = this.label;\n\t\t\tif (this.helpers.length !== 0)             states.helpers = this.helpers.slice(0, this.helpers.length);\n\t\t\tif (this.state !== 'default')              states.state   = this.state;\n\t\t\tif (this.value !== 'Settings')             states.value   = this.value;\n\t\t\tif (this.options.join(',') !== 'Settings') states.options = this.options.slice(0, this.options.length);\n\n\n\t\t\tif (this.font !== null) blob.font = lychee.serialize(this.font);\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "2c657ad9",
+				"memory": [
+					"_Layer"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -346,6 +356,9 @@
 				"chunk": "function(clock, delta) {\n\n\t\t\tlet helpers = this.__helpers;\n\t\t\tfor (let h = 0, hl = helpers.length; h < hl; h++) {\n\t\t\t\thelpers[h].update(clock, delta);\n\t\t\t}\n\n\n\t\t\t_Layer.prototype.update.call(this, clock, delta);\n\n\t\t}",
 				"type": "function",
 				"hash": "02e59d22",
+				"memory": [
+					"_Layer"
+				],
 				"parameters": [
 					{
 						"chunk": null,
@@ -368,6 +381,9 @@
 				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tif (this.visible === false) return;\n\n\n\t\t\tlet alpha    = this.alpha;\n\t\t\tlet helpers  = this.__helpers;\n\t\t\tlet position = this.position;\n\n\n\t\t\tlet x  = position.x + offsetX;\n\t\t\tlet y  = position.y + offsetY;\n\t\t\tlet x1 = x - this.width  / 2;\n\t\t\tlet y1 = y - this.height / 2;\n\t\t\tlet x2 = x + this.width  / 2;\n\t\t\tlet y2 = y + this.height / 2;\n\n\n\t\t\trenderer.drawBox(\n\t\t\t\tx1,\n\t\t\t\ty1,\n\t\t\t\tx2,\n\t\t\t\ty2,\n\t\t\t\t'#363f3e',\n\t\t\t\ttrue\n\t\t\t);\n\n\t\t\trenderer.drawBox(\n\t\t\t\tx2 - 48,\n\t\t\t\ty1 + 20,\n\t\t\t\tx2 - 16,\n\t\t\t\ty1 + 22,\n\t\t\t\t'#ffffff',\n\t\t\t\ttrue\n\t\t\t);\n\n\t\t\trenderer.drawBox(\n\t\t\t\tx2 - 48,\n\t\t\t\ty1 + 31,\n\t\t\t\tx2 - 16,\n\t\t\t\ty1 + 33,\n\t\t\t\t'#ffffff',\n\t\t\t\ttrue\n\t\t\t);\n\n\t\t\trenderer.drawBox(\n\t\t\t\tx2 - 48,\n\t\t\t\ty1 + 42,\n\t\t\t\tx2 - 16,\n\t\t\t\ty1 + 44,\n\t\t\t\t'#ffffff',\n\t\t\t\ttrue\n\t\t\t);\n\n\n\t\t\tfor (let h = 0, hl = helpers.length; h < hl; h++) {\n\n\t\t\t\thelpers[h].render(\n\t\t\t\t\trenderer,\n\t\t\t\t\tx,\n\t\t\t\t\ty\n\t\t\t\t);\n\n\t\t\t}\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(alpha);\n\t\t\t}\n\n\n\t\t\tif (alpha !== 0) {\n\t\t\t\t_Layer.prototype.render.call(this, renderer, offsetX, offsetY);\n\t\t\t}\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(1.0);\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "7e32aa88",
+				"memory": [
+					"_Layer"
+				],
 				"parameters": [
 					{
 						"chunk": null,
@@ -395,6 +411,7 @@
 				"chunk": "function(font) {\n\n\t\t\tfont = font instanceof Font ? font : null;\n\n\n\t\t\tif (font !== null) {\n\n\t\t\t\tthis.getEntity('@label').setFont(font);\n\t\t\t\tthis.font = font;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "b5ff0b4e",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "font instanceof Font ? font : null",
@@ -420,6 +437,9 @@
 				"chunk": "function(helpers) {\n\n\t\t\thelpers = helpers instanceof Array ? helpers : null;\n\n\n\t\t\tif (helpers !== null) {\n\n\t\t\t\tthis.helpers = helpers.map(function(helper) {\n\t\t\t\t\treturn '' + helper;\n\t\t\t\t});\n\n\n\t\t\t\tthis.__helpers = [];\n\n\t\t\t\tfor (let h = 0, hl = this.helpers.length; h < hl; h++) {\n\n\t\t\t\t\tthis.__helpers.push(new _Helper({\n\t\t\t\t\t\twidth:  32,\n\t\t\t\t\t\theight: 32,\n\t\t\t\t\t\tlabel:  null,\n\t\t\t\t\t\tvalue:  this.helpers[h],\n\t\t\t\t\t\tposition: {\n\t\t\t\t\t\t\tx: 0,\n\t\t\t\t\t\t\ty: (this.height / 2) - 16 - 32 * hl + 32 * h + 16 * h\n\t\t\t\t\t\t}\n\t\t\t\t\t}));\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "99ec5012",
+				"memory": [
+					"_Helper"
+				],
 				"parameters": [
 					{
 						"chunk": "helpers instanceof Array ? helpers : null",
@@ -445,6 +465,7 @@
 				"chunk": "function(label) {\n\n\t\t\tlabel = typeof label === 'string' ? label : null;\n\n\n\t\t\tif (label !== null) {\n\n\t\t\t\tthis.getEntity('@label').setValue(label);\n\t\t\t\tthis.label = label;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "4c7b0e33",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof label === 'string' ? label : null",
@@ -470,6 +491,7 @@
 				"chunk": "function(options) {\n\n\t\t\toptions = options instanceof Array ? options : null;\n\n\n\t\t\tif (options !== null) {\n\n\t\t\t\tthis.options = options.map(function(option) {\n\t\t\t\t\treturn '' + option;\n\t\t\t\t});\n\n\t\t\t\tthis.getEntity('@select').setOptions(this.options);\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "a2baf79c",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "options instanceof Array ? options : null",
@@ -495,6 +517,13 @@
 				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null && id !== this.state && this.states[id] !== undefined) {\n\n\t\t\t\tif (id === 'active') {\n\n\t\t\t\t\tthis.removeEffects();\n\n\t\t\t\t\tthis.addEffect(new _Alpha({\n\t\t\t\t\t\ttype:     _Alpha.TYPE.easeout,\n\t\t\t\t\t\tdelay:    300,\n\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\talpha:    1.0\n\t\t\t\t\t}));\n\n\t\t\t\t\tthis.addEffect(new _Position({\n\t\t\t\t\t\ttype:     _Position.TYPE.easeout,\n\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\tposition: {\n\t\t\t\t\t\t\tx: this.__boundary + 70\n\t\t\t\t\t\t}\n\t\t\t\t\t}));\n\n\t\t\t\t\tthis.addEffect(new _Width({\n\t\t\t\t\t\ttype:     _Width.TYPE.easeout,\n\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\twidth:    144\n\t\t\t\t\t}));\n\n\t\t\t\t\tthis.getEntity('@label').addEffect(new _Visible({\n\t\t\t\t\t\tdelay:   300,\n\t\t\t\t\t\tvisible: true\n\t\t\t\t\t}));\n\n\t\t\t\t\tthis.getEntity('@select').addEffect(new _Visible({\n\t\t\t\t\t\tdelay:   300,\n\t\t\t\t\t\tvisible: true\n\t\t\t\t\t}));\n\n\t\t\t\t} else {\n\n\t\t\t\t\tthis.removeEffects();\n\n\t\t\t\t\tthis.addEffect(new _Alpha({\n\t\t\t\t\t\ttype:     _Alpha.TYPE.easeout,\n\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\talpha:    0.0\n\t\t\t\t\t}));\n\n\t\t\t\t\tthis.addEffect(new _Position({\n\t\t\t\t\t\ttype:     _Position.TYPE.easeout,\n\t\t\t\t\t\tdelay:    300,\n\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\tposition: {\n\t\t\t\t\t\t\tx: this.__boundary + 30\n\t\t\t\t\t\t}\n\t\t\t\t\t}));\n\n\t\t\t\t\tthis.addEffect(new _Width({\n\t\t\t\t\t\ttype:     _Width.TYPE.easeout,\n\t\t\t\t\t\tdelay:    300,\n\t\t\t\t\t\tduration: 300,\n\t\t\t\t\t\twidth:     64\n\t\t\t\t\t}));\n\n\t\t\t\t\tthis.getEntity('@label').addEffect(new _Visible({\n\t\t\t\t\t\tdelay:   300,\n\t\t\t\t\t\tvisible: false\n\t\t\t\t\t}));\n\n\t\t\t\t\tthis.getEntity('@select').addEffect(new _Visible({\n\t\t\t\t\t\tdelay:   300,\n\t\t\t\t\t\tvisible: false\n\t\t\t\t\t}));\n\n\t\t\t\t}\n\n\n\t\t\t\tthis.addEffect(new _Event({\n\t\t\t\t\tdelay: 600,\n\t\t\t\t\tevent: 'relayout'\n\t\t\t\t}));\n\n\n\t\t\t\tthis.state = id;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "581bde92",
+				"memory": [
+					"_Alpha",
+					"_Event",
+					"_Position",
+					"_Visible",
+					"_Width"
+				],
 				"parameters": [
 					{
 						"chunk": "typeof id === 'string' ? id : null",
@@ -520,6 +549,7 @@
 				"chunk": "function(value) {\n\n\t\t\tvalue = typeof value === 'string' ? value : null;\n\n\n\t\t\tif (value !== null) {\n\n\t\t\t\tlet oldvalue = this.value;\n\t\t\t\tif (oldvalue !== value) {\n\n\t\t\t\t\tthis.value = value;\n\n\t\t\t\t\tlet select = this.getEntity('@select');\n\t\t\t\t\tif (select.value !== value) {\n\t\t\t\t\t\tselect.setValue(value);\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "14922e05",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof value === 'string' ? value : null",

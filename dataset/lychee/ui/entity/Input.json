@@ -33,6 +33,7 @@
 			"chunk": "function(renderer) {\n\n\t\tlet font = this.font;\n\t\tif (font !== null && font.texture !== null) {\n\n\t\t\tif (this.__buffer !== null) {\n\t\t\t\tthis.__buffer.resize(this.width - 16, this.height);\n\t\t\t} else {\n\t\t\t\tthis.__buffer = renderer.createBuffer(this.width - 16, this.height);\n\t\t\t}\n\n\n\t\t\trenderer.clear(this.__buffer);\n\t\t\trenderer.setBuffer(this.__buffer);\n\t\t\trenderer.setAlpha(1.0);\n\n\n\t\t\tlet lh     = font.lineheight;\n\t\t\tlet buffer = this.__buffer;\n\t\t\tlet text   = this.__value;\n\t\t\tlet cur    = this.__cursor.map;\n\t\t\tlet dim_x  = font.measure(text).width;\n\t\t\tif (dim_x > buffer.width) {\n\n\t\t\t\trenderer.drawText(\n\t\t\t\t\tbuffer.width - dim_x,\n\t\t\t\t\tlh / 2,\n\t\t\t\t\ttext,\n\t\t\t\t\tfont,\n\t\t\t\t\tfalse\n\t\t\t\t);\n\n\t\t\t\tcur.x = buffer.width + cur.w / 2;\n\n\t\t\t} else {\n\n\t\t\t\trenderer.drawText(\n\t\t\t\t\t0,\n\t\t\t\t\tlh / 2,\n\t\t\t\t\ttext,\n\t\t\t\t\tfont,\n\t\t\t\t\tfalse\n\t\t\t\t);\n\n\t\t\t\tcur.x = dim_x;\n\n\t\t\t}\n\n\n\t\t\trenderer.setBuffer(null);\n\t\t\tthis.__isDirty = false;\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "459d27a3",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -64,6 +65,10 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Entity",
+				"_FONT"
 			]
 		},
 		"states": {
@@ -263,6 +268,7 @@
 				"chunk": "function(blob) {\n\n\t\t\tlet font = lychee.deserialize(blob.font);\n\t\t\tif (font !== null) {\n\t\t\t\tthis.setFont(font);\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "814dbb80",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -280,6 +286,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Entity.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.ui.entity.Input';\n\n\t\t\tlet states = data['arguments'][0];\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.max !== Infinity)             states.max   = this.max;\n\t\t\tif (this.min !== 0)                    states.min   = this.min;\n\t\t\tif (this.type !== Composite.TYPE.text) states.type  = this.type;\n\t\t\tif (this.value !== null)               states.value = this.value;\n\n\n\t\t\tif (this.font !== null) blob.font = lychee.serialize(this.font);\n\n\n\t\t\tdata['blob'] = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "ab3ed22d",
+				"memory": [
+					"_Entity"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -293,6 +302,9 @@
 				"chunk": "function(clock, delta) {\n\n\t\t\tlet pulse = this.__pulse;\n\t\t\tif (pulse.active === true) {\n\n\t\t\t\tif (pulse.start === null) {\n\t\t\t\t\tpulse.start = clock;\n\t\t\t\t}\n\n\t\t\t\tlet pt = (clock - pulse.start) / pulse.duration;\n\t\t\t\tif (pt <= 1) {\n\t\t\t\t\tpulse.alpha = (1 - pt);\n\t\t\t\t} else {\n\t\t\t\t\tpulse.alpha  = 0.0;\n\t\t\t\t\tpulse.active = false;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tlet cursor = this.__cursor;\n\t\t\tif (cursor.active === true) {\n\n\t\t\t\tif (cursor.start === null) {\n\t\t\t\t\tcursor.start = clock;\n\t\t\t\t}\n\n\n\t\t\t\tlet ct = (clock - cursor.start) / cursor.duration;\n\t\t\t\tif (ct <= 1) {\n\t\t\t\t\tcursor.alpha = cursor.pingpong === true ? (1 - ct) : ct;\n\t\t\t\t} else {\n\t\t\t\t\tcursor.start    = clock;\n\t\t\t\t\tcursor.pingpong = !cursor.pingpong;\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\t_Entity.prototype.update.call(this, clock, delta);\n\n\t\t}",
 				"type": "function",
 				"hash": "e58ea5bb",
+				"memory": [
+					"_Entity"
+				],
 				"parameters": [
 					{
 						"chunk": null,
@@ -315,6 +327,9 @@
 				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tif (this.visible === false) return;\n\n\n\t\t\tlet alpha    = this.alpha;\n\t\t\tlet position = this.position;\n\t\t\tlet x        = position.x + offsetX;\n\t\t\tlet y        = position.y + offsetY;\n\t\t\tlet hwidth   = (this.width  - 2) / 2;\n\t\t\tlet hheight  = (this.height - 2) / 2;\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(alpha);\n\t\t\t}\n\n\t\t\trenderer.drawBox(\n\t\t\t\tx - hwidth,\n\t\t\t\ty - hheight,\n\t\t\t\tx + hwidth,\n\t\t\t\ty + hheight,\n\t\t\t\tthis.state === 'active' ? '#32afe5' : '#545454',\n\t\t\t\tfalse,\n\t\t\t\t2\n\t\t\t);\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(1.0);\n\t\t\t}\n\n\n\t\t\tif (this.__isDirty === true) {\n\t\t\t\t_render_buffer.call(this, renderer);\n\t\t\t}\n\n\n\t\t\tlet cursor = this.__cursor;\n\t\t\tif (cursor.active === true) {\n\n\t\t\t\tlet map = cursor.map;\n\t\t\t\tlet cx1 = x - hwidth  + map.x + map.w / 2;\n\t\t\t\tlet cy1 = y - hheight + 8;\n\n\n\t\t\t\trenderer.setAlpha(cursor.alpha);\n\n\t\t\t\trenderer.drawBox(\n\t\t\t\t\tcx1,\n\t\t\t\t\tcy1,\n\t\t\t\t\tcx1 + map.w,\n\t\t\t\t\tcy1 + map.h,\n\t\t\t\t\t'#32afe5',\n\t\t\t\t\ttrue\n\t\t\t\t);\n\n\t\t\t\trenderer.setAlpha(1.0);\n\n\t\t\t}\n\n\n\t\t\tlet pulse = this.__pulse;\n\t\t\tif (pulse.active === true) {\n\n\t\t\t\trenderer.setAlpha(pulse.alpha);\n\n\t\t\t\trenderer.drawBox(\n\t\t\t\t\tx - hwidth,\n\t\t\t\t\ty - hheight,\n\t\t\t\t\tx + hwidth,\n\t\t\t\t\ty + hheight,\n\t\t\t\t\t'#32afe5',\n\t\t\t\t\ttrue\n\t\t\t\t);\n\n\t\t\t\trenderer.setAlpha(1.0);\n\n\t\t\t}\n\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(alpha);\n\t\t\t}\n\n\t\t\tif (this.__buffer !== null) {\n\n\t\t\t\trenderer.drawBuffer(\n\t\t\t\t\tx - hwidth + 8,\n\t\t\t\t\ty - hheight,\n\t\t\t\t\tthis.__buffer\n\t\t\t\t);\n\n\t\t\t}\n\n\t\t\tif (alpha !== 1) {\n\t\t\t\trenderer.setAlpha(1.0);\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "4570be4c",
+				"memory": [
+					"_render_buffer"
+				],
 				"parameters": [
 					{
 						"chunk": null,
@@ -342,6 +357,7 @@
 				"chunk": "function(font) {\n\n\t\t\tfont = font instanceof Font ? font : null;\n\n\n\t\t\tif (font !== null) {\n\n\t\t\t\tthis.font = font;\n\n\t\t\t\tthis.__cursor.map.w = font.measure('_').realwidth;\n\t\t\t\tthis.__cursor.map.h = font.measure('_').realheight;\n\t\t\t\tthis.__isDirty      = true;\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "e1f5e64d",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "font instanceof Font ? font : null",
@@ -367,6 +383,7 @@
 				"chunk": "function(max) {\n\n\t\t\tmax = typeof max === 'number' ? max : null;\n\n\n\t\t\tif (max !== null) {\n\n\t\t\t\tthis.max = max;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "6aec857d",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof max === 'number' ? max : null",
@@ -392,6 +409,7 @@
 				"chunk": "function(min) {\n\n\t\t\tmin = typeof min === 'number' ? min : null;\n\n\n\t\t\tif (min !== null) {\n\n\t\t\t\tthis.min = min;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "efffbb93",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof min === 'number' ? min : null",
@@ -417,6 +435,9 @@
 				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null) {\n\n\t\t\t\tlet result = _Entity.prototype.setState.call(this, id);\n\t\t\t\tif (result === true) {\n\n\t\t\t\t\tlet cursor = this.__cursor;\n\t\t\t\t\tlet pulse  = this.__pulse;\n\n\n\t\t\t\t\tif (id === 'active') {\n\n\t\t\t\t\t\tcursor.start  = null;\n\t\t\t\t\t\tcursor.active = true;\n\n\t\t\t\t\t\tpulse.alpha   = 1.0;\n\t\t\t\t\t\tpulse.start   = null;\n\t\t\t\t\t\tpulse.active  = true;\n\n\t\t\t\t\t} else {\n\n\t\t\t\t\t\tcursor.active = false;\n\n\t\t\t\t\t}\n\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "998628dc",
+				"memory": [
+					"_Entity"
+				],
 				"parameters": [
 					{
 						"chunk": "typeof id === 'string' ? id : null",
@@ -442,6 +463,7 @@
 				"chunk": "function(type) {\n\n\t\t\ttype = lychee.enumof(Composite.TYPE, type) ? type : null;\n\n\n\t\t\tif (type !== null) {\n\n\t\t\t\tthis.type = type;\n\n\t\t\t\tif (type === Composite.TYPE.text) {\n\t\t\t\t\tthis.setValue('' + this.value);\n\t\t\t\t} else if (type === Composite.TYPE.number) {\n\t\t\t\t\tthis.setValue(typeof this.value === 'string' ? parseInt(this.value, 10) : this.value);\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "0106d339",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "lychee.enumof(Composite.TYPE, type) ? type : null",
@@ -467,6 +489,7 @@
 				"chunk": "function(value) {\n\n\t\t\tvalue = (typeof value === 'string' || typeof value === 'number') ? value : null;\n\n\n\t\t\tif (value !== null) {\n\n\t\t\t\tlet type = this.type;\n\t\t\t\tif (type === Composite.TYPE.text && typeof value === 'string') {\n\n\t\t\t\t\tif (this.value !== value && value.length >= this.min && value.length <= this.max) {\n\n\t\t\t\t\t\tthis.value = value;\n\n\t\t\t\t\t\tthis.__value   = value + '';\n\t\t\t\t\t\tthis.__isDirty = true;\n\n\t\t\t\t\t\treturn true;\n\n\t\t\t\t\t}\n\n\t\t\t\t} else if (type === Composite.TYPE.number && typeof value === 'number' && !isNaN(value)) {\n\n\t\t\t\t\tif (this.value !== value && value >= this.min && value <= this.max) {\n\n\t\t\t\t\t\tthis.value = value;\n\n\t\t\t\t\t\tthis.__value   = value + '';\n\t\t\t\t\t\tthis.__isDirty = true;\n\n\t\t\t\t\t\treturn true;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "3ed3d661",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,

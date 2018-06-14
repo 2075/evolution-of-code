@@ -13,6 +13,7 @@
 			"chunk": "function(effect) {\n\n\t\tif (effect instanceof Object) {\n\n\t\t\tif (\n\t\t\t\ttypeof effect.update === 'function'\n\t\t\t\t&& typeof effect.render === 'function'\n\t\t\t) {\n\t\t\t\treturn true;\n\t\t\t}\n\n\t\t}\n\n\n\t\treturn false;\n\n\t}",
 			"type": "function",
 			"hash": "a333e882",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -37,6 +38,7 @@
 			"chunk": "function(a, b) {\n\n\t\tlet dx  = Math.sqrt(Math.pow(b.position.x - a.position.x, 2));\n\t\tlet dy  = Math.sqrt(Math.pow(b.position.y - a.position.y, 2));\n\t\tlet dz  = Math.sqrt(Math.pow(b.position.z - a.position.z, 2));\n\n\t\tlet rxy = 0;\n\t\tlet rxz = 0;\n\n\t\tif (a.shape === Composite.SHAPE.sphere) {\n\t\t\trxy += a.radius;\n\t\t\trxz += a.radius;\n\t\t}\n\n\t\tif (b.shape === Composite.SHAPE.sphere) {\n\t\t\trxy += b.radius;\n\t\t\trxz += b.radius;\n\t\t}\n\n\t\treturn ((dx + dy) <= rxy && (dx + dz) <= rxz);\n\n\t}",
 			"type": "function",
 			"hash": "9025213e",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -61,6 +63,7 @@
 			"chunk": "function(a, b) {\n\n\t\tlet r  = a.radius;\n\t\tlet hw = b.width  / 2;\n\t\tlet hh = b.height / 2;\n\t\tlet hd = b.depth  / 2;\n\n\t\tlet ax = a.position.x;\n\t\tlet ay = a.position.y;\n\t\tlet az = a.position.z;\n\n\t\tlet bx = b.position.x;\n\t\tlet by = b.position.y;\n\t\tlet bz = b.position.z;\n\n\t\tlet colx = (ax + r >= bx - hw) && (ax - r <= bx + hw);\n\t\tlet coly = (ay + r >= by - hh) && (ay - r <= by + hh);\n\n\t\tif (a.shape === Composite.SHAPE.circle) {\n\t\t\tr = 0;\n\t\t}\n\n\t\tlet colz = (az + r >= bz - hd) && (az - r <= bz + hd);\n\n\t\treturn (colx && coly && colz);\n\n\t}",
 			"type": "function",
 			"hash": "2329dd7c",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -85,6 +88,7 @@
 			"chunk": "function(a, b) {\n\n\t\tlet dx = Math.abs(b.position.x - a.position.x);\n\t\tlet dy = Math.abs(b.position.y - a.position.y);\n\t\tlet dz = Math.abs(b.position.z - a.position.z);\n\n\t\tlet hw = (a.width  + b.width)  / 2;\n\t\tlet hh = (a.height + b.height) / 2;\n\t\tlet hd = (a.depth  + b.depth)  / 2;\n\n\t\treturn (dx <= hw && dy <= hh && dz <= hd);\n\n\t}",
 			"type": "function",
 			"hash": "1ec3ee98",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -127,7 +131,8 @@
 					"name": "data",
 					"type": "Object"
 				}
-			]
+			],
+			"memory": []
 		},
 		"states": {
 			"alpha": "setAlpha",
@@ -379,6 +384,7 @@
 				"chunk": "function(blob) {}",
 				"type": "function",
 				"hash": "cf6d9c5f",
+				"memory": [],
 				"parameters": [
 					{
 						"name": "blob",
@@ -396,6 +402,7 @@
 				"chunk": "function() {\n\n\t\t\tlet states = {};\n\n\n\t\t\tif (this.width  !== 0) states.width  = this.width;\n\t\t\tif (this.height !== 0) states.height = this.height;\n\t\t\tif (this.depth  !== 0) states.depth  = this.depth;\n\t\t\tif (this.radius !== 0) states.radius = this.radius;\n\n\t\t\tif (this.alpha !== 1)                            states.alpha     = this.alpha;\n\t\t\tif (this.collision !== Composite.COLLISION.none) states.collision = this.collision;\n\t\t\tif (this.shape !== Composite.SHAPE.rectangle)    states.shape     = this.shape;\n\t\t\tif (this.state !== 'default')                    states.state     = this.state;\n\t\t\tif (Object.keys(this.states).length > 1)         states.states    = this.states;\n\n\n\t\t\tif (this.position.x !== 0 || this.position.y !== 0 || this.position.z !== 0) {\n\n\t\t\t\tstates.position = {};\n\n\t\t\t\tif (this.position.x !== 0) states.position.x = this.position.x;\n\t\t\t\tif (this.position.y !== 0) states.position.y = this.position.y;\n\t\t\t\tif (this.position.z !== 0) states.position.z = this.position.z;\n\n\t\t\t}\n\n\n\t\t\tif (this.velocity.x !== 0 || this.velocity.y !== 0 || this.velocity.z !== 0) {\n\n\t\t\t\tstates.velocity = {};\n\n\t\t\t\tif (this.velocity.x !== 0) states.velocity.x = this.velocity.x;\n\t\t\t\tif (this.velocity.y !== 0) states.velocity.y = this.velocity.y;\n\t\t\t\tif (this.velocity.z !== 0) states.velocity.z = this.velocity.z;\n\n\t\t\t}\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.app.Entity',\n\t\t\t\t'arguments':   [ states ],\n\t\t\t\t'blob':        null\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "fb7332d3",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -409,6 +416,7 @@
 				"chunk": "function(renderer, offsetX, offsetY) {\n\n\t\t\tlet effects = this.effects;\n\t\t\tfor (let e = 0, el = effects.length; e < el; e++) {\n\t\t\t\teffects[e].render(renderer, offsetX, offsetY);\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "2e563c90",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -436,6 +444,7 @@
 				"chunk": "function(clock, delta) {\n\n\t\t\tlet velocity = this.velocity;\n\n\t\t\tif (velocity.x !== 0 || velocity.y !== 0 || velocity.z !== 0) {\n\n\t\t\t\tlet x = this.position.x;\n\t\t\t\tlet y = this.position.y;\n\t\t\t\tlet z = this.position.z;\n\n\n\t\t\t\tlet vt = delta / 1000;\n\n\t\t\t\tif (velocity.x !== 0) {\n\t\t\t\t\tx += velocity.x * vt;\n\t\t\t\t}\n\n\t\t\t\tif (velocity.y !== 0) {\n\t\t\t\t\ty += velocity.y * vt;\n\t\t\t\t}\n\n\t\t\t\tif (velocity.z !== 0) {\n\t\t\t\t\tz += velocity.z * vt;\n\t\t\t\t}\n\n\n\t\t\t\tthis.position.x = x;\n\t\t\t\tthis.position.y = y;\n\t\t\t\tthis.position.z = z;\n\n\t\t\t}\n\n\n\t\t\tlet effects = this.effects;\n\t\t\tfor (let e = 0, el = effects.length; e < el; e++) {\n\n\t\t\t\tlet effect = effects[e];\n\t\t\t\tif (effect.update(this, clock, delta) === false) {\n\t\t\t\t\tthis.removeEffect(effect);\n\t\t\t\t\tel--;\n\t\t\t\t\te--;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "de02f431",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -458,6 +467,7 @@
 				"chunk": "function(position) {\n\n\t\t\tposition = position instanceof Object ? position : null;\n\n\n\t\t\tif (position !== null) {\n\n\t\t\t\tif (typeof position.x === 'number' && typeof position.y === 'number') {\n\n\t\t\t\t\tlet ax = position.x;\n\t\t\t\t\tlet ay = position.y;\n\t\t\t\t\tlet az = position.z;\n\t\t\t\t\tlet bx = this.position.x;\n\t\t\t\t\tlet by = this.position.y;\n\t\t\t\t\tlet bz = this.position.z;\n\n\n\t\t\t\t\tlet shape = this.shape;\n\t\t\t\t\tif (shape === Composite.SHAPE.circle) {\n\n\t\t\t\t\t\tlet dist = Math.sqrt(Math.pow(ax - bx, 2) + Math.pow(ay - by, 2));\n\t\t\t\t\t\tif (dist < this.radius) {\n\t\t\t\t\t\t\treturn true;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t} else if (shape === Composite.SHAPE.sphere) {\n\n\t\t\t\t\t\tlet dist = Math.sqrt(Math.pow(ax - bx, 2) + Math.pow(ay - by, 2) + Math.pow(az - bz, 2));\n\t\t\t\t\t\tif (dist < this.radius) {\n\t\t\t\t\t\t\treturn true;\n\t\t\t\t\t\t}\n\n\t\t\t\t\t} else if (shape === Composite.SHAPE.rectangle) {\n\n\t\t\t\t\t\tlet hwidth  = this.width  / 2;\n\t\t\t\t\t\tlet hheight = this.height / 2;\n\t\t\t\t\t\tlet colX    = (ax >= bx - hwidth)  && (ax <= bx + hwidth);\n\t\t\t\t\t\tlet colY    = (ay >= by - hheight) && (ay <= by + hheight);\n\n\n\t\t\t\t\t\treturn colX && colY;\n\n\t\t\t\t\t} else if (shape === Composite.SHAPE.cuboid) {\n\n\t\t\t\t\t\tlet hwidth  = this.width  / 2;\n\t\t\t\t\t\tlet hheight = this.height / 2;\n\t\t\t\t\t\tlet hdepth  = this.depth  / 2;\n\t\t\t\t\t\tlet colX    = (ax >= bx - hwidth)  && (ax <= bx + hwidth);\n\t\t\t\t\t\tlet colY    = (ay >= by - hheight) && (ay <= by + hheight);\n\t\t\t\t\t\tlet colZ    = (az >= bz - hdepth)  && (az <= bz + hdepth);\n\n\n\t\t\t\t\t\treturn colX && colY && colZ;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "cc01b52f",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "position instanceof Object ? position : null",
@@ -483,6 +493,11 @@
 				"chunk": "function(entity) {\n\n\t\t\tentity = lychee.interfaceof(Composite, entity) ? entity : null;\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tlet none = Composite.COLLISION.none;\n\t\t\t\tif (this.collision !== entity.collision || this.collision === none || entity.collision === none) {\n\t\t\t\t\treturn false;\n\t\t\t\t}\n\n\n\t\t\t\tlet circle    = Composite.SHAPE.circle;\n\t\t\t\tlet sphere    = Composite.SHAPE.sphere;\n\t\t\t\tlet rectangle = Composite.SHAPE.rectangle;\n\t\t\t\tlet cuboid    = Composite.SHAPE.cuboid;\n\n\t\t\t\tlet shapeA    = this.shape;\n\t\t\t\tlet shapeB    = entity.shape;\n\n\t\t\t\tlet issphereA = shapeA === circle    || shapeA === sphere;\n\t\t\t\tlet issphereB = shapeB === circle    || shapeB === sphere;\n\t\t\t\tlet iscuboidA = shapeA === rectangle || shapeA === cuboid;\n\t\t\t\tlet iscuboidB = shapeB === rectangle || shapeB === cuboid;\n\n\t\t\t\tif (issphereA && issphereB) {\n\t\t\t\t\treturn _sphere_sphere(this, entity);\n\t\t\t\t} else if (iscuboidA && iscuboidB) {\n\t\t\t\t\treturn _cuboid_cuboid(this, entity);\n\t\t\t\t} else if (issphereA && iscuboidB) {\n\t\t\t\t\treturn _sphere_cuboid(this, entity);\n\t\t\t\t} else if (iscuboidA && issphereB) {\n\t\t\t\t\treturn _sphere_cuboid(entity, this);\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "fd60fcaa",
+				"memory": [
+					"_cuboid_cuboid",
+					"_sphere_cuboid",
+					"_sphere_sphere"
+				],
 				"parameters": [
 					{
 						"chunk": "lychee.interfaceof(Composite, entity) ? entity : null",
@@ -507,6 +522,7 @@
 				"chunk": "function(alpha) {\n\n\t\t\talpha = typeof alpha === 'number' ? alpha : null;\n\n\n\t\t\tif (alpha !== null) {\n\n\t\t\t\tthis.alpha = Math.min(Math.max(alpha, 0), 1);\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "8c452654",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof alpha === 'number' ? alpha : null",
@@ -532,6 +548,7 @@
 				"chunk": "function(collision) {\n\n\t\t\tcollision = lychee.enumof(Composite.COLLISION, collision) ? collision : null;\n\n\n\t\t\tif (collision !== null) {\n\n\t\t\t\tthis.collision = collision;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "490345a5",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "lychee.enumof(Composite.COLLISION, collision) ? collision : null",
@@ -557,6 +574,9 @@
 				"chunk": "function(effect) {\n\n\t\t\teffect = _validate_effect(effect) ? effect : null;\n\n\n\t\t\tif (effect !== null) {\n\n\t\t\t\tlet index = this.effects.indexOf(effect);\n\t\t\t\tif (index === -1) {\n\n\t\t\t\t\tthis.effects.push(effect);\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "09f5f6a1",
+				"memory": [
+					"_validate_effect"
+				],
 				"parameters": [
 					{
 						"chunk": "_validate_effect(effect) ? effect : null",
@@ -585,6 +605,9 @@
 				"chunk": "function(effect) {\n\n\t\t\teffect = _validate_effect(effect) ? effect : null;\n\n\n\t\t\tif (effect !== null) {\n\n\t\t\t\tlet index = this.effects.indexOf(effect);\n\t\t\t\tif (index !== -1) {\n\n\t\t\t\t\tthis.effects.splice(index, 1);\n\n\t\t\t\t\treturn true;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "6b39208a",
+				"memory": [
+					"_validate_effect"
+				],
 				"parameters": [
 					{
 						"chunk": "_validate_effect(effect) ? effect : null",
@@ -613,6 +636,7 @@
 				"chunk": "function() {\n\n\t\t\tlet effects = this.effects;\n\n\t\t\tfor (let e = 0, el = effects.length; e < el; e++) {\n\n\t\t\t\teffects[e].update(this, Infinity, 0);\n\t\t\t\tthis.removeEffect(effects[e]);\n\n\t\t\t\tel--;\n\t\t\t\te--;\n\n\t\t\t}\n\n\n\t\t\treturn true;\n\n\t\t}",
 				"type": "function",
 				"hash": "1cbe2218",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -626,6 +650,7 @@
 				"chunk": "function(position) {\n\n\t\t\tposition = position instanceof Object ? position : null;\n\n\n\t\t\tif (position !== null) {\n\n\t\t\t\tthis.position.x = typeof position.x === 'number' ? position.x : this.position.x;\n\t\t\t\tthis.position.y = typeof position.y === 'number' ? position.y : this.position.y;\n\t\t\t\tthis.position.z = typeof position.z === 'number' ? position.z : this.position.z;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "da2f4510",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "position instanceof Object ? position : null",
@@ -651,6 +676,7 @@
 				"chunk": "function(shape) {\n\n\t\t\tshape = lychee.enumof(Composite.SHAPE, shape) ? shape : null;\n\n\n\t\t\tif (shape !== null) {\n\n\t\t\t\tthis.shape = shape;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "8ab7a9ce",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "lychee.enumof(Composite.SHAPE, shape) ? shape : null",
@@ -676,6 +702,7 @@
 				"chunk": "function(states) {\n\n\t\t\tstates = states instanceof Object ? states : null;\n\n\n\t\t\tif (states !== null) {\n\n\t\t\t\tthis.states = {\n\t\t\t\t\t'default': null\n\t\t\t\t};\n\n\t\t\t\tfor (let id in states) {\n\n\t\t\t\t\tif (states.hasOwnProperty(id)) {\n\n\t\t\t\t\t\tlet state = states[id];\n\t\t\t\t\t\tif (state instanceof Object) {\n\t\t\t\t\t\t\tthis.states[id] = states[id];\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "382c9eac",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "states instanceof Object ? states : null",
@@ -701,6 +728,7 @@
 				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null && this.states[id] !== undefined) {\n\n\t\t\t\tthis.state = id;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "570fc1f1",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof id === 'string' ? id : null",
@@ -726,6 +754,7 @@
 				"chunk": "function(velocity) {\n\n\t\t\tvelocity = velocity instanceof Object ? velocity : null;\n\n\n\t\t\tif (velocity !== null) {\n\n\t\t\t\tthis.velocity.x = typeof velocity.x === 'number' ? velocity.x : this.velocity.x;\n\t\t\t\tthis.velocity.y = typeof velocity.y === 'number' ? velocity.y : this.velocity.y;\n\t\t\t\tthis.velocity.z = typeof velocity.z === 'number' ? velocity.z : this.velocity.z;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "2f270c7d",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "velocity instanceof Object ? velocity : null",

@@ -13,6 +13,7 @@
 			"chunk": "function(entity) {\n\n\t\tif (entity instanceof Object) {\n\t\t\treturn true;\n\t\t}\n\n\n\t\treturn false;\n\n\t}",
 			"type": "function",
 			"hash": "1190930a",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -37,6 +38,7 @@
 			"chunk": "function(callback, scope) {\n\n\t\tlet filtered = [];\n\t\tlet queue    = [ this.__root ];\n\n\t\twhile (queue.length > 0) {\n\n\t\t\tlet node = queue.shift();\n\n\t\t\tif (callback.call(scope, node) === true) {\n\t\t\t\tfiltered.push(node);\n\t\t\t}\n\n\t\t\tfor (let c = 0, cl = node.children.length; c < cl; c++) {\n\t\t\t\tqueue.push(node.children[c]);\n\t\t\t}\n\n\t\t}\n\n\t\treturn filtered;\n\n\t}",
 			"type": "function",
 			"hash": "208d1a7f",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -61,6 +63,7 @@
 			"chunk": "function(callback, scope) {\n\n\t\tlet found = null;\n\t\tlet queue = [ this.__root ];\n\n\t\twhile (queue.length > 0) {\n\n\t\t\tlet node = queue.shift();\n\n\t\t\tif (callback.call(scope, node) === true) {\n\t\t\t\tfound = node;\n\t\t\t\tbreak;\n\t\t\t}\n\n\t\t\tfor (let c = 0, cl = node.children.length; c < cl; c++) {\n\t\t\t\tqueue.push(node.children[c]);\n\t\t\t}\n\n\t\t}\n\n\t\treturn found;\n\n\t}",
 			"type": "function",
 			"hash": "18f5aa77",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": null,
@@ -94,7 +97,8 @@
 					"name": "data",
 					"type": "Object"
 				}
-			]
+			],
+			"memory": []
 		},
 		"states": {
 			"entities": "setEntities"
@@ -133,6 +137,7 @@
 				"chunk": "function(blob) {\n\n\t\t\tif (blob.entities instanceof Object && blob.map instanceof Object) {\n\n\t\t\t\tlet cache = {};\n\n\t\t\t\tfor (let id in blob.entities) {\n\n\t\t\t\t\tlet entity = lychee.deserialize(blob.entities[id]);\n\t\t\t\t\tif (entity !== null) {\n\n\t\t\t\t\t\tlet pid = blob.map[id] || -1;\n\t\t\t\t\t\tif (pid >= 0) {\n\t\t\t\t\t\t\tthis.addEntity(entity, cache[pid] || null);\n\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\tthis.addEntity(entity);\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\tcache[id] = entity;\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "52aa62d3",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -150,6 +155,7 @@
 				"chunk": "function() {\n\n\t\t\tlet blob = {};\n\n\n\t\t\tlet root = this.__root;\n\t\t\tif (root.children.length > 0) {\n\n\t\t\t\tblob.entities = {};\n\t\t\t\tblob.map      = {};\n\n\t\t\t\tlet cache = [];\n\t\t\t\tlet count = 0;\n\t\t\t\tlet queue = [ this.__root ];\n\n\t\t\t\twhile (queue.length > 0) {\n\n\t\t\t\t\tlet node = queue.shift();\n\n\t\t\t\t\tblob.entities[cache.length] = lychee.serialize(node.entity);\n\t\t\t\t\tcache.push(node.entity);\n\n\t\t\t\t\tfor (let c = 0, cl = node.children.length; c < cl; c++) {\n\t\t\t\t\t\tqueue.push(node.children[c]);\n\t\t\t\t\t\tblob.map[count++] = cache.indexOf(node.entity);\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn {\n\t\t\t\t'constructor': 'lychee.data.Tree',\n\t\t\t\t'arguments':   [],\n\t\t\t\t'blob':        Object.keys(blob).length > 0 ? blob : null\n\t\t\t};\n\n\t\t}",
 				"type": "function",
 				"hash": "dcbff4a3",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -163,6 +169,9 @@
 				"chunk": "function(callback, scope) {\n\n\t\t\tcallback = callback instanceof Function ? callback : null;\n\t\t\tscope    = scope !== undefined          ? scope    : this;\n\n\n\t\t\tlet filtered = [];\n\n\t\t\tif (callback !== null) {\n\t\t\t\t_traverse_filter.call(this, filtered, callback, scope);\n\t\t\t}\n\n\t\t\treturn filtered;\n\n\t\t}",
 				"type": "function",
 				"hash": "e79b674e",
+				"memory": [
+					"_traverse_filter"
+				],
 				"parameters": [
 					{
 						"chunk": "callback instanceof Function ? callback : null",
@@ -189,6 +198,9 @@
 				"chunk": "function(callback, scope) {\n\n\t\t\tcallback = callback instanceof Function ? callback : null;\n\t\t\tscope    = scope !== undefined          ? scope    : this;\n\n\n\t\t\tif (callback !== null) {\n\t\t\t\treturn _traverse_find.call(this, callback, scope);\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
 				"type": "function",
 				"hash": "cfb8f172",
+				"memory": [
+					"_traverse_find"
+				],
 				"parameters": [
 					{
 						"chunk": "callback instanceof Function ? callback : null",
@@ -220,6 +232,9 @@
 				"chunk": "function(entity, parent) {\n\n\t\t\tentity = _validate_entity(entity) === true ? entity : null;\n\t\t\tparent = _validate_entity(parent) === true ? parent : null;\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tlet node = this.__root;\n\n\t\t\t\tif (parent !== null) {\n\n\t\t\t\t\tnode = this.find(function(other) {\n\t\t\t\t\t\treturn other.entity === parent;\n\t\t\t\t\t});\n\n\t\t\t\t}\n\n\n\t\t\t\tlet found = node.children.find(function(other) {\n\t\t\t\t\treturn other.entity === entity;\n\t\t\t\t}) || null;\n\n\t\t\t\tif (found === null) {\n\n\t\t\t\t\tnode.children.push({\n\t\t\t\t\t\tentity:   entity,\n\t\t\t\t\t\tchildren: []\n\t\t\t\t\t});\n\n\t\t\t\t\tthis.length++;\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "8cbdff",
+				"memory": [
+					"_validate_entity"
+				],
 				"parameters": [
 					{
 						"chunk": "_validate_entity(entity) === true ? entity : null",
@@ -257,6 +272,9 @@
 				"chunk": "function(entity) {\n\n\t\t\tentity = _validate_entity(entity) === true ? entity : null;\n\n\n\t\t\tif (entity !== null) {\n\n\t\t\t\tlet queue = [ this.__root ];\n\n\t\t\t\twhile (queue.length > 0) {\n\n\t\t\t\t\tlet node = queue.shift();\n\n\t\t\t\t\tfor (let c = 0, cl = node.children.length; c < cl; c++) {\n\n\t\t\t\t\t\tif (node.children[c].entity === entity) {\n\n\t\t\t\t\t\t\tnode.children.splice(c, 1);\n\t\t\t\t\t\t\tthis.length--;\n\t\t\t\t\t\t\tcl--;\n\t\t\t\t\t\t\tc--;\n\n\t\t\t\t\t\t} else {\n\n\t\t\t\t\t\t\tqueue.push(node.children[c]);\n\n\t\t\t\t\t\t}\n\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "d86d25b9",
+				"memory": [
+					"_validate_entity"
+				],
 				"parameters": [
 					{
 						"chunk": "_validate_entity(entity) === true ? entity : null",
@@ -285,6 +303,7 @@
 				"chunk": "function(entities) {\n\n\t\t\tentities = entities instanceof Array ? entities : null;\n\n\n\t\t\tlet all = true;\n\n\t\t\tif (entities !== null) {\n\n\t\t\t\tfor (let e = 0, el = entities.length; e < el; e++) {\n\n\t\t\t\t\tlet result = this.addEntity(entities[e]);\n\t\t\t\t\tif (result === false) {\n\t\t\t\t\t\tall = false;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\treturn all;\n\n\t\t}",
 				"type": "function",
 				"hash": "bbf2adbe",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "entities instanceof Array ? entities : null",
@@ -310,6 +329,7 @@
 				"chunk": "function() {\n\n\t\t\tlet root = this.__root;\n\n\t\t\tif (root.children.length > 0) {\n\n\t\t\t\tdelete root.children;\n\t\t\t\troot.children = [];\n\n\t\t\t}\n\n\t\t\treturn true;\n\n\t\t}",
 				"type": "function",
 				"hash": "09e23e6a",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{

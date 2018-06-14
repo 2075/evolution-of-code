@@ -76,6 +76,7 @@
 			"chunk": "function(id, service) {\n\n\t\tid = typeof id === 'string' ? id : null;\n\n\t\tif (id === null || service === null) {\n\t\t\treturn;\n\t\t}\n\n\n\t\tlet found = false;\n\n\t\tfor (let w = 0, wl = this.__services.waiting.length; w < wl; w++) {\n\n\t\t\tif (this.__services.waiting[w] === service) {\n\t\t\t\tthis.__services.waiting.splice(w, 1);\n\t\t\t\tfound = true;\n\t\t\t\twl--;\n\t\t\t\tw--;\n\t\t\t}\n\n\t\t}\n\n\n\t\tif (found === true) {\n\n\t\t\tthis.__services.active.push(service);\n\n\t\t\tservice.trigger('plug');\n\n\t\t\tif (lychee.debug === true) {\n\t\t\t\tconsole.log('lychee.net.Tunnel: Remote plugged in Service (' + id + ')');\n\t\t\t}\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "aee6e22d",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": "typeof id === 'string' ? id : null",
@@ -95,6 +96,7 @@
 			"chunk": "function(id, service) {\n\n\t\tid = typeof id === 'string' ? id : null;\n\n\t\tif (id === null || service === null) {\n\t\t\treturn;\n\t\t}\n\n\n\t\tlet found = false;\n\n\t\tfor (let w = 0, wl = this.__services.waiting.length; w < wl; w++) {\n\n\t\t\tif (this.__services.waiting[w] === service) {\n\t\t\t\tthis.__services.waiting.splice(w, 1);\n\t\t\t\tfound = true;\n\t\t\t\twl--;\n\t\t\t\tw--;\n\t\t\t}\n\n\t\t}\n\n\t\tfor (let a = 0, al = this.__services.active.length; a < al; a++) {\n\n\t\t\tif (this.__services.active[a] === service) {\n\t\t\t\tthis.__services.active.splice(a, 1);\n\t\t\t\tfound = true;\n\t\t\t\tal--;\n\t\t\t\ta--;\n\t\t\t}\n\n\t\t}\n\n\n\t\tif (found === true) {\n\n\t\t\tservice.trigger('unplug');\n\n\t\t\tif (lychee.debug === true) {\n\t\t\t\tconsole.log('lychee.net.Tunnel: Remote unplugged Service (' + id + ')');\n\t\t\t}\n\n\t\t}\n\n\t}",
 			"type": "function",
 			"hash": "af9cea5a",
+			"memory": [],
 			"parameters": [
 				{
 					"chunk": "typeof id === 'string' ? id : null",
@@ -123,6 +125,9 @@
 					"name": "data",
 					"type": "Object"
 				}
+			],
+			"memory": [
+				"_Emitter"
 			]
 		},
 		"states": {
@@ -340,6 +345,7 @@
 				"chunk": "function(blob) {\n\n\t\t\tlet socket = lychee.deserialize(blob.socket);\n\t\t\tif (socket !== null) {\n\t\t\t\tthis.__socket = socket;\n\t\t\t}\n\n\n\t\t\tif (blob.services instanceof Array) {\n\n\t\t\t\tfor (let s = 0, sl = blob.services.length; s < sl; s++) {\n\t\t\t\t\tthis.addService(lychee.deserialize(blob.services[s]));\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t}",
 				"type": "function",
 				"hash": "3ebcf62d",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": null,
@@ -357,6 +363,9 @@
 				"chunk": "function() {\n\n\t\t\tlet data = _Emitter.prototype.serialize.call(this);\n\t\t\tdata['constructor'] = 'lychee.net.Tunnel';\n\n\t\t\tlet states = {};\n\t\t\tlet blob   = (data['blob'] || {});\n\n\n\t\t\tif (this.codec !== _JSON)            states.codec     = lychee.serialize(this.codec);\n\t\t\tif (this.host !== 'localhost')       states.host      = this.host;\n\t\t\tif (this.port !== 1337)              states.port      = this.port;\n\t\t\tif (this.reconnect !== 0)            states.reconnect = this.reconnect;\n\t\t\tif (this.type !== Composite.TYPE.WS) states.type      = this.type;\n\n\n\t\t\tif (this.__socket !== null) blob.socket = lychee.serialize(this.__socket);\n\n\n\t\t\tif (this.__services.active.length > 0) {\n\n\t\t\t\tblob.services = [];\n\n\t\t\t\tfor (let a = 0, al = this.__services.active.length; a < al; a++) {\n\n\t\t\t\t\tlet service = this.__services.active[a];\n\n\t\t\t\t\tblob.services.push(lychee.serialize(service));\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\tdata['arguments'][0] = states;\n\t\t\tdata['blob']         = Object.keys(blob).length > 0 ? blob : null;\n\n\n\t\t\treturn data;\n\n\t\t}",
 				"type": "function",
 				"hash": "cab5a4e4",
+				"memory": [
+					"_Emitter"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -370,6 +379,7 @@
 				"chunk": "function(connection) {\n\n\t\t\tconnection = typeof connection === 'object' ? connection : null;\n\n\n\t\t\tif (this.__isConnected === false) {\n\n\t\t\t\tlet type = this.type;\n\t\t\t\tif (type === Composite.TYPE.WS) {\n\t\t\t\t\tthis.__socket = new _socket.WS();\n\t\t\t\t} else if (type === Composite.TYPE.HTTP) {\n\t\t\t\t\tthis.__socket = new _socket.HTTP();\n\t\t\t\t} else if (type === Composite.TYPE.TCP) {\n\t\t\t\t\tthis.__socket = new _socket.TCP();\n\t\t\t\t}\n\n\n\t\t\t\tthis.__socket.bind('connect', function() {\n\t\t\t\t\tthis.trigger('connect');\n\t\t\t\t}, this);\n\n\t\t\t\tthis.__socket.bind('receive', function(payload, headers) {\n\t\t\t\t\tthis.receive(payload, headers);\n\t\t\t\t}, this);\n\n\t\t\t\tthis.__socket.bind('disconnect', function() {\n\t\t\t\t\tthis.disconnect();\n\t\t\t\t}, this);\n\n\t\t\t\tthis.__socket.bind('error', function() {\n\t\t\t\t\tthis.setReconnect(0);\n\t\t\t\t\tthis.disconnect();\n\t\t\t\t}, this);\n\n\n\t\t\t\tthis.__socket.connect(this.host, this.port, connection);\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "6d1c8a8a",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof connection === 'object' ? connection : null",
@@ -395,6 +405,7 @@
 				"chunk": "function() {\n\n\t\t\tif (this.__isConnected === true) {\n\n\t\t\t\tlet socket = this.__socket;\n\t\t\t\tif (socket !== null) {\n\n\t\t\t\t\tsocket.unbind('connect');\n\t\t\t\t\tsocket.unbind('receive');\n\t\t\t\t\tsocket.unbind('disconnect');\n\t\t\t\t\tsocket.unbind('error');\n\t\t\t\t\tsocket.disconnect();\n\t\t\t\t\tthis.__socket = null;\n\n\t\t\t\t}\n\n\n\t\t\t\tthis.trigger('disconnect');\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "c4975a7b",
+				"memory": [],
 				"parameters": [],
 				"values": [
 					{
@@ -413,6 +424,7 @@
 				"chunk": "function(data, headers) {\n\n\t\t\tdata    = data instanceof Object    ? data    : null;\n\t\t\theaders = headers instanceof Object ? headers : {};\n\n\n\t\t\tif (data === null) {\n\t\t\t\treturn false;\n\t\t\t}\n\n\n\t\t\tif (typeof headers.id     === 'string') headers['@service-id']     = headers.id;\n\t\t\tif (typeof headers.event  === 'string') headers['@service-event']  = headers.event;\n\t\t\tif (typeof headers.method === 'string') headers['@service-method'] = headers.method;\n\n\n\t\t\tdelete headers.id;\n\t\t\tdelete headers.event;\n\t\t\tdelete headers.method;\n\n\n\t\t\tlet payload = null;\n\t\t\tif (data !== null) {\n\t\t\t\tpayload = this.codec.encode(data);\n\t\t\t}\n\n\n\t\t\tif (payload !== null) {\n\n\t\t\t\tthis.trigger('send', [ payload, headers ]);\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "697e41bf",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "data instanceof Object    ? data    : null",
@@ -444,6 +456,10 @@
 				"chunk": "function(payload, headers) {\n\n\t\t\tpayload = payload instanceof Buffer ? payload : null;\n\t\t\theaders = headers instanceof Object ? headers : {};\n\n\n\t\t\tlet id     = headers['@service-id']     || null;\n\t\t\tlet event  = headers['@service-event']  || null;\n\t\t\tlet method = headers['@service-method'] || null;\n\n\t\t\tlet data = null;\n\t\t\tif (payload.length === 0) {\n\t\t\t\tpayload = this.codec.encode({});\n\t\t\t}\n\n\t\t\tif (payload !== null) {\n\t\t\t\tdata = this.codec.decode(payload);\n\t\t\t}\n\n\n\t\t\tlet instance = this.getService(id);\n\t\t\tif (instance !== null && data !== null) {\n\n\t\t\t\tif (method === '@plug' || method === '@unplug') {\n\n\t\t\t\t\tif (method === '@plug') {\n\t\t\t\t\t\t_plug_service.call(this,   id, instance);\n\t\t\t\t\t} else if (method === '@unplug') {\n\t\t\t\t\t\t_unplug_service.call(this, id, instance);\n\t\t\t\t\t}\n\n\t\t\t\t} else if (method !== null) {\n\n\t\t\t\t\tif (typeof instance[method] === 'function') {\n\t\t\t\t\t\tinstance[method](data);\n\t\t\t\t\t}\n\n\t\t\t\t} else if (event !== null) {\n\n\t\t\t\t\tif (typeof instance.trigger === 'function') {\n\t\t\t\t\t\tinstance.trigger(event, [ data ]);\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t} else {\n\n\t\t\t\tthis.trigger('receive', [ data, headers ]);\n\n\t\t\t}\n\n\n\t\t\treturn true;\n\n\t\t}",
 				"type": "function",
 				"hash": "3801304d",
+				"memory": [
+					"_plug_service",
+					"_unplug_service"
+				],
 				"parameters": [
 					{
 						"chunk": "payload instanceof Buffer ? payload : null",
@@ -470,6 +486,7 @@
 				"chunk": "function(host) {\n\n\t\t\thost = typeof host === 'string' ? host : null;\n\n\n\t\t\tif (host !== null) {\n\n\t\t\t\tthis.id   = (/:/g.test(host) ? '[' + host + ']' : host) + ':' + this.port;\n\t\t\t\tthis.host = host;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "4b4ed3c9",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof host === 'string' ? host : null",
@@ -495,6 +512,7 @@
 				"chunk": "function(port) {\n\n\t\t\tport = typeof port === 'number' ? (port | 0) : null;\n\n\n\t\t\tif (port !== null) {\n\n\t\t\t\tthis.id   = (/:/g.test(this.host) ? '[' + this.host + ']' : this.host) + ':' + port;\n\t\t\t\tthis.port = port;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "081c8b19",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof port === 'number' ? (port | 0) : null",
@@ -520,6 +538,7 @@
 				"chunk": "function(reconnect) {\n\n\t\t\treconnect = typeof reconnect === 'number' ? (reconnect | 0) : null;\n\n\n\t\t\tif (reconnect !== null) {\n\n\t\t\t\tthis.reconnect = reconnect;\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "7b510e6e",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof reconnect === 'number' ? (reconnect | 0) : null",
@@ -545,6 +564,7 @@
 				"chunk": "function(service) {\n\n\t\t\tservice = lychee.interfaceof(_Service, service) ? service : null;\n\n\n\t\t\tif (service !== null) {\n\n\t\t\t\tlet found = false;\n\n\t\t\t\tfor (let w = 0, wl = this.__services.waiting.length; w < wl; w++) {\n\n\t\t\t\t\tif (this.__services.waiting[w] === service) {\n\t\t\t\t\t\tfound = true;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t\tfor (let a = 0, al = this.__services.active.length; a < al; a++) {\n\n\t\t\t\t\tif (this.__services.active[a] === service) {\n\t\t\t\t\t\tfound = true;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tif (found === false) {\n\n\t\t\t\t\tthis.__services.waiting.push(service);\n\n\t\t\t\t\tthis.send({}, {\n\t\t\t\t\t\tid:     service.id,\n\t\t\t\t\t\tmethod: '@plug'\n\t\t\t\t\t});\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "86ad69bb",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "lychee.interfaceof(_Service, service) ? service : null",
@@ -570,6 +590,7 @@
 				"chunk": "function(id) {\n\n\t\t\tid = typeof id === 'string' ? id : null;\n\n\n\t\t\tif (id !== null) {\n\n\t\t\t\tfor (let w = 0, wl = this.__services.waiting.length; w < wl; w++) {\n\n\t\t\t\t\tlet wservice = this.__services.waiting[w];\n\t\t\t\t\tif (wservice.id === id) {\n\t\t\t\t\t\treturn wservice;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t\tfor (let a = 0, al = this.__services.active.length; a < al; a++) {\n\n\t\t\t\t\tlet aservice = this.__services.active[a];\n\t\t\t\t\tif (aservice.id === id) {\n\t\t\t\t\t\treturn aservice;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t}\n\n\n\t\t\treturn null;\n\n\t\t}",
 				"type": "function",
 				"hash": "2487c5bb",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "typeof id === 'string' ? id : null",
@@ -606,6 +627,7 @@
 				"chunk": "function(service) {\n\n\t\t\tservice = lychee.interfaceof(_Service, service) ? service : null;\n\n\n\t\t\tif (service !== null) {\n\n\t\t\t\tlet found = false;\n\n\t\t\t\tfor (let w = 0, wl = this.__services.waiting.length; w < wl; w++) {\n\n\t\t\t\t\tif (this.__services.waiting[w] === service) {\n\t\t\t\t\t\tfound = true;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\t\t\t\tfor (let a = 0, al = this.__services.active.length; a < al; a++) {\n\n\t\t\t\t\tif (this.__services.active[a] === service) {\n\t\t\t\t\t\tfound = true;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\tif (found === true) {\n\n\t\t\t\t\tthis.send({}, {\n\t\t\t\t\t\tid:     service.id,\n\t\t\t\t\t\tmethod: '@unplug'\n\t\t\t\t\t});\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "fcf718d1",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "lychee.interfaceof(_Service, service) ? service : null",
@@ -631,6 +653,9 @@
 				"chunk": "function() {\n\n\t\t\tthis.__services.waiting.slice(0).forEach(function(service) {\n\t\t\t\t_unplug_service.call(this, service.id, service);\n\t\t\t}.bind(this));\n\n\t\t\tthis.__services.active.slice(0).forEach(function(service) {\n\t\t\t\t_unplug_service.call(this, service.id, service);\n\t\t\t}.bind(this));\n\n\n\t\t\treturn true;\n\n\t\t}",
 				"type": "function",
 				"hash": "cd4ddc19",
+				"memory": [
+					"_unplug_service"
+				],
 				"parameters": [],
 				"values": [
 					{
@@ -644,6 +669,7 @@
 				"chunk": "function(type) {\n\n\t\t\ttype = lychee.enumof(Composite.TYPE, type) ? type : null;\n\n\n\t\t\tif (type !== null) {\n\n\t\t\t\tlet oldtype = this.type;\n\t\t\t\tif (oldtype !== type) {\n\n\t\t\t\t\tthis.type = type;\n\n\n\t\t\t\t\tif (this.__isConnected === true) {\n\t\t\t\t\t\tthis.disconnect();\n\t\t\t\t\t\tthis.connect();\n\t\t\t\t\t}\n\n\t\t\t\t}\n\n\n\t\t\t\treturn true;\n\n\t\t\t}\n\n\n\t\t\treturn false;\n\n\t\t}",
 				"type": "function",
 				"hash": "ac4b62a7",
+				"memory": [],
 				"parameters": [
 					{
 						"chunk": "lychee.enumof(Composite.TYPE, type) ? type : null",
